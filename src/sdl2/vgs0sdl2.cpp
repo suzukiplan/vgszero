@@ -177,9 +177,9 @@ int main(int argc, char* argv[])
     log("Initializing AudioDriver");
     SDL_AudioSpec desired;
     SDL_AudioSpec obtained;
-    desired.freq = 44100;
+    desired.freq = 22050;
     desired.format = AUDIO_S16LSB;
-    desired.channels = 2;
+    desired.channels = 1;
     desired.samples = 735; // desired.freq * 20 / 1000;
     desired.callback = audioCallback;
     desired.userdata = &vgs0;
@@ -270,7 +270,7 @@ int main(int argc, char* argv[])
         pthread_mutex_unlock(&soundMutex);
 
         // render graphics
-        auto VGS0Display = vgs0.getDisplay();
+        auto vgsDisplay = vgs0.getDisplay();
         auto pcDisplay = (unsigned int*)windowSurface->pixels;
         auto pitch = windowSurface->pitch / windowSurface->format->BytesPerPixel;
         int offsetY = fullScreen ? 48 * pitch : 0;
@@ -278,7 +278,7 @@ int main(int argc, char* argv[])
         pcDisplay += offsetY;
         for (int y = 0; y < 192; y++) {
             for (int x = 0; x < 240; x++) {
-                unsigned int rgb555 = VGS0Display[x];
+                unsigned int rgb555 = vgsDisplay[x];
                 unsigned int rgb888 = 0;
                 rgb888 |= bit5To8((rgb555 & 0b0111110000000000) >> 10);
                 rgb888 <<= 8;
@@ -289,7 +289,7 @@ int main(int argc, char* argv[])
                 pcDisplay[offsetX + x * 2] = rgb888;
                 pcDisplay[offsetX + x * 2 + 1] = rgb888;
             }
-            VGS0Display += 240;
+            vgsDisplay += 240;
             memcpy(&pcDisplay[pitch], &pcDisplay[0], windowSurface->pitch);
             pcDisplay += pitch * 2;
         }
