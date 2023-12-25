@@ -24,9 +24,8 @@
  * THE SOFTWARE.
  * -----------------------------------------------------------------------------
  */
-#include "BufferQueue.h"
 #include "SDL.h"
-#include "fcs80.hpp"
+#include "vgs0.hpp"
 #include <chrono>
 #include <map>
 #include <pthread.h>
@@ -37,15 +36,20 @@
 #include <unistd.h>
 #include <vector>
 
-#define WINDOW_TITLE "VGS-Zero for SDL2"
-#define USE_CBIOS
+#define WINDOW_TITLE "VGS0 for SDL2"
 
-typedef struct {
-    void* data;
-    size_t size;
-} Binary;
+class Binary {
+    public:
+        void* data;
+        size_t size;
+ 
+        Binary(void* data_, size_t size_)
+        {
+            this->data = data_;
+            this->size = size_;
+        }    
+};
 
-static BufferQueue soundQueue(65536);
 static pthread_mutex_t soundMutex = PTHREAD_MUTEX_INITIALIZER;
 static bool halt = false;
 
@@ -70,21 +74,15 @@ static void log(const char* format, ...)
 
 static void audioCallback(void* userdata, Uint8* stream, int len)
 {
+    VGS0* vgs0 = (VGS0*)userdata;
     pthread_mutex_lock(&soundMutex);
     if (halt) {
         pthread_mutex_unlock(&soundMutex);
         return;
     }
-    if (soundQueue.getCursor() < len) {
-        memset(stream, 0, len);
-    } else {
-        void* buf;
-        size_t bufSize;
-        soundQueue.dequeue(&buf, &bufSize, len);
-        memcpy(stream, buf, len);
-    }
+    void* buf = vgs0->tickSound(len);
+    memcpy(stream, buf, len);
     pthread_mutex_unlock(&soundMutex);
-    usleep(1000);
 }
 
 static inline unsigned char bit5To8(unsigned char bit5)
@@ -94,31 +92,31 @@ static inline unsigned char bit5To8(unsigned char bit5)
     return bit5;
 }
 
-static void* loadBinary(const char* path, size_t* size)
+static Binary* loadBinary(const char* path)
 {
     log("Loading %s", path);
     FILE* fp = fopen(path, "rb");
     if (!fp) return nullptr;
     fseek(fp, 0, SEEK_END);
-    *size = (size_t)ftell(fp);
+    size_t size = (size_t)ftell(fp);
     fseek(fp, 0, SEEK_SET);
-    void* result = malloc(*size);
-    if (*size != fread(result, 1, *size, fp)) {
+    void* result = malloc(size);
+    if (size != fread(result, 1, size, fp)) {
         fclose(fp);
         free(result);
         return nullptr;
     }
     fclose(fp);
-    return result;
+    return new Binary(result, size);
 }
 
 int main(int argc, char* argv[])
 {
     const char* romPath = nullptr;
+    const char* bgmPath = nullptr;
     bool cliError = false;
     int fullScreen = 0;
     int gpuType = SDL_WINDOW_OPENGL;
-    std::vector<Binary*> vgsTable;
 
     for (int i = 1; !cliError && i < argc; i++) {
         if ('-' != argv[i][0]) {
@@ -126,20 +124,13 @@ int main(int argc, char* argv[])
             continue;
         }
         switch (tolower(argv[i][1])) {
-            case 'v': {
+            case 'b': {
                 i++;
                 if (argc <= i) {
                     cliError = true;
                     break;
                 }
-                auto bin = new Binary();
-                bin->data = loadBinary(argv[i], &bin->size);
-                if (!bin->data) {
-                    puts("File not found");
-                    cliError = true;
-                    break;
-                }
-                vgsTable.push_back(bin);
+                bgmPath = argv[i];
                 break;
             }
             case 'f':
@@ -170,36 +161,34 @@ int main(int argc, char* argv[])
         }
     }
     if (cliError || !romPath) {
-        puts("usage: vgszero /path/to/file.rom ....... Specify ROM file to be used");
-        puts("               [-v /path/to/bgm.vgs] ... VGS BGM data (max 256 data)");
-        puts("               [-g { None .............. GPU: Do not use");
-        puts("                   | OpenGL ............ GPU: OpenGL <default>");
-        puts("                   | Vulkan ............ GPU: Vulkan");
-        puts("                   | Metal ............. GPU: Metal");
-        puts("                   }]");
-        puts("               [-f] .................... Full Screen Mode");
+        puts("usage: vgs0 /path/to/file.rom ....... Specify ROM file to be used");
+        puts("            [-b /path/to/bgm.dat] ... VGS BGM data");
+        puts("            [-g { None .............. GPU: Do not use");
+        puts("                | OpenGL ............ GPU: OpenGL <default>");
+        puts("                | Vulkan ............ GPU: Vulkan");
+        puts("                | Metal ............. GPU: Metal");
+        puts("                }]");
+        puts("            [-f] .................... Full Screen Mode");
         return 1;
     }
 
-    log("Booting FCS80 for SDL2.");
+    log("Booting VGS0 for SDL2.");
     SDL_version sdlVersion;
     SDL_GetVersion(&sdlVersion);
     log("SDL version: %d.%d.%d", sdlVersion.major, sdlVersion.minor, sdlVersion.patch);
 
-    log("Initializing VGS-Zero");
-    FCS80 fcs80;
+    log("Initializing VGS0");
+    VGS0 vgs0;
 
-    int vgsIndex = 0;
-    for (Binary* vgs : vgsTable) {
-        log("Loaded BGM data #%d (%lu bytes)", vgsIndex, vgs->size);
-        fcs80.loadVgsData(vgsIndex++, vgs->data, vgs->size);
+    Binary* bgm = nullptr;
+    if (bgmPath) {
+        bgm = loadBinary(bgmPath);
+        vgs0.loadBgm(bgm->data, bgm->size);
     }
 
-    if (!fcs80.loadRomFile(romPath)) {
-        log("Load ROM failed: %s", romPath);
-        return -1;
-    }
-
+    Binary* rom = loadBinary(romPath);
+    vgs0.loadRom(rom->data, rom->size);
+   
     log("Initializing SDL");
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS)) {
         log("SDL_Init failed: %s", SDL_GetError());
@@ -214,7 +203,7 @@ int main(int argc, char* argv[])
     desired.channels = 2;
     desired.samples = 735; // desired.freq * 20 / 1000;
     desired.callback = audioCallback;
-    desired.userdata = &fcs80;
+    desired.userdata = &vgs0;
     auto audioDeviceId = SDL_OpenAudioDevice(nullptr, 0, &desired, &obtained, 0);
     if (0 == audioDeviceId) {
         log(" ... SDL_OpenAudioDevice failed: %s", SDL_GetError());
@@ -270,25 +259,25 @@ int main(int argc, char* argv[])
             if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
                     case SDLK_q: halt = true; break;
-                    case SDLK_UP: key1 |= FCS80_JOYPAD_UP; break;
-                    case SDLK_DOWN: key1 |= FCS80_JOYPAD_DW; break;
-                    case SDLK_LEFT: key1 |= FCS80_JOYPAD_LE; break;
-                    case SDLK_RIGHT: key1 |= FCS80_JOYPAD_RI; break;
-                    case SDLK_SPACE: key1 |= FCS80_JOYPAD_ST; break;
-                    case SDLK_ESCAPE: key1 |= FCS80_JOYPAD_SE; break;
-                    case SDLK_x: key1 |= FCS80_JOYPAD_T1; break;
-                    case SDLK_z: key1 |= FCS80_JOYPAD_T2; break;
+                    case SDLK_UP: key1 |= VGS0_JOYPAD_UP; break;
+                    case SDLK_DOWN: key1 |= VGS0_JOYPAD_DW; break;
+                    case SDLK_LEFT: key1 |= VGS0_JOYPAD_LE; break;
+                    case SDLK_RIGHT: key1 |= VGS0_JOYPAD_RI; break;
+                    case SDLK_SPACE: key1 |= VGS0_JOYPAD_ST; break;
+                    case SDLK_ESCAPE: key1 |= VGS0_JOYPAD_SE; break;
+                    case SDLK_x: key1 |= VGS0_JOYPAD_T1; break;
+                    case SDLK_z: key1 |= VGS0_JOYPAD_T2; break;
                 }
             } else if (event.type == SDL_KEYUP) {
                 switch (event.key.keysym.sym) {
-                    case SDLK_UP: key1 ^= FCS80_JOYPAD_UP; break;
-                    case SDLK_DOWN: key1 ^= FCS80_JOYPAD_DW; break;
-                    case SDLK_LEFT: key1 ^= FCS80_JOYPAD_LE; break;
-                    case SDLK_RIGHT: key1 ^= FCS80_JOYPAD_RI; break;
-                    case SDLK_SPACE: key1 ^= FCS80_JOYPAD_ST; break;
-                    case SDLK_ESCAPE: key1 ^= FCS80_JOYPAD_SE; break;
-                    case SDLK_x: key1 ^= FCS80_JOYPAD_T1; break;
-                    case SDLK_z: key1 ^= FCS80_JOYPAD_T2; break;
+                    case SDLK_UP: key1 ^= VGS0_JOYPAD_UP; break;
+                    case SDLK_DOWN: key1 ^= VGS0_JOYPAD_DW; break;
+                    case SDLK_LEFT: key1 ^= VGS0_JOYPAD_LE; break;
+                    case SDLK_RIGHT: key1 ^= VGS0_JOYPAD_RI; break;
+                    case SDLK_SPACE: key1 ^= VGS0_JOYPAD_ST; break;
+                    case SDLK_ESCAPE: key1 ^= VGS0_JOYPAD_SE; break;
+                    case SDLK_x: key1 ^= VGS0_JOYPAD_T1; break;
+                    case SDLK_z: key1 ^= VGS0_JOYPAD_T2; break;
                 }
             }
         }
@@ -297,17 +286,12 @@ int main(int argc, char* argv[])
         }
 
         // execute emulator 1 frame
-        fcs80.tick(key1, 0);
-
-        // enqueue sound
         pthread_mutex_lock(&soundMutex);
-        size_t pcmSize;
-        auto pcm = fcs80.dequeSoundBuffer(&pcmSize);
-        soundQueue.enqueue(pcm, pcmSize);
+        vgs0.tick(key1);
         pthread_mutex_unlock(&soundMutex);
 
         // render graphics
-        auto fcs80Display = fcs80.getDisplay();
+        auto VGS0Display = vgs0.getDisplay();
         auto pcDisplay = (unsigned int*)windowSurface->pixels;
         auto pitch = windowSurface->pitch / windowSurface->format->BytesPerPixel;
         int offsetY = fullScreen ? 48 * pitch : 0;
@@ -315,7 +299,7 @@ int main(int argc, char* argv[])
         pcDisplay += offsetY;
         for (int y = 0; y < 192; y++) {
             for (int x = 0; x < 240; x++) {
-                unsigned int rgb555 = fcs80Display[x];
+                unsigned int rgb555 = VGS0Display[x];
                 unsigned int rgb888 = 0;
                 rgb888 |= bit5To8((rgb555 & 0b0111110000000000) >> 10);
                 rgb888 <<= 8;
@@ -326,7 +310,7 @@ int main(int argc, char* argv[])
                 pcDisplay[offsetX + x * 2] = rgb888;
                 pcDisplay[offsetX + x * 2 + 1] = rgb888;
             }
-            fcs80Display += 240;
+            VGS0Display += 240;
             memcpy(&pcDisplay[pitch], &pcDisplay[0], windowSurface->pitch);
             pcDisplay += pitch * 2;
         }
@@ -352,9 +336,11 @@ int main(int argc, char* argv[])
     SDL_CloseAudioDevice(audioDeviceId);
     SDL_DestroyWindow(window);
     SDL_Quit();
-    for (Binary* bin : vgsTable) {
-        free(bin->data);
-        delete bin;
+    free(rom->data);
+    delete rom;
+    if (bgm) {
+        free(bgm->data);
+        delete bgm;
     }
     return 0;
 }

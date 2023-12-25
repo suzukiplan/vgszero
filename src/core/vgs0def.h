@@ -1,5 +1,5 @@
-/*
- * FCS80 - Simple Buffer Queue
+/**
+ * VGS0 - Literal value definition
  * -----------------------------------------------------------------------------
  * The MIT License (MIT)
  *
@@ -24,37 +24,20 @@
  * THE SOFTWARE.
  * -----------------------------------------------------------------------------
  */
-#ifndef INCLUDE_BUFFER_QUEUE_H
-#define INCLUDE_BUFFER_QUEUE_H
-#include <stdio.h>
+#ifndef INCLUDE_VGS0DEF_H
+#define INCLUDE_VGS0DEF_H
 
-#define BUFFER_BLOCK_SIZE 8192
+#define VGS0_CPU_CLOCK_PER_SEC 3579545
+#define VGS0_VDP_CLOCK_PER_SEC 5376240 /* 342 * 262 * 60 Hz */
+#define VGS0_PSG_CLOCK_PER_SEC 44100
 
-class BufferQueue
-{
-  private:
-    void* buffer;
-    void* resultBuffer;
-    size_t size;
-    size_t cursor;
-
-  public:
-    BufferQueue(size_t iSize);
-    ~BufferQueue();
-    bool enqueue(const void* aBuffer, const size_t aSize);
-    void dequeue(void** oBuffer, size_t* oSize, size_t limit = 0xffffffff);
-    size_t getSize()
-    {
-        return size;
-    }
-    size_t getCursor()
-    {
-        return cursor;
-    }
-    void clear()
-    {
-        cursor = 0;
-    }
-};
+#define VGS0_JOYPAD_UP 0b10000000
+#define VGS0_JOYPAD_DW 0b01000000
+#define VGS0_JOYPAD_LE 0b00100000
+#define VGS0_JOYPAD_RI 0b00010000
+#define VGS0_JOYPAD_ST 0b00001000
+#define VGS0_JOYPAD_SE 0b00000100
+#define VGS0_JOYPAD_T1 0b00000010
+#define VGS0_JOYPAD_T2 0b00000001
 
 #endif

@@ -53,6 +53,13 @@ int main(int argc, char* argv[])
         return -1;
     }
 
+    // write eyecatch
+    if (8 != fwrite("VGS0BGM", 1, 8, fp)) {
+        fclose(fp);
+        printf("File write failed: %s\n", output);
+        return -1;
+    }
+
     // write count
     int size = (int)input.size();
     printf("Count of song: %d\n", size);

@@ -1,9 +1,9 @@
 /**
- * FAIRY COMPUTER SYSTEM 80 - Video Display Processor Emulator
+ * VGS0 - Video Display Processor
  * -----------------------------------------------------------------------------
  * The MIT License (MIT)
  *
- * Copyright (c) 2021 Yoji Suzuki.
+ * Copyright (c) 2023 Yoji Suzuki.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,12 @@
  * -----------------------------------------------------------------------------
  */
 
-#ifndef INCLUDE_FCS80VIDEO_HPP
-#define INCLUDE_FCS80VIDEO_HPP
+#ifndef INCLUDE_VDP_HPP
+#define INCLUDE_VDP_HPP
 #include <stdio.h>
 #include <string.h>
 
-class FCS80Video
+class VDP
 {
   public:
     enum class ColorMode {
@@ -93,7 +93,7 @@ class FCS80Video
         unsigned char ram[0x4000];
     } ctx;
 
-    FCS80Video(ColorMode colorMode_, void* arg, void (*detectEndOfFrame)(void* arg), void (*detectIRQ)(void* arg))
+    VDP(ColorMode colorMode_, void* arg, void (*detectEndOfFrame)(void* arg), void (*detectIRQ)(void* arg))
     {
         this->colorMode = colorMode_;
         this->detectEndOfFrame = detectEndOfFrame;

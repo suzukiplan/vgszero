@@ -2,9 +2,13 @@
 
 ![image](vgs0.png)
 
-SUZUKI PLAN - Video Game System Zero (VGS0) は、FCS80 と VGS の機能を融合した新しいレトロゲーム機です。
+SUZUKI PLAN - Video Game System Zero (VGS0) は、[FCS80](https://github.com/suzukiplan/fcs80/) と VGS の機能を融合した新しいレトロゲーム機です。
 
-VGS0 向け開発したゲームは RaspberryPi Zero (ベアメタル環境) で動作させることができますが、Linux または macOS 上で動作をデバッグすることもできます。
+VGS0 向け開発したゲームは RaspberryPi Zero (ベアメタル環境) で動作させることを想定しています。
+
+また、開発中のゲームを Linux または macOS 上のシミュレータで動作確認できるため、効率的なゲーム開発が可能です
+
+なお、VGS0 本体は GPL ライセンスの OSS ですが、VGS0 向けに開発したゲームは自由なライセンスに設定できるため OSS にする必要がありません。（もちろん OSS にすることもできます）
 
 ## VGS0 Feature
 

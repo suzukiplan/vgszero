@@ -22,26 +22,21 @@ CPP = g++ $(CPPFLAGS)
 
 HEADER_FILES = ../core/*.hpp
 HEADER_FILES += ../core/*.h
-HEADER_FILES += ./*.h
 
-OBJECTS = vgszero.o
-OBJECTS += BufferQueue.o
+OBJECTS = vgs0sdl2.o
 OBJECTS += lz4.o
 OBJECTS += vgstone.o
 
-all: vgszero
+all: vgs0
 
 clean:
 	rm -f $(OBJECTS)
 	rm -f vgszero 
 
-vgszero: $(OBJECTS)
-	$(CPP) -o vgszero $(OBJECTS) -L/usr/local/lib -lSDL2
+vgs0: $(OBJECTS)
+	$(CPP) -o vgs0 $(OBJECTS) -L/usr/local/lib -lSDL2
 
-BufferQueue.o: BufferQueue.cpp $(HEADER_FILES) ./Makefile
-	$(CPP) -c $<
-
-vgszero.o: vgszero.cpp $(HEADER_FILES) ./Makefile
+vgs0sdl2.o: vgs0sdl2.cpp $(HEADER_FILES) ./Makefile
 	$(CPP) -c $<
 
 lz4.o: ../core/lz4.c $(HEADER_FILES) ./Makefile
