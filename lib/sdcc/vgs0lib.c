@@ -1,0 +1,196 @@
+/**
+ * @file vgs0lib.c
+ * @brief VGS0 API Library for Z80 (SDCC version)
+  * -----------------------------------------------------------------------------
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2023 Yoji Suzuki.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * -----------------------------------------------------------------------------
+ */
+#include "vgs0lib.h"
+#pragma disable_warning 59 // no check none return (return at inline-asm)
+#pragma disable_warning 85 // no check unused args (check at inline-asm)
+#define STACK_ARG_HEAD 4
+
+void vgs0_wait_vsync(void) __z88dk_fastcall
+{
+__asm
+    ld hl, #0x9607
+wait_vblank_loop:
+    ld a, (hl)
+    and #0x80
+    jp z, wait_vblank_loop
+__endasm;
+}
+
+void vgs0_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b) __smallc
+{
+    uint16_t col;
+    uint16_t addr;
+    col = r & 0x1F;
+    col <<= 5;
+    col |= g & 0x1F;
+    col <<= 5;
+    col |= b & 0x1F;
+    addr = 0x9400;
+    addr += pn << 5;
+    addr += pi << 1;
+    *((uint16_t*)addr) = col;
+}
+
+void vgs0_palette_set_rgb555(uint8_t pn, uint8_t pi, uint16_t rgb555) __smallc
+{
+    uint16_t addr;
+    addr = 0x9400;
+    addr += pn << 5;
+    addr += pi << 1;
+    *((uint16_t*)addr) = rgb555;
+}
+
+void vgs0_dma(uint8_t prg) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xC0), a
+__endasm;
+}
+
+void vgs0_memset(uint16_t dst, uint8_t value, uint16_t cnt) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // cnt -> hl
+    ld l, (ix)
+    inc ix
+    ld h, (ix)
+    inc ix
+    // value-> a
+    ld a, (ix)
+    inc ix
+    // dst -> bc
+    ld c, (ix)
+    inc ix
+    ld b, (ix)
+    pop ix
+    // execute DMA
+    out (#0xC2), a
+__endasm;
+}
+
+void vgs0_memcpy(uint16_t dst, uint16_t src, uint16_t cnt) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // cnt -> hl
+    ld l, (ix)
+    inc ix
+    ld h, (ix)
+    inc ix
+    // src -> de
+    ld e, (ix)
+    inc ix
+    ld d, (ix)
+    inc ix
+    // dst -> bc
+    ld c, (ix)
+    inc ix
+    ld b, (ix)
+    pop ix
+    // execute DMA
+    out (#0xC3), a
+__endasm;
+}
+
+void vgs0_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
+{
+    x &= 0x1F;
+    y &= 0x1F;
+    uint16_t addrC = 0x8000 + (y << 5) + x;
+    uint16_t addrA = addrC + 0x400;
+    while (*str) {
+        *((uint8_t*)addrC) = *str;
+        *((uint8_t*)addrA) = attr;
+        addrC++;
+        addrA++;
+        str++;
+    }
+}
+
+void vgs0_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
+{
+    x &= 0x1F;
+    y &= 0x1F;
+    uint16_t addrC = 0x8800 + (y << 5) + x;
+    uint16_t addrA = addrC + 0x400;
+    while (*str) {
+        *((uint8_t*)addrC) = *str;
+        *((uint8_t*)addrA) = attr;
+        addrC++;
+        addrA++;
+        str++;
+    }
+}
+
+uint8_t vgs0_joypad_get(void) __z88dk_fastcall
+{
+__asm
+    in a, (#0xA0)
+    xor #0xFF
+    ld l, a
+    ret
+__endasm;
+}
+
+void vgs0_vgs_play(uint8_t song) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xE0), a
+__endasm;
+}
+
+void vgs0_vgs_pause(void) __z88dk_fastcall
+{
+__asm
+    ld a, #0
+    out (#0xE1), a
+__endasm;
+}
+
+void vgs0_vgs_resume(void) __z88dk_fastcall
+{
+__asm
+    ld a, #1
+    out (#0xE1), a
+__endasm;
+}
+
+void vgs0_vgs_fadeout(void) __z88dk_fastcall
+{
+__asm
+    ld a, #2
+    out (#0xE1), a
+__endasm;
+}
