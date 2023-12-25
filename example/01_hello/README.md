@@ -20,7 +20,7 @@
 
 ```zsh
 git clone https://github.com/suzukiplan/vgszero
-cd vgszero/example/hello
+cd vgszero/example/01_hello
 make
 ```
 
