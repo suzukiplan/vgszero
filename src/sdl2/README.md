@@ -1,4 +1,4 @@
-# VGS-Zero for SDL2
+# VGS0 for SDL2
 
 ## How to Build & Execute
 
@@ -11,10 +11,10 @@
 brew install sdl2
 
 # download repository
-git clone https://github.com/suzukiplan/fcs80
+git clone https://github.com/suzukiplan/vgszero
 
 # move to this dir
-cd fcs80/hal/sdl2
+cd vgszero/src/sdl2
 
 # build
 make
@@ -37,10 +37,10 @@ sudo apt-get install libasound2
 sudo apt-get install libasound2-dev
 
 # download repository
-git clone https://github.com/suzukiplan/fcs80
+git clone https://github.com/suzukiplan/vgszero
 
 # move to this dir
-cd fcs80/hal/sdl2
+cd vgszero/src/sdl2
 
 # build
 make
