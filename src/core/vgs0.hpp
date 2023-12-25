@@ -125,7 +125,7 @@ class VGS0
         }
         if (this->ctx.bgm.playing) {
             this->vgsdec->execute(buf, size);
-            this->ctx.bgm.playing = this->vgsdec->isPlayEnd();
+            this->ctx.bgm.playing = !this->vgsdec->isPlayEnd();
             if (!this->ctx.bgm.playing) {
                 this->ctx.bgm.fadeout = false;
             } else {
