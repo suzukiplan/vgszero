@@ -18,7 +18,7 @@ void main(void)
     vgs0_bg_putstr(8, 13, 0x80, "PAUSE");
     vgs0_bg_putstr(8, 15, 0x80, "RESUME");
     vgs0_bg_putstr(8, 17, 0x80, "FADEOUT");
-    VGS0_ADDR_BG->ptn[7][6] = '>';
+    vgs0_oam_set(0, 6 * 8, 7 * 8, 0x80, '>');
 
     // ボタン入力制御変数を準備
     uint8_t pushing = 0;
@@ -50,14 +50,13 @@ void main(void)
 
         // カーソル移動
         if (move) {
-            VGS0_ADDR_BG->ptn[cursor][6] = ' ';
             cursor += move;
             if (cursor < 7) {
                 cursor = 17;
             } else if (17 < cursor) {
                 cursor = 7;
             }
-            VGS0_ADDR_BG->ptn[cursor][6] = '>';
+            VGS0_ADDR_OAM[0].y = cursor * 8;
             move = 0;
         }
 
