@@ -1,9 +1,7 @@
-/* (C)2015, SUZUKI PLAN.
- *----------------------------------------------------------------------------
- * Description: VGS mk-II SR - Tones
- *    Platform: Common
- *      Author: Yoji Suzuki (SUZUKI PLAN)
- *----------------------------------------------------------------------------
+/**
+ * VGS0 - Tones
+ * License under GPLv3: https://github.com/suzukiplan/vgszero/blob/master/LICENSE-VGS0.txt
+ * (C)2023, SUZUKI PLAN
  */
 
 /*
