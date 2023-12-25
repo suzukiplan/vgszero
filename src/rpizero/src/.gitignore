@@ -1,0 +1,8 @@
+*.o
+*.d
+*.elf
+*.img
+*.lst
+*.map
+lz4.c
+vgstone.c

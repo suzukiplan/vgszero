@@ -1,0 +1,8 @@
+Copy the following files to the root directory of the SD card to launch the game on RaspberryPi Zero.
+
+1. bootcode.bin (firmware of VideoCore IV)
+2. start.elf (firmware of VideoCore IV)
+3. kernel.img (FCS80 kernel image)
+4. game.rom (ROM file of the game to be executed)
+
+The default game.rom is Hello, World.
