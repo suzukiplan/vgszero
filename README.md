@@ -1,6 +1,6 @@
 # SUZUKI PLAN - Video Game System Zero
 
-![image](vgs0.png)
+![logo](logo.png)
 
 SUZUKI PLAN - Video Game System Zero (VGS0) は、[FCS80](https://github.com/suzukiplan/fcs80/) と VGS の機能を融合した新しいレトロゲーム機です。
 
