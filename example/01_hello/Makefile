@@ -4,6 +4,8 @@ MAKEROM = ../../tools/makerom/makerom
 SDCC_FLAGS = -mz80
 SDCC_FLAGS += --opt-code-size
 SDCC_FLAGS += --code-loc 0x100
+SDCC_FLAGS += --xram-loc 0xC000 
+SDCC_FLAGS += --xram-size 0x4000 
 SDCC_FLAGS += --no-std-crt0
 SDCC_FLAGS += -Wl../../lib/sdcc/vgs0.lib
 
