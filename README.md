@@ -8,13 +8,29 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
 
 ## WIP status
 
-- [x] CPU
-- [x] VDP
-- [x] BGM API
-- [ ] Sound Effect API
-- [ ] RaspberryPi Zero
-- [ ] Support RaspberryPi Zero 2W
-- [ ] 22050Hz 1ch -> 44100Hz 2ch へ変更が必要かも（HDMIの仕様）
+- implementation
+  - [x] CPU
+  - [x] VDP
+  - [x] BGM API
+  - [ ] Sound Effect API
+  - [ ] RaspberryPi Zero
+  - [ ] RaspberryPi Zero 2W
+  - [ ] 22050Hz 1ch -> 44100Hz 2ch へ変更が必要かも（HDMIの仕様）
+- examples
+  - [x] Hello, World!
+  - [x] グローバル変数の使い方
+  - [x] BGM再生
+  - [ ] SE再生
+  - [ ] Map Scroll
+  - [ ] スプライト
+  - [ ] アセンブリ言語実装例（Helloのみ）
+- documents
+  - [ ] Z80: Memory map
+  - [ ] Z80: I/O map
+  - [ ] C API Library
+  - [ ] `game.rom`
+  - [ ] `bgm.dat`
+  - [ ] `se.dat`
 
 ## VGS0 Feature
 
