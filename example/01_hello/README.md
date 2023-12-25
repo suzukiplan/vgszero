@@ -1,9 +1,9 @@
 # Hello, World
 
-![preview](hello.png)
-
 - 画面に `Hello, World!` を表示します
 - ジョイパッドでハードウェアスクロール機能を用いて8方向に動かすことができます
+
+![preview](preview.png)
 
 ## How to build
 
@@ -20,7 +20,7 @@
 
 ```zsh
 git clone https://github.com/suzukiplan/vgszero
-cd vgszero/example/hello
+cd vgszero/example/01_hello
 make
 ```
 

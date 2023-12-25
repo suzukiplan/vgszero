@@ -1,4 +1,4 @@
-PROJECT = hello
+PROJECT = global
 BMP2CHR = ../../tools/bmp2chr/bmp2chr
 MAKEROM = ../../tools/makerom/makerom
 SDCC_FLAGS = -mz80

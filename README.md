@@ -2,13 +2,9 @@
 
 ![logo](logo.png)
 
-SUZUKI PLAN - Video Game System Zero (VGS0) は、[FCS80](https://github.com/suzukiplan/fcs80/) と VGS の機能を融合した新しいレトロゲーム機です。
+SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用いたゲーム機です。
 
-VGS0 向け開発したゲームは RaspberryPi Zero (ベアメタル環境) で動作させることを想定しています。
-
-また、開発中のゲームを Linux または macOS 上のシミュレータで動作確認できるため、効率的なゲーム開発が可能です
-
-なお、VGS0 本体は GPL ライセンスの OSS ですが、VGS0 向けに開発したゲームは自由なライセンスに設定できるため OSS にする必要がありません。（もちろん OSS にすることもできます）
+本リポジトリは、VGS0 の本体コード、配布イメージ、SDK、パソコン（Linux または macOS）で動作するエミュレータを提供します。
 
 ## VGS0 Feature
 
@@ -33,12 +29,23 @@ VGS0 向け開発したゲームは RaspberryPi Zero (ベアメタル環境) で
   - 22050Hz 16bit 1ch 形式の PCM 音源で効果音を再生
   - 最大 256 個を搭載可能
 
-## Required Device
+## RaspberryPi Zero
+
+### Required Device
 
 1. RaspberryPi Zero, Zero W, Zero WH or Zero 2W
 2. USB 接続のゲームパッド
 3. HDMI 接続のモニタ（解像度 640x480 以上、リフレーッシュレート 60 Hz、オーディオあり）
 4. SD カード
+
+### How to Luanch
+
+1. FAT32 フォーマットされた SD カードを準備
+2. SD カードのルートディレクトリに [./image/rpizero](./image/rpizero) または [./image/rpizero2](./image/rpizero2) 以下のファイルをコピー
+3. `game.rom` を起動対象のゲームの ROM データに置き換える
+4. `bgm.dat` を起動対象のゲームの BGM データに置き換える
+5. `eff.dat` を起動対象のゲームの効果音データに置き換える
+6. SD カードを RaspberryPi Zero に挿入して電源を入れる
 
 ## License
 
