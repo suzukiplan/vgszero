@@ -131,7 +131,7 @@ class VGS0
 
     void tick(unsigned char pad)
     {
-        this->ctx.pad = pad;
+        this->ctx.pad = 0xFF ^ pad;
         this->cpu->execute(0x7FFFFFFF);
     }
 
