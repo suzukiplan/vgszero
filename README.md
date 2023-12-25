@@ -14,6 +14,7 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
 - [ ] Sound Effect API
 - [ ] RaspberryPi Zero
 - [ ] Support RaspberryPi Zero 2W
+- [ ] 22050Hz 1ch -> 44100Hz 2ch へ変更が必要かも（HDMIの仕様）
 
 ## VGS0 Feature
 
@@ -33,9 +34,15 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - VRAM サイズ 16KB (TMS9918A 相当!)
 - BGM
   - VGS の MML で記述された BGM を再生可能
+  - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
+  - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要!
+  - 本体 ROM (`game.rom`) とは別アセット（`bgm.dat`）
   - 最大 256 曲を搭載可能
-- 効果音
+- SE (効果音)
   - 22050Hz 16bit 1ch 形式の PCM 音源で効果音を再生
+  - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
+  - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要
+  - 本体 ROM (`game.rom`) とは別アセット（`se.dat`）
   - 最大 256 個を搭載可能
 
 ## RaspberryPi Zero
