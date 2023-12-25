@@ -83,6 +83,14 @@
  */
 #define VGS0_ADDR_OAM ((volatile OAM*)0x9000)
 
+/**
+ * Set an object attribute memory record
+ */
+#define vgs0_oam_set(NUM, X, Y, ATTR, PTN) VGS0_ADDR_OAM[NUM].x = X; \
+                                           VGS0_ADDR_OAM[NUM].y = Y; \
+                                           VGS0_ADDR_OAM[NUM].attr = ATTR; \
+                                           VGS0_ADDR_OAM[NUM].ptn = PTN
+
 /** @def
  * Palette table
  */
