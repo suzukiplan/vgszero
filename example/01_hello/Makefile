@@ -1,3 +1,4 @@
+PROJECT = hello
 BMP2CHR = ../../tools/bmp2chr/bmp2chr
 MAKEROM = ../../tools/makerom/makerom
 SDCC_FLAGS = -mz80
@@ -6,9 +7,9 @@ SDCC_FLAGS += --code-loc 0x100
 SDCC_FLAGS += --no-std-crt0
 SDCC_FLAGS += -Wl../../lib/sdcc/vgs0.lib
 
-all: tools hello.rom
+all: tools ${PROJECT}.rom
 	cd ../../src/sdl2 && make
-	../../src/sdl2/vgs0 hello.rom
+	../../src/sdl2/vgs0 ${PROJECT}.rom
 
 clean:
 	rm -f *.rel
@@ -21,17 +22,17 @@ clean:
 	rm -f *.bin
 	rm -f *.lk
 	rm -f *.noi
-	rm -f *.rom
+	rm -f ${PROJECT}.rom
 
 tools:
 	cd ../../tools && make
 
-hello.rom: hello.bin font.chr
-	${MAKEROM} hello.rom hello.bin font.chr
+${PROJECT}.rom: program.bin font.chr
+	${MAKEROM} ${PROJECT}.rom program.bin font.chr
 
-hello.bin: hello.c ../../lib/sdcc/vgs0.lib ../../lib/sdcc/vgs0lib.h
-	sdcc ${SDCC_FLAGS} hello.c
-	makebin -s 16384 hello.ihx hello.bin
+program.bin: program.c ../../lib/sdcc/vgs0.lib ../../lib/sdcc/vgs0lib.h
+	sdcc ${SDCC_FLAGS} program.c
+	makebin -s 16384 program.ihx program.bin
 
 font.chr: font.bmp
 	${BMP2CHR} font.bmp font.chr
