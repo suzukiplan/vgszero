@@ -163,7 +163,7 @@ __asm
 __endasm;
 }
 
-void vgs0_vgs_play(uint8_t song) __z88dk_fastcall
+void vgs0_bgm_play(uint8_t song) __z88dk_fastcall
 {
 __asm
     ld a, l
@@ -171,7 +171,7 @@ __asm
 __endasm;
 }
 
-void vgs0_vgs_pause(void) __z88dk_fastcall
+void vgs0_bgm_pause(void) __z88dk_fastcall
 {
 __asm
     ld a, #0
@@ -179,7 +179,7 @@ __asm
 __endasm;
 }
 
-void vgs0_vgs_resume(void) __z88dk_fastcall
+void vgs0_bgm_resume(void) __z88dk_fastcall
 {
 __asm
     ld a, #1
@@ -187,7 +187,7 @@ __asm
 __endasm;
 }
 
-void vgs0_vgs_fadeout(void) __z88dk_fastcall
+void vgs0_bgm_fadeout(void) __z88dk_fastcall
 {
 __asm
     ld a, #2
