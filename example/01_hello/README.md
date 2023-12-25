@@ -1,9 +1,9 @@
 # Hello, World
 
-![preview](preview.png)
-
 - 画面に `Hello, World!` を表示します
 - ジョイパッドでハードウェアスクロール機能を用いて8方向に動かすことができます
+
+![preview](preview.png)
 
 ## How to build
 
