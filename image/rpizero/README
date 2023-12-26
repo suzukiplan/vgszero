@@ -8,3 +8,6 @@ Copy the following files to the root directory of the SD card to launch the game
 6. se.dat (Sound effect data file)
 
 The default game.rom is Hello, World.
+
+NOTE: The LICENSE-* and LICENSE.broadcom files must be included on the media for redistribution.
+
