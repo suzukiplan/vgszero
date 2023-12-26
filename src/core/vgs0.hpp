@@ -26,8 +26,21 @@ class VGS0
             }
     };
 
+    class SoundEffect {
+        public:
+            short* data;
+            size_t count;
+
+            SoundEffect()
+            {
+                this->data = nullptr;
+                this->count = 0;
+            }
+    };
+
     Binary rom;
     Binary bgm[256];
+    SoundEffect se[256];
 
   public:
     Z80* cpu;
@@ -46,6 +59,10 @@ class VGS0
             int playingIndex;
             unsigned int seekPosition;
         } bgm;
+        struct SoundEffectContext {
+            bool playing;
+            int playingIndex;
+        } se[256];
     } ctx;
 
     VGS0(VDP::ColorMode colorMode = VDP::ColorMode::RGB555)
@@ -108,6 +125,32 @@ class VGS0
         }
     }
 
+    void loadSoundEffect(const void* buffer, size_t size)
+    {
+        memset(&this->se, 0, sizeof(this->se));
+        const unsigned char* ptr = (const unsigned char*)buffer;
+        if (0 != memcmp(ptr, "VGS0EFF", 8)) {
+            return; // invalid eye-catch
+        }
+        ptr += 8;
+        int count;
+        memcpy(&count, ptr, 4);
+        ptr += 4;
+        if (count < 0 || 256 < count) {
+            return; // invalid count
+        }
+        int sizes[256];
+        for (int i = 0; i < count; i++) {
+            memcpy(&sizes[i], ptr, 4);
+            ptr += 4;
+        }
+        for (int i = 0; i < count; i++) {
+            this->se[i].data = (short*)ptr;
+            this->se[i].count = sizes[i] / 2;
+            ptr += sizes[i];
+        }
+    }
+
     void tick(unsigned char pad)
     {
         this->ctx.pad = 0xFF ^ pad;
@@ -133,6 +176,24 @@ class VGS0
             }
         } else {
             memset(buf, 0, size);
+        }
+        for (int i = 0; i < 256; i++) {
+            if (this->ctx.se[i].playing) {
+                for (int j = 0; j < size / 2; j++) {
+                    int wav = buf[j];
+                    wav += this->se[i].data[this->ctx.se[i].playingIndex++];
+                    if (32767 < wav) {
+                        wav = 32767;
+                    } else if (wav < -32768) {
+                        wav = -32768;
+                    }
+                    buf[i] = (short)wav;
+                    if (this->se[i].count <= this->ctx.se[i].playingIndex) {
+                        this->ctx.se[i].playingIndex = 0;
+                        this->ctx.se[i].playing = false;
+                    }
+                }
+            }
         }
         return buf;
     }
@@ -286,6 +347,19 @@ class VGS0
                         this->vgsdec->fadeout();
                         break;
                 }
+                break;
+            case 0xF0:
+                if (this->se[value].data) {
+                    this->ctx.se[value].playing = true;
+                    this->ctx.se[value].playingIndex = 0;
+                }
+                break;
+            case 0xF1:
+                this->ctx.se[value].playing = false;
+                this->ctx.se[value].playingIndex = 0;
+                break;
+            case 0xF2:
+                this->cpu->reg.pair.A = this->ctx.se[value].playing ? 1 : 0;
                 break;
         }
     }

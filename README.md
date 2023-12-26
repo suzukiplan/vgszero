@@ -223,6 +223,11 @@ VGS0 では最大 256 枚のスプライトを同時に表示でき、水平方�
 |   0xC0    |  -  |  o  | [ROM to Character DMA](#rom-to-character-dma) |
 |   0xC2    |  -  |  o  | [memset 相当の DMA](#memset-dma) |
 |   0xC3    |  -  |  o  | [memcpy 相当の DMA](#memcpy-dma) |
+|   0xE0    |  -  |  o  | BGM を[再生](#play-bgm) |
+|   0xE1    |  -  |  o  | BGM を[中断](#pause-bgm)、[再開](#resume-bgm)、[フェードアウト](#fadeout-bgm) |
+|   0xF0    |  -  |  o  | 効果音を再生 |
+|   0xF1    |  -  |  o  | 効果音を停止 |
+|   0xF2    |  -  |  o  | 効果音が再生中かチェック |
 
 ### (JoyPad)
 
@@ -269,6 +274,58 @@ LD BC, 0xC000   # 転送先アドレス (RAM)
 LD DE, 0x6000   # 転送元アドレス (ROM Bank 3)
 LD HL, 0x2000   # 転送バイト数 (8KB)
 OUT (0xC3), A   # memcpy (※書き込んだ値は無視されるので何でもOK)
+```
+
+### (Play BGM)
+
+```z80
+LD A, 0x01      # 演奏対象のBGM番号を指定
+OUT (0xE0), A   # BGMの演奏を開始
+```
+
+### (Pause BGM)
+
+```z80
+LD A, 0x00      # オペレーションID: Pause
+OUT (0xE1), A   # BGMの演奏を中断
+```
+
+### (Resume BGM)
+
+```z80
+LD A, 0x01      # オペレーションID: Resume
+OUT (0xE1), A   # BGMの演奏を再開
+```
+
+### (Fadeout BGM)
+
+```z80
+LD A, 0x02      # オペレーションID: Fadeout
+OUT (0xE1), A   # BGMの演奏をフェードアウト
+```
+
+### (Play Sound Effect)
+
+```z80
+LD A, 0x01      # 再生する効果音の番号を指定
+OUT (0xF0), A   # 効果音を再生
+```
+
+### (Stop Sound Effect)
+
+```z80
+LD A, 0x02      # 停止する効果音の番号を指定
+OUT (0xF1), A   # 効果音を停止
+```
+
+### (Check Sound Effect)
+
+```z80
+LD A, 0x03      # チェックする効果音の番号を指定
+OUT (0xF1), A   # 効果音をチェック (A=0: Stopped, A=1: Playing)
+AND 0x01
+JNZ EFF03_IS_PILAYING
+JZ  EFF03_IS_NOT_PLAYING
 ```
 
 ## License
