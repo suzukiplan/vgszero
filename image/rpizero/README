@@ -4,8 +4,8 @@ Copy the following files to the root directory of the SD card to launch the game
 2. start.elf (firmware of VideoCore IV)
 3. kernel.img (FCS80 kernel image)
 4. game.rom (ROM file of the game to be executed)
-5. bgm.dat (BGM data file)
-6. se.dat (Sound effect data file)
+5. bgm.dat (BGM data file) *optional
+6. se.dat (Sound effect data file) *optional
 
 The default game.rom is Hello, World.
 
