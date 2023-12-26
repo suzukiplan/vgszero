@@ -177,9 +177,9 @@ int main(int argc, char* argv[])
     log("Initializing AudioDriver");
     SDL_AudioSpec desired;
     SDL_AudioSpec obtained;
-    desired.freq = 22050;
+    desired.freq = 44100;
     desired.format = AUDIO_S16LSB;
-    desired.channels = 1;
+    desired.channels = 2;
     desired.samples = 735; // desired.freq * 20 / 1000;
     desired.callback = audioCallback;
     desired.userdata = &vgs0;
