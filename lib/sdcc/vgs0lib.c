@@ -194,3 +194,29 @@ __asm
     out (#0xE1), a
 __endasm;
 }
+
+void vgs0_se_play(uint8_t se) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xF0), a
+__endasm;
+}
+
+void vgs0_se_stop(uint8_t se) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xF1), a
+__endasm;
+}
+
+uint8_t vgs0_se_playing(uint8_t se) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xF2), a
+    ld l, a
+    ret
+__endasm;
+}

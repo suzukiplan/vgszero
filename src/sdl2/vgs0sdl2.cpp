@@ -93,6 +93,7 @@ int main(int argc, char* argv[])
 {
     const char* romPath = nullptr;
     const char* bgmPath = nullptr;
+    const char* sePath = nullptr;
     bool cliError = false;
     int fullScreen = 0;
     int gpuType = SDL_WINDOW_OPENGL;
@@ -110,6 +111,15 @@ int main(int argc, char* argv[])
                     break;
                 }
                 bgmPath = argv[i];
+                break;
+            }
+            case 's': {
+                i++;
+                if (argc <= i) {
+                    cliError = true;
+                    break;
+                }
+                sePath = argv[i];
                 break;
             }
             case 'f':
@@ -142,6 +152,7 @@ int main(int argc, char* argv[])
     if (cliError || !romPath) {
         puts("usage: vgs0 /path/to/file.rom ....... Specify ROM file to be used");
         puts("            [-b /path/to/bgm.dat] ... VGS BGM data");
+        puts("            [-s /path/to/se.dat] .... Sound Effect data");
         puts("            [-g { None .............. GPU: Do not use");
         puts("                | OpenGL ............ GPU: OpenGL <default>");
         puts("                | Vulkan ............ GPU: Vulkan");
@@ -163,6 +174,12 @@ int main(int argc, char* argv[])
     if (bgmPath) {
         bgm = loadBinary(bgmPath);
         vgs0.loadBgm(bgm->data, bgm->size);
+    }
+
+    Binary* se = nullptr;
+    if (sePath) {
+        se = loadBinary(sePath);
+        vgs0.loadSoundEffect(se->data, se->size);
     }
 
     Binary* rom = loadBinary(romPath);
@@ -320,6 +337,10 @@ int main(int argc, char* argv[])
     if (bgm) {
         free(bgm->data);
         delete bgm;
+    }
+    if (se) {
+        free(se->data);
+        delete se;
     }
     return 0;
 }

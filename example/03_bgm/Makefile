@@ -2,6 +2,7 @@ PROJECT = bgm
 BMP2CHR = ../../tools/bmp2chr/bmp2chr
 MAKEROM = ../../tools/makerom/makerom
 MAKEBGM = ../../tools/makebgm/makebgm
+MAKESE = ../../tools/makese/makese
 VGSMML = ../../tools/vgsmml/vgsmml
 SDCC_FLAGS = -mz80
 SDCC_FLAGS += --opt-code-size
@@ -11,9 +12,9 @@ SDCC_FLAGS += --xram-size 0x4000
 SDCC_FLAGS += --no-std-crt0
 SDCC_FLAGS += -Wl../../lib/sdcc/vgs0.lib
 
-all: tools ${PROJECT}.rom bgm.dat
+all: tools ${PROJECT}.rom bgm.dat se.dat
 	cd ../../src/sdl2 && make
-	../../src/sdl2/vgs0 -b bgm.dat ${PROJECT}.rom
+	../../src/sdl2/vgs0 -b bgm.dat -s se.dat ${PROJECT}.rom
 
 clean:
 	rm -f *.rel
@@ -53,3 +54,6 @@ song2.bgm: song2.mml
 
 song3.bgm: song3.mml
 	${VGSMML} $< $@
+
+se.dat: se_move.wav se_enter.wav
+	${MAKESE} se.dat se_move.wav se_enter.wav

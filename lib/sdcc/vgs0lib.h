@@ -280,4 +280,19 @@ void vgs0_bgm_resume(void) __z88dk_fastcall;
  */
 void vgs0_bgm_fadeout(void) __z88dk_fastcall;
 
+/**
+ * @brief SE: Play Sound Effect
+ */
+void vgs0_se_play(uint8_t se) __z88dk_fastcall;
+
+/**
+ * @brief SE: Stop Sound Effect
+ */
+void vgs0_se_stop(uint8_t se) __z88dk_fastcall;
+
+/**
+ * @brief SE: Check Sound Effect
+ */
+uint8_t vgs0_se_playing(uint8_t se) __z88dk_fastcall;
+
 #endif

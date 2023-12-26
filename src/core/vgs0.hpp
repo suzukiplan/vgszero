@@ -187,10 +187,11 @@ class VGS0
                     } else if (wav < -32768) {
                         wav = -32768;
                     }
-                    buf[i] = (short)wav;
+                    buf[j] = (short)wav;
                     if (this->se[i].count <= this->ctx.se[i].playingIndex) {
                         this->ctx.se[i].playingIndex = 0;
                         this->ctx.se[i].playing = false;
+                        break;
                     }
                 }
             }

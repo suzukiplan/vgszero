@@ -50,6 +50,7 @@ void main(void)
 
         // カーソル移動
         if (move) {
+            vgs0_se_play(0);
             cursor += move;
             if (cursor < 7) {
                 cursor = 17;
@@ -76,6 +77,7 @@ void main(void)
 
         // Aボタンを押して離した瞬間にカーソル位置のコマンドを実行
         if (!pushing && push) {
+            vgs0_se_play(1);
             switch (cursor) {
                 case 7: vgs0_bgm_play(0); break;
                 case 9: vgs0_bgm_play(1); break;
