@@ -16,7 +16,8 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - [x] RaspberryPi Zero
   - [ ] RaspberryPi Zero 2W
   - [x] 22050Hz 1ch -> 44100Hz 2ch へ変更が必要かも（HDMIの仕様）
-  - [ ] game.rom, bgm.dat, se.dat を1ファイルに纏めたい (game.pac とか?)
+  - [ ] 44100Hz 2ch -> 44100Hz 1ch にする (モノラルでもイケた）
+  - [ ] game.rom, bgm.dat, se.dat を1ファイルに纏めたい (game.pkg)
 - examples
   - [x] Hello, World!
   - [x] グローバル変数の使い方
