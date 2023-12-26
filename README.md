@@ -63,23 +63,31 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - 本体 ROM (`game.rom`) とは別アセット（`se.dat`）
   - 最大 256 個 & 合計 8MB 以下を搭載可能
 
-## RaspberryPi Zero
+## How to Execute
 
-### Required Device
-
-1. RaspberryPi Zero, Zero W, Zero WH or Zero 2W
-2. USB 接続のゲームパッド
-3. HDMI 接続のモニタ（解像度 640x480 以上、リフレーッシュレート 60 Hz、オーディオあり）
-4. SD カード
-
-### How to Luanch
+### RaspberryPi Zero
 
 1. FAT32 フォーマットされた SD カードを準備
 2. SD カードのルートディレクトリに [./image/rpizero](./image/rpizero) または [./image/rpizero2](./image/rpizero2) 以下のファイルをコピー
 3. `game.rom` を起動対象のゲームの ROM データに置き換える
 4. `bgm.dat` を起動対象のゲームの BGM データに置き換える
-5. `eff.dat` を起動対象のゲームの効果音データに置き換える
-6. SD カードを RaspberryPi Zero に挿入して電源を入れる
+5. `se.dat` を起動対象のゲームの効果音データに置き換える
+6. SD カードを RaspberryPi Zero に挿入
+7. RaspberryPi Zero に USB ゲームパッドを接続
+8. RaspberryPi Zero とテレビを HDMI ケーブルで接続
+9. RaspberryPi Zero に USB で電源を供給
+
+### PC (Linux or macOS)
+
+SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コマンドラインオプションに起動対象の `game.rom`, `bgm.dat`, `se.dat` を指定して実行してください。
+
+## Examples
+
+| Directory | Language | Description |
+| :-------- | :------- | :---------- |
+| [example/01_hello](./example/01_hello/) | C言語 | `HELLO,WORLD!` を表示 |
+| [example/02_global](./example/02_global/) | C言語 | グローバル変数の使用例 |
+| [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
 
 ## Programming Guide
 
