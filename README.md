@@ -83,7 +83,7 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
 ## License
 
 - VGS0 本体は GPLv3 の OSS です: [LICENSE-VGS0.txt](./LICENSE_VGS0.txt)
-- VGS0 本体配布イメージには RaspberryPi ブートローダーが含まれます: [LICENSE.broadcom](./LICENSE.broadcom)
+- VGS0 本体配布イメージには RaspberryPi ブートローダーが含まれます: [LICENCE.broadcom](./LICENCE.broadcom)
 - VGS0 本体には Circle（GPLv3）が含まれます: [LICENSE-CIRCLE.txt](./LICENSE-CIRCLE.txt)
 - VGS0 本体には LZ4 Library（2か条BSD）が含まれます: [LICENSE-LZ4LIB.txt](./LICENSE-LZ4LIB.txt)
 - VGS0 本体には SUZUKI PLAN - Z80 Emulator (MIT) が含まれます: [LICENSE-Z80.txt](./LICENSE-Z80.txt)
