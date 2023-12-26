@@ -23,6 +23,7 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - [ ] SE再生
   - [ ] Map Scroll
   - [ ] スプライト
+  - [ ] スプライト・BG・FG全表示しつつ音楽+効果音（限界性能チェック用）
   - [ ] アセンブリ言語実装例（Helloのみ）
 - documents
   - [ ] Z80: Memory map
