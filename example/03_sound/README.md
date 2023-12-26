@@ -1,7 +1,8 @@
-# BGM
+# Sound 
 
 - BGM を再生・ポーズ・再開・フェードアウト
-- ジョイパッドで操作と曲を選択します
+- 効果音を再生
+- ジョイパッドで操作します
 
 ![preview](preview.png)
 
@@ -20,7 +21,7 @@
 
 ```zsh
 git clone https://github.com/suzukiplan/vgszero
-cd vgszero/example/03_bgm
+cd vgszero/example/03_sound
 make
 ```
 
@@ -39,6 +40,11 @@ make
 - BGM 0: [./song1.mml](./song1.mml)
 - BGM 1: [./song2.mml](./song2.mml)
 - BGM 2: [./song3.mml](./song3.mml)
+
+## Sound Effect structure
+
+- SE 0: [./se_move.wav](./se_move.wav)
+- SE 1: [./se_enter.wav](./se_enter.wav)
 
 ## Program Code
 
@@ -95,6 +101,7 @@ void main(void)
 
         // カーソル移動
         if (move) {
+            vgs0_se_play(0);
             cursor += move;
             if (cursor < 7) {
                 cursor = 17;
@@ -121,6 +128,7 @@ void main(void)
 
         // Aボタンを押して離した瞬間にカーソル位置のコマンドを実行
         if (!pushing && push) {
+            vgs0_se_play(1);
             switch (cursor) {
                 case 7: vgs0_bgm_play(0); break;
                 case 9: vgs0_bgm_play(1); break;

@@ -1,4 +1,4 @@
-PROJECT = bgm
+PROJECT = sound
 BMP2CHR = ../../tools/bmp2chr/bmp2chr
 MAKEROM = ../../tools/makerom/makerom
 MAKEBGM = ../../tools/makebgm/makebgm
