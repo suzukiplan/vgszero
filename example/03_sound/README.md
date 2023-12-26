@@ -141,3 +141,7 @@ void main(void)
     }
 }
 ```
+
+## Note
+
+効果音の作成には [Jfxr](https://github.com/ttencate/jfxr) を使用しています。
