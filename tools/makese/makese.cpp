@@ -16,6 +16,7 @@ class Binary {
 
 static Binary* loadBinary(const char* path)
 {
+    printf("Loading: %s\n", path);
     FILE* fp = fopen(path, "rb");
     if (!fp) {
         printf("File open failed: %s\n", path);
@@ -24,7 +25,7 @@ static Binary* loadBinary(const char* path)
     fseek(fp, 0, SEEK_END);
     size_t size = (size_t)ftell(fp);
     fseek(fp, 0, SEEK_SET);
-    void* result = malloc(size);
+    char* result = (char*)malloc(size);
     if (size != fread(result, 1, size, fp)) {
         fclose(fp);
         free(result);
@@ -33,7 +34,103 @@ static Binary* loadBinary(const char* path)
     }
     fclose(fp);
 
-    // TODO: wav -> pcm raw data convert
+    if (0 != memcmp(result, "RIFF", 4)) {
+        puts("Invalid format: RIFF not exist");
+        exit(-1);
+    }
+    result += 4;
+    size -= 4;
+
+    int n;
+    unsigned short s;
+
+    memcpy(&n, result, 4);
+    if (n != size - 4) {
+        puts("Invalid format: SIZE");
+        exit(-1);
+    }
+    result += 4;
+    size -= 4;
+
+    if (0 != memcmp(result, "WAVE", 4)) {
+        puts("Invalid format: not WAVE format");
+        exit(-1);
+    }
+    result += 4;
+    size -= 4;
+
+    // check chunks
+    while (1) {
+        if (0 == memcmp(result, "fmt ", 4)) {
+            result += 4;
+            size -= 4;
+            memcpy(&n, result, 4);
+            if (n != 16) {
+                puts("Invalid format: not linear format");
+                exit(-1);
+            }
+            result += 4;
+            size -= 4;
+
+            memcpy(&s, result, 2);
+            if (s != 0x0001) {
+                puts("Invalid format: unsupported compress type");
+                exit(-1);
+            }
+            result += 2;
+            size -= 2;
+
+            short ch;
+            memcpy(&ch, result, 2);
+            result += 2;
+            size -= 2;
+
+            int rate;
+            memcpy(&rate, result, 4);
+            result += 4;
+            size -= 4;
+
+            int bps;
+            memcpy(&bps, result, 4);
+            result += 4;
+            size -= 4;
+
+            short bs;
+            memcpy(&bs, result, 2);
+            result += 2;
+            size -= 2;
+
+            short bits;
+            memcpy(&bits, result, 2);
+            result += 2;
+            size -= 2;
+
+            printf("- PCM Format: %dHz %dbits %dch (%d bytes/sec, %d bytes/sample)\n", rate, bits, ch, bps, bs);
+        } else if (0 == memcmp(result, "LIST", 4)) {
+            result += 4;
+            size -= 4;
+            memcpy(&n, result, 4);
+            result += 4 + n;
+            size -= 4 + n;
+        } else if (0 == memcmp(result, "data", 4)) {
+            result += 4;
+            size -= 4;
+            break;
+        } else {
+            printf("Detected an invalid chunk: %c%c%c%c\n", result[0], result[1], result[2], result[3]);
+            exit(-1);
+        }
+    }
+
+    // validate data chunk size
+    memcpy(&n, result, 4);
+    if (n != size - 4) {
+        puts("Invalid format: invalid sub chunk size");
+        exit(-1);
+    }
+    printf("- PCM size: %d bytes\n", n);
+    result += 4;
+    size -= 4;
 
     return new Binary(result, size);
 }
