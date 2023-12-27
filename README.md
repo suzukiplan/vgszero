@@ -35,7 +35,7 @@ Video Game System - Zero (VGS0) は RaspberryPi Zero 2W のベアメタル環境
   - [x] BGM再生
   - [x] SE再生
   - [ ] Map Scroll
-  - [ ] スプライト
+  - [x] スプライト
   - [x] スプライト・BG・FG全表示しつつ音楽+効果音（限界性能チェック用）
   - [ ] アセンブリ言語実装例（Helloのみ）
 - documents
