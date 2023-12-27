@@ -24,8 +24,8 @@
  * THE SOFTWARE.
  * -----------------------------------------------------------------------------
  */
-#include "vgs0.hpp"
 #include "kernel.h"
+#include "vgs0.hpp"
 
 #define TAG "kernel"
 static uint8_t pad1_;
