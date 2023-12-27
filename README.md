@@ -2,9 +2,9 @@
 
 ![logo](logo.png)
 
-Video Game System - Zero (VGS0) は RaspberryPi Zero 2W のベアメタル環境で動作するゲーム機です。
+Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル環境で動作するゲーム機です。
 
-本リポジトリは、VGS0 の本体コード、配布イメージ、SDK、パソコン（Linux または macOS）で動作するエミュレータを提供します。
+本リポジトリは、VGS-Zero の本体コード、配布イメージ、SDK、パソコン（Linux または macOS）で動作するエミュレータを提供します。
 
 ## WIP status
 
@@ -28,7 +28,7 @@ Video Game System - Zero (VGS0) は RaspberryPi Zero 2W のベアメタル環境
   - [x] Z80 のクロックアップ
   - [ ] RaspberryPi Zero 2W で処理遅延していないことの検証
   - [ ] SAVE/LOAD API (Z80)
-    - VGS0 で RPG を創ったり STG のスコア保存ができたりするようにするため
+    - VGS-Zero で RPG を創ったり STG のスコア保存ができたりするようにするため
 - examples
   - [x] Hello, World!
   - [x] グローバル変数の使い方
@@ -47,7 +47,7 @@ Video Game System - Zero (VGS0) は RaspberryPi Zero 2W のベアメタル環境
   - [x] `se.dat`
   - [x] `game.pkg`
 
-## VGS0 Feature
+## VGS-Zero Feature
 
 - CPU: Z80 16MHz (16,777,216Hz)
   - Z80 アセンブリ言語でプログラムを記述
@@ -107,7 +107,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 
 ## game.pkg
 
-game.pkg は、再配布可能な VGS0 のゲーム実行形式で、ツールチェインの [makepkg コマンド](./tools/makepkg/) で生成することができます。
+game.pkg は、再配布可能な VGS-Zero のゲーム実行形式で、ツールチェインの [makepkg コマンド](./tools/makepkg/) で生成することができます。
 
 ```
 makepkg  -o /path/to/output.pkg
@@ -174,7 +174,7 @@ makese コマンドに指定できる .wav ファイルは、次の形式でな�
 
 ### Programming Language
 
-- VGS0 のゲームは Z80 アセンブリ言語 または C言語 で記述することができます
+- VGS-Zero のゲームは Z80 アセンブリ言語 または C言語 で記述することができます
   - Z80 アセンブリ言語: [./example/01_hello-asm](./example/01_hello-asm)
   - C言語: [./example/01_hello](./example/01_hello)
 - C言語で記述する場合:
@@ -276,7 +276,7 @@ VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへ�
 
 #### (Name Table)
 
-- VGS0 では 8x8 ピクセルの矩形単位の[キャラクタパターン](#character-pattern-table)番号をネームテーブルに書き込むことでグラフィックスを表示します
+- VGS-Zero では 8x8 ピクセルの矩形単位の[キャラクタパターン](#character-pattern-table)番号をネームテーブルに書き込むことでグラフィックスを表示します
 - ネームテーブルは 32 行 32 列の二次元配列です（BG/FG 共通）
 
 #### (Attribute)
@@ -294,7 +294,7 @@ VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへ�
 
 #### (Palette)
 
-- VGS0 では最大 16 個のパレットを使用できます
+- VGS-Zero では最大 16 個のパレットを使用できます
 - 各パレットには 16 色を RGB555 形式で指定できます
 - FG と スプライトの場合、色番号 0 は透明色になります
 
@@ -311,7 +311,7 @@ struct OAM {
 } oam[256];
 ```
 
-VGS0 では最大 256 枚のスプライトを同時に表示でき、水平方向の表示数に上限がありません。
+VGS-Zero では最大 256 枚のスプライトを同時に表示でき、水平方向の表示数に上限がありません。
 
 #### (Scanline Counter)
 
@@ -517,7 +517,7 @@ JZ  EFF03_IS_NOT_PLAYING
 
 ## How to Sell Your Game
 
-コミックマーケットや通販で VGS0 用のゲームを販売する時は、
+コミックマーケットや通販で VGS-Zero 用のゲームを販売する時は、
 
 1. FAT32 でフォーマットした micro SD カードを準備
 2. [./image](./image/) 以下のファイルを micro SD カードのルートディレクトリへコピー
@@ -561,9 +561,9 @@ README.txtの記載凡例:
 
 ## License
 
-- VGS0 本体は GPLv3 の OSS です: [LICENSE-VGS0.txt](./LICENSE_VGS0.txt)
-- VGS0 本体配布イメージには RaspberryPi ブートローダーが含まれます: [LICENCE.broadcom](./LICENCE.broadcom)
-- VGS0 本体には Circle（GPLv3）が含まれます: [LICENSE-CIRCLE.txt](./LICENSE-CIRCLE.txt)
-- VGS0 本体には LZ4 Library（2か条BSD）が含まれます: [LICENSE-LZ4LIB.txt](./LICENSE-LZ4LIB.txt)
-- VGS0 本体には SUZUKI PLAN - Z80 Emulator (MIT) が含まれます: [LICENSE-Z80.txt](./LICENSE-Z80.txt)
-- VGS0 Library for Z80 は MIT ライセンスの OSS です:[LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
+- VGS-Zero 本体は GPLv3 の OSS です: [LICENSE-VGS0.txt](./LICENSE_VGS0.txt)
+- VGS-Zero 本体配布イメージには RaspberryPi ブートローダーが含まれます: [LICENCE.broadcom](./LICENCE.broadcom)
+- VGS-Zero 本体には Circle（GPLv3）が含まれます: [LICENSE-CIRCLE.txt](./LICENSE-CIRCLE.txt)
+- VGS-Zero 本体には LZ4 Library（2か条BSD）が含まれます: [LICENSE-LZ4LIB.txt](./LICENSE-LZ4LIB.txt)
+- VGS-Zero 本体には SUZUKI PLAN - Z80 Emulator (MIT) が含まれます: [LICENSE-Z80.txt](./LICENSE-Z80.txt)
+- VGS-Zero Library for Z80 は MIT ライセンスの OSS です:[LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)

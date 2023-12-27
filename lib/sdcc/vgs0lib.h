@@ -1,6 +1,6 @@
 /**
  * @file vgs0lib.h
- * @brief VGS0 API Library for Z80 (SDCC version)
+ * @brief VGS-Zero API Library for Z80 (SDCC version)
  * -----------------------------------------------------------------------------
  * The MIT License (MIT)
  *
