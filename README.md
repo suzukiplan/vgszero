@@ -1,8 +1,8 @@
-# [WIP] SUZUKI PLAN - Video Game System Zero 2W
+# [WIP] Video Game System - Zero
 
 ![logo](logo.png)
 
-SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero 2W をコアに用いたゲーム機です。
+Video Game System - Zero (VGS0) は RaspberryPi Zero 2W のベアメタル環境で動作するゲーム機です。
 
 本リポジトリは、VGS0 の本体コード、配布イメージ、SDK、パソコン（Linux または macOS）で動作するエミュレータを提供します。
 
