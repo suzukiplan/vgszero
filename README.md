@@ -545,6 +545,7 @@ README.txtの記載凡例:
 ・RaspberryPi Zero 2W: https://www.switch-science.com/products/7600
 ・RaspberryPi Zero 2W とテレビを接続する HDMI ケーブル
 ・RaspberryPi Zero 2W に接続する USB ゲームパッド
+・RaspberryPi Zero 2W に接続する USB 電源 (5V/2.5A以上を推奨)
 ・テレビなど（HDMI入力対応、オーディオ有り、リフレッシュレート60Hz）
 
 【起動方法】
