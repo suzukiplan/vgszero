@@ -1,8 +1,8 @@
-Copy the following files to the root directory of the SD card to launch the game on RaspberryPi Zero.
+Copy the following files to the root directory of the SD card to launch the game on RaspberryPi Zero 2W.
 
 1. bootcode.bin (firmware of VideoCore IV)
 2. start.elf (firmware of VideoCore IV)
-3. kernel.img (FCS80 kernel image)
+3. kernel8.img (VGS0 kernel image)
 4. game.pkg (game package to be executed)
 
 The default game.pkg is Hello, World.
