@@ -156,6 +156,7 @@
 
 /** @def
  * VDP status
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#vdp-status
  */
 #define VGS0_ADDR_STATUS ((volatile uint8_t*)0x9607)
 
