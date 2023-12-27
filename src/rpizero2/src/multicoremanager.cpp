@@ -1,15 +1,12 @@
 #include "multicoremanager.h"
 #include "vgs0.hpp"
 
-#include <circle/timer.h>
-
 extern VGS0* vgs0_;
 extern uint8_t pad1_;
 extern size_t hdmiPitch_;
 extern uint16_t* hdmiBuffer_;
 extern uint16_t pcmData_[735];
 extern CLogger* logger_;
-extern CTimer* timer_;
 
 MultiCoreManager::MultiCoreManager(CMemorySystem* pMemorySystem) : CMultiCoreSupport(pMemorySystem)
 {
@@ -60,7 +57,6 @@ void MultiCoreManager::IPIHandler(unsigned nCore, unsigned nIPI)
 {
     if (nIPI == IPI_USER + 0) {
         // CPU1: execute main core (z80) tick and render display
-        unsigned start = timer_->GetClockTicks();
         vgs0_->tick(pad1_);
         uint16_t* display = vgs0_->getDisplay();
         uint16_t* hdmi = hdmiBuffer_;
@@ -69,7 +65,6 @@ void MultiCoreManager::IPIHandler(unsigned nCore, unsigned nIPI)
             display += 240;
             hdmi += hdmiPitch_;
         }
-        logger_->Write("CPU1", LogNotice, "proctime: %uus", timer_->GetClockTicks() - start);
     } else if (nIPI == IPI_USER + 1) {
         // CPU2: execute sound core (vgs) tick and buffering the result
         memcpy(pcmData_, vgs0_->tickSound(1470), 1470);
