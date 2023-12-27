@@ -44,14 +44,18 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - 最大 2MB (8kb × 256) のプログラムとデータ (※音声データを除く)
   - RAM サイズ 16KB (PV16相当!)
 - VDP (映像処理)
+  - VRAM サイズ 16KB (TMS9918A 相当!)
   - 解像度: 240x192 ピクセル
   - 32,768 色中 256 色を同時発色可能
-  - BG, FG, スプライトを合成描画
-    - 最大 256 枚のキャラクタパターン (8x8ピクセル)
-    - BG, FG のネームテーブルサイズ: 32x32 (256x256 ピクセル)
-    - BG, FG: ハードウェアスクロール対応
-    - 最大 256 枚のスプライトを表示可能（水平上限なし）
-  - VRAM サイズ 16KB (TMS9918A 相当!)
+  - [BG](#bg), [FG](#fg), [スプライト](#oam)を合成描画
+    - 最大 256 枚 (8KB) の[キャラクタパターン](#character-pattern-table) (8x8ピクセル)
+    - [BG](#bg), [FG](#fg) の[ネームテーブル](#name-table)サイズ: 32x32 (256x256 ピクセル)
+    - [BG](#bg), [FG](#fg): [ハードウェアスクロール](#hardware-scroll)対応
+    - 最大 256 枚の[スプライト](#oam)を表示可能（水平上限なし）
+- DMA (ダイレクトメモリアクセス)
+  - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
+  - [C言語の `memset` に相当する高速 DMA 転送機能を実装](#memset-dma)
+  - [C言語の `memcpy` に相当する高速 DMA 転送機能を実装](#memcpy-dma)
 - BGM
   - VGS の MML で記述された BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
@@ -148,28 +152,43 @@ open doc/html/index.html
 
 |   CPU address   |  VRAM address   | Map |
 | :-------------: | :-------------: | :-- |
-| 0x8000 ~ 0x83FF | 0x0000 ~ 0x03FF | BG [Name Table](#name-table) (32 x 32) |
-| 0x8400 ~ 0x87FF | 0x0400 ~ 0x07FF | BG [Attribute](#attribute) Table (32 x 32) |
-| 0x8800 ~ 0x8BFF | 0x0800 ~ 0x0BFF | FG [Name Table](#name-table) (32 x 32) |
-| 0x8C00 ~ 0x8FFF | 0x0C00 ~ 0x0FFF | FG [Attribute](#attribute) Table (32 x 32) |
+| 0x8000 ~ 0x83FF | 0x0000 ~ 0x03FF | [BG](#bg) [Name Table](#name-table) (32 x 32) |
+| 0x8400 ~ 0x87FF | 0x0400 ~ 0x07FF | [BG](#bg) [Attribute](#attribute) Table (32 x 32) |
+| 0x8800 ~ 0x8BFF | 0x0800 ~ 0x0BFF | [FG](#fg) [Name Table](#name-table) (32 x 32) |
+| 0x8C00 ~ 0x8FFF | 0x0C00 ~ 0x0FFF | [FG](#fg) [Attribute](#attribute) Table (32 x 32) |
 | 0x9000 ~ 0x93FF | 0x1000 ~ 0x13FF | [OAM](#oam); Object Attribute Memory (4 x 256) |
 | 0x9400 ~ 0x95FF | 0x1400 ~ 0x15FF | [Palette](#palette) Table (2 x 16 x 16) |
-| 0x9600          | 0x1600	        | Register #0: Scanline vertical counter (read only) |
-| 0x9601          | 0x1601          | Register #1: Scanline horizontal counter (read only) |
-| 0x9602          | 0x1602          | Register #2: BG Scroll X |
-| 0x9603          | 0x1603          | Register #3: BG Scroll Y |
-| 0x9604          | 0x1604          | Register #4: FG Scroll X |
-| 0x9605          | 0x1605          | Register #5: FG Scroll Y |
+| 0x9600          | 0x1600	        | Register #0: Vertical [Scanline Counter](#scanline-counter) (read only) |
+| 0x9601          | 0x1601          | Register #1: Horizontal [Scanline Counter](#scanline-counter) (read only) |
+| 0x9602          | 0x1602          | Register #2: [BG](#bg)BG [Scroll](#hardware-scroll) X |
+| 0x9603          | 0x1603          | Register #3: [BG](#bg) [Scroll](#hardware-scroll) Y |
+| 0x9604          | 0x1604          | Register #4: [FG](#fg) [Scroll](#hardware-scroll) X |
+| 0x9605          | 0x1605          | Register #5: [FG](#fg) [Scroll](#hardware-scroll) Y |
 | 0x9606          | 0x1606          | Register #6: IRQ scanline position (NOTE: 0 is disable) |
 | 0x9607          | 0x1607          | Register #7: Status (read only) |
 | 0xA000 ~ $BFFF  | 0x2000 ~ 0x3FFF | [Character Pattern Table](#character-pattern-table) (32 x 256) |
 
-- VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへのロード・ストア（LD命令等）で簡単に実行できます
-- BG と FG は 32x32 (256x256 ピクセル) のネームテーブルに書き込まれたキャラクタパターンが表示されます
-- BG はスプライトの背面に表示され、FG はスプライトの前面に表示されます
-- BG/FG は 0x9602 〜 0x9605 のレジスタに値を書き込むことでハードウェアスクロールができます
-- IRQ によりスキャンライン位置を検知できますが 0x9600 のレジスタ参照でもスキャンライン位置を特定できるため、ラスター処理の実行に必ずしも割り込みが必要ではありません（基本的に割り込み無しでのプログラミングを想定しています）
-- BG/FG/スプライトで使用するキャラクタパターンは共通です
+VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへのロード・ストア（LD命令等）で簡単に実行できます。
+
+#### (BG)
+
+- BG (Background Graphics) は、基本となる背景映像です
+- [スプライト](#oam) と [FG](#fg) の背面に表示されます
+- ゲームの背景映像として利用することを想定しています
+- [ネームテーブル](#name-table) にキャラクタ番号と[属性](#attribute)を指定して表示します
+- 透明色が存在しません
+- [属性](#attribute)の指定で描画を非表示（hidden）にすることができません
+- [FG](#fg) とは独立した [ハードウェアスクロール](#hardware-scroll) に対応しています
+
+#### (FG)
+
+- FG (Foreground Graphics) は、最前面に表示される映像です
+- [BG](#bg) と [スプライト](#oam) の前面に表示されます
+- ゲームのスコアやメッセージウインドウなどの表示に利用することを想定しています
+- [ネームテーブル](#name-table) にキャラクタ番号と[属性](#attribute)を指定して表示します
+- [パレット](#palette) の色番号 0 が透明色になります
+- [属性](#attribute)の指定で描画を非表示（hidden）にすることができ、デフォルトは非表示になっています
+- [BG](#bg) とは独立した [ハードウェアスクロール](#hardware-scroll) に対応しています
 
 #### (Name Table)
 
@@ -209,6 +228,19 @@ struct OAM {
 ```
 
 VGS0 では最大 256 枚のスプライトを同時に表示でき、水平方向の表示数に上限がありません。
+
+#### (Scanline Counter)
+
+- スキャンラインカウンタは、VDP のピクセルレンダリング位置を特定することができる読み取り専用の VDP レジスタです
+- `0x9600` が垂直方向で `0x9601` が垂直方向です
+- 垂直方向の値を待機することでラスター[スクロール](#hardware-scroll)等の処理を **割り込み無し** で実装することができます
+- 水平方向は高速に切り替わるため使い所は無いかもしれません
+
+#### (Hardware Scroll)
+
+- [BG](#bg) は `0x9602` に X 座標, `0x9603` に Y 座標の描画起点座標を指定することができます
+- [FG](#fg) は `0x9604` に X 座標, `0x9605` に Y 座標の描画起点座標を指定することができます
+- `0x9602` ~ `0x9605` を読み取ることで現在のスクロール位置を取得することもできます
 
 #### (Character Pattern Table)
 
