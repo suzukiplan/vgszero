@@ -165,7 +165,7 @@ open doc/html/index.html
 | 0x9604          | 0x1604          | Register #4: [FG](#fg) [Scroll](#hardware-scroll) X |
 | 0x9605          | 0x1605          | Register #5: [FG](#fg) [Scroll](#hardware-scroll) Y |
 | 0x9606          | 0x1606          | Register #6: IRQ scanline position (NOTE: 0 is disable) |
-| 0x9607          | 0x1607          | Register #7: Status (read only) |
+| 0x9607          | 0x1607          | Register #7: [Status](#vdp-status) (read only) |
 | 0xA000 ~ $BFFF  | 0x2000 ~ 0x3FFF | [Character Pattern Table](#character-pattern-table) (32 x 256) |
 
 VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへのロード・ストア（LD命令等）で簡単に実行できます。
@@ -250,6 +250,16 @@ VGS0 では最大 256 枚のスプライトを同時に表示でき、水平方�
 - [BG](#bg) は `0x9602` に X 座標, `0x9603` に Y 座標の描画起点座標を指定することができます
 - [FG](#fg) は `0x9604` に X 座標, `0x9605` に Y 座標の描画起点座標を指定することができます
 - `0x9602` ~ `0x9605` を読み取ることで現在のスクロール位置を取得することもできます
+
+#### (VDP Status)
+
+| Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|  BL   |   -   |   -   |   -   |   -   |   -   |   -   |   -   |
+
+- BL: 1 = start vblank
+
+NOTE: Status register always reset after read.
 
 #### (Character Pattern Table)
 
