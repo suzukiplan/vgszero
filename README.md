@@ -98,7 +98,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/01_hello](./example/01_hello/) | C言語 | `HELLO,WORLD!` を表示 |
 | [example/02_global](./example/02_global/) | C言語 | グローバル変数の使用例 |
 | [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
-| [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の不可を最大化する検査用プログラム |
+| [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の負荷を最大化する検査用プログラム |
 
 ## game.pkg
 
