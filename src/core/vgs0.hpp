@@ -183,7 +183,7 @@ class VGS0
         }
         for (int i = 0; i < 256; i++) {
             if (this->ctx.se[i].playing) {
-                for (int j = 0; j < size / 2; j++) {
+                for (int j = 0; j < (int)size / 2; j++) {
                     int wav = buf[j];
                     wav += this->se[i].data[this->ctx.se[i].playingIndex++];
                     if (32767 < wav) {
@@ -192,7 +192,7 @@ class VGS0
                         wav = -32768;
                     }
                     buf[j] = (short)wav;
-                    if (this->se[i].count <= this->ctx.se[i].playingIndex) {
+                    if ((int)this->se[i].count <= this->ctx.se[i].playingIndex) {
                         this->ctx.se[i].playingIndex = 0;
                         this->ctx.se[i].playing = false;
                         break;
