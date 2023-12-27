@@ -253,7 +253,7 @@ VGS0 では最大 256 枚のスプライトを同時に表示でき、水平方�
 |   0xF1    |  -  |  o  | 効果音を停止 |
 |   0xF2    |  -  |  o  | 効果音が再生中かチェック |
 
-### (JoyPad)
+#### (JoyPad)
 
 ```z80
 IN A, (0xA0)
@@ -263,7 +263,7 @@ IN A, (0xA0)
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | `Up`  | `Down` | `Left` | `Right` | `Start` | `Select` | `A` | `B` |
 
-### (Bank Switch)
+#### (Bank Switch)
 
 ```z80
 # Read current bank of ROM Bank 0
@@ -274,7 +274,7 @@ LD A, 0x11
 OUT (0xB1), A
 ```
 
-### (ROM to Character DMA)
+#### (ROM to Character DMA)
 
 ```z80
  # バンク番号 = 0x22 をキャラクタパターンへ転送
@@ -282,7 +282,7 @@ LD A, 0x22
 OUT (0xC0), A
 ```
 
-### (memset DMA)
+#### (memset DMA)
 
 ```z80
 LD BC, 0xC000   # 転送先アドレス
@@ -291,7 +291,7 @@ LD A,  0xFF     # 転送する値
 OUT (0xC2), A   # memset
 ```
 
-### (memcpy DMA)
+#### (memcpy DMA)
 
 ```
 LD BC, 0xC000   # 転送先アドレス (RAM)
@@ -300,49 +300,49 @@ LD HL, 0x2000   # 転送バイト数 (8KB)
 OUT (0xC3), A   # memcpy (※書き込んだ値は無視されるので何でもOK)
 ```
 
-### (Play BGM)
+#### (Play BGM)
 
 ```z80
 LD A, 0x01      # 演奏対象のBGM番号を指定
 OUT (0xE0), A   # BGMの演奏を開始
 ```
 
-### (Pause BGM)
+#### (Pause BGM)
 
 ```z80
 LD A, 0x00      # オペレーションID: Pause
 OUT (0xE1), A   # BGMの演奏を中断
 ```
 
-### (Resume BGM)
+#### (Resume BGM)
 
 ```z80
 LD A, 0x01      # オペレーションID: Resume
 OUT (0xE1), A   # BGMの演奏を再開
 ```
 
-### (Fadeout BGM)
+#### (Fadeout BGM)
 
 ```z80
 LD A, 0x02      # オペレーションID: Fadeout
 OUT (0xE1), A   # BGMの演奏をフェードアウト
 ```
 
-### (Play Sound Effect)
+#### (Play Sound Effect)
 
 ```z80
 LD A, 0x01      # 再生する効果音の番号を指定
 OUT (0xF0), A   # 効果音を再生
 ```
 
-### (Stop Sound Effect)
+#### (Stop Sound Effect)
 
 ```z80
 LD A, 0x02      # 停止する効果音の番号を指定
 OUT (0xF1), A   # 効果音を停止
 ```
 
-### (Check Sound Effect)
+#### (Check Sound Effect)
 
 ```z80
 LD A, 0x03      # チェックする効果音の番号を指定
