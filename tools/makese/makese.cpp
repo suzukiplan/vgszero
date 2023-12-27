@@ -3,15 +3,16 @@
 #include <string.h>
 #include <vector>
 
-class Binary {
-    public:
-        unsigned char* data;
-        size_t size;
-        Binary(void* data_, size_t size_)
-        {
-            this->data = (unsigned char*)data_;
-            this->size = size_;
-        }
+class Binary
+{
+  public:
+    unsigned char* data;
+    size_t size;
+    Binary(void* data_, size_t size_)
+    {
+        this->data = (unsigned char*)data_;
+        this->size = size_;
+    }
 };
 
 static Binary* loadBinary(const char* path)
@@ -138,7 +139,6 @@ static Binary* loadBinary(const char* path)
 
     return new Binary(result, size);
 }
-
 
 int main(int argc, char* argv[])
 {

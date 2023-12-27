@@ -1,7 +1,7 @@
+#include "lz4.h"
+#include "vgsmml.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "vgsmml.h"
-#include "lz4.h"
 
 int vgsftv(const void* notes, size_t notesSize, void** ftv, size_t* ftvSize);
 

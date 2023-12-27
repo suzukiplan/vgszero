@@ -4,10 +4,10 @@
  * License under GPLv3: https://github.com/suzukiplan/tohovgs-pico/blob/master/LICENSE.txt
  */
 
+#include <map>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <map>
 
 #define NTYPE_ENV1 1
 #define NTYPE_ENV2 2

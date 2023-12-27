@@ -6,20 +6,20 @@
 #ifndef INCLUDE_VGSDEC_INTERNAL_H
 #define INCLUDE_VGSDEC_INTERNAL_H
 #ifdef _WIN32
-#include <winsock2.h>
-#include <windows.h>
 #include <process.h>
+#include <windows.h>
+#include <winsock2.h>
 #define inline
 #else
+#include <arpa/inet.h>
+#include <limits.h>
 #include <pthread.h>
 #include <unistd.h>
-#include <limits.h>
-#include <arpa/inet.h>
 #endif
+#include "vgsdec.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "vgsdec.h"
 
 #define NTYPE_ENV1 1
 #define NTYPE_ENV2 2

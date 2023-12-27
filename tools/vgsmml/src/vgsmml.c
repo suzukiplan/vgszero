@@ -4,18 +4,18 @@
  */
 
 #ifdef _WIN32
-#include <winsock2.h>
 #include <windows.h>
+#include <winsock2.h>
 #else
 #include <unistd.h>
 #define __stdcall
 #endif
+#include "vgsdec_internal.h"
+#include "vgsmml.h"
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
-#include "vgsdec_internal.h"
-#include "vgsmml.h"
 
 #define HZ 22050
 
@@ -697,8 +697,7 @@ static int canl(struct MML* mml, struct VgsMmlErrorInfo* err, int line, int cn, 
                 case 'G':
                     n -= 2;
                     break;
-                case 'A':
-                    ;
+                case 'A':;
                     break;
                 case 'B':
                     n += 2;
