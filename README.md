@@ -1,28 +1,30 @@
-# [WIP] SUZUKI PLAN - Video Game System Zero
+# [WIP] SUZUKI PLAN - Video Game System Zero 2W
 
 ![logo](logo.png)
 
-SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用いたゲーム機です。
+SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero 2W をコアに用いたゲーム機です。
 
 本リポジトリは、VGS0 の本体コード、配布イメージ、SDK、パソコン（Linux または macOS）で動作するエミュレータを提供します。
 
 ## WIP status
 
 - problem
-  - [ ] 限界性能のテストプログラムが RaspberryPi Zero (無印) で動作遅延する問題の対処
+  - [x] 限界性能のテストプログラムが RaspberryPi Zero (無印) で動作遅延する問題の対処
     - Zero 2W 専用にしてマルチコア前提で動かせば大丈夫そう
-    - Zero 無印のサポートを落とすか緩くサポートするかで悩み中...
+    - Zero 無印のサポートを落とすか緩くサポートするかで悩み中... _But I made a decision._
+    - _2W の供給も安定してきたし良いよね（旧Zeroのテストも面倒だし）_
 - implementation
   - [x] CPU
   - [x] VDP
   - [x] BGM API
   - [x] Sound Effect API
   - [x] RaspberryPi Zero
-  - [ ] RaspberryPi Zero 2W
+  - [x] RaspberryPi Zero 2W
   - [x] 22050Hz 1ch -> 44100Hz 2ch へ変更が必要かも（HDMIの仕様）
   - [x] 44100Hz 2ch -> 44100Hz 1ch にする（モノラルでもイケたので）
   - [x] game.rom, bgm.dat, se.dat を1ファイルに纏めたい (game.pkg)
   - [x] bank switch API (C言語)
+  - [x] RaspberryPi Zero のサポートを廃止
   - [ ] Z80 のクロックアップ
 - examples
   - [x] Hello, World!
@@ -44,7 +46,7 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
 
 ## VGS0 Feature
 
-- CPU: Z80A 互換
+- CPU: Z80 3.4MHz (3,579,545Hz)
   - Z80 アセンブリ言語でプログラムを記述
   - SDCC を用いて C 言語でもプログラミング可能
   - 最大 2MB (8kb × 256) のプログラムとデータ (※音声データを除く)
@@ -77,17 +79,17 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
 
 ## How to Execute
 
-### RaspberryPi Zero
+### on RaspberryPi Zero 2W
 
 1. FAT32 フォーマットされた SD カードを準備
-2. SD カードのルートディレクトリに [./image/rpizero](./image/rpizero) または [./image/rpizero2](./image/rpizero2) 以下のファイルをコピー
+2. SD カードのルートディレクトリに [./image](./image) 以下のファイルをコピー
 3. [game.pkg](#gamepkg) を起動対象のゲームに置き換える
 4. SD カードを RaspberryPi Zero に挿入
-5. RaspberryPi Zero に USB ゲームパッドを接続
-6. RaspberryPi Zero とテレビを HDMI ケーブルで接続
-7. RaspberryPi Zero に USB で電源を供給
+5. RaspberryPi Zero 2W に USB ゲームパッドを接続
+6. RaspberryPi Zero 2W とテレビを HDMI ケーブルで接続
+7. RaspberryPi Zero 2W に USB で電源を供給
 
-### PC (Linux or macOS)
+### on PC for Debug (Linux or macOS)
 
 SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コマンドラインオプションに起動対象の [game.pkg](#gamepkg) を指定して実行してください。
 
