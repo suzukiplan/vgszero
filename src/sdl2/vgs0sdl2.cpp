@@ -183,6 +183,11 @@ int main(int argc, char* argv[])
     if (0 < bgmSize) vgs0.loadBgm(bgm, bgmSize);
     if (0 < seSize) vgs0.loadSoundEffect(se, seSize);
     vgs0.loadRom(rom, romSize);
+#if 0
+    vgs0.setExternalRenderingCallback([](void* arg) {
+        ((VGS0*)arg)->executeExternalRendering();
+    });
+#endif
 
     log("Initializing SDL");
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS)) {

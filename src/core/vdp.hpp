@@ -17,6 +17,7 @@ class VDP
         RGB555,
         RGB565
     };
+    void (*externalRedneringCallback)(void* arg);
 
   private:
     void (*detectEndOfFrame)(void* arg);
@@ -79,6 +80,7 @@ class VDP
         this->detectEndOfFrame = detectEndOfFrame;
         this->detectIRQ = detectIRQ;
         this->arg = arg;
+        this->externalRedneringCallback = nullptr;
     }
 
     void reset()
@@ -134,13 +136,29 @@ class VDP
         for (int i = 8; i < 200; i++) this->renderScanline(i);
     }
 
+    void externalRendering()
+    {
+        static int scanline = 8;
+        this->renderBG(scanline - 8);
+        this->renderSprites(scanline);
+        this->renderFG(scanline - 8);
+        scanline++;
+        if (200 <= scanline) {
+            scanline = 8;
+        }
+    }
+
   private:
     inline void renderScanline(int scanline)
     {
         if (scanline < 8 || 200 <= scanline) return; // blanking
-        this->renderBG(scanline - 8);
-        this->renderSprites(scanline);
-        this->renderFG(scanline - 8);
+        if (this->externalRedneringCallback) {
+            this->externalRedneringCallback(this->arg);
+        } else {
+            this->renderBG(scanline - 8);
+            this->renderSprites(scanline);
+            this->renderFG(scanline - 8);
+        }
     }
 
     inline void renderBG(int scanline)

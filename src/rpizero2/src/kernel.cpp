@@ -230,6 +230,9 @@ TShutdownMode CKernel::run(void)
     vgs0.loadRom(rom, romSize);
     if (0 < bgmSize) vgs0.loadBgm(bgm, bgmSize);
     if (0 < seSize) vgs0.loadSoundEffect(se, seSize);
+    vgs0.setExternalRenderingCallback([](void* arg) {
+        CMultiCoreSupport::SendIPI(3, IPI_USER + 2); // request execute rendering core (vdp)
+    });
     vgs0_ = &vgs0;
 
     int swap = 0;

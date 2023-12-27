@@ -31,7 +31,7 @@ boolean MultiCoreManager::Initialize(void)
         return FALSE;
     }
     logger_->Write("MCM", LogNotice, "wait for idle...");
-    for (unsigned nCore = 1; nCore < 3; nCore++) {
+    for (unsigned nCore = 1; nCore < 4; nCore++) {
         while (coreStatus[nCore] != CoreStatus::Idle) {
             ; // just wait
         }
@@ -46,7 +46,7 @@ void MultiCoreManager::Run(unsigned nCore)
     sprintf(buf, "cpu#%u idle", nCore);
     logger_->Write("MCM", LogNotice, buf);
     coreStatus[nCore] = CoreStatus::Idle;
-    if (1 <= nCore && nCore < 3) {
+    if (1 <= nCore && nCore < 4) {
         while (1) {
             ; // just wait interrupt
         }
@@ -68,5 +68,7 @@ void MultiCoreManager::IPIHandler(unsigned nCore, unsigned nIPI)
     } else if (nIPI == IPI_USER + 1) {
         // CPU2: execute sound core (vgs) tick and buffering the result
         memcpy(pcmData_, vgs0_->tickSound(1470), 1470);
+    } else if (nIPI == IPI_USER + 2) {
+        vgs0_->executeExternalRendering();
     }
 }

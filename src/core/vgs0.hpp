@@ -85,6 +85,16 @@ class VGS0
         delete this->cpu;
     }
 
+    void setExternalRenderingCallback(void (*externalRedneringCallback)(void* arg))
+    {
+        this->vdp->externalRedneringCallback = externalRedneringCallback;
+    }
+
+    void executeExternalRendering()
+    {
+        this->vdp->externalRendering();
+    }
+
     void reset()
     {
         memset(&this->ctx, 0, sizeof(this->ctx));
