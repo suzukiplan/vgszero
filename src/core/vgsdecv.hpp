@@ -1,5 +1,5 @@
 /**
- * VGS BGM Decoder for Variable NOTEs (vgsftv compressed data)
+ * VGS-Zero BGM Decoder for Variable NOTEs (vgsftv compressed data)
  * License under GPLv3: https://github.com/suzukiplan/vgszero/blob/master/LICENSE-VGS0.txt
  * (C)2023, SUZUKI PLAN
  */

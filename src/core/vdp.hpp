@@ -1,5 +1,5 @@
 /**
- * VGS0 - Video Display Processor
+ * VGS-Zero - Video Display Processor
  * License under GPLv3: https://github.com/suzukiplan/vgszero/blob/master/LICENSE-VGS0.txt
  * (C)2023, SUZUKI PLAN
  */

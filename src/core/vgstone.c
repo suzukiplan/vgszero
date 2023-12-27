@@ -1,5 +1,5 @@
 /**
- * VGS0 - Tones
+ * VGS-Zero - Tones
  * License under GPLv3: https://github.com/suzukiplan/vgszero/blob/master/LICENSE-VGS0.txt
  * (C)2023, SUZUKI PLAN
  */
