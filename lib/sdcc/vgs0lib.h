@@ -102,10 +102,11 @@
  * - Sprite: https://github.com/suzukiplan/vgszero/blob/master/README.md#sprite
  * - OAM: https://github.com/suzukiplan/vgszero/blob/master/README.md#oam
  */
-#define vgs0_oam_set(NUM, X, Y, ATTR, PTN) VGS0_ADDR_OAM[NUM].x = X; \
-                                           VGS0_ADDR_OAM[NUM].y = Y; \
-                                           VGS0_ADDR_OAM[NUM].attr = ATTR; \
-                                           VGS0_ADDR_OAM[NUM].ptn = PTN
+#define vgs0_oam_set(NUM, X, Y, ATTR, PTN) \
+    VGS0_ADDR_OAM[NUM].x = X;              \
+    VGS0_ADDR_OAM[NUM].y = Y;              \
+    VGS0_ADDR_OAM[NUM].attr = ATTR;        \
+    VGS0_ADDR_OAM[NUM].ptn = PTN
 
 /** @def
  * Palette table
