@@ -1,6 +1,7 @@
 all:
 	@echo make format .............	execute clang-format
 	@echo make build .............. Build API, SDL2, RPIZero, Hello
+	@echo make clean .............. Clean API, SDL2, RPIZero, Hello
 
 format:
 	make execute-format FILENAME=./src/core/vgs0.hpp
@@ -42,3 +43,9 @@ build:
 	cd src/sdl2 && make
 	cd src/rpizero && make
 	cd example/01_hello && make
+
+clean:
+	cd lib/sdcc && make clean
+	cd src/sdl2 && make clean
+	cd src/rpizero && make clean
+	cd example/01_hello && make clean
