@@ -19,6 +19,7 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - [x] 44100Hz 2ch -> 44100Hz 1ch にする（モノラルでもイケたので）
   - [x] game.rom, bgm.dat, se.dat を1ファイルに纏めたい (game.pkg)
   - [ ] bank switch API (C言語)
+  - [ ] Z80 のクロックアップ
 - examples
   - [x] Hello, World!
   - [x] グローバル変数の使い方
