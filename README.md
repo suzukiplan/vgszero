@@ -54,15 +54,15 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero 2W をコアに
   - SDCC を用いて C 言語でもプログラミング可能
   - 最大 2MB (8kb × 256) のプログラムとデータ (※音声データを除く)
   - RAM サイズ 16KB (PV16相当!)
+  - [セーブ機能](#save-data)に対応
 - VDP (映像処理)
   - VRAM サイズ 16KB (TMS9918A 相当!)
   - 解像度: 240x192 ピクセル
   - 32,768 色中 256 色を同時発色可能
-  - [BG](#bg), [FG](#fg), [スプライト](#sprite)を合成描画
-    - 最大 256 枚 (8KB) の[キャラクタパターン](#character-pattern-table) (8x8ピクセル)
-    - [BG](#bg), [FG](#fg) の[ネームテーブル](#name-table)サイズ: 32x32 (256x256 ピクセル)
-    - [BG](#bg), [FG](#fg): [ハードウェアスクロール](#hardware-scroll)対応
-    - 最大 256 枚の[スプライト](#sprite)を表示可能（水平上限なし）
+  - 8x8 ピクセルの[キャラクタパターン](#character-pattern-table)を最大 256 枚 (8KB) 定義可能
+  - [BG](#bg), [FG](#fg) の[ネームテーブル](#name-table)サイズ: 32x32 (256x256 ピクセル)
+  - [ハードウェアスクロール](#hardware-scroll)対応
+  - 最大 256 枚の[スプライト](#sprite)を表示可能（水平上限なし）
 - DMA (ダイレクトメモリアクセス)
   - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
   - [C言語の `memset` に相当する高速 DMA 転送機能を実装](#memset-dma)
@@ -373,6 +373,7 @@ NOTE: Status register always reset after read.
 |   0xC0    |  -  |  o  | [ROM to Character DMA](#rom-to-character-dma) |
 |   0xC2    |  -  |  o  | [memset 相当の DMA](#memset-dma) |
 |   0xC3    |  -  |  o  | [memcpy 相当の DMA](#memcpy-dma) |
+|   0xDA    |  o  |  o  | [データのセーブ・ロード](#save-data) |
 |   0xE0    |  -  |  o  | BGM を[再生](#play-bgm) |
 |   0xE1    |  -  |  o  | BGM を[中断](#pause-bgm)、[再開](#resume-bgm)、[フェードアウト](#fadeout-bgm) |
 |   0xF0    |  -  |  o  | 効果音を再生 |
@@ -419,12 +420,48 @@ OUT (0xC2), A   # memset
 
 #### (memcpy DMA)
 
-```
+```z80
 LD BC, 0xC000   # 転送先アドレス (RAM)
 LD DE, 0x6000   # 転送元アドレス (ROM Bank 3)
 LD HL, 0x2000   # 転送バイト数 (8KB)
 OUT (0xC3), A   # memcpy (※書き込んだ値は無視されるので何でもOK)
 ```
+
+#### (Save Data)
+
+- ポート 0xDA の I/O でセーブ（OUT）、ロード（IN）ができます
+- セーブデータのファイル名は SD カードルートディレクトリ（SDL2の場合はカレントディレクトリ）の `save.dat` 固定です
+- RPG のセーブ機能や STG のハイスコア保存機能などで利用することを想定しています
+
+セーブの実装例:
+
+```z80
+LD BC, 0xC000   # セーブするデータのアドレスを指定 (RAM 領域のみ指定可能)
+LD HL, 0x2000   # セーブするデータのサイズを指定 (最大 16 KB = 0x4000)
+OUT (0xDA), A   # セーブ (※書き込んだ値は無視されるので何でもOK)
+AND 0xFF        # セーブ結果はレジスタAに格納される
+JZ SAVE_SUCCESS # 成功時は 0
+JNZ SAVE_FAILED # 失敗時は not 0
+```
+
+ロードの実装例:
+
+```z80
+LD BC, 0xC000   # ロード先のアドレスを指定 (RAM 領域のみ指定可能)
+LD HL, 0x2000   # ロードするデータサイズを指定 (最大 16 KB = 0x4000)
+IN A, (0xDA)    # セーブ (※書き込んだ値は無視されるので何でもOK)
+JZ LOAD_SUCCESS # ロード成功時は 0
+JNZ LOAD_FAILED # ロード失敗時は not 0 (※ロード先は 0x00 で埋められる)
+```
+
+注意事項:
+
+- save.dat がロード時に指定したサイズ（HL）よりも小さくてもロードは成功し、この時、データが存在しない領域は 0x00 で埋められます
+- スタック領域へのロードを行うとプログラムが暴走する可能性があります
+- ユーザが異なるゲームのセーブデータを用いて動かす可能性を考慮するのが望ましいです
+- セーブの頻繁な実行は SD カードの寿命を縮めたり、SD カード破損の原因になるため、最小限の実行に留めることが望ましいです
+- セーブ中に RaspberryPi Zero 2W の電源断を行うと SD カードが破損する恐れがあります
+- カーネルは、セーブとロードが実行された時に SD カードのマウントを行い、処理が完了すると自動的にアンマウントします
 
 #### (Play BGM)
 
