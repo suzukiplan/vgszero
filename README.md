@@ -515,6 +515,50 @@ JNZ EFF03_IS_PILAYING
 JZ  EFF03_IS_NOT_PLAYING
 ```
 
+## How to Sell Your Game
+
+コミックマーケットや通販で VGS0 用のゲームを販売する時は、
+
+1. FAT32 でフォーマットした micro SD カードを準備
+2. [./image](./image/) 以下のファイルを micro SD カードのルートディレクトリへコピー
+3. [game.pkg](#gamepkg) を差し替え
+4. [README](./image/README) を削除
+5. README.txt（ゲームの遊び方を記載したテキスト）を格納
+6. micro-SD カードを[ケース](https://www.amazon.co.jp/dp/B08TWR47LV/)などに格納
+7. ケースにゲームのラベルを塗布
+
+といった形で媒体を準備して販売するのが良いかと思われます。（ダウンロード販売の場合は SD カードに格納するものと同等のものを ZIP で固めて販売）
+
+README.txtの記載凡例:
+
+```
+================================================================================
+<<<ゲームタイトル>>>
+<<<コピーライト>>>
+================================================================================
+
+この度は「<<<ゲームタイトル>>>」をお買い上げいただき誠にありがとうございます。
+本書は本ゲームの遊び方などを記載していますので、プレイ前にご一読ください。
+
+【必要なハードウェア】
+・RaspberryPi Zero 2W: https://www.switch-science.com/products/7600
+・RaspberryPi Zero 2W とテレビを接続する HDMI ケーブル
+・RaspberryPi Zero 2W に接続する USB ゲームパッド
+・テレビなど（HDMI入力対応、オーディオ有り、リフレッシュレート60Hz）
+
+【起動方法】
+・RaspberryPi Zero 2W に本製品（micro SDカード）を挿入
+・RaspberryPi Zero 2W の電源を ON
+
+【遊び方】
+<<<ゲームの遊び方を記載>>>
+
+【連絡先】
+<<<Twitterアカウントやeメールアドレスなどを記載>>>
+```
+
+販売により得られた収益の SUZUKIPLAN へのペイバック（ライセンス料）等は一切不要です。
+
 ## License
 
 - VGS0 本体は GPLv3 の OSS です: [LICENSE-VGS0.txt](./LICENSE_VGS0.txt)
