@@ -26,6 +26,9 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero 2W をコアに
   - [x] bank switch API (C言語)
   - [x] RaspberryPi Zero のサポートを廃止
   - [x] Z80 のクロックアップ
+  - [ ] RaspberryPi Zero 2W で処理遅延していないことの検証
+  - [ ] SAVE/LOAD API (Z80)
+    - VGS0 で RPG を創ったり STG のスコア保存ができたりするようにするため
 - examples
   - [x] Hello, World!
   - [x] グローバル変数の使い方
@@ -105,7 +108,6 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 ## game.pkg
 
 game.pkg は、再配布可能な VGS0 のゲーム実行形式で、ツールチェインの [makepkg コマンド](./tools/makepkg/) で生成することができます。
-
 
 ```
 makepkg  -o /path/to/output.pkg
