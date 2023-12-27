@@ -51,8 +51,7 @@ class VGS0
     VGSDecoder* vgsdec;
 
     struct Context {
-        unsigned int tick;
-        int bobo;
+        int64_t bobo;
         unsigned char ram[0x4000];
         unsigned char romBank[4];
         unsigned char pad;
