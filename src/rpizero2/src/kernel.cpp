@@ -245,10 +245,12 @@ TShutdownMode CKernel::run(void)
         CMultiCoreSupport::SendIPI(1, IPI_USER + 0); // request execute main core (z80)
         CMultiCoreSupport::SendIPI(2, IPI_USER + 1); // request execute sound core (vgs)
 
-        // wait v-sync
+        // wait v-sync (cpu0 expects synchronize with the another cores)
+        buffer->WaitForVerticalSync();
+
+        // flip screen buffer
         swap = 192 - swap;
         buffer->SetVirtualOffset(0, swap);
-        buffer->WaitForVerticalSync();
 
         // playback sound
         while (sound.PlaybackActive()) scheduler.Sleep(1);
