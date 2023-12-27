@@ -6,8 +6,8 @@
 
 #ifndef INCLUDE_VDP_HPP
 #define INCLUDE_VDP_HPP
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 
 class VDP
