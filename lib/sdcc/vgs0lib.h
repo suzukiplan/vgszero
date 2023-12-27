@@ -217,6 +217,54 @@ typedef struct {
 } NameTable;
 
 /**
+ * @brief Switch ROM bank 0
+ * @param n number of the bank
+ */
+void vgs0_bank0_switch(uint8_t n) __z88dk_fastcall;
+
+/**
+ * @brief Switch ROM bank 1
+ * @param n number of the bank
+ */
+void vgs0_bank1_switch(uint8_t n) __z88dk_fastcall;
+
+/**
+ * @brief Switch ROM bank 2
+ * @param n number of the bank
+ */
+void vgs0_bank2_switch(uint8_t n) __z88dk_fastcall;
+
+/**
+ * @brief Switch ROM bank 3
+ * @param n number of the bank
+ */
+void vgs0_bank3_switch(uint8_t n) __z88dk_fastcall;
+
+/**
+ * @brief Get current bank number of ROM bank 0
+ * @return number of the bank
+ */
+uint8_t vgs0_bank0_get(void) __z88dk_fastcall;
+
+/**
+ * @brief Get current bank number of ROM bank 1
+ * @return number of the bank
+ */
+uint8_t vgs0_bank1_get(void) __z88dk_fastcall;
+
+/**
+ * @brief Get current bank number of ROM bank 2
+ * @return number of the bank
+ */
+uint8_t vgs0_bank2_get(void) __z88dk_fastcall;
+
+/**
+ * @brief Get current bank number of ROM bank 3
+ * @return number of the bank
+ */
+uint8_t vgs0_bank3_get(void) __z88dk_fastcall;
+
+/**
  * @brief Wait until V-Blank is detected
  */
 void vgs0_wait_vsync(void) __z88dk_fastcall;

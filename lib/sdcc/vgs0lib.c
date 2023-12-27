@@ -30,6 +30,74 @@
 #pragma disable_warning 85 // no check unused args (check at inline-asm)
 #define STACK_ARG_HEAD 4
 
+void vgs0_bank0_switch(uint8_t n) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xB0), a
+__endasm;
+}
+
+void vgs0_bank1_switch(uint8_t n) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xB1), a
+__endasm;
+}
+
+void vgs0_bank2_switch(uint8_t n) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xB2), a
+__endasm;
+}
+
+void vgs0_bank3_switch(uint8_t n) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xB3), a
+__endasm;
+}
+
+uint8_t vgs0_bank0_get(void) __z88dk_fastcall
+{
+__asm
+    in a, (#0xB0)
+    ld l, a
+    ret
+__endasm;
+}
+
+uint8_t vgs0_bank1_get(void) __z88dk_fastcall
+{
+__asm
+    in a, (#0xB1)
+    ld l, a
+    ret
+__endasm;
+}
+
+uint8_t vgs0_bank2_get(void) __z88dk_fastcall
+{
+__asm
+    in a, (#0xB2)
+    ld l, a
+    ret
+__endasm;
+}
+
+uint8_t vgs0_bank3_get(void) __z88dk_fastcall
+{
+__asm
+    in a, (#0xB3)
+    ld l, a
+    ret
+__endasm;
+}
+
 void vgs0_wait_vsync(void) __z88dk_fastcall
 {
 __asm
