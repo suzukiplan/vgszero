@@ -16,7 +16,7 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - [x] RaspberryPi Zero
   - [ ] RaspberryPi Zero 2W
   - [x] 22050Hz 1ch -> 44100Hz 2ch へ変更が必要かも（HDMIの仕様）
-  - [ ] 44100Hz 2ch -> 44100Hz 1ch にする (モノラルでもイケた）
+  - [ ] 44100Hz 2ch -> 44100Hz 1ch にする（モノラルでもイケたので）
   - [ ] game.rom, bgm.dat, se.dat を1ファイルに纏めたい (game.pkg)
 - examples
   - [x] Hello, World!
@@ -30,10 +30,11 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
 - documents
   - [x] Z80: Memory map
   - [x] Z80: I/O map
-  - [ ] C API Library
+  - [x] C API Library
   - [ ] `game.rom`
   - [ ] `bgm.dat`
   - [ ] `se.dat`
+  - [ ] `game.pkg`
 
 ## VGS0 Feature
 
@@ -101,6 +102,20 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
   - クロスコンパイラに SDCC (Small Device C) が使用できます
   - 標準ライブラリは使用できません
   - [vgs0.lib](./lib/sdcc/) を使用することができます
+
+### API Manual for Programming Language C
+
+[vgs0lib.h](./lib/sdcc/vgs0lib.h) の実装を参照してください。
+
+実装を見た方が手っ取り早いと思われるので非推奨ですが、以下のコマンドを実行すれば HTML 形式のマニュアルを閲覧できます。
+
+```
+sudo apt install doxygen build-essential
+git clone https://github.com/suzukiplan/vgszero
+cd vgszero/lib/sdcc
+make doc
+open doc/html/index.html
+```
 
 ### Create Sound Data
 
