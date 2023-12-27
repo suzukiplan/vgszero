@@ -29,16 +29,10 @@
 
 #define TAG "kernel"
 static uint8_t pad1_;
-static uint8_t rom_[2097152];
-static UINT romSize_;
-static uint8_t bgm_[8388608];
-static UINT bgmSize_;
-static uint8_t se_[8388608];
-static UINT seSize_;
+static uint8_t pkg_[16777216];
+static UINT pkgSize_;
 #define MOUNT_DRIVE "SD:"
-#define ROM_FILE "/game.rom"
-#define BGM_FILE "/bgm.dat"
-#define SE_FILE "/se.dat"
+#define PKG_FILE "/game.pkg"
 extern "C" const unsigned short splash[46080];
 
 CKernel::CKernel(void) : screen(240, 192),
@@ -157,67 +151,76 @@ TShutdownMode CKernel::run(void)
         return ShutdownHalt;
     }
 
-    logger.Write(TAG, LogNotice, "Loading game.rom...");
-    FIL gameRom;
-    result = f_open(&gameRom, MOUNT_DRIVE ROM_FILE, FA_READ | FA_OPEN_EXISTING);
+    logger.Write(TAG, LogNotice, "Loading game.pkg...");
+    FIL gamePkg;
+    result = f_open(&gamePkg, MOUNT_DRIVE PKG_FILE, FA_READ | FA_OPEN_EXISTING);
     if (FR_OK != result) {
         logger.Write(TAG, LogPanic, "File not found! (%d)", (int)result);
         return ShutdownHalt;
     }
-    result = f_read(&gameRom, rom_, sizeof(rom_), &romSize_);
+    result = f_read(&gamePkg, pkg_, sizeof(pkg_), &pkgSize_);
     if (FR_OK != result) {
         logger.Write(TAG, LogPanic, "File read error! (%d)", (int)result);
         return ShutdownHalt;
     }
-    logger.Write(TAG, LogNotice, "Load success: %d bytes", (int)romSize_);
-    f_close(&gameRom);
-
-    logger.Write(TAG, LogNotice, "Loading bgm.dat...");
-    FIL bgmDat;
-    bgmSize_ = 0;
-    result = f_open(&bgmDat, MOUNT_DRIVE BGM_FILE, FA_READ | FA_OPEN_EXISTING);
-    if (FR_OK != result) {
-        logger.Write(TAG, LogNotice, "bgm not exist");
-    } else {
-        result = f_read(&bgmDat, bgm_, sizeof(bgm_), &bgmSize_);
-        if (FR_OK != result) {
-            logger.Write(TAG, LogPanic, "File read error! (%d)", (int)result);
-            return ShutdownHalt;
-        }
-        logger.Write(TAG, LogNotice, "Load success: %d bytes", (int)bgmSize_);
-    }
-    f_close(&bgmDat);
-
-    logger.Write(TAG, LogNotice, "Loading se.dat...");
-    FIL seDat;
-    seSize_ = 0;
-    result = f_open(&seDat, MOUNT_DRIVE SE_FILE, FA_READ | FA_OPEN_EXISTING);
-    if (FR_OK != result) {
-        logger.Write(TAG, LogNotice, "SE not exist");
-    } else {
-        result = f_read(&seDat, se_, sizeof(se_), &seSize_);
-        if (FR_OK != result) {
-            logger.Write(TAG, LogPanic, "File read error! (%d)", (int)result);
-            return ShutdownHalt;
-        }
-        logger.Write(TAG, LogNotice, "Load success: %d bytes", (int)seSize_);
-    }
-    f_close(&seDat);
-
+    logger.Write(TAG, LogNotice, "Load success: %d bytes", (int)pkgSize_);
+    f_close(&gamePkg);
     f_unmount(MOUNT_DRIVE);
+
+    void* rom = nullptr;
+    void* bgm = nullptr;
+    void* se = nullptr;
+    int romSize = 0;
+    int bgmSize = 0;
+    int seSize = 0;
+    { // extract package
+        uint8_t* ptr = pkg_;
+        if (0 != memcmp(ptr, "VGS0PKG", 8)) {
+            logger.Write(TAG, LogPanic, "Invalid game.pkg data");
+            return ShutdownHalt;
+        }
+        ptr += 8;
+        memcpy(&romSize, ptr, 4);
+        if (romSize < 8 + 8192) {
+            logger.Write(TAG, LogPanic, "Invalid game.pkg data");
+            return ShutdownHalt;
+        }
+        logger.Write(TAG, LogNotice, "game.rom: %d bytes", romSize);
+        ptr += 4;
+        rom = ptr;
+        ptr += romSize;
+        memcpy(&bgmSize, ptr, 4);
+        if (bgmSize < 0) {
+            logger.Write(TAG, LogPanic, "Invalid game.pkg data");
+            return ShutdownHalt;
+        }
+        logger.Write(TAG, LogNotice, "bgm.dat: %d bytes", bgmSize);
+        ptr += 4;
+        bgm = ptr;
+        ptr += bgmSize;
+        memcpy(&seSize, ptr, 4);
+        if (seSize < 0) {
+            logger.Write(TAG, LogPanic, "Invalid game.pkg data");
+            return ShutdownHalt;
+        }
+        logger.Write(TAG, LogNotice, "se.dat: %d bytes", seSize);
+        if (sizeof(pkg_) < (size_t)romSize + bgmSize + seSize) {
+            logger.Write(TAG, LogPanic, "Invalid game.pkg data (size too large)");
+            return ShutdownHalt;
+        }
+        ptr += 4;
+        se = ptr;
+    }
+
     sound.SetControl(VCHIQ_SOUND_VOLUME_MAX);
     auto buffer = screen.GetFrameBuffer();
     auto hdmiPitch = buffer->GetPitch() / sizeof(TScreenColor);
     unsigned long ptr = buffer->GetBuffer();
     auto hdmiBuffer = (uint16_t*)ptr;
     VGS0 vgs0(VDP::ColorMode::RGB565);
-    vgs0.loadRom(rom_, romSize_);
-    if (0 < bgmSize_) {
-        vgs0.loadBgm(bgm_, bgmSize_);
-    }
-    if (0 < seSize_) {
-        vgs0.loadSoundEffect(se_, seSize_);
-    }
+    vgs0.loadRom(rom, romSize);
+    if (0 < bgmSize) vgs0.loadBgm(bgm, bgmSize);
+    if (0 < seSize) vgs0.loadSoundEffect(se, seSize);
     int swap = 0;
     while (1) {
         updateUsbStatus();
