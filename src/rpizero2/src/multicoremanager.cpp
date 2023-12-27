@@ -69,6 +69,7 @@ void MultiCoreManager::IPIHandler(unsigned nCore, unsigned nIPI)
         // CPU2: execute sound core (vgs) tick and buffering the result
         memcpy(pcmData_, vgs0_->tickSound(1470), 1470);
     } else if (nIPI == IPI_USER + 2) {
+        // CPU3: execute VDP's rendering 1 scanline procedure
         vgs0_->executeExternalRendering();
     }
 }
