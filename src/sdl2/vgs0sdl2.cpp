@@ -92,37 +92,17 @@ static Binary* loadBinary(const char* path)
 
 int main(int argc, char* argv[])
 {
-    const char* romPath = nullptr;
-    const char* bgmPath = nullptr;
-    const char* sePath = nullptr;
+    const char* pkgPath = nullptr;
     bool cliError = false;
     int fullScreen = 0;
     int gpuType = SDL_WINDOW_OPENGL;
 
     for (int i = 1; !cliError && i < argc; i++) {
         if ('-' != argv[i][0]) {
-            romPath = argv[i];
+            pkgPath = argv[i];
             continue;
         }
         switch (tolower(argv[i][1])) {
-            case 'b': {
-                i++;
-                if (argc <= i) {
-                    cliError = true;
-                    break;
-                }
-                bgmPath = argv[i];
-                break;
-            }
-            case 's': {
-                i++;
-                if (argc <= i) {
-                    cliError = true;
-                    break;
-                }
-                sePath = argv[i];
-                break;
-            }
             case 'f':
                 fullScreen = SDL_WINDOW_FULLSCREEN;
                 break;
@@ -150,10 +130,8 @@ int main(int argc, char* argv[])
                 break;
         }
     }
-    if (cliError || !romPath) {
-        puts("usage: vgs0 /path/to/file.rom ....... Specify ROM file to be used");
-        puts("            [-b /path/to/bgm.dat] ... VGS BGM data");
-        puts("            [-s /path/to/se.dat] .... Sound Effect data");
+    if (cliError || !pkgPath) {
+        puts("usage: vgs0 /path/to/game.pkg ....... Specify game package to be used");
         puts("            [-g { None .............. GPU: Do not use");
         puts("                | OpenGL ............ GPU: OpenGL <default>");
         puts("                | Vulkan ............ GPU: Vulkan");
@@ -168,23 +146,43 @@ int main(int argc, char* argv[])
     SDL_GetVersion(&sdlVersion);
     log("SDL version: %d.%d.%d", sdlVersion.major, sdlVersion.minor, sdlVersion.patch);
 
+    Binary* pkg = loadBinary(pkgPath);
+    int romSize;
+    void* rom = nullptr;
+    int bgmSize;
+    void* bgm = nullptr;
+    int seSize;
+    void* se = nullptr;
+    char* ptr = (char*)pkg->data;
+    if (0 != memcmp(ptr, "VGS0PKG", 8)) {
+        puts("Invalid package!");
+        return -1;
+    }
+    ptr += 8;
+    memcpy(&romSize, ptr, 4);
+    ptr += 4;
+    rom = ptr;
+    ptr += romSize;
+    printf("- game.rom size: %d\n", romSize);
+    if (romSize < 8 + 8192) {
+        puts("Invalid game.rom size");
+        exit(-1);
+    }
+    memcpy(&bgmSize, ptr, 4);
+    ptr += 4;
+    bgm = 0 < bgmSize ? ptr : nullptr;
+    ptr += bgmSize;
+    printf("- bgm.dat size: %d\n", bgmSize);
+    memcpy(&seSize, ptr, 4);
+    ptr += 4;
+    se = 0 < seSize ? ptr : nullptr;
+    printf("- se.dat size: %d\n", seSize);
+
     log("Initializing VGS0");
     VGS0 vgs0;
-
-    Binary* bgm = nullptr;
-    if (bgmPath) {
-        bgm = loadBinary(bgmPath);
-        vgs0.loadBgm(bgm->data, bgm->size);
-    }
-
-    Binary* se = nullptr;
-    if (sePath) {
-        se = loadBinary(sePath);
-        vgs0.loadSoundEffect(se->data, se->size);
-    }
-
-    Binary* rom = loadBinary(romPath);
-    vgs0.loadRom(rom->data, rom->size);
+    if (0 < bgmSize) vgs0.loadBgm(bgm, bgmSize);
+    if (0 < seSize) vgs0.loadSoundEffect(se, seSize);
+    vgs0.loadRom(rom, romSize);
 
     log("Initializing SDL");
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS)) {
@@ -333,15 +331,7 @@ int main(int argc, char* argv[])
     SDL_CloseAudioDevice(audioDeviceId);
     SDL_DestroyWindow(window);
     SDL_Quit();
-    free(rom->data);
-    delete rom;
-    if (bgm) {
-        free(bgm->data);
-        delete bgm;
-    }
-    if (se) {
-        free(se->data);
-        delete se;
-    }
+    free(pkg->data);
+    delete pkg;
     return 0;
 }
