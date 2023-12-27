@@ -24,6 +24,10 @@ format:
 	make execute-format FILENAME=./tools/vgsmml/src/vgsftv.cpp
 	make execute-format FILENAME=./tools/vgsmml/src/vgsmml.c
 	make execute-format FILENAME=./tools/vgsmml/src/vgsmml.h
+	make execute-format FILENAME=./example/01_hello/program.c
+	make execute-format FILENAME=./example/02_global/program.c
+	make execute-format FILENAME=./example/02_global/global.h
+	make execute-format FILENAME=./example/03_sound/program.c
 
 execute-format:
 	clang-format -style=file < ${FILENAME} > ${FILENAME}.bak
