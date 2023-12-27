@@ -31,6 +31,8 @@ format:
 	make execute-format FILENAME=./example/02_global/program.c
 	make execute-format FILENAME=./example/02_global/global.h
 	make execute-format FILENAME=./example/03_sound/program.c
+	make execute-format FILENAME=./example/04_heavy/program.c
+	make execute-format FILENAME=./example/05_sprite256/program.c
 	make execute-format FILENAME=./lib/sdcc/vgs0lib.h
 
 execute-format:
