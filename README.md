@@ -47,11 +47,11 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - VRAM サイズ 16KB (TMS9918A 相当!)
   - 解像度: 240x192 ピクセル
   - 32,768 色中 256 色を同時発色可能
-  - [BG](#bg), [FG](#fg), [スプライト](#oam)を合成描画
+  - [BG](#bg), [FG](#fg), [スプライト](#sprite)を合成描画
     - 最大 256 枚 (8KB) の[キャラクタパターン](#character-pattern-table) (8x8ピクセル)
     - [BG](#bg), [FG](#fg) の[ネームテーブル](#name-table)サイズ: 32x32 (256x256 ピクセル)
     - [BG](#bg), [FG](#fg): [ハードウェアスクロール](#hardware-scroll)対応
-    - 最大 256 枚の[スプライト](#oam)を表示可能（水平上限なし）
+    - 最大 256 枚の[スプライト](#sprite)を表示可能（水平上限なし）
 - DMA (ダイレクトメモリアクセス)
   - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
   - [C言語の `memset` に相当する高速 DMA 転送機能を実装](#memset-dma)
@@ -173,9 +173,9 @@ VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへ�
 #### (BG)
 
 - BG (Background Graphics) は、基本となる背景映像です
-- [スプライト](#oam) と [FG](#fg) の背面に表示されます
+- [スプライト](#sprite) と [FG](#fg) の背面に表示されます
 - ゲームの背景映像として利用することを想定しています
-- [ネームテーブル](#name-table) にキャラクタ番号と[属性](#attribute)を指定して表示します
+- [ネームテーブル](#name-table) に[キャラクタ番号](#character-pattern-table)と[属性](#attribute)を指定することで表示できます
 - 透明色が存在しません
 - [属性](#attribute)の指定で描画を非表示（hidden）にすることができません
 - [FG](#fg) とは独立した [ハードウェアスクロール](#hardware-scroll) に対応しています
@@ -183,12 +183,21 @@ VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへ�
 #### (FG)
 
 - FG (Foreground Graphics) は、最前面に表示される映像です
-- [BG](#bg) と [スプライト](#oam) の前面に表示されます
+- [BG](#bg) と [スプライト](#sprite) の前面に表示されます
 - ゲームのスコアやメッセージウインドウなどの表示に利用することを想定しています
-- [ネームテーブル](#name-table) にキャラクタ番号と[属性](#attribute)を指定して表示します
+- [ネームテーブル](#name-table) に[キャラクタ番号](#character-pattern-table)と[属性](#attribute)を指定することで表示できます
 - [パレット](#palette) の色番号 0 が透明色になります
 - [属性](#attribute)の指定で描画を非表示（hidden）にすることができ、デフォルトは非表示になっています
 - [BG](#bg) とは独立した [ハードウェアスクロール](#hardware-scroll) に対応しています
+
+#### (Sprite)
+
+- 妖精（Sprite）は、画面上を動き回るキャラクタ映像です
+- [BG](#bg) の前面 & [FG](#fg) の背面 に表示されます
+- ゲームのキャラクタ表示に利用することを想定しています
+- 最大 256 枚を同時に表示できます
+- [OAM](#oam) に表示座標、[キャラクタ番号](#character-pattern-table)、[属性](#attribute)を指定することで表示できます
+- [属性](#attribute)の指定で描画を非表示（hidden）にすることができ、デフォルトは非表示になっています
 
 #### (Name Table)
 
