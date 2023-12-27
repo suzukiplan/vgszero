@@ -13,6 +13,7 @@ format:
 	make execute-format FILENAME=./src/rpizero/src/main.cpp
 	make execute-format FILENAME=./src/rpizero/src/splash.c
 	make execute-format FILENAME=./src/rpizero/src/std.c
+	make execute-format FILENAME=./src/sdl2/vgs0sdl2.cpp
 
 execute-format:
 	clang-format -style=file < ${FILENAME} > ${FILENAME}.bak

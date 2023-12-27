@@ -17,16 +17,17 @@
 
 #define WINDOW_TITLE "VGS0 for SDL2"
 
-class Binary {
-    public:
-        void* data;
-        size_t size;
- 
-        Binary(void* data_, size_t size_)
-        {
-            this->data = data_;
-            this->size = size_;
-        }    
+class Binary
+{
+  public:
+    void* data;
+    size_t size;
+
+    Binary(void* data_, size_t size_)
+    {
+        this->data = data_;
+        this->size = size_;
+    }
 };
 
 static pthread_mutex_t soundMutex = PTHREAD_MUTEX_INITIALIZER;
@@ -184,7 +185,7 @@ int main(int argc, char* argv[])
 
     Binary* rom = loadBinary(romPath);
     vgs0.loadRom(rom->data, rom->size);
-   
+
     log("Initializing SDL");
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS)) {
         log("SDL_Init failed: %s", SDL_GetError());
