@@ -1,6 +1,6 @@
-# Global Variables
+# Sprite256
 
-- グローバル変数の利用例です
+256 個のスプライトを表示して動かすサンプルです。
 
 ![preview](preview.png)
 
@@ -19,7 +19,7 @@
 
 ```zsh
 git clone https://github.com/suzukiplan/vgszero
-cd vgszero/example/02_global
+cd vgszero/example/05_sprie256
 make
 ```
 
@@ -38,84 +38,110 @@ make
 ### global.h
 
 ```c
-#pragma once
 #include "../../lib/sdcc/vgs0lib.h"
 
-struct GlobalVariables {
-    uint8_t c1;
-    uint8_t c10;
-    uint8_t c100;
-    uint8_t c1000;
-    uint8_t stop;
+#define SPRITE_NUM 256
+
+// グローバル変数
+typedef struct {
+    // スプライトの表示情報
+    struct Obj {
+        union {
+            uint8_t raw[2];
+            uint16_t val;
+        } x;
+        union {
+            uint8_t raw[2];
+            uint16_t val;
+        } y;
+        int8_t vx;
+        int8_t vy;
+        uint8_t an;
+    } obj[SPRITE_NUM];
+} GlobalVariables;
+#define GV ((GlobalVariables*)0xC000)
+
+// 乱数テーブル
+const uint8_t random[256] = {
+    0x2A, 0x46, 0x5E, 0x7D, 0x45, 0xDA, 0x1E, 0x72, 0x38, 0x43, 0xD4, 0xD1, 0x3E, 0x69, 0xAC, 0x7E, 
+    0x08, 0x79, 0x8F, 0xF5, 0x0F, 0xE8, 0xE4, 0x41, 0x6D, 0x71, 0x2F, 0x04, 0xE3, 0x5D, 0xD0, 0xC3,
+    0x19, 0x7B, 0xDF, 0x1A, 0x6E, 0xCD, 0xC8, 0x84, 0x27, 0xCA, 0xBA, 0x53, 0xA8, 0x62, 0x16, 0xFF,
+    0x3C, 0x22, 0x51, 0x95, 0x0E, 0x63, 0x26, 0xB3, 0x42, 0xED, 0xA0, 0x78, 0x73, 0xC5, 0x34, 0xDE,
+    0x9F, 0xE6, 0xA1, 0xB9, 0x61, 0x59, 0x24, 0x9D, 0xF4, 0x68, 0x00, 0x5A, 0x7C, 0x91, 0x85, 0xC4,
+    0xD5, 0x3D, 0xC2, 0x31, 0x99, 0x30, 0x17, 0x8E, 0x3A, 0x96, 0xB7, 0xC1, 0xB1, 0xB5, 0x3B, 0x93,
+    0xEB, 0x4F, 0x4A, 0x9A, 0x70, 0x37, 0x60, 0x09, 0xD2, 0xAA, 0xD8, 0xB2, 0xD3, 0x29, 0xF7, 0x67,
+    0x1D, 0x0D, 0xF9, 0x4D, 0xF6, 0x77, 0xEC, 0x82, 0x06, 0x2B, 0x14, 0xF3, 0x6F, 0xF1, 0x4E, 0xBD,
+    0x83, 0xAF, 0x55, 0x81, 0x49, 0x6A, 0x50, 0x35, 0xA3, 0xE1, 0x8D, 0x75, 0xBC, 0xA9, 0x07, 0x65,
+    0x01, 0x57, 0x97, 0xE5, 0xC9, 0x3F, 0x10, 0xC0, 0x89, 0xEE, 0x74, 0x9E, 0x66, 0x8B, 0x0C, 0x1F,
+    0x25, 0x39, 0x64, 0xE2, 0x5C, 0x47, 0x40, 0x32, 0xFE, 0x6C, 0xF8, 0xB4, 0xA5, 0xB0, 0x44, 0x36,
+    0xCE, 0x5F, 0x6B, 0x05, 0xD7, 0xAE, 0x33, 0x52, 0x1B, 0x11, 0x1C, 0xDC, 0x48, 0x02, 0xCF, 0xF0,
+    0x80, 0x7F, 0x28, 0xE7, 0x92, 0xE0, 0x9B, 0x86, 0x20, 0xCB, 0x7A, 0x54, 0x0B, 0xC6, 0x94, 0xBF,
+    0x76, 0xDD, 0xCC, 0xB8, 0x13, 0x4B, 0x0A, 0x5B, 0x88, 0xFD, 0x18, 0xFA, 0x9C, 0x98, 0xA4, 0x2C,
+    0xDB, 0x12, 0xAD, 0x03, 0x58, 0xEF, 0xFB, 0xA6, 0xD6, 0x8C, 0xD9, 0xC7, 0x2D, 0xF2, 0x15, 0xA2,
+    0x2E, 0xA7, 0x4C, 0x87, 0xB6, 0x90, 0x56, 0xE9, 0xEA, 0x23, 0xBE, 0xFC, 0xAB, 0x8A, 0x21, 0xBB
 };
-
-#define GV ((struct GlobalVariables*)0xC000)
-```
-
-### program.c
-
-```c
-#include "../../lib/sdcc/vgs0lib.h"
-#include "global.h"
-
-void countUp(void)
-{
-    if (!GV->stop) {
-        GV->c1++;
-        if (9 < GV->c1) {
-            GV->c1 = 0;
-            GV->c10++;
-            if (9 < GV->c10) {
-                GV->c10 = 0;
-                GV->c100++;
-                if (9 < GV->c100) {
-                    GV->c100 = 0;
-                    GV->c1000++;
-                    if (9 < GV->c1000) {
-                        GV->stop = 1;
-                        GV->c1 = 9;
-                        GV->c10 = 9;
-                        GV->c100 = 9;
-                        GV->c1000 = 9;
-                    }
-                }
-            }
-        }
-    }
-}
 
 void main(void)
 {
     // パレットを初期化
-    vgs0_palette_set(0, 0, 0, 0, 0);    // black
-    vgs0_palette_set(0, 1, 7, 7, 7);    // dark gray
-    vgs0_palette_set(0, 2, 24, 24, 24); // light gray
-    vgs0_palette_set(0, 3, 31, 31, 31); // white
+    vgs0_palette_set_rgb555(0, 0, 0b0000000000000000);
+    vgs0_palette_set_rgb555(0, 1, 0b0001110011100111);
+    vgs0_palette_set_rgb555(0, 2, 0b0110001100011000);
+    vgs0_palette_set_rgb555(0, 3, 0b0111111111111111);
+    vgs0_palette_set_rgb555(0, 4, 0b0000001110000000);
+    vgs0_palette_set_rgb555(0, 5, 0b0000000000011100);
 
-    // Bank 2 を Character Pattern Table ($A000) に転送 (DMA)
+    // Bank 2 を Character Pattern Table (0xA000) に転送 (DMA)
     vgs0_dma(2);
 
-    // グローバル変数を初期化
-    GV->stop = 0;
-    GV->c1 = 4;
-    GV->c10 = 3;
-    GV->c100 = 2;
-    GV->c1000 = 1;
-    vgs0_bg_putstr(4, 4, 0x80, "COUNT:");
+    // FGの左上に "SPRITE TEST" を描画
+    vgs0_fg_putstr(2, 2, 0x80, "SPRITE TEST");
+
+    // BG全画面にひし形を描画
+    for (int y = 0; y < 32; y++) {
+        for (int x = 0; x < 32; x++) {
+            VGS0_ADDR_BG->ptn[y][x] = 0x10;
+            VGS0_ADDR_BG->attr[y][x] = 0x80 | ((x & 1) << 5) | ((y & 1) << 6);
+        }
+    }
+
+    // スプライト & グローバル変数を初期化
+    uint8_t rptr = 0;
+    for (int i = 0; i < SPRITE_NUM; i++) {
+        VGS0_ADDR_OAM[i].x = random[rptr++];
+        VGS0_ADDR_OAM[i].y = random[rptr++] % 192;
+        VGS0_ADDR_OAM[i].ptn = 1 + (i & 0x07);
+        VGS0_ADDR_OAM[i].attr = 0x80;
+        GV->obj[i].x.val = VGS0_ADDR_OAM[i].x << 8;
+        GV->obj[i].y.val = VGS0_ADDR_OAM[i].y << 8;
+        GV->obj[i].vx = random[rptr++];
+        GV->obj[i].vy = random[rptr++];
+        GV->obj[i].an = random[rptr++];
+    }
 
     // メインループ
     while (1) {
+        // V-BLANK を待機
         vgs0_wait_vsync();
-        countUp();
-        VGS0_ADDR_BG->ptn[4][10] = '0' + GV->c1000;
-        VGS0_ADDR_BG->ptn[4][11] = '0' + GV->c100;
-        VGS0_ADDR_BG->ptn[4][12] = '0' + GV->c10;
-        VGS0_ADDR_BG->ptn[4][13] = '0' + GV->c1;
+
+        // スプライトを動かす
+        for (int i = 0; i < SPRITE_NUM; i++) {
+            GV->obj[i].x.val += GV->obj[i].vx;
+            GV->obj[i].y.val += GV->obj[i].vy;
+            VGS0_ADDR_OAM[i].x = GV->obj[i].x.raw[1];
+            VGS0_ADDR_OAM[i].y = GV->obj[i].y.raw[1];
+            GV->obj[i].an++;
+            GV->obj[i].an &= 0x03;
+            if (0 == GV->obj[i].an) {
+                VGS0_ADDR_OAM[i].ptn++;
+                if (9 == VGS0_ADDR_OAM[i].ptn) {
+                    VGS0_ADDR_OAM[i].ptn = 1;
+                }
+            }
+        }
+
+        // BGをスクロール
+        (*VGS0_ADDR_BG_SCROLL_Y)--;
     }
 }
 ```
-
-### Explanation
-
-- VGS0 の RAM 先頭アドレス（0xC000）をポイントする構造体でグローバル変数を管理する事を推奨します。
-- グローバル変数サイズが大きくなりすぎるとスタックとの競合の恐れがあるため、最大でも 8KB 以内とすることを推奨します。
