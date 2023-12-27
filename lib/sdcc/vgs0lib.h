@@ -30,61 +30,77 @@
 
 /** @def
  * Joypad bit mask (Cursor: Up)
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#joypad
  */
 #define VGS0_JOYPAD_UP 0b10000000
 
 /** @def
  * Joypad bit mask (Cursor: Down)
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#joypad
  */
 #define VGS0_JOYPAD_DW 0b01000000
 
 /** @def
  * Joypad bit mask (Cursor: Left)
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#joypad
  */
 #define VGS0_JOYPAD_LE 0b00100000
 
 /** @def
  * Joypad bit mask (Cursor: Right)
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#joypad
  */
 #define VGS0_JOYPAD_RI 0b00010000
 
 /** @def
  * Joypad bit mask (START button)
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#joypad
  */
 #define VGS0_JOYPAD_ST 0b00001000
 
 /** @def
  * Joypad bit mask (SELECT button)
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#joypad
  */
 #define VGS0_JOYPAD_SE 0b00000100
 
 /** @def
  * Joypad bit mask (A button: Jump/Bomber/Enter)
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#joypad
  */
 #define VGS0_JOYPAD_T1 0b00000010
 
 /** @def
  * Joypad bit mask (B button: Fire/Shot/Cancel)
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#joypad
  */
 #define VGS0_JOYPAD_T2 0b00000001
 
 /** @def
  * BG name table
+ * - BG: https://github.com/suzukiplan/vgszero/blob/master/README.md#bg
+ * - NameTable: https://github.com/suzukiplan/vgszero/blob/master/README.md#name-table
  */
 #define VGS0_ADDR_BG ((volatile NameTable*)0x8000)
 
 /** @def
  * FG name table
+ * - FG: https://github.com/suzukiplan/vgszero/blob/master/README.md#fg
+ * - NameTable: https://github.com/suzukiplan/vgszero/blob/master/README.md#name-table
  */
 #define VGS0_ADDR_FG ((volatile NameTable*)0x8800)
 
 /** @def
- * Object Attribute Memory
+ * Object Attribute Memory of the Sprites
+ * - Sprite: https://github.com/suzukiplan/vgszero/blob/master/README.md#sprite
+ * - OAM: https://github.com/suzukiplan/vgszero/blob/master/README.md#oam
  */
 #define VGS0_ADDR_OAM ((volatile OAM*)0x9000)
 
 /**
- * Set an object attribute memory record
+ * Set an object attribute memory record macro
+ * - Sprite: https://github.com/suzukiplan/vgszero/blob/master/README.md#sprite
+ * - OAM: https://github.com/suzukiplan/vgszero/blob/master/README.md#oam
  */
 #define vgs0_oam_set(NUM, X, Y, ATTR, PTN) VGS0_ADDR_OAM[NUM].x = X; \
                                            VGS0_ADDR_OAM[NUM].y = Y; \
@@ -93,36 +109,43 @@
 
 /** @def
  * Palette table
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#palette
  */
 #define VGS0_ADDR_PALETTE ((volatile uint16_t*)0x9400)
 
 /** @def
  * Vertical rendering counter
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#scanline-counter
  */
 #define VGS0_ADDR_COUNT_V ((volatile uint8_t*)0x9600)
 
 /** @def
  * Horizontal rendering counter
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#scanline-counter
  */
 #define VGS0_ADDR_COUNT_H ((volatile uint8_t*)0x9601)
 
 /** @def
  * BG scroll X
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
 #define VGS0_ADDR_BG_SCROLL_X ((volatile uint8_t*)0x9602)
 
 /** @def
  * BG scroll Y
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
 #define VGS0_ADDR_BG_SCROLL_Y ((volatile uint8_t*)0x9603)
 
 /** @def
  * FG scroll X
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
 #define VGS0_ADDR_FG_SCROLL_X ((volatile uint8_t*)0x9604)
 
 /** @def
  * FG scroll Y
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
 #define VGS0_ADDR_FG_SCROLL_Y ((volatile uint8_t*)0x9605)
 
@@ -138,6 +161,7 @@
 
 /** @def
  * Character pattern table
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#character-pattern-table
  */
 #define VGS0_ADDR_CHARACTER ((volatile uint8_t*)0xA000)
 
@@ -166,16 +190,17 @@ typedef unsigned long long uint64_t;
 typedef signed long long int64_t;
 
 /**
- * Object Attribute Memory record
+ * Object Attribute Memory
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#oam
  */
 typedef struct {
     //! Y-coordinate
     uint8_t y;
     //! X-coordinate
     uint8_t x;
-    //! Character pattern number
+    //! Character pattern number: https://github.com/suzukiplan/vgszero/blob/master/README.md#character-pattern-table
     uint8_t ptn;
-    //! Attribute value https://github.com/suzukiplan/vgs0/blob/master/README.md#attribute-bit-layout-bgfgsprite
+    //! Attribute value: https://github.com/suzukiplan/vgszero/blob/master/README.md#attribute
     uint8_t attr;
 } OAM;
 
@@ -183,9 +208,9 @@ typedef struct {
  * Name Table
  */
 typedef struct {
-    //! Character pattern number
+    //! Character pattern number: https://github.com/suzukiplan/vgszero/blob/master/README.md#character-pattern-table
     uint8_t ptn[32][32];
-    //! Attribute value https://github.com/suzukiplan/vgs0/blob/master/README.md#attribute-bit-layout-bgfgsprite
+    //! Attribute value: https://github.com/suzukiplan/vgszero/blob/master/README.md#attribute
     uint8_t attr[32][32];
 } NameTable;
 
@@ -201,6 +226,7 @@ void vgs0_wait_vsync(void) __z88dk_fastcall;
  * @param r color depth of red (0-31)
  * @param g color depth of green (0-31)
  * @param b color depth of blue (0-31)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#palette
  */
 void vgs0_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b) __smallc;
 
@@ -209,12 +235,14 @@ void vgs0_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b) _
  * @param pn number of palette (0-15)
  * @param pi index of palette (0-15)
  * @param rgb555 color depth of RGB555 (0b0rrrrrgggggbbbbb)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#palette
  */
 void vgs0_palette_set_rgb555(uint8_t pn, uint8_t pi, uint16_t rgb555) __smallc;
 
 /**
  * @brief High-speed DMA transfer of the contents of the specified ROM Bank to the Character Pattern Table in VRAM
  * @param prg ROM Bank number (0-255)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#rom-to-character-dma
  */
 void vgs0_dma(uint8_t prg) __z88dk_fastcall;
 
@@ -223,6 +251,7 @@ void vgs0_dma(uint8_t prg) __z88dk_fastcall;
  * @param dst destination address
  * @param value set value
  * @param cnt transfer count in byte
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#memset-dma
  */
 void vgs0_memset(uint16_t dst, uint8_t value, uint16_t cnt) __smallc;
 
@@ -231,6 +260,7 @@ void vgs0_memset(uint16_t dst, uint8_t value, uint16_t cnt) __smallc;
  * @param dst destination address
  * @param src source address
  * @param cnt transfer count in byte
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#memcpy-dma
  */
 void vgs0_memcpy(uint16_t dst, uint16_t src, uint16_t cnt) __smallc;
 
@@ -238,7 +268,7 @@ void vgs0_memcpy(uint16_t dst, uint16_t src, uint16_t cnt) __smallc;
  * @brief Continuously writes the specified ASCII code and attribute values to BG's NameTable
  * @param x X-coordinate (0-31)
  * @param y Y-coordinate (0-31)
- * @param attr attribute value https://github.com/suzukiplan/vgs0/blob/master/README.md#attribute-bit-layout-bgfgsprite
+ * @param attr attribute value: https://github.com/suzukiplan/vgszero/blob/master/README.md#attribute
  * @param str '\0' terminated string
  */
 void vgs0_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc;
@@ -247,7 +277,7 @@ void vgs0_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __small
  * @brief Continuously writes the specified ASCII code and attribute values to FG's NameTable
  * @param x X-coordinate (0-31)
  * @param y Y-coordinate (0-31)
- * @param attr attribute value https://github.com/suzukiplan/vgs0/blob/master/README.md#attribute-bit-layout-bgfgsprite
+ * @param attr attribute value https://github.com/suzukiplan/vgszero/blob/master/README.md#attribute
  * @param str '\0' terminated string
  */
 void vgs0_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc;
@@ -255,6 +285,7 @@ void vgs0_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __small
 /**
  * @brief Acquire joypad input status
  * @return joypad input status
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#joypad
  * @note that the input bit is originally reset (0) and the uninput bit is set (1), but when this function is used, it is inverted.
  */
 uint8_t vgs0_joypad_get(void) __z88dk_fastcall;
@@ -262,36 +293,43 @@ uint8_t vgs0_joypad_get(void) __z88dk_fastcall;
 /**
  * @brief VGS: Play BGM
  * @param song number of the song to play
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#play-bgm
  */
 void vgs0_bgm_play(uint8_t song) __z88dk_fastcall;
 
 /**
  * @brief VGS: Pause BGM
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#pause-bgm
  */
 void vgs0_bgm_pause(void) __z88dk_fastcall;
 
 /**
  * @brief VGS: Resume BGM
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#resume-bgm
  */
 void vgs0_bgm_resume(void) __z88dk_fastcall;
 
 /**
  * @brief VGS: Fadeout BGM
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#fadeout-bgm
  */
 void vgs0_bgm_fadeout(void) __z88dk_fastcall;
 
 /**
  * @brief SE: Play Sound Effect
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#play-sound-effect
  */
 void vgs0_se_play(uint8_t se) __z88dk_fastcall;
 
 /**
  * @brief SE: Stop Sound Effect
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#stop-sound-effect
  */
 void vgs0_se_stop(uint8_t se) __z88dk_fastcall;
 
 /**
  * @brief SE: Check Sound Effect
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#check-sound-effect
  */
 uint8_t vgs0_se_playing(uint8_t se) __z88dk_fastcall;
 
