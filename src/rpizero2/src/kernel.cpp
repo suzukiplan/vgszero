@@ -39,10 +39,11 @@ size_t hdmiPitch_;
 uint16_t* hdmiBuffer_;
 uint16_t pcmData_[735];
 CLogger* logger_;
+CTimer* timer_;
 
 CKernel::CKernel(void) : screen(240, 192),
                          timer(&interrupt),
-                         logger(LogPanic, nullptr),
+                         logger(LogNotice, nullptr),
                          usb(&interrupt, &timer, TRUE),
                          vchiq(CMemorySystem::Get(), &interrupt),
                          sound(&vchiq, (TVCHIQSoundDestination)options.GetSoundOption()),
@@ -119,6 +120,7 @@ boolean CKernel::initialize(void)
     if (bOK) {
         logger.Write(TAG, LogNotice, "init mcm");
         logger_ = &logger;
+        timer_ = &timer;
         bOK = mcm.Initialize();
     }
 
@@ -235,7 +237,7 @@ TShutdownMode CKernel::run(void)
     });
     vgs0_ = &vgs0;
 
-    int swap = 0;
+    //int swap = 0;
     auto buffer = screen.GetFrameBuffer();
     while (1) {
         // update status of the peripheral devices
@@ -246,8 +248,10 @@ TShutdownMode CKernel::run(void)
         CMultiCoreSupport::SendIPI(2, IPI_USER + 1); // request execute sound core (vgs)
 
         // wait v-sync
+        /*
         swap = 192 - swap;
         buffer->SetVirtualOffset(0, swap);
+        */
         buffer->WaitForVerticalSync();
 
         // playback sound
