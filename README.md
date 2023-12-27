@@ -25,7 +25,7 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero 2W をコアに
   - [x] game.rom, bgm.dat, se.dat を1ファイルに纏めたい (game.pkg)
   - [x] bank switch API (C言語)
   - [x] RaspberryPi Zero のサポートを廃止
-  - [ ] Z80 のクロックアップ
+  - [x] Z80 のクロックアップ
 - examples
   - [x] Hello, World!
   - [x] グローバル変数の使い方
@@ -46,7 +46,7 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero 2W をコアに
 
 ## VGS0 Feature
 
-- CPU: Z80 3.4MHz (3,579,545Hz)
+- CPU: Z80 16MHz (16,777,216Hz)
   - Z80 アセンブリ言語でプログラムを記述
   - SDCC を用いて C 言語でもプログラミング可能
   - 最大 2MB (8kb × 256) のプログラムとデータ (※音声データを除く)
