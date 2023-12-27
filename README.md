@@ -8,6 +8,10 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
 
 ## WIP status
 
+- problem
+  - [ ] 限界性能のテストプログラムが RaspberryPi Zero (無印) で動作遅延する問題の対処
+    - Zero 2W 専用にしてマルチコア前提で動かせば大丈夫そう
+    - Zero 無印のサポートを落とすか緩くサポートするかで悩み中...
 - implementation
   - [x] CPU
   - [x] VDP
@@ -27,7 +31,7 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - [x] SE再生
   - [ ] Map Scroll
   - [ ] スプライト
-  - [ ] スプライト・BG・FG全表示しつつ音楽+効果音（限界性能チェック用）
+  - [x] スプライト・BG・FG全表示しつつ音楽+効果音（限界性能チェック用）
   - [ ] アセンブリ言語実装例（Helloのみ）
 - documents
   - [x] Z80: Memory map
@@ -94,6 +98,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/01_hello](./example/01_hello/) | C言語 | `HELLO,WORLD!` を表示 |
 | [example/02_global](./example/02_global/) | C言語 | グローバル変数の使用例 |
 | [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
+| [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の不可を最大化する検査用プログラム |
 
 ## game.pkg
 
