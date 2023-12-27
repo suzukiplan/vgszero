@@ -279,7 +279,7 @@ class VGSDecoder
         if (0 == ctx.mvol) {
             return result;
         }
-        for (int i = 0; i < (int)size; i += 8, ctx.hz++) {
+        for (int i = 0; i < (int)size; i += 4, ctx.hz++) {
             for (int j = 0; j < 6; j++) {
                 if (ctx.ch[j].tone || ctx.ch[j].toneS) {
                     ctx.ch[j].cur %= ctx.ch[j].toneS[0];
@@ -320,8 +320,6 @@ class VGSDecoder
                         }
                         *bp = (short)wav;
                         *(bp + 1) = *bp; // 44100Hz
-                        *(bp + 2) = *bp; // 2ch
-                        *(bp + 3) = *bp; // 2ch
                         if (i) {
                             ctx.wav[j] += pw < 0 ? -pw : pw;
                             ctx.wav[j] >>= 1;

@@ -29,6 +29,7 @@ clean:
 	rm -f *.noi
 	rm -f ${PROJECT}.rom
 	rm -f bgm.dat
+	rm -f se.dat
 
 tools:
 	cd ../../tools && make

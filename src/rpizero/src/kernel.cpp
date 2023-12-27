@@ -33,6 +33,8 @@ static uint8_t rom_[2097152];
 static UINT romSize_;
 static uint8_t bgm_[8388608];
 static UINT bgmSize_;
+static uint8_t se_[8388608];
+static UINT seSize_;
 #define MOUNT_DRIVE "SD:"
 #define ROM_FILE "/game.rom"
 #define BGM_FILE "/bgm.dat"
@@ -186,6 +188,22 @@ TShutdownMode CKernel::run(void)
     }
     f_close(&bgmDat);
 
+    logger.Write(TAG, LogNotice, "Loading se.dat...");
+    FIL seDat;
+    seSize_ = 0;
+    result = f_open(&seDat, MOUNT_DRIVE SE_FILE, FA_READ | FA_OPEN_EXISTING);
+    if (FR_OK != result) {
+        logger.Write(TAG, LogNotice, "SE not exist");
+    } else {
+        result = f_read(&seDat, se_, sizeof(se_), &seSize_);
+        if (FR_OK != result) {
+            logger.Write(TAG, LogPanic, "File read error! (%d)", (int)result);
+            return ShutdownHalt;
+        }
+        logger.Write(TAG, LogNotice, "Load success: %d bytes", (int)seSize_);
+    }
+    f_close(&seDat);
+
     f_unmount(MOUNT_DRIVE);
     sound.SetControl(VCHIQ_SOUND_VOLUME_MAX);
     auto buffer = screen.GetFrameBuffer();
@@ -196,6 +214,9 @@ TShutdownMode CKernel::run(void)
     vgs0.loadRom(rom_, romSize_);
     if (0 < bgmSize_) {
         vgs0.loadBgm(bgm_, bgmSize_);
+    }
+    if (0 < seSize_) {
+        vgs0.loadSoundEffect(se_, seSize_);
     }
     int swap = 0;
     while (1) {
@@ -213,12 +234,12 @@ TShutdownMode CKernel::run(void)
         buffer->SetVirtualOffset(0, swap);
         buffer->WaitForVerticalSync();
 
-        // play sound: 2940bytes = 44100Hz x 2(16bits) x 2ch / 60fps
-        int16_t* pcmData = (int16_t*)vgs0.tickSound(2940);
+        // play sound: 1470bytes = 44100Hz x 2(16bits) x 1ch / 60fps
+        int16_t* pcmData = (int16_t*)vgs0.tickSound(1470);
         while (sound.PlaybackActive()) {
             scheduler.Sleep(1);
         }
-        sound.Playback(pcmData, 2940 / 4, 2, 16);
+        sound.Playback(pcmData, 1470 / 2, 1, 16);
     }
 
     return ShutdownHalt;

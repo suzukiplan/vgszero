@@ -125,7 +125,7 @@ open doc/html/index.html
 ### Create Sound Data
 
 - VGS 形式の Music Macro Language (MML) で音楽データを記述できます
-- 効果音には 44100Hz 16bits 2ch の wav ファイルを用いることができます
+- 効果音には 44100Hz 16bits 1ch (モノラル) の wav ファイルを用いることができます
 
 ### How to Debug
 

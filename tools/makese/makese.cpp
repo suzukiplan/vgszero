@@ -107,8 +107,8 @@ static Binary* loadBinary(const char* path)
             size -= 2;
 
             printf("- PCM Format: %dHz %dbits %dch (%d bytes/sec, %d bytes/sample)\n", rate, bits, ch, bps, bs);
-            if (rate != 44100 || bits != 16 || ch != 2) {
-                puts("Detected unsupported format (44100Hz/16bits/2ch only)");
+            if (rate != 44100 || bits != 16 || ch != 1) {
+                puts("Detected unsupported format (44100Hz/16bits/1ch only)");
                 exit(-1);
             }
         } else if (0 == memcmp(result, "LIST", 4)) {

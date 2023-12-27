@@ -197,7 +197,7 @@ int main(int argc, char* argv[])
     SDL_AudioSpec obtained;
     desired.freq = 44100;
     desired.format = AUDIO_S16LSB;
-    desired.channels = 2;
+    desired.channels = 1;
     desired.samples = 735; // desired.freq * 20 / 1000;
     desired.callback = audioCallback;
     desired.userdata = &vgs0;
