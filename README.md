@@ -17,7 +17,7 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - [ ] RaspberryPi Zero 2W
   - [x] 22050Hz 1ch -> 44100Hz 2ch へ変更が必要かも（HDMIの仕様）
   - [x] 44100Hz 2ch -> 44100Hz 1ch にする（モノラルでもイケたので）
-  - [ ] game.rom, bgm.dat, se.dat を1ファイルに纏めたい (game.pkg)
+  - [x] game.rom, bgm.dat, se.dat を1ファイルに纏めたい (game.pkg)
   - [ ] bank switch API (C言語)
 - examples
   - [x] Hello, World!
@@ -32,10 +32,10 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - [x] Z80: Memory map
   - [x] Z80: I/O map
   - [x] C API Library
-  - [ ] `game.rom`
-  - [ ] `bgm.dat`
-  - [ ] `se.dat`
-  - [ ] `game.pkg`
+  - [x] `game.rom`
+  - [x] `bgm.dat`
+  - [x] `se.dat`
+  - [x] `game.pkg`
 
 ## VGS0 Feature
 
