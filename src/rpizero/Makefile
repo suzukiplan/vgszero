@@ -9,7 +9,6 @@ all:
 	cd src/circle/addon/linux && make
 	cd src/circle/addon/vc4 && ./makeall --nosample
 	cd src && make -f Build.mk
-	cp src/kernel.img ../../image/rpizero/kernel.img
 
 clean:
 	cd src && make -f Build.mk clean

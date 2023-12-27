@@ -1,4 +1,7 @@
-# VGS0 for RaspberryPi Zero (Bare Metal)
+# VGS0 for RaspberryPi Zero (Bare Metal) **deprecated**
+
+> **NOTE:** VGS0 has discontinued support for RaspberryPi Zero.
+> Please use the [RaspberryPi Zero 2W version](../rpizero2).
 
 - This is an VGS0 emulator that runs in a RaspberryPi Zero bare-metal environment.
 - Compatible with RaspberryPiZero series (Zero, Zero W and Zero WH) and RaspberryPi1.
