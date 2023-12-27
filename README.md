@@ -235,7 +235,7 @@ open doc/html/index.html
 | 0x9400 ~ 0x95FF | 0x1400 ~ 0x15FF | [Palette](#palette) Table (2 x 16 x 16) |
 | 0x9600          | 0x1600	        | Register #0: Vertical [Scanline Counter](#scanline-counter) (read only) |
 | 0x9601          | 0x1601          | Register #1: Horizontal [Scanline Counter](#scanline-counter) (read only) |
-| 0x9602          | 0x1602          | Register #2: [BG](#bg)BG [Scroll](#hardware-scroll) X |
+| 0x9602          | 0x1602          | Register #2: [BG](#bg) [Scroll](#hardware-scroll) X |
 | 0x9603          | 0x1603          | Register #3: [BG](#bg) [Scroll](#hardware-scroll) Y |
 | 0x9604          | 0x1604          | Register #4: [FG](#fg) [Scroll](#hardware-scroll) X |
 | 0x9605          | 0x1605          | Register #5: [FG](#fg) [Scroll](#hardware-scroll) Y |
