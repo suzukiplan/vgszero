@@ -14,28 +14,31 @@
 class VGS0
 {
   private:
-    class Binary {
-        public:
-            const unsigned char* data;
-            size_t size;
+    class Binary
+    {
+      public:
+        const unsigned char* data;
+        size_t size;
 
-            Binary()
-            {
-                this->data = nullptr;
-                this->size = 0;;
-            }
+        Binary()
+        {
+            this->data = nullptr;
+            this->size = 0;
+            ;
+        }
     };
 
-    class SoundEffect {
-        public:
-            short* data;
-            size_t count;
+    class SoundEffect
+    {
+      public:
+        short* data;
+        size_t count;
 
-            SoundEffect()
-            {
-                this->data = nullptr;
-                this->count = 0;
-            }
+        SoundEffect()
+        {
+            this->data = nullptr;
+            this->count = 0;
+        }
     };
 
     Binary rom;
@@ -69,7 +72,8 @@ class VGS0
     {
         this->cpu = new Z80([](void* arg, unsigned short addr) { return ((VGS0*)arg)->readMemory(addr); }, [](void* arg, unsigned short addr, unsigned char value) { ((VGS0*)arg)->writeMemory(addr, value); }, [](void* arg, unsigned short port) { return ((VGS0*)arg)->inPort(port); }, [](void* arg, unsigned short port, unsigned char value) { ((VGS0*)arg)->outPort(port, value); }, this);
         this->cpu->setConsumeClockCallback([](void* arg, int clocks) { ((VGS0*)arg)->consumeClock(clocks); });
-        this->vdp = new VDP(colorMode, this, [](void* arg) { ((VGS0*)arg)->cpu->requestBreak(); }, [](void* arg) { ((VGS0*)arg)->cpu->generateIRQ(0x07); } );
+        this->vdp = new VDP(
+            colorMode, this, [](void* arg) { ((VGS0*)arg)->cpu->requestBreak(); }, [](void* arg) { ((VGS0*)arg)->cpu->generateIRQ(0x07); });
         this->vgsdec = new VGSDecoder();
         this->reset();
     }
@@ -96,7 +100,7 @@ class VGS0
     {
         this->rom.data = (const unsigned char*)data;
         this->rom.size = size & 0x001FFFFF; // max 2MB
-        this->rom.size -= size % 0x2000; // ignore additional not 8KB data
+        this->rom.size -= size % 0x2000;    // ignore additional not 8KB data
     }
 
     void loadBgm(const void* buffer, size_t size)

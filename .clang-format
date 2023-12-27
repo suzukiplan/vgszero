@@ -1,0 +1,17 @@
+BasedOnStyle: LLVM
+ColumnLimit: 0
+IndentWidth: 4
+TabWidth: 4
+BreakBeforeBraces: Linux
+ObjCBlockIndentWidth: 4
+ObjCSpaceAfterProperty: true 
+ObjCSpaceBeforeProtocolList: true
+AllowShortFunctionsOnASingleLine: true 
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+PointerAlignment: Left
+UseTab: Never
+IndentCaseLabels: true
+
