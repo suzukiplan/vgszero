@@ -1,4 +1,6 @@
-all:
+all: vgs0.lib
+
+vgs0.lib: vgs0lib.c vgs0lib.h
 	sdasz80 -o crt0.s
 	sdcc -mz80 --opt-code-size --code-loc 0x0100 --no-std-crt0 -c vgs0lib.c
 	sdar -rc vgs0.lib crt0.rel vgs0lib.rel
