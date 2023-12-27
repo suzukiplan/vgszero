@@ -62,13 +62,13 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要!
   - 本体 ROM (`game.rom`) とは別アセット（`bgm.dat`）
-  - 最大 256 曲 & 合計 8MB 以下を搭載可能
+  - 最大 256 曲
 - SE (効果音)
   - 22050Hz 16bit 1ch 形式の PCM 音源で効果音を再生
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要
   - 本体 ROM (`game.rom`) とは別アセット（`se.dat`）
-  - 最大 256 個 & 合計 8MB 以下を搭載可能
+  - 最大 256 個
 
 ## How to Execute
 
@@ -76,17 +76,15 @@ SUZUKI PLAN - Video Game System Zero (VGS0) は RaspberryPi Zero をコアに用
 
 1. FAT32 フォーマットされた SD カードを準備
 2. SD カードのルートディレクトリに [./image/rpizero](./image/rpizero) または [./image/rpizero2](./image/rpizero2) 以下のファイルをコピー
-3. `game.rom` を起動対象のゲームの ROM データに置き換える
-4. `bgm.dat` を起動対象のゲームの BGM データに置き換える
-5. `se.dat` を起動対象のゲームの効果音データに置き換える
-6. SD カードを RaspberryPi Zero に挿入
-7. RaspberryPi Zero に USB ゲームパッドを接続
-8. RaspberryPi Zero とテレビを HDMI ケーブルで接続
-9. RaspberryPi Zero に USB で電源を供給
+3. [game.pkg](#gamepkg) を起動対象のゲームに置き換える
+4. SD カードを RaspberryPi Zero に挿入
+5. RaspberryPi Zero に USB ゲームパッドを接続
+6. RaspberryPi Zero とテレビを HDMI ケーブルで接続
+7. RaspberryPi Zero に USB で電源を供給
 
 ### PC (Linux or macOS)
 
-SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コマンドラインオプションに起動対象の `game.rom`, `bgm.dat`, `se.dat` を指定して実行してください。
+SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コマンドラインオプションに起動対象の [game.pkg](#gamepkg) を指定して実行してください。
 
 ## Examples
 
@@ -95,6 +93,72 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/01_hello](./example/01_hello/) | C言語 | `HELLO,WORLD!` を表示 |
 | [example/02_global](./example/02_global/) | C言語 | グローバル変数の使用例 |
 | [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
+
+## game.pkg
+
+game.pkg は、再配布可能な VGS0 のゲーム実行形式で、ツールチェインの [makepkg コマンド](./tools/makepkg/) で生成することができます。
+
+
+```
+makepkg  -o /path/to/output.pkg
+         -r /path/to/game.rom
+        [-b /path/to/bgm.dat]
+        [-s /path/to/se.dat]
+```
+
+- [game.rom](#gamerom): プログラムや画像データ
+- [bgm.dat](#bgmdat): BGM データ
+- [se.dat](#sedat): 効果音データ
+
+なお、game.pkg のサイズは **16MB以下** でなければなりません。
+
+### game.rom
+
+game.rom は [ROMバンク](#cpu-memory-map)に読み込まれる 8KB 単位の ROM データセットで、ツールチェインの [makerom コマンド](./tools/makepkg/) で生成することができます。
+
+```
+usage: makerom output input1 input2 ... input256
+```
+
+なお、入力ファイルが 8KB で割り切れない場合、パディングデータが自動的に挿入されます。
+
+### bgm.dat
+
+bgm.dat は、本リポジトリのツールチェインで提供している [vgsmml コマンド](./tools/vgsmml) でコンパイルされた1つ以上の楽曲データを纏めたデータセットで、ツールチェインの [makebgm コマンド](./tools/makebgm/) で生成することができます。
+
+#### (Compile MML)
+
+```
+usage: vgsmml /path/to/file.mml /path/to/file.bgm
+```
+
+- MMLの仕様: [https://github.com/suzukiplan/vgs-mml-compiler/blob/master/MML-ja.md](https://github.com/suzukiplan/vgs-mml-compiler/blob/master/MML-ja.md)
+- MML ファイルは、[tohovgs コマンド](https://github.com/suzukiplan/tohovgs-cli) を用いれば PC 上でプレビューできます
+
+#### (Make bgm.dat)
+
+```
+makebgm bgm.dat song1.bgm [song2.bgm [song3.bgm...]]
+```
+
+BGM ファイルは最大 256 個指定することができます。
+
+### se.dat
+
+se.dat は、効果音のデータセットで、ツールチェインの [makese コマンド](./tools/makese/) で生成することができます。
+
+```
+makese se.dat se1.wav [se2.wav [se3.wav...]]
+```
+
+makese コマンドに指定できる .wav ファイルは、次の形式でなければなりません:
+
+- 無圧縮 RIFF 形式
+- サンプリングレート: 44100Hz
+- ビットレート: 16bits
+- チャネル数: 1 (モノラル)
+
+.wav ファイルは最大 256 個指定することができます。
 
 ## Programming Guide
 

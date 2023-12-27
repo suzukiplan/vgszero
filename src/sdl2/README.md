@@ -20,7 +20,7 @@ cd vgszero/src/sdl2
 make
 
 # execute
-./vgszero ../../example/hello/hello.rom
+./vgszero ../../example/01_hello/game.pkg
 ```
 
 ### Linux
@@ -46,18 +46,17 @@ cd vgszero/src/sdl2
 make
 
 # execute
-./vgszero ../../example/hello/hello.rom
+./vgszero ../../example/01_hello/game.pkg
 ```
 
 ## Usage
 
 ```
-usage: vgszero /path/to/file.rom ....... Specify ROM file to be used
-               [-v /path/to/bgm.vgs] ... VGS BGM data (max 256 data)
-               [-g { None .............. GPU: Do not use
-                   | OpenGL ............ GPU: OpenGL <default>
-                   | Vulkan ............ GPU: Vulkan
-                   | Metal ............. GPU: Metal
-                   }]
-               [-f] .................... Full Screen Mode
+usage: vgs0 /path/to/game.pkg ....... Specify game package to be used
+            [-g { None .............. GPU: Do not use
+                | OpenGL ............ GPU: OpenGL <default>
+                | Vulkan ............ GPU: Vulkan
+                | Metal ............. GPU: Metal
+                }]
+            [-f] .................... Full Screen Mode
 ```
