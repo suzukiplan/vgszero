@@ -1,5 +1,6 @@
 all:
 	@echo make format .............	execute clang-format
+	@echo make build .............. Build API, SDL2, RPIZero, Hello
 
 format:
 	make execute-format FILENAME=./src/core/vgs0.hpp
@@ -35,3 +36,9 @@ execute-format:
 	clang-format -style=file < ${FILENAME} > ${FILENAME}.bak
 	cat ${FILENAME}.bak > ${FILENAME}
 	rm ${FILENAME}.bak
+
+build:
+	cd lib/sdcc && make
+	cd src/sdl2 && make
+	cd src/rpizero && make
+	cd example/01_hello && make
