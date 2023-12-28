@@ -35,8 +35,6 @@ make
 
 ## Program Code
 
-### global.h
-
 ```c
 #include "../../lib/sdcc/vgs0lib.h"
 

@@ -39,7 +39,7 @@ game.pkg: ${PROJECT}.rom
 ${PROJECT}.rom: program.bin font.chr
 	${MAKEROM} ${PROJECT}.rom program.bin font.chr
 
-program.bin: program.c global.h ../../lib/sdcc/vgs0.lib ../../lib/sdcc/vgs0lib.h
+program.bin: program.c ../../lib/sdcc/vgs0.lib ../../lib/sdcc/vgs0lib.h
 	sdcc ${SDCC_FLAGS} program.c
 	makebin -s 16384 program.ihx program.bin
 
