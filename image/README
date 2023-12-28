@@ -1,11 +1,19 @@
-Copy the following files to the root directory of the SD card to launch the game on RaspberryPi Zero 2W.
+VGS-Zero のゲームに最低限必要なファイルは以下の 4 ファイルです。
 
-1. bootcode.bin (firmware of VideoCore IV)
-2. start.elf (firmware of VideoCore IV)
-3. kernel8.img (VGS0 kernel image)
-4. game.pkg (game package to be executed)
+1. bootcode.bin (VideoCore IV のファームウェア)
+2. start.elf (RaspberryPi 1~3, Zero, Zero 2用の VideoCore IV のファームウェア)
+3. kernel8.img (VGS-Zero のカーネルイメージ)
+4. game.pkg (ゲーム本体)
 
-The default game.pkg is Hello, World.
+これらのファイルを FAT フォーマットされた SD カードのルートディレクトリに配置して RaspberryPi Zero 2W を起動すればゲームが起動します。
+※現時点の game.pkg は Hello, World! を表示する example なので適宜適当な game.pkg に置き換えてください
 
-NOTE: The LICENSE-* and LICENCE.broadcom files must be included on the media for redistribution.
+【重要】
+- ゲームを再配布（販売）する時は、必ずライセンスファイル（LICENSE-* と LICENCE.broadcom）を変更せずに同梱してください
+- 本ファイル（README）は同梱しなくても大丈夫です
+- ゲームの再配布（販売）に伴うライセンス料金の支払いは不要です
+- VGS-Zero 本体は GPLv3 ライセンスの OSS ですが、VGS-Zero 向けに開発したゲームプログラム（Z80）は VGS-Zero のバイナリとは分離されているため、VGS-Zero 向けに開発したゲームプログラム（Z80）のソースコード開示義務は発生しません（もちろん、ソースコード開示しても問題ありません）
 
+【参考】
+ゲームを再配布（販売）する時の参考手順を以下に記しています。
+https://github.com/suzukiplan/vgszero/blob/master/README.md#how-to-sell-your-game
