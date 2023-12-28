@@ -383,4 +383,20 @@ void vgs0_se_stop(uint8_t se) __z88dk_fastcall;
  */
 uint8_t vgs0_se_playing(uint8_t se) __z88dk_fastcall;
 
+/**
+ * @brief Save data to save.dat
+ * @param addr Save start RAM address
+ * @param size Save size
+ * @return 0: Sucess, !0: Failed
+ */
+uint8_t vgs0_save(uint16_t addr, uint16_t size) __smallc;
+
+/**
+ * @brief Load data from save.dat
+ * @param addr Load start RAM address
+ * @param size Load size
+ * @return 0: Sucess, !0: Failed
+ */
+uint8_t vgs0_load(uint16_t addr, uint16_t size) __smallc;
+
 #endif

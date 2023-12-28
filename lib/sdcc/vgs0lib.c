@@ -288,3 +288,49 @@ __asm
     ret
 __endasm;
 }
+
+uint8_t vgs0_save(uint16_t addr, uint16_t size) __smallc
+{    
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // size -> HL
+    ld l, (ix)
+    inc ix
+    ld h, (ix)
+    inc ix
+    // addr -> BC
+    ld c, (ix)
+    inc ix
+    ld b, (ix)
+    pop ix
+    // execute SAVE
+    out (#0xDA), a
+    ld l, a
+    ret
+__endasm;
+}
+
+uint8_t vgs0_load(uint16_t addr, uint16_t size) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // size -> HL
+    ld l, (ix)
+    inc ix
+    ld h, (ix)
+    inc ix
+    // addr -> BC
+    ld c, (ix)
+    inc ix
+    ld b, (ix)
+    pop ix
+    // execute LOAD
+    in  a, (#0xDA)
+    ld l, a
+    ret
+__endasm;
+}
