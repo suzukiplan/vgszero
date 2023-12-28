@@ -111,6 +111,12 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - 解像度 240x192 ピクセル以上
   - オーディオ出力対応
 
+> Amazon の商品リスト:
+> 
+> [https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H](https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H)
+> 
+> Amazon で購入すると割高ですが、それでも全部合計で1万円弱ほどです。(2023.12.28時点)
+
 #### (Launch Sequence)
 
 起動手順は次の通りです。
@@ -572,6 +578,7 @@ README.txtの記載凡例:
 この度は「<<<ゲームタイトル>>>」をお買い上げいただき誠にありがとうございます。
 本書は本ゲームの遊び方などを記載していますので、プレイ前にご一読ください。
 
+
 【必要なハードウェア】
 ・RaspberryPi Zero 2W
   - https://www.switch-science.com/products/7600
@@ -589,12 +596,18 @@ README.txtの記載凡例:
   - 解像度 240x192 ピクセル以上
   - オーディオ出力対応
 
+Amazon の商品リスト:
+https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H
+
+
 【起動方法】
 ・RaspberryPi Zero 2W に本製品（micro SDカード）を挿入
 ・RaspberryPi Zero 2W の電源を ON
 
+
 【遊び方】
 <<<ゲームの遊び方を記載>>>
+
 
 【連絡先】
 <<<Twitterアカウントやeメールアドレスなどを記載>>>
