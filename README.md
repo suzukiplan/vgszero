@@ -88,6 +88,8 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 
 ### on RaspberryPi Zero 2W
 
+#### (Required Hardware)
+
 以下のハードウェアが必要です。
 
 - RaspberryPi Zero 2W
@@ -108,6 +110,8 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/](https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/)
   - 最大 20MB 程度の空き容量が必要です（ゲーム本体: 最大16MB、ファームウェア: 約4MB）
 
+#### (Launch Sequence)
+
 起動手順は次の通りです。
 
 1. FAT32 フォーマットされた SD カードを準備
@@ -116,7 +120,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 4. SD カードを RaspberryPi Zero 2W に挿入
 5. RaspberryPi Zero 2W に USB ゲームパッドを接続
 6. RaspberryPi Zero 2W とテレビを HDMI ケーブルで接続
-7. RaspberryPi Zero 2W に USB で電源を供給
+7. RaspberryPi Zero 2W の電源を ON
 
 ### on PC for Debug (Linux or macOS)
 
