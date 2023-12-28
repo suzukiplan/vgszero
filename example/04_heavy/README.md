@@ -1,6 +1,6 @@
 # Heavy 
 
-このサンプルは、VGS0 のエミュレーション動作に最もオーバーヘッドが掛かる状態を検証するためのプログラムです。
+このサンプルは、VGS-Zero のエミュレーション動作に最もオーバーヘッドが掛かる状態を検証するためのプログラムです。
 
 ## How to build
 
@@ -17,7 +17,7 @@
 
 ```zsh
 git clone https://github.com/suzukiplan/vgszero
-cd vgszero/example/03_sound
+cd vgszero/example/04_heavy
 make
 ```
 
