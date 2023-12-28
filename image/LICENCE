@@ -1,6 +1,25 @@
-- VGS-Zero itself is OSS under GPLv3: LICENSE-VGS0.txt
-- VGS-Zero redistribution image includes Raspberry Pi bootloader: LICENCE.broadcom
-- VGS-Zero includes Circle: LICENSE-CIRCLE.txt
-- VGS-Zero includes LZ4 Library: LICENSE-LZ4LIB.txt
-- VGS-Zero includes SUZUKI PLAN - Z80 Emulator: LICENSE-Z80.txt
-- VGS-Zero Library for Z80 is MIT licensed OSS: LICENSE-VGS0LIB.txt
+Licenses Summary
+
+VGS-Zero is OSS under GPLv3:
+- Copied License: LICENSE-VGS0.txt
+- Web Site: https://github.com/suzukiplan/vgszero
+
+VGS-Zero redistribution image includes Raspberry Pi bootloader: 
+- Copied License: LICENCE.broadcom
+- Web Site: https://github.com/raspberrypi/firmware
+
+VGS-Zero includes Circle:
+- Copied License: LICENSE-CIRCLE.txt
+- Web Site: https://github.com/rsta2/circle
+
+VGS-Zero includes LZ4 - Library Files
+- Copied License: LICENSE-LZ4LIB.txt
+- Web Site: https://github.com/lz4/lz4/tree/dev/lib
+
+VGS-Zero includes SUZUKI PLAN - Z80 Emulator:
+- Copied License: LICENSE-Z80.txt
+- Web Site: https://github.com/suzukiplan/z80
+
+VGS-Zero Library for Z80 is OSS under MIT license:
+- Copied License: LICENSE-VGS0LIB.txt
+- Web Site: https://github.com/suzukiplan/vgszero/tree/master/lib/sdcc
