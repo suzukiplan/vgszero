@@ -94,21 +94,22 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 
 - RaspberryPi Zero 2W
   - [https://www.switch-science.com/products/7600](https://www.switch-science.com/products/7600)
-- HDMI ケーブル
-  - [https://www.amazon.co.jp/dp/B09LYT89CC/](https://www.amazon.co.jp/dp/B09LYT89CC/)
+  - [https://www.amazon.co.jp/dp/B0B55MFH1D/](https://www.amazon.co.jp/dp/B0B55MFH1D/)
+・HDMI ケーブル (mini HDMI Type C → HDMI Type A)
+  - [https://www.amazon.co.jp/dp/B08R7BVL7T/](https://www.amazon.co.jp/dp/B08R7BVL7T/)
 - USB ゲームパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
   - [https://www.amazon.co.jp/dp/B07M7SYX11/](https://www.amazon.co.jp/dp/B07M7SYX11/)
   - [https://www.amazon.co.jp/dp/B08BNFKCYM/](https://www.amazon.co.jp/dp/B08BNFKCYM/)
 - USB 電源
   - [https://www.amazon.co.jp/dp/B09T3C758Q/](https://www.amazon.co.jp/dp/B09T3C758Q/)
+- micro SD カード
+  - [https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/](https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/)
+  - 最大 20MB 程度の空き容量が必要です（ゲーム本体: 最大16MB、ファームウェア: 約4MB）
 - テレビなど（以下の条件のもの）
   - HDMI入力対応
   - リフレッシュレート60Hz
   - 解像度 240x192 ピクセル以上
   - オーディオ出力対応
-- micro SD カード
-  - [https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/](https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/)
-  - 最大 20MB 程度の空き容量が必要です（ゲーム本体: 最大16MB、ファームウェア: 約4MB）
 
 #### (Launch Sequence)
 
@@ -574,8 +575,9 @@ README.txtの記載凡例:
 【必要なハードウェア】
 ・RaspberryPi Zero 2W
   - https://www.switch-science.com/products/7600
-・HDMI ケーブル
-  - https://www.amazon.co.jp/dp/B09LYT89CC/
+  - https://www.amazon.co.jp/dp/B0B55MFH1D/
+・HDMI ケーブル (mini HDMI Type C → HDMI Type A)
+  - https://www.amazon.co.jp/dp/B08R7BVL7T/
 ・USB ゲームパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
   - https://www.amazon.co.jp/dp/B07M7SYX11/
   - https://www.amazon.co.jp/dp/B08BNFKCYM/
