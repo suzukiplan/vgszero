@@ -1,4 +1,6 @@
-VGS-Zero のゲームに最低限必要なファイルは以下の 4 ファイルです。
+【媒体格納イメージについての解説】
+
+VGS-Zero 対応ゲームに最低限必要なファイルは以下の 4 ファイルです。
 
 1. bootcode.bin (VideoCore IV のファームウェア)
 2. start.elf (RaspberryPi 1~3, Zero, Zero 2用の VideoCore IV のファームウェア)
