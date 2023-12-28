@@ -49,6 +49,8 @@ class VGS0
     Z80* cpu;
     VDP* vdp;
     VGSDecoder* vgsdec;
+    bool (*saveCallback)(VGS0* vgs0, const void* data, size_t size);
+    bool (*loadCallback)(VGS0* vgs0, void* data, size_t size);
 
     struct Context {
         int64_t bobo;
@@ -75,6 +77,8 @@ class VGS0
         this->vdp = new VDP(
             colorMode, this, [](void* arg) { ((VGS0*)arg)->cpu->requestBreak(); }, [](void* arg) { ((VGS0*)arg)->cpu->generateIRQ(0x07); });
         this->vgsdec = new VGSDecoder();
+        this->saveCallback = nullptr;
+        this->loadCallback = nullptr;
         this->reset();
     }
 
@@ -288,6 +292,18 @@ class VGS0
             case 0xB1: return this->ctx.romBank[1];
             case 0xB2: return this->ctx.romBank[2];
             case 0xB3: return this->ctx.romBank[3];
+            case 0xDA: {
+                if (!this->loadCallback) return 0xFF;
+                unsigned short addr = this->cpu->reg.pair.B;
+                addr <<= 8;
+                addr |= this->cpu->reg.pair.C;
+                addr &= 0x3FFF;
+                unsigned short size = this->cpu->reg.pair.H;
+                size <<= 8;
+                size |= this->cpu->reg.pair.L;
+                size = 0x4000 < (int)addr + size ? 0x4000 - addr : size;
+                return this->loadCallback(this, &this->ctx.ram[addr], size) ? 0x00 : 0xFF;
+            }
             default: return 0xFF;
         }
     }
@@ -337,6 +353,22 @@ class VGS0
                 // printf("DMA: memcpy(%04X,%04X,%d)\n",addrTo,addrFrom,count);
                 for (int i = 0; i < count; i++, addrTo++, addrFrom++) {
                     this->writeMemory(addrTo, this->readMemory(addrFrom));
+                }
+                break;
+            }
+            case 0xDA: {
+                if (this->saveCallback) {
+                    unsigned short addr = this->cpu->reg.pair.B;
+                    addr <<= 8;
+                    addr |= this->cpu->reg.pair.C;
+                    addr &= 0x3FFF;
+                    unsigned short size = this->cpu->reg.pair.H;
+                    size <<= 8;
+                    size |= this->cpu->reg.pair.L;
+                    size = 0x4000 < (int)addr + size ? 0x4000 - addr : size;
+                    this->cpu->reg.pair.A = this->saveCallback(this, &this->ctx.ram[addr], size) ? 0x00 : 0xFF;
+                } else {
+                    this->cpu->reg.pair.A = 0xFF;
                 }
                 break;
             }
