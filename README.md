@@ -77,7 +77,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - 本体 ROM (`game.rom`) とは別アセット（`bgm.dat`）
   - 最大 256 曲
 - SE (効果音)
-  - 22050Hz 16bit 1ch 形式の PCM 音源で効果音を再生
+  - 44100Hz 16bit 1ch (モノラル) 形式の PCM データ (.wav ファイル) を効果音として再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要
   - 本体 ROM (`game.rom`) とは別アセット（`se.dat`）
