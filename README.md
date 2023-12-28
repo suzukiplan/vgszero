@@ -544,11 +544,20 @@ README.txtの記載凡例:
 本書は本ゲームの遊び方などを記載していますので、プレイ前にご一読ください。
 
 【必要なハードウェア】
-・RaspberryPi Zero 2W: https://www.switch-science.com/products/7600
-・RaspberryPi Zero 2W とテレビを接続する HDMI ケーブル
-・RaspberryPi Zero 2W に接続する USB ゲームパッド
-・RaspberryPi Zero 2W に接続する USB 電源 (5V/2.5A以上を推奨)
-・テレビなど（HDMI入力対応、オーディオ有り、リフレッシュレート60Hz）
+・RaspberryPi Zero 2W
+  - https://www.switch-science.com/products/7600
+・HDMI ケーブル
+  - https://www.amazon.co.jp/dp/B09LYT89CC/
+・USB ゲームパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
+  - https://ja.aliexpress.com/item/1005001905753033.html
+  - https://www.amazon.co.jp/dp/B08BNFKCYM
+・USB 電源
+  - https://www.amazon.co.jp/dp/B09T3C758Q/
+・テレビなど（以下の条件のもの）
+  - HDMI入力対応
+  - リフレッシュレート60Hz
+  - 解像度 240x192 ピクセル以上
+  - オーディオ出力対応
 
 【起動方法】
 ・RaspberryPi Zero 2W に本製品（micro SDカード）を挿入
