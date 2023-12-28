@@ -237,7 +237,7 @@ class VDP
                 int pal;
                 if (flipH) {
                     int jj = 7 - j;
-                    pal = jj & 1 ? (chrtbl[jj >> 1] & 0xF0) >> 4 : chrtbl[jj >> 1] & 0x0F;
+                    pal = jj & 1 ? chrtbl[jj >> 1] & 0x0F : (chrtbl[jj >> 1] & 0xF0) >> 4;
                 } else {
                     pal = j & 1 ? chrtbl[j >> 1] & 0x0F : (chrtbl[j >> 1] & 0xF0) >> 4;
                 }
