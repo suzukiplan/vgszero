@@ -32,6 +32,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [ ] SAVE/LOAD API (Z80)
     - VGS-Zero で RPG を創ったり STG のスコア保存ができたりするようにするため
   - [ ] bmp2chr のサポートフォーマットを増やす（16色bmpの対応は必要）
+  - [ ] ゲームパッドのボタン割当を変更できるようにする（config.sys）
 - examples
   - [x] Hello, World!
   - [x] グローバル変数の使い方
