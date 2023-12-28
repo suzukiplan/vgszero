@@ -95,7 +95,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 - RaspberryPi Zero 2W
   - [https://www.switch-science.com/products/7600](https://www.switch-science.com/products/7600)
   - [https://www.amazon.co.jp/dp/B0B55MFH1D/](https://www.amazon.co.jp/dp/B0B55MFH1D/)
-・HDMI ケーブル (mini HDMI Type C → HDMI Type A)
+- HDMI ケーブル (mini HDMI Type C → HDMI Type A)
   - [https://www.amazon.co.jp/dp/B08R7BVL7T/](https://www.amazon.co.jp/dp/B08R7BVL7T/)
 - USB ゲームパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
   - [https://www.amazon.co.jp/dp/B07M7SYX11/](https://www.amazon.co.jp/dp/B07M7SYX11/)
