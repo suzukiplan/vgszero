@@ -38,7 +38,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [x] BGM再生
   - [x] SE再生
   - [ ] Map Scroll
-  - [x] スプライト
+  - [x] スプライト256
   - [x] スプライト・BG・FG全表示しつつ音楽+効果音（限界性能チェック用）
   - [ ] アセンブリ言語実装例（Helloのみ）
 - documents
@@ -107,6 +107,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/02_global](./example/02_global/) | C言語 | グローバル変数の使用例 |
 | [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
 | [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の負荷を最大化する検査用プログラム |
+| [example/05_sprite256](./example/05_sprite256/) | C言語 | スプライトを256表示して動かす例 |
 
 ## game.pkg
 
