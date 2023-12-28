@@ -90,9 +90,9 @@ class VGS0
         this->vdp->externalRedneringCallback = externalRedneringCallback;
     }
 
-    void executeExternalRendering()
+    bool executeExternalRendering()
     {
-        this->vdp->externalRendering();
+        return this->vdp->externalRendering();
     }
 
     void reset()

@@ -58,18 +58,20 @@ void MultiCoreManager::IPIHandler(unsigned nCore, unsigned nIPI)
     if (nIPI == IPI_USER + 0) {
         // CPU1: execute main core (z80) tick and render display
         vgs0_->tick(pad1_);
-        uint16_t* display = vgs0_->getDisplay();
-        uint16_t* hdmi = hdmiBuffer_;
-        for (int y = 0; y < 192; y++) {
-            memcpy(hdmi, display, 240 * 2);
-            display += 240;
-            hdmi += hdmiPitch_;
-        }
     } else if (nIPI == IPI_USER + 1) {
         // CPU2: execute sound core (vgs) tick and buffering the result
         memcpy(pcmData_, vgs0_->tickSound(1470), 1470);
     } else if (nIPI == IPI_USER + 2) {
         // CPU3: execute VDP's rendering 1 scanline procedure
-        vgs0_->executeExternalRendering();
+        if (vgs0_->executeExternalRendering()) {
+            // copy to the mailbox buffer
+            uint16_t* display = vgs0_->getDisplay();
+            uint16_t* hdmi = hdmiBuffer_;
+            for (int y = 0; y < 192; y++) {
+                memcpy(hdmi, display, 240 * 2);
+                display += 240;
+                hdmi += hdmiPitch_;
+            }
+        }
     }
 }

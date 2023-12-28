@@ -136,7 +136,7 @@ class VDP
         for (int i = 8; i < 200; i++) this->renderScanline(i);
     }
 
-    void externalRendering()
+    bool externalRendering()
     {
         static int scanline = 8;
         this->renderBG(scanline - 8);
@@ -145,6 +145,9 @@ class VDP
         scanline++;
         if (200 <= scanline) {
             scanline = 8;
+            return true; // EOL
+        } else {
+            return false;
         }
     }
 
