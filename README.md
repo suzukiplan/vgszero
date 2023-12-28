@@ -59,7 +59,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - RAM サイズ 16KB (PV16相当!)
   - [セーブ機能](#save-data)に対応
 - VDP (映像処理)
-  - VRAM サイズ 16KB (TMS9918A 相当!)
+  - [VRAM](#vram-memory-map) サイズ 16KB (TMS9918A 相当!)
   - 解像度: 240x192 ピクセル
   - 32,768 色中 256 色を同時発色可能
   - 8x8 ピクセルの[キャラクタパターン](#character-pattern-table)を最大 256 枚 (8KB) 定義可能
@@ -70,13 +70,13 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
   - [C言語の `memset` に相当する高速 DMA 転送機能を実装](#memset-dma)
   - [C言語の `memcpy` に相当する高速 DMA 転送機能を実装](#memcpy-dma)
-- BGM
+- [BGM](#bgmdat)
   - VGS の MML で記述された BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要!
   - 本体 ROM (`game.rom`) とは別アセット（`bgm.dat`）
   - 最大 256 曲
-- SE (効果音)
+- [SE](#sedat) (効果音)
   - 44100Hz 16bit 1ch (モノラル) 形式の PCM データ (.wav ファイル) を効果音として再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要
@@ -87,10 +87,32 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 
 ### on RaspberryPi Zero 2W
 
+以下のハードウェアが必要です。
+
+- RaspberryPi Zero 2W
+  - [https://www.switch-science.com/products/7600](https://www.switch-science.com/products/7600)
+- HDMI ケーブル
+  - [https://www.amazon.co.jp/dp/B09LYT89CC/](https://www.amazon.co.jp/dp/B09LYT89CC/)
+- USB ゲームパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
+  - [https://ja.aliexpress.com/item/1005001905753033.html](https://ja.aliexpress.com/item/1005001905753033.html)
+  - [https://www.amazon.co.jp/dp/B08BNFKCYM/](https://www.amazon.co.jp/dp/B08BNFKCYM/)
+- USB 電源
+  - [https://www.amazon.co.jp/dp/B09T3C758Q/](https://www.amazon.co.jp/dp/B09T3C758Q/)
+- テレビなど（以下の条件のもの）
+  - HDMI入力対応
+  - リフレッシュレート60Hz
+  - 解像度 240x192 ピクセル以上
+  - オーディオ出力対応
+- micro SD カード
+  - [https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/](https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/)
+  - 最大 20MB 程度の空き容量が必要です（ゲーム本体: 最大16MB、ファームウェア: 約4MB）
+
+起動手順は次の通りです。
+
 1. FAT32 フォーマットされた SD カードを準備
 2. SD カードのルートディレクトリに [./image](./image) 以下のファイルをコピー
 3. [game.pkg](#gamepkg) を起動対象のゲームに置き換える
-4. SD カードを RaspberryPi Zero に挿入
+4. SD カードを RaspberryPi Zero 2W に挿入
 5. RaspberryPi Zero 2W に USB ゲームパッドを接続
 6. RaspberryPi Zero 2W とテレビを HDMI ケーブルで接続
 7. RaspberryPi Zero 2W に USB で電源を供給
