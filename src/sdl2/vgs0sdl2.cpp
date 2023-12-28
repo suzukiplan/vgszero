@@ -189,6 +189,40 @@ int main(int argc, char* argv[])
     });
 #endif
 
+    vgs0.saveCallback = [](VGS0* vgs0, const void* data, size_t size) -> bool {
+        log("Saving save.dat (%lubytes)", size);
+        FILE* fp = fopen("save.dat", "wb");
+        if (!fp) {
+
+            log("File open error!");
+            return false;
+        }
+        if (size != fwrite(data, 1, size, fp)) {
+            log("File write error!");
+            fclose(fp);
+            return false;
+        }
+        fclose(fp);
+        return true;
+    };
+
+    vgs0.loadCallback = [](VGS0* vgs0, void* data, size_t size) -> bool {
+        log("Loading save.dat (%lubytes)", size);
+        FILE* fp = fopen("save.dat", "rb");
+        if (!fp) {
+            log("File open error!");
+            memset(data, 0, size);
+            return false;
+        }
+        size_t readSize = fread(data, 1, size, fp);
+        if (readSize < size) {
+            log("warning: file size is smaller than expected");
+            memset(&((char*)data)[readSize], 0, size - readSize);
+        }
+        fclose(fp);
+        return true;
+    };
+
     log("Initializing SDL");
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS)) {
         log("SDL_Init failed: %s", SDL_GetError());
