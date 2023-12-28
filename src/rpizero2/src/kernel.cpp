@@ -32,12 +32,16 @@ static uint8_t pkg_[16777216];
 static UINT pkgSize_;
 #define MOUNT_DRIVE "SD:"
 #define PKG_FILE "/game.pkg"
+#define SAVE_FILE "/save.dat"
 extern "C" const unsigned short splash[46080];
 VGS0* vgs0_;
 uint8_t pad1_;
 size_t hdmiPitch_;
 uint16_t* hdmiBuffer_;
 uint16_t pcmData_[735];
+uint8_t saveDataCache_[0x4000];
+bool saveDataChanged_;
+UINT saveDataSize_;
 CLogger* logger_;
 
 CKernel::CKernel(void) : screen(240, 192),
@@ -178,6 +182,18 @@ TShutdownMode CKernel::run(void)
     }
     logger.Write(TAG, LogNotice, "Load success: %d bytes", (int)pkgSize_);
     f_close(&gamePkg);
+
+    FIL saveDat;
+    result = f_open(&saveDat, MOUNT_DRIVE SAVE_FILE, FA_READ | FA_OPEN_EXISTING);
+    if (FR_OK == result) {
+        memset(saveDataCache_, 0, sizeof(saveDataCache_));
+        saveDataChanged_ = false;
+        if (FR_OK != f_read(&saveDat, saveDataCache_, sizeof(saveDataCache_), &saveDataSize_)) {
+            saveDataSize_ = 0;
+        }
+        f_close(&saveDat);
+    }
+
     f_unmount(MOUNT_DRIVE);
 
     void* rom = nullptr;
@@ -233,6 +249,26 @@ TShutdownMode CKernel::run(void)
     vgs0.setExternalRenderingCallback([](void* arg) {
         CMultiCoreSupport::SendIPI(3, IPI_USER + 2); // request execute rendering core (vdp)
     });
+    vgs0.saveCallback = [](VGS0* vgs0, const void* data, size_t size) -> bool {
+        // この処理はサブCPUで実行されるのでキャッシュと変更フラグのみ更新して実際のセーブはメイン処理に委ねる
+        if (size < sizeof(saveDataCache_)) return false;
+        if (saveDataSize_ != size || 0 != memcmp(saveDataCache_, data, size)) {
+            memcpy(saveDataCache_, data, size);
+            saveDataChanged_ = true;
+            saveDataSize_ = size;
+        }
+        return true;
+    };
+    vgs0.loadCallback = [](VGS0* vgs0, void* data, size_t size) -> bool {
+        // 実際にSDカードからは読み込まずキャッシュから読む
+        // NOTE: ゲーム稼働中にSDカードのsave.datを置き換えてゲーム内でロードしても無効
+        if (0 < saveDataSize_) {
+            memcpy(data, saveDataCache_, size);
+            return true;
+        } else {
+            return false;
+        }
+    };
     vgs0_ = &vgs0;
 
     int swap = 0;
@@ -255,6 +291,28 @@ TShutdownMode CKernel::run(void)
         // playback sound
         while (sound.PlaybackActive()) scheduler.Sleep(1);
         sound.Playback(pcmData_, 735, 1, 16);
+
+        // save if needed
+        if (saveDataChanged_ && 0 < saveDataSize_ && saveDataSize_ < sizeof(saveDataCache_)) {
+            saveDataChanged_ = false;
+            result = f_mount(&fatFs, MOUNT_DRIVE, 1);
+            if (FR_OK != result) {
+                logger.Write(TAG, LogError, "Mount failed! (%d)", (int)result);
+            } else {
+                result = f_open(&saveDat, MOUNT_DRIVE SAVE_FILE, FA_WRITE | FA_CREATE_ALWAYS);
+                if (FR_OK != result) {
+                    logger.Write(TAG, LogError, "File open failed! (%d)", (int)result);
+                } else {
+                    UINT wrote;
+                    result = f_read(&saveDat, saveDataCache_, saveDataSize_, &wrote);
+                    if (FR_OK != result || wrote != saveDataSize_) {
+                        logger.Write(TAG, LogError, "File write failed! (%d)", (int)result);
+                    }
+                    f_close(&saveDat);
+                }
+                f_unmount(MOUNT_DRIVE);
+            }
+        }
     }
 
     return ShutdownHalt;
