@@ -29,11 +29,11 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [x] RaspberryPi Zero 2W で処理遅延していないことの検証
     - [この実装](https://github.com/suzukiplan/vgszero/commit/ef8f8450af4cf49aef75ba251f631b7577cf6a30)を入れて [04_heavy](./example/04_heavy/) を動かした時の Z80 (16MHz) の CPU 1tick 分の処理時間を検証したところ、約15ms程度で安定していたことを確認（16〜17msでアウトなのでセーフ）
     - 約1ms程度の余力を残しているが DMA 等のバッファとして残しておく必要があるため 16MHz が実用的な限界性能と判断する
-  - [ ] SAVE/LOAD API (Z80)
+  - [x] SAVE/LOAD API (Z80)
     - VGS-Zero で RPG を創ったり STG のスコア保存ができたりするようにするため
-    - memo: implemented (need test on the rpizero2)
   - [ ] bmp2chr のサポートフォーマットを増やす（16色bmpの対応は必要）
   - [ ] ゲームパッドのボタン割当を変更できるようにする（config.sys）
+  - [ ] example のサイレントビルド
 - examples
   - [x] Hello, World!
   - [x] グローバル変数の使い方
