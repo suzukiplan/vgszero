@@ -14,7 +14,7 @@ jobs:
           command: "sudo apt-get install -y build-essential"
       - run:
           name: "install sdcc"
-          command: "sudo apt list sdcc -a && sudo apt-get install -y sdcc=4.0"
+          command: "sudo apt-get install -y sdcc"
       - run:
           name: "Build and Test VGS-Zero"
           command: "make tests"
