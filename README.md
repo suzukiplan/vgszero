@@ -8,52 +8,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 
 ## WIP status
 
-- problem
-  - [x] 限界性能のテストプログラムが RaspberryPi Zero (無印) で動作遅延する問題の対処
-    - Zero 2W 専用にしてマルチコア前提で動かせば大丈夫そう
-    - Zero 無印のサポートを落とすか緩くサポートするかで悩み中... _But I made a decision._
-    - _2W の供給も安定してきたし良いよね（旧Zeroのテストも面倒だし）_
-- implementation
-  - [x] CPU
-  - [x] VDP
-  - [x] BGM API
-  - [x] Sound Effect API
-  - [x] RaspberryPi Zero
-  - [x] RaspberryPi Zero 2W
-  - [x] 22050Hz 1ch -> 44100Hz 2ch へ変更が必要かも（HDMIの仕様）
-  - [x] 44100Hz 2ch -> 44100Hz 1ch にする（モノラルでもイケたので）
-  - [x] game.rom, bgm.dat, se.dat を1ファイルに纏めたい (game.pkg)
-  - [x] bank switch API (C言語)
-  - [x] RaspberryPi Zero のサポートを廃止
-  - [x] Z80 のクロックアップ
-  - [x] RaspberryPi Zero 2W で処理遅延していないことの検証
-    - [この実装](https://github.com/suzukiplan/vgszero/commit/ef8f8450af4cf49aef75ba251f631b7577cf6a30)を入れて [04_heavy](./example/04_heavy/) を動かした時の Z80 (16MHz) の CPU 1tick 分の処理時間を検証したところ、約15ms程度で安定していたことを確認（16〜17msでアウトなのでセーフ）
-    - 約1ms程度の余力を残しているが DMA 等のバッファとして残しておく必要があるため 16MHz が実用的な限界性能と判断する
-  - [x] SAVE/LOAD API (Z80)
-    - VGS-Zero で RPG を創ったり STG のスコア保存ができたりするようにするため
-  - [x] bmp2chr のサポートフォーマットを増やす（16色bmpの対応は必要）
-  - [ ] ゲームパッドのボタン割当を変更できるようにする（config.sys）
-  - [x] example のサイレントビルド
-  - [ ] CI による自動テスト
-- examples
-  - [x] Hello, World!
-  - [x] グローバル変数の使い方
-  - [x] BGM再生
-  - [x] SE再生
-  - [ ] Map Scroll
-  - [x] スプライト256
-  - [x] スプライト・BG・FG全表示しつつ音楽+効果音（限界性能チェック用）
-  - [ ] アセンブリ言語実装例（Helloのみ）
-  - [ ] 16パレットをフルに使った例
-  - [ ] 簡単なゲーム
-- documents
-  - [x] Z80: Memory map
-  - [x] Z80: I/O map
-  - [x] C API Library
-  - [x] `game.rom`
-  - [x] `bgm.dat`
-  - [x] `se.dat`
-  - [x] `game.pkg`
+[issues のラベル WIP を参照](https://github.com/suzukiplan/vgszero/issues?q=is%3Aopen+is%3Aissue+label%3AWIP)
 
 ## VGS-Zero Feature
 
