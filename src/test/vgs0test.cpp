@@ -19,12 +19,12 @@
 class Binary
 {
   public:
-    void* data;
+    unsigned char* data;
     size_t size;
 
     Binary(void* data_, size_t size_)
     {
-        this->data = data_;
+        this->data = (unsigned char*)data_;
         this->size = size_;
     }
 };
@@ -116,9 +116,44 @@ int main(int argc, char* argv[])
     }
 
     log("Booting VGS0 for test.");
-    VGS0 vgs0;
-    Binary* rom = loadBinary(romPath);
-    vgs0.loadRom(rom->data, rom->size);
+    auto pkg = loadBinary(pkgPath);
+    unsigned char* ptr = pkg->data;
+    if (0 != memcmp(ptr, "VGS0PKG", 8)) {
+        log("Invalid package");
+        return -1;
+    }
+    ptr += 8;
+
+    VGS0 vgs0(VDP::ColorMode::RGB565);
+    const void* rom;
+    int romSize;
+    memcpy(&romSize, ptr, 4);
+    ptr += 4;
+    rom = ptr;
+    ptr += romSize;
+    log("load ROM");
+    vgs0.loadRom(rom, romSize);
+
+    const void* bgm;
+    int bgmSize;
+    memcpy(&bgmSize, ptr, 4);
+    ptr += 4;
+    bgm = ptr;
+    ptr += bgmSize;
+    if (0 < bgmSize) {
+        log("load BGM");
+        vgs0.loadBgm(bgm, bgmSize);
+    }
+
+    const void* se;
+    int seSize;
+    memcpy(&seSize, ptr, 4);
+    ptr += 4;
+    se = ptr;
+    if (0 < seSize) {
+        log("load SE");
+        vgs0.loadSoundEffect(se, seSize);
+    }
     vgs0.setExternalRenderingCallback([](void* arg) {
         auto cpu3Start = std::chrono::system_clock::now();
         ((VGS0*)arg)->executeExternalRendering();
@@ -178,7 +213,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    free(rom->data);
-    delete rom;
+    free(pkg->data);
+    delete pkg;
     return 0;
 }
