@@ -123,12 +123,11 @@ int main(int argc, char* argv[])
                 fprintf(stderr, "ERROR: Could not read graphic data.\n");
                 goto ENDPROC;
             }
-            for (int j  = 0; j < 128; j++) {
+            for (int j = 0; j < 128; j++) {
                 bmp[i * 128 + j] = j & 1 ? tmp[j / 2] & 0x0F : (tmp[j / 2] & 0xF0) >> 4;
             }
         }
     }
-
 
     /* Bitmap を CHR に変換 */
     for (y = 0; y < 16; y++) {
