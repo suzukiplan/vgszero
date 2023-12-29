@@ -31,7 +31,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
     - 約1ms程度の余力を残しているが DMA 等のバッファとして残しておく必要があるため 16MHz が実用的な限界性能と判断する
   - [x] SAVE/LOAD API (Z80)
     - VGS-Zero で RPG を創ったり STG のスコア保存ができたりするようにするため
-  - [ ] bmp2chr のサポートフォーマットを増やす（16色bmpの対応は必要）
+  - [x] bmp2chr のサポートフォーマットを増やす（16色bmpの対応は必要）
   - [ ] ゲームパッドのボタン割当を変更できるようにする（config.sys）
   - [ ] example のサイレントビルド
 - examples
@@ -43,6 +43,8 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [x] スプライト256
   - [x] スプライト・BG・FG全表示しつつ音楽+効果音（限界性能チェック用）
   - [ ] アセンブリ言語実装例（Helloのみ）
+  - [ ] 16パレットをフルに使った例
+  - [ ] 簡単なゲーム
 - documents
   - [x] Z80: Memory map
   - [x] Z80: I/O map
