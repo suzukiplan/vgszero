@@ -81,21 +81,21 @@
  * - BG: https://github.com/suzukiplan/vgszero/blob/master/README.md#bg
  * - NameTable: https://github.com/suzukiplan/vgszero/blob/master/README.md#name-table
  */
-#define VGS0_ADDR_BG ((NameTable*)0x8000)
+#define VGS0_ADDR_BG ((NameTable*)((void*)0x8000))
 
 /** @def
  * FG name table
  * - FG: https://github.com/suzukiplan/vgszero/blob/master/README.md#fg
  * - NameTable: https://github.com/suzukiplan/vgszero/blob/master/README.md#name-table
  */
-#define VGS0_ADDR_FG ((NameTable*)0x8800)
+#define VGS0_ADDR_FG ((NameTable*)((void*)0x8800))
 
 /** @def
  * Object Attribute Memory of the Sprites
  * - Sprite: https://github.com/suzukiplan/vgszero/blob/master/README.md#sprite
  * - OAM: https://github.com/suzukiplan/vgszero/blob/master/README.md#oam
  */
-#define VGS0_ADDR_OAM ((OAM*)0x9000)
+#define VGS0_ADDR_OAM ((OAM*)((void*)0x9000))
 
 /**
  * Set an object attribute memory record macro
