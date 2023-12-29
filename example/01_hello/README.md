@@ -38,14 +38,12 @@ make
 
 ```c
 #include "../../lib/sdcc/vgs0lib.h"
+#include "palette.h"
 
 void main(void)
 {
     // パレットを初期化
-    vgs0_palette_set(0, 0, 0, 0, 0);    // black
-    vgs0_palette_set(0, 1, 7, 7, 7);    // dark gray
-    vgs0_palette_set(0, 2, 24, 24, 24); // light gray
-    vgs0_palette_set(0, 3, 31, 31, 31); // white
+    init_palette();
 
     // Bank 2 を Character Pattern Table ($A000) に転送 (DMA)
     vgs0_dma(2);
@@ -69,3 +67,5 @@ void main(void)
     }
 }
 ```
+
+パレット初期化処理（[palette.h](./palette.h)）はツールチェインの [bmp2chr](../../tools/bmp2chr/) で自動生成しています。
