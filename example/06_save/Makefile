@@ -12,9 +12,11 @@ SDCC_FLAGS += --xram-size 0x4000
 SDCC_FLAGS += --no-std-crt0
 SDCC_FLAGS += -Wl../../lib/sdcc/vgs0.lib
 
-all: tools game.pkg
+all: build
 	cd ../../src/sdl2 && make
 	../../src/sdl2/vgs0 game.pkg
+
+build: tools game.pkg
 
 clean:
 	rm -f *.rel

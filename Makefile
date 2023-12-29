@@ -45,6 +45,7 @@ build:
 	cd lib/sdcc && make
 	cd src/sdl2 && make
 	cd src/rpizero2 && make
+	cd example && make
 	cd example/01_hello && make
 	cp -p example/01_hello/game.pkg image
 
