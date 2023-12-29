@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: "Install Prerequests"
-          command: "sudo apt-get update && sudo apt-get install -y build-essential sdcc"
+          command: "sudo apt-get update && sudo apt-get install -y build-essential sdcc=4.0.0"
       - run:
           name: "Build and Test VGS-Zero"
           command: "make tests"
