@@ -5,6 +5,7 @@ all:
 	@echo make tests .............. execute all tests
 
 tests:
+	cd lib/sdcc && make
 	cd test && make
 
 format:
