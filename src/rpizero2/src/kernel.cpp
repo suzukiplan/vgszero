@@ -34,6 +34,7 @@ static UINT pkgSize_;
 #define PKG_FILE "/game.pkg"
 #define SAVE_FILE "/save.dat"
 extern "C" const unsigned short splash[46080];
+extern "C" const unsigned short sderror[3072];
 VGS0* vgs0_;
 uint8_t pad1_;
 size_t hdmiPitch_;
@@ -251,7 +252,7 @@ TShutdownMode CKernel::run(void)
     });
     vgs0.saveCallback = [](VGS0* vgs0, const void* data, size_t size) -> bool {
         // この処理はサブCPUで実行されるのでキャッシュと変更フラグのみ更新して実際のセーブはメイン処理に委ねる
-        if (size < sizeof(saveDataCache_)) return false;
+        if (sizeof(saveDataCache_) < size) return false;
         if (saveDataSize_ != size || 0 != memcmp(saveDataCache_, data, size)) {
             memcpy(saveDataCache_, data, size);
             saveDataChanged_ = true;
@@ -262,6 +263,7 @@ TShutdownMode CKernel::run(void)
     vgs0.loadCallback = [](VGS0* vgs0, void* data, size_t size) -> bool {
         // 実際にSDカードからは読み込まずキャッシュから読む
         // NOTE: ゲーム稼働中にSDカードのsave.datを置き換えてゲーム内でロードしても無効
+        if (sizeof(saveDataCache_) < size) return false;
         if (0 < saveDataSize_) {
             memcpy(data, saveDataCache_, size);
             return true;
@@ -294,24 +296,44 @@ TShutdownMode CKernel::run(void)
 
         // save if needed
         if (saveDataChanged_ && 0 < saveDataSize_ && saveDataSize_ < sizeof(saveDataCache_)) {
+            led.On();
+            int blinkCount = 0;
             saveDataChanged_ = false;
             result = f_mount(&fatFs, MOUNT_DRIVE, 1);
             if (FR_OK != result) {
                 logger.Write(TAG, LogError, "Mount failed! (%d)", (int)result);
+                blinkCount = 3;
             } else {
                 result = f_open(&saveDat, MOUNT_DRIVE SAVE_FILE, FA_WRITE | FA_CREATE_ALWAYS);
                 if (FR_OK != result) {
                     logger.Write(TAG, LogError, "File open failed! (%d)", (int)result);
+                    blinkCount = 3;
                 } else {
                     UINT wrote;
-                    result = f_read(&saveDat, saveDataCache_, saveDataSize_, &wrote);
+                    result = f_write(&saveDat, saveDataCache_, saveDataSize_, &wrote);
                     if (FR_OK != result || wrote != saveDataSize_) {
                         logger.Write(TAG, LogError, "File write failed! (%d)", (int)result);
+                        blinkCount = 3;
                     }
                     f_close(&saveDat);
                 }
                 f_unmount(MOUNT_DRIVE);
             }
+            if (0 < blinkCount) {
+                auto bptr = hdmiBuffer_;
+                bptr += hdmiPitch_ * 84;
+                uint16_t* eptr = (uint16_t*)sderror;
+                buffer->WaitForVerticalSync();
+                for (int y = 0; y < 24; y++) {
+                    memcpy(bptr + 56, eptr, 128 * 2);
+                    bptr += hdmiPitch_;
+                    eptr += 128;
+                }
+                swap = 192 - swap;
+                buffer->SetVirtualOffset(0, swap);
+                led.Blink(blinkCount);
+            }
+            led.Off();
         }
     }
 

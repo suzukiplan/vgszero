@@ -19,6 +19,7 @@ OBJS += std.o
 OBJS += kernel.o
 OBJS += multicoremanager.o
 OBJS += splash.o
+OBJS += sderror.o
 OBJS += lz4.o
 OBJS += vgstone.o
 LIBS = $(CIRCLEHOME)/lib/libcircle.a
