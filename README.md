@@ -34,13 +34,13 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - VGS の MML で記述された BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要!
-  - 本体 ROM (`game.rom`) とは別アセット（`bgm.dat`）
+  - 本体 ROM ([`game.rom`](#gamerom)) とは別アセット（[`bgm.dat`](#bgmdat)）
   - 最大 256 曲
 - [SE](#sedat) (効果音)
   - 44100Hz 16bit 1ch (モノラル) 形式の PCM データ (.wav ファイル) を効果音として再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要
-  - 本体 ROM (`game.rom`) とは別アセット（`se.dat`）
+  - 本体 ROM ([`game.rom`](#gamerom)) とは別アセット（[`se.dat`](#sedat)）
   - 最大 256 個
 
 ## How to Execute
@@ -101,6 +101,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
 | [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の負荷を最大化する検査用プログラム |
 | [example/05_sprite256](./example/05_sprite256/) | C言語 | スプライトを256表示して動かす例 |
+| [example/06_save](./example/06_save/) | C言語 | [セーブ機能](#save-data)の例 |
 
 ## game.pkg
 
@@ -175,7 +176,7 @@ makese コマンドに指定できる .wav ファイルは、次の形式でな�
   - Z80 アセンブリ言語: [./example/01_hello-asm](./example/01_hello-asm)
   - C言語: [./example/01_hello](./example/01_hello)
 - C言語で記述する場合:
-  - クロスコンパイラに SDCC (Small Device C) が使用できます
+  - クロスコンパイラに [SDCC (Small Device C Compiler)](https://sdcc.sourceforge.net/) が使用できます
   - 標準ライブラリは使用できません
   - [vgs0.lib](./lib/sdcc/) を使用することができます
 
