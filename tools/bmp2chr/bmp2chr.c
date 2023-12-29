@@ -24,7 +24,8 @@ int main(int argc, char* argv[])
     FILE* fpW = NULL;
     int rc = 0;
     char fh[14];
-    int pal[256];
+    unsigned int pal256[256];
+    unsigned int pal16[16];
     struct DatHead dh;
     unsigned char bh, bl;
     unsigned char mh[4];
@@ -35,7 +36,7 @@ int main(int argc, char* argv[])
     /* 引数チェック */
     rc++;
     if (argc < 3) {
-        fprintf(stderr, "usage: bmp2chr input.bmp output.chr\n");
+        fprintf(stderr, "usage: bmp2chr input.bmp output.chr [palette.c]\n");
         goto ENDPROC;
     }
 
@@ -76,9 +77,9 @@ int main(int argc, char* argv[])
         goto ENDPROC;
     }
 
-    /* 8ビットカラー以外は弾く */
+    /* 8ビットカラーと4ビットカラー以外は弾く */
     rc++;
-    if (8 != dh.bits) {
+    if (8 != dh.bits && 4 != dh.bits) {
         fprintf(stderr, "ERROR: This program supports only 8bit color.\n");
         goto ENDPROC;
     }
@@ -92,24 +93,42 @@ int main(int argc, char* argv[])
 
     /* パレットを読み飛ばす */
     rc++;
-    if (sizeof(pal) != fread(pal, 1, sizeof(pal), fpR)) {
-        fprintf(stderr, "ERROR: Could not read palette data.\n");
-        goto ENDPROC;
-    }
-
-    /* 画像データを上下反転しながら読み込む */
-    rc++;
-    for (i = 127; 0 <= i; i--) {
-        if (128 != fread(&bmp[i * 128], 1, 128, fpR)) {
-            fprintf(stderr, "ERROR: Could not read graphic data.\n");
+    if (dh.bits == 8) {
+        if (sizeof(pal256) != fread(pal256, 1, sizeof(pal256), fpR)) {
+            fprintf(stderr, "ERROR: Could not read palette data.\n");
             goto ENDPROC;
+        }
+        /* 画像データを上下反転しながら読み込む */
+        rc++;
+        for (i = 127; 0 <= i; i--) {
+            if (128 != fread(&bmp[i * 128], 1, 128, fpR)) {
+                fprintf(stderr, "ERROR: Could not read graphic data.\n");
+                goto ENDPROC;
+            }
+        }
+        /* 色情報を mod 16 (0~15) にしておく*/
+        for (i = 0; i < 16384; i++) {
+            bmp[i] = bmp[i] & 0x0F;
+        }
+    } else {
+        if (sizeof(pal16) != fread(pal16, 1, sizeof(pal16), fpR)) {
+            fprintf(stderr, "ERROR: Could not read palette data.\n");
+            goto ENDPROC;
+        }
+        /* 画像データを上下反転しながら読み込む */
+        rc++;
+        unsigned char tmp[64];
+        for (i = 127; 0 <= i; i--) {
+            if (64 != fread(&tmp, 1, 64, fpR)) {
+                fprintf(stderr, "ERROR: Could not read graphic data.\n");
+                goto ENDPROC;
+            }
+            for (int j  = 0; j < 128; j++) {
+                bmp[i * 128 + j] = j & 1 ? tmp[j / 2] & 0x0F : (tmp[j / 2] & 0xF0) >> 4;
+            }
         }
     }
 
-    /* 色情報を mod 16 (0~15) にしておく*/
-    for (i = 0; i < 16384; i++) {
-        bmp[i] = bmp[i] & 0x0F;
-    }
 
     /* Bitmap を CHR に変換 */
     for (y = 0; y < 16; y++) {
@@ -133,6 +152,25 @@ int main(int argc, char* argv[])
     if (sizeof(chr) != fwrite(chr, 1, sizeof(chr), fpW)) {
         fprintf(stderr, "ERROR: File write error: %s\n", argv[2]);
         goto ENDPROC;
+    }
+
+    /* パレットデータの先頭16色をC形式で書き出す */
+    if (4 <= argc) {
+        fclose(fpW);
+        if (NULL == (fpW = fopen(argv[3], "wt"))) {
+            fprintf(stderr, "ERROR: Could not open: %s\n", argv[3]);
+            goto ENDPROC;
+        }
+        unsigned int* pal = dh.bits == 8 ? pal256 : pal16;
+        fprintf(fpW, "void init_palette(void)\n");
+        fprintf(fpW, "{\n");
+        for (int i = 0; i < 16; i++) {
+            int r = (pal[i] & 0x00F80000) >> 19;
+            int g = (pal[i] & 0x0000F800) >> 11;
+            int b = (pal[i] & 0x000000F8) >> 3;
+            fprintf(fpW, "    vgs0_palette_set(0, %d, %d, %d, %d);\n", i, r, g, b);
+        }
+        fprintf(fpW, "}\n");
     }
 
     rc = 0;
