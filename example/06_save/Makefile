@@ -2,6 +2,8 @@ PROJECT = save
 BMP2CHR = ../../tools/bmp2chr/bmp2chr
 MAKEROM = ../../tools/makerom/makerom
 MAKEPKG = ../../tools/makepkg/makepkg
+MAKEBGM = ../../tools/makebgm/makebgm
+VGSMML = ../../tools/vgsmml/vgsmml
 SDCC_FLAGS = -mz80
 SDCC_FLAGS += --opt-code-size
 SDCC_FLAGS += --code-loc 0x100
@@ -33,8 +35,8 @@ clean:
 tools:
 	cd ../../tools && make
 
-game.pkg: ${PROJECT}.rom
-	${MAKEPKG} -o game.pkg -r ${PROJECT}.rom
+game.pkg: ${PROJECT}.rom bgm.dat
+	${MAKEPKG} -o game.pkg -r ${PROJECT}.rom -b bgm.dat
 
 ${PROJECT}.rom: program.bin font.chr
 	${MAKEROM} ${PROJECT}.rom program.bin font.chr
@@ -45,3 +47,7 @@ program.bin: program.c ../../lib/sdcc/vgs0.lib ../../lib/sdcc/vgs0lib.h
 
 font.chr: font.bmp
 	${BMP2CHR} font.bmp font.chr
+
+bgm.dat: bgm.mml
+	${VGSMML} bgm.mml bgm.bin
+	${MAKEBGM} bgm.dat bgm.bin
