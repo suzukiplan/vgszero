@@ -74,7 +74,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 > 
 > [https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H](https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H)
 > 
-> Amazon で購入すると割高ですが、それでも全部合計で1万円弱ほどです。(2023.12.28時点)
+> Amazon で購入すると割高ですが、それでも全部合計で1万円弱です。(2023.12.29時点: 9,207円)
 
 #### (Launch Sequence)
 
@@ -86,7 +86,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 4. SD カードを RaspberryPi Zero 2W に挿入
 5. RaspberryPi Zero 2W に USB ゲームパッドを接続
 6. RaspberryPi Zero 2W とテレビを HDMI ケーブルで接続
-7. RaspberryPi Zero 2W の電源を ON
+7. RaspberryPi Zero 2W に電源を接続して ON
 
 ### on PC for Debug (Linux or macOS)
 
@@ -141,6 +141,7 @@ usage: vgsmml /path/to/file.mml /path/to/file.bgm
 ```
 
 - MMLの仕様: [https://github.com/suzukiplan/vgs-mml-compiler/blob/master/MML-ja.md](https://github.com/suzukiplan/vgs-mml-compiler/blob/master/MML-ja.md)
+- [東方BGM on VGS の MML](https://github.com/suzukiplan/tohovgs-cli/tree/master/mml) が全楽曲公開されているので、実用的な使い方はそちらが参考になるかもしれません
 - MML ファイルは、[tohovgs コマンド](https://github.com/suzukiplan/tohovgs-cli) を用いれば PC 上でプレビューできます
 
 #### (Make bgm.dat)
@@ -590,3 +591,9 @@ https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H
 - VGS-Zero 本体には LZ4 Library（2か条BSD）が含まれます: [LICENSE-LZ4LIB.txt](./LICENSE-LZ4LIB.txt)
 - VGS-Zero 本体には SUZUKI PLAN - Z80 Emulator (MIT) が含まれます: [LICENSE-Z80.txt](./LICENSE-Z80.txt)
 - VGS-Zero Library for Z80 は MIT ライセンスの OSS です:[LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
+
+> あなたが開発した[game.pkg](#gamepkg)の著作権はあなたに帰属し、商業利用を含む自由な利用が可能です。
+>
+> VGS-Zero Library for Z80 のみ[game.pkg](#gamepkg)内に組み込まれる場合がありますが、その他の OSS はすべてカーネル（VGS-Zero本体）側で利用しているものなので、開発したゲームのライセンスに影響しません。
+>
+> ただし、再配布時に同梱する場合は [./image/README](./image/README) に記載されている事項を遵守する必要がありますので、内容を注意深くご確認ください。
