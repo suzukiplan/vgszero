@@ -2,6 +2,10 @@ all:
 	@echo make format .............	execute clang-format
 	@echo make build .............. Build API, SDL2, RPI, Hello
 	@echo make clean .............. Clean API, SDL2, RPI, Hello
+	@echo make tests .............. execute all tests
+
+tests:
+	cd test && make
 
 format:
 	make execute-format FILENAME=./src/core/vgs0.hpp

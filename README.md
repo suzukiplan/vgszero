@@ -8,52 +8,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 
 ## WIP status
 
-- problem
-  - [x] 限界性能のテストプログラムが RaspberryPi Zero (無印) で動作遅延する問題の対処
-    - Zero 2W 専用にしてマルチコア前提で動かせば大丈夫そう
-    - Zero 無印のサポートを落とすか緩くサポートするかで悩み中... _But I made a decision._
-    - _2W の供給も安定してきたし良いよね（旧Zeroのテストも面倒だし）_
-- implementation
-  - [x] CPU
-  - [x] VDP
-  - [x] BGM API
-  - [x] Sound Effect API
-  - [x] RaspberryPi Zero
-  - [x] RaspberryPi Zero 2W
-  - [x] 22050Hz 1ch -> 44100Hz 2ch へ変更が必要かも（HDMIの仕様）
-  - [x] 44100Hz 2ch -> 44100Hz 1ch にする（モノラルでもイケたので）
-  - [x] game.rom, bgm.dat, se.dat を1ファイルに纏めたい (game.pkg)
-  - [x] bank switch API (C言語)
-  - [x] RaspberryPi Zero のサポートを廃止
-  - [x] Z80 のクロックアップ
-  - [x] RaspberryPi Zero 2W で処理遅延していないことの検証
-    - [この実装](https://github.com/suzukiplan/vgszero/commit/ef8f8450af4cf49aef75ba251f631b7577cf6a30)を入れて [04_heavy](./example/04_heavy/) を動かした時の Z80 (16MHz) の CPU 1tick 分の処理時間を検証したところ、約15ms程度で安定していたことを確認（16〜17msでアウトなのでセーフ）
-    - 約1ms程度の余力を残しているが DMA 等のバッファとして残しておく必要があるため 16MHz が実用的な限界性能と判断する
-  - [x] SAVE/LOAD API (Z80)
-    - VGS-Zero で RPG を創ったり STG のスコア保存ができたりするようにするため
-  - [x] bmp2chr のサポートフォーマットを増やす（16色bmpの対応は必要）
-  - [ ] ゲームパッドのボタン割当を変更できるようにする（config.sys）
-  - [x] example のサイレントビルド
-  - [ ] CI による自動テスト
-- examples
-  - [x] Hello, World!
-  - [x] グローバル変数の使い方
-  - [x] BGM再生
-  - [x] SE再生
-  - [ ] Map Scroll
-  - [x] スプライト256
-  - [x] スプライト・BG・FG全表示しつつ音楽+効果音（限界性能チェック用）
-  - [ ] アセンブリ言語実装例（Helloのみ）
-  - [ ] 16パレットをフルに使った例
-  - [ ] 簡単なゲーム
-- documents
-  - [x] Z80: Memory map
-  - [x] Z80: I/O map
-  - [x] C API Library
-  - [x] `game.rom`
-  - [x] `bgm.dat`
-  - [x] `se.dat`
-  - [x] `game.pkg`
+[issues のラベル WIP を参照](https://github.com/suzukiplan/vgszero/issues?q=is%3Aopen+is%3Aissue+label%3AWIP)
 
 ## VGS-Zero Feature
 
@@ -79,13 +34,13 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - VGS の MML で記述された BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要!
-  - 本体 ROM (`game.rom`) とは別アセット（`bgm.dat`）
+  - 本体 ROM ([`game.rom`](#gamerom)) とは別アセット（[`bgm.dat`](#bgmdat)）
   - 最大 256 曲
 - [SE](#sedat) (効果音)
   - 44100Hz 16bit 1ch (モノラル) 形式の PCM データ (.wav ファイル) を効果音として再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要
-  - 本体 ROM (`game.rom`) とは別アセット（`se.dat`）
+  - 本体 ROM ([`game.rom`](#gamerom)) とは別アセット（[`se.dat`](#sedat)）
   - 最大 256 個
 
 ## How to Execute
@@ -119,7 +74,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 > 
 > [https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H](https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H)
 > 
-> Amazon で購入すると割高ですが、それでも全部合計で1万円弱ほどです。(2023.12.28時点)
+> Amazon で購入すると割高ですが、それでも全部合計で1万円弱です。(2023.12.29時点: 9,207円)
 
 #### (Launch Sequence)
 
@@ -131,7 +86,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 4. SD カードを RaspberryPi Zero 2W に挿入
 5. RaspberryPi Zero 2W に USB ゲームパッドを接続
 6. RaspberryPi Zero 2W とテレビを HDMI ケーブルで接続
-7. RaspberryPi Zero 2W の電源を ON
+7. RaspberryPi Zero 2W に電源を接続して ON
 
 ### on PC for Debug (Linux or macOS)
 
@@ -146,6 +101,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
 | [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の負荷を最大化する検査用プログラム |
 | [example/05_sprite256](./example/05_sprite256/) | C言語 | スプライトを256表示して動かす例 |
+| [example/06_save](./example/06_save/) | C言語 | [セーブ機能](#save-data)の例 |
 
 ## game.pkg
 
@@ -185,6 +141,7 @@ usage: vgsmml /path/to/file.mml /path/to/file.bgm
 ```
 
 - MMLの仕様: [https://github.com/suzukiplan/vgs-mml-compiler/blob/master/MML-ja.md](https://github.com/suzukiplan/vgs-mml-compiler/blob/master/MML-ja.md)
+- [東方BGM on VGS の MML](https://github.com/suzukiplan/tohovgs-cli/tree/master/mml) が全楽曲公開されているので、実用的な使い方はそちらが参考になるかもしれません
 - MML ファイルは、[tohovgs コマンド](https://github.com/suzukiplan/tohovgs-cli) を用いれば PC 上でプレビューできます
 
 #### (Make bgm.dat)
@@ -220,7 +177,7 @@ makese コマンドに指定できる .wav ファイルは、次の形式でな�
   - Z80 アセンブリ言語: [./example/01_hello-asm](./example/01_hello-asm)
   - C言語: [./example/01_hello](./example/01_hello)
 - C言語で記述する場合:
-  - クロスコンパイラに SDCC (Small Device C) が使用できます
+  - クロスコンパイラに [SDCC (Small Device C Compiler)](https://sdcc.sourceforge.net/) が使用できます
   - 標準ライブラリは使用できません
   - [vgs0.lib](./lib/sdcc/) を使用することができます
 
@@ -634,3 +591,9 @@ https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H
 - VGS-Zero 本体には LZ4 Library（2か条BSD）が含まれます: [LICENSE-LZ4LIB.txt](./LICENSE-LZ4LIB.txt)
 - VGS-Zero 本体には SUZUKI PLAN - Z80 Emulator (MIT) が含まれます: [LICENSE-Z80.txt](./LICENSE-Z80.txt)
 - VGS-Zero Library for Z80 は MIT ライセンスの OSS です:[LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
+
+> あなたが開発した[game.pkg](#gamepkg)の著作権はあなたに帰属し、商業利用を含む自由な利用が可能です。
+>
+> VGS-Zero Library for Z80 のみ[game.pkg](#gamepkg)内に組み込まれる場合がありますが、その他の OSS はすべてカーネル（VGS-Zero本体）側で利用しているものなので、開発したゲームのライセンスに影響しません。
+>
+> ただし、再配布時に同梱する場合は [./image/README](./image/README) に記載されている事項を遵守する必要がありますので、内容を注意深くご確認ください。
