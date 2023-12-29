@@ -80,14 +80,18 @@ double cpu3Time = 0.0;
 
 int main(int argc, char* argv[])
 {
-    const char* romPath = nullptr;
+    const char* pkgPath = nullptr;
     std::string result = "result";
     bool cliError = false;
     int frames = 60;
 
     for (int i = 1; !cliError && i < argc; i++) {
         if ('-' != argv[i][0]) {
-            romPath = argv[i];
+            if (pkgPath) {
+                cliError = true;
+                break;
+            }
+            pkgPath = argv[i];
             continue;
         }
         switch (tolower(argv[i][1])) {
@@ -106,7 +110,7 @@ int main(int argc, char* argv[])
                 break;
         }
     }
-    if (cliError || !romPath) {
+    if (cliError || !pkgPath) {
         puts("usage: vgs0test [-f frame_count] [-r result_base_name] /path/to/game.rom");
         return 1;
     }
