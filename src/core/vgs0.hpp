@@ -89,6 +89,17 @@ class VGS0
         delete this->cpu;
     }
 
+    void* getRAM(size_t* size)
+    {
+        *size = sizeof(this->ctx.ram);
+        return this->ctx.ram;
+    }
+
+    void* getVRAM(size_t* size)
+    {
+        return this->vdp->getRAM(size);
+    }
+
     void setExternalRenderingCallback(void (*externalRedneringCallback)(void* arg))
     {
         this->vdp->externalRedneringCallback = externalRedneringCallback;

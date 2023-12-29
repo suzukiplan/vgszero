@@ -16,6 +16,7 @@ format:
 	make execute-format FILENAME=./src/rpizero/src/splash.c
 	make execute-format FILENAME=./src/rpizero/src/std.c
 	make execute-format FILENAME=./src/sdl2/vgs0sdl2.cpp
+	make execute-format FILENAME=./src/test/vgs0test.cpp
 	make execute-format FILENAME=./tools/bmp2chr/bmp2chr.c
 	make execute-format FILENAME=./tools/makepkg/makepkg.cpp
 	make execute-format FILENAME=./tools/makebgm/makebgm.cpp

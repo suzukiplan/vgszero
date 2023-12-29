@@ -83,6 +83,12 @@ class VDP
         this->externalRedneringCallback = nullptr;
     }
 
+    void* getRAM(size_t* size)
+    {
+        *size = sizeof(this->ctx.ram);
+        return this->ctx.ram;
+    }
+
     void reset()
     {
         memset(&this->ctx, 0, sizeof(this->ctx));

@@ -1,0 +1,4 @@
+*.o
+vgs0test
+result_*
+
