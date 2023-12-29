@@ -211,7 +211,6 @@ int main(int argc, char* argv[])
         FILE* fp = fopen("save.dat", "rb");
         if (!fp) {
             log("File open error!");
-            memset(data, 0, size);
             return false;
         }
         size_t readSize = fread(data, 1, size, fp);
