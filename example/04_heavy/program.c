@@ -10,10 +10,11 @@ void main(void)
 
     // Bank 2 を Character Pattern Table ($A000) に転送 (DMA)
     vgs0_dma(2);
+    int x, y;
 
     // NameTableを初期化
-    for (int y = 0; y < 32; y++) {
-        for (int x = 0; x < 32; x++) {
+    for (y = 0; y < 32; y++) {
+        for (x = 0; x < 32; x++) {
             VGS0_ADDR_BG->ptn[y][x] = '#';
             VGS0_ADDR_BG->attr[y][x] = 0b11100000;
             VGS0_ADDR_FG->ptn[y][x] = '.';
@@ -23,8 +24,8 @@ void main(void)
 
     // OAM を初期化
     uint8_t n = 0;
-    for (int y = 0; y < 16; y++) {
-        for (int x = 0; x < 16; x++) {
+    for (y = 0; y < 16; y++) {
+        for (x = 0; x < 16; x++) {
             vgs0_oam_set(n, 8 + x * 4, 8 + y * 4, 0x80, 'X');
             n++;
         }
