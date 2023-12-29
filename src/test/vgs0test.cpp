@@ -74,6 +74,10 @@ static Binary* loadBinary(const char* path)
     return new Binary(result, size);
 }
 
+double cpu1Time = 0.0;
+double cpu2Time = 0.0;
+double cpu3Time = 0.0;
+
 int main(int argc, char* argv[])
 {
     const char* romPath = nullptr;
@@ -112,7 +116,10 @@ int main(int argc, char* argv[])
     Binary* rom = loadBinary(romPath);
     vgs0.loadRom(rom->data, rom->size);
     vgs0.setExternalRenderingCallback([](void* arg) {
+        auto cpu3Start = std::chrono::system_clock::now();
         ((VGS0*)arg)->executeExternalRendering();
+        std::chrono::duration<double> diff = std::chrono::system_clock::now() - cpu3Start;
+        cpu3Time += diff.count();
     });
     vgs0.saveCallback = [](VGS0* vgs0, const void* data, size_t size) -> bool {
         log("Saving save.dat (%lubytes)", size);
@@ -127,12 +134,23 @@ int main(int argc, char* argv[])
     log("Start main loop...");
     auto start = std::chrono::system_clock::now();
     for (int i = 0; i < frames; i++) {
+        auto cpu1Start = std::chrono::system_clock::now();
         vgs0.tick(0);
+        std::chrono::duration<double> diff = std::chrono::system_clock::now() - cpu1Start;
+        cpu1Time += diff.count();
+        auto cpu2Start = std::chrono::system_clock::now();
+        vgs0.tickSound(44100 * 2 / 60);
+        diff = std::chrono::system_clock::now() - cpu2Start;
+        cpu2Time += diff.count();
     }
     std::chrono::duration<double> diff = std::chrono::system_clock::now() - start;
     int us = (int)(diff.count() * 1000000);
     log("Execution time: %dus", us);
     log("Frame average: %dus", us / frames);
+    cpu1Time -= cpu3Time;
+    log("CPU1 (Z80) time: %dus (%dus/frame)", (int)(cpu1Time * 1000000), (int)(cpu1Time * 1000000 / frames));
+    log("CPU2 (VGS) time: %dus (%dus/frame)", (int)(cpu2Time * 1000000), (int)(cpu2Time * 1000000 / frames));
+    log("CPU3 (VDP) time: %dus (%dus/frame)", (int)(cpu3Time * 1000000), (int)(cpu3Time * 1000000 / frames));
 
     log("writing " + result + "_ram.bin");
     {
