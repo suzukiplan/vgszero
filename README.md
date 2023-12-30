@@ -142,7 +142,7 @@ usage: vgsmml /path/to/file.mml /path/to/file.bgm
 
 - MMLの仕様: [https://github.com/suzukiplan/vgs-mml-compiler/blob/master/MML-ja.md](https://github.com/suzukiplan/vgs-mml-compiler/blob/master/MML-ja.md)
 - [東方BGM on VGS の MML](https://github.com/suzukiplan/tohovgs-cli/tree/master/mml) が全楽曲公開されているので、実用的な使い方はそちらが参考になるかもしれません
-- MML ファイルは、[tohovgs コマンド](https://github.com/suzukiplan/tohovgs-cli) を用いれば PC 上でプレビューできます
+- MML ファイルは、ツールチェインの [vgsplay コマンド](./tools/vgsplay) を用いれば PC 上でプレビューできます
 
 #### (Make bgm.dat)
 
