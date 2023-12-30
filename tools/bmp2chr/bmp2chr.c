@@ -163,11 +163,11 @@ int main(int argc, char* argv[])
         unsigned int* pal = dh.bits == 8 ? pal256 : pal16;
         fprintf(fpW, "void init_palette(void)\n");
         fprintf(fpW, "{\n");
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < (dh.bits == 8 ? 256 : 16); i++) {
             int r = (pal[i] & 0x00F80000) >> 19;
             int g = (pal[i] & 0x0000F800) >> 11;
             int b = (pal[i] & 0x000000F8) >> 3;
-            fprintf(fpW, "    vgs0_palette_set(0, %d, %d, %d, %d);\n", i, r, g, b);
+            fprintf(fpW, "    vgs0_palette_set(%d, %d, %d, %d, %d);\n", i / 16, i % 16, r, g, b);
         }
         fprintf(fpW, "}\n");
     }
