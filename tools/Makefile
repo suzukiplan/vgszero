@@ -6,3 +6,4 @@ all:
 	cd vgsmml && make
 	cd vgsplay && make
 	cd makepkg && make
+	cd chkdif && make
