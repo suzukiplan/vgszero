@@ -858,7 +858,6 @@ static inline int get_next_note(struct _VGSCTX* c)
         c->nidx++;
     }
     c->timeP += ret;
-printf("len %d\n", ret);
     return ret;
 }
 
