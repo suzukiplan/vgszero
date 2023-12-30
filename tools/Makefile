@@ -3,4 +3,5 @@ all:
 	cd makebgm && make
 	cd makerom && make
 	cd vgsmml && make
+	cd vgsplay && make
 	cd makepkg && make
