@@ -12,9 +12,9 @@
 - GNU make and GNU Compiler Collection
   - macOS: install XCODE
   - Linux: `sudo apt install build-essential`
-- SDCC
-  - macOS: `brew install sdcc`
-  - Linux: `sudo apt-get install sdcc`
+- SDCC version 4.1.0
+  - macOS(x64): [https://sourceforge.net/projects/sdcc/files/sdcc-macos-amd64/4.1.0/](https://sourceforge.net/projects/sdcc/files/sdcc-macos-amd64/4.1.0/)
+  - Linux(x64): [https://sourceforge.net/projects/sdcc/files/sdcc-linux-amd64/4.1.0/](https://sourceforge.net/projects/sdcc/files/sdcc-linux-amd64/4.1.0/)
 
 ### Build
 
