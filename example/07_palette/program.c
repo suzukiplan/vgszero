@@ -19,6 +19,7 @@ void main(void)
         }
     }
 
+    // 縦スクロール
     while (1) {
         vgs0_wait_vsync();
         *VGS0_ADDR_BG_SCROLL_Y += 1;
