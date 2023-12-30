@@ -226,7 +226,7 @@ int main(int argc, char* argv[])
 {
     srand((unsigned int)time(NULL));
     if (argc < 2) {
-        puts("usage: tohovgs [-i] [-j sec] [-t spped] music.mml [loopCount]");
+        puts("usage: vgsplay [-i] [-j sec] [-t spped] music.mml [loopCount]");
         puts("-i: infinite play");
         puts("-j: initial seek seconds");
         puts("-t: playback speed %");
