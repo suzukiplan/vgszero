@@ -69,6 +69,7 @@ int main(int argc, char* argv[])
             printf("File2: %s\n", t2);
             break;
         }
+        addr += s1;
     } while(1);
     fclose(f1);
     fclose(f2);
