@@ -1,0 +1,14 @@
+SOURCE=src/miniz.c\
+	src/BufferQueue.cpp\
+	src/sound-linux.cpp\
+	src/vgsplay.cpp\
+	src/vgs2tone.c\
+	src/vgsdec.c\
+	src/vgsmml.c
+
+all: build
+
+build: vgsplay
+
+vgsplay: $(SOURCE)
+	g++ -std=c++11 -Os -o vgsplay $(SOURCE) -lasound

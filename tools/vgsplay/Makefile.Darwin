@@ -1,0 +1,14 @@
+SOURCE=src/miniz.c\
+	src/BufferQueue.cpp\
+	src/sound-ios.cpp\
+	src/vgsplay.cpp\
+	src/vgs2tone.c\
+	src/vgsdec.c\
+	src/vgsmml.c
+
+all: build
+
+build: vgsplay
+
+vgsplay: $(SOURCE)
+	clang -D__APPLE__ -Os -o vgsplay $(SOURCE) -lstdc++ -framework Foundation -framework AudioToolbox
