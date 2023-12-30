@@ -178,6 +178,9 @@ makese コマンドに指定できる .wav ファイルは、次の形式でな�
   - C言語: [./example/01_hello](./example/01_hello)
 - C言語で記述する場合:
   - クロスコンパイラに [SDCC (Small Device C Compiler)](https://sdcc.sourceforge.net/) が使用できます
+  - VGS-Zero が対応している SDCC は **バージョン 4.1.0 のみ** です
+    - `brew`, `apt` 等でのデフォルトインストールバージョンとは異なります
+    - バージョン 4.2 〜 4.4 では [致命的な不具合](https://github.com/suzukiplan/vgszero/issues/8) が発生するので利用しないでください
   - 標準ライブラリは使用できません
   - [vgs0.lib](./lib/sdcc/) を使用することができます
 
