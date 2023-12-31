@@ -635,6 +635,12 @@ https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H
 ・RaspberryPi Zero 2W の電源を ON
 
 
+【ボタン割り当ての変更方法】
+ジョイパッドのボタン割当は config.sys でカスタマイズできます。
+config.sys に設定すべき内容については、以下のツールでチェックできます。
+https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
+
+
 【遊び方】
 <<<ゲームの遊び方を記載>>>
 
