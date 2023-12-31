@@ -2,6 +2,8 @@
 
 Direct Pattern Mapping を用いて全画面に異なるパターン（30x24=720）を表示します。
 
+![preview.png](preview.png)
+
 ## How to build
 
 ### Pre-request
