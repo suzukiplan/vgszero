@@ -13,8 +13,8 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 ## VGS-Zero Feature
 
 - CPU: Z80 16MHz (16,777,216Hz)
-  - Z80 アセンブリ言語でプログラムを記述
-  - SDCC を用いて C 言語でもプログラミング可能
+  - Z80 アセンブリ言語でプログラミング可能: [Programming Guide](#programming-guide)を参照
+  - C言語 (SDCC) でもプログラミング可能: [Programming Guide](#programming-guide)を参照
   - 最大 2MB (8kb × 256) のプログラムとデータ (※音声データを除く)
   - RAM サイズ 16KB (PV16相当!)
   - [セーブ機能](#save-data)に対応
