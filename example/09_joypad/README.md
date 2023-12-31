@@ -29,7 +29,7 @@ make
 
 - Bank 0: program
 - Bank 1: program
-- Bank 2: image.chr
+- Bank 2: font.chr
 
 ## Program Code
 
