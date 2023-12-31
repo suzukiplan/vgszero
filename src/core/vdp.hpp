@@ -258,7 +258,7 @@ class VDP
         unsigned short* display = &this->display[(scanline - 8) * 240];
         oam += 255 * 4;
         const unsigned char* ptntbl;
-        int dpm = this->getFgDPM();
+        int dpm = this->getSpriteDPM();
         if (dpm) {
             ptntbl = &this->rom[dpm];
         } else {
