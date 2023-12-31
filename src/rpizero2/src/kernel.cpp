@@ -1,36 +1,17 @@
 /**
- * VGS0 for RaspberryPi Baremetal Environment - Kernel implementation
- * -----------------------------------------------------------------------------
- * The MIT License (MIT)
- *
- * Copyright (c) 2023 Yoji Suzuki.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * -----------------------------------------------------------------------------
+ * VGS-Zero for RaspberryPi Baremetal Environment - Kernel implementation
+ * License under GPLv3: https://github.com/suzukiplan/vgszero/blob/master/LICENSE-VGS0.txt
+ * (C)2023, SUZUKI PLAN
  */
 #include "kernel.h"
 #include "vgs0.hpp"
+#include "config.hpp"
 
 #define TAG "kernel"
 static uint8_t pkg_[16777216];
 static UINT pkgSize_;
 #define MOUNT_DRIVE "SD:"
+#define CONFIG_FILE "/config.sys"
 #define PKG_FILE "/game.pkg"
 #define SAVE_FILE "/save.dat"
 extern "C" const unsigned short splash[46080];
@@ -44,6 +25,7 @@ uint8_t saveDataCache_[0x4000];
 bool saveDataChanged_;
 UINT saveDataSize_;
 CLogger* logger_;
+SystemConfiguration* config_;
 
 CKernel::CKernel(void) : screen(240, 192),
                          timer(&interrupt),
@@ -141,14 +123,14 @@ void CKernel::updateUsbStatus(void)
             if (gamePad) {
                 gamePad->RegisterStatusHandler([](unsigned index, const TGamePadState* state) {
                     pad1_ = 0;
-                    pad1_ |= state->axes[0].value == state->axes[0].minimum ? VGS0_JOYPAD_LE : 0;
-                    pad1_ |= state->axes[0].value == state->axes[0].maximum ? VGS0_JOYPAD_RI : 0;
-                    pad1_ |= state->axes[1].value == state->axes[1].minimum ? VGS0_JOYPAD_UP : 0;
-                    pad1_ |= state->axes[1].value == state->axes[1].maximum ? VGS0_JOYPAD_DW : 0;
-                    pad1_ |= (state->buttons & 0x0001) ? VGS0_JOYPAD_T2 : 0;
-                    pad1_ |= (state->buttons & 0x0002) ? VGS0_JOYPAD_T1 : 0;
-                    pad1_ |= (state->buttons & 0x0100) ? VGS0_JOYPAD_SE : 0;
-                    pad1_ |= (state->buttons & 0x0200) ? VGS0_JOYPAD_ST : 0;
+                    pad1_ |= config_->buttonLeft->check(state) ? VGS0_JOYPAD_LE : 0;
+                    pad1_ |= config_->buttonRight->check(state) ? VGS0_JOYPAD_RI : 0;
+                    pad1_ |= config_->buttonUp->check(state) ? VGS0_JOYPAD_UP : 0;
+                    pad1_ |= config_->buttonDown->check(state) ? VGS0_JOYPAD_DW : 0;
+                    pad1_ |= config_->buttonA->check(state) ? VGS0_JOYPAD_T1 : 0;
+                    pad1_ |= config_->buttonB->check(state) ? VGS0_JOYPAD_T2 : 0;
+                    pad1_ |= config_->buttonStart->check(state) ? VGS0_JOYPAD_ST : 0;
+                    pad1_ |= config_->buttonSelect->check(state) ? VGS0_JOYPAD_SE : 0;
                 });
             }
         } else {
@@ -167,6 +149,23 @@ TShutdownMode CKernel::run(void)
     if (FR_OK != result) {
         logger.Write(TAG, LogPanic, "Mount failed! (%d)", (int)result);
         return ShutdownHalt;
+    }
+
+    logger.Write(TAG, LogNotice, "Loading config.sys...");
+    FIL configSys;
+    result = f_open(&configSys, MOUNT_DRIVE CONFIG_FILE, FA_READ | FA_OPEN_EXISTING);
+    if (FR_OK == result) {
+        char buf[0x10000];
+        UINT bufSize;
+        if (FR_OK == f_read(&configSys, buf, sizeof(buf) - 1, &bufSize)) {
+            buf[bufSize] = 0;
+            config_ = new SystemConfiguration(buf);
+        } else {
+            config_ = new SystemConfiguration("");
+        }
+        f_close(&configSys);
+    } else {
+        config_ = new SystemConfiguration("");
     }
 
     logger.Write(TAG, LogNotice, "Loading game.pkg...");

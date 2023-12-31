@@ -1,3 +1,8 @@
+/**
+ * VGS-Zero for RaspberryPi Baremetal Environment - Multicore Support
+ * License under GPLv3: https://github.com/suzukiplan/vgszero/blob/master/LICENSE-VGS0.txt
+ * (C)2023, SUZUKI PLAN
+ */
 #include "multicoremanager.h"
 #include "vgs0.hpp"
 
