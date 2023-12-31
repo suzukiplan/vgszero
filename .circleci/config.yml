@@ -10,11 +10,8 @@ jobs:
           name: "install build-essential"
           command: "sudo apt-get update && sudo apt-get install -y build-essential"
       - run:
-          name: "install sdcc"
-          command: "sudo apt update && sudo apt install -y sdcc"
-      - run:
           name: "Build and Test VGS-Zero"
-          command: "make tests"
+          command: "make ci"
 
 workflows:
   test-workflow:

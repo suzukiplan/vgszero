@@ -4,10 +4,6 @@ all:
 	@echo make clean .............. Clean API, SDL2, RPI, Hello
 	@echo make tests .............. execute all tests
 
-tests:
-	cd lib/sdcc && make
-	cd test && make
-
 format:
 	make execute-format FILENAME=./src/core/vgs0.hpp
 	make execute-format FILENAME=./src/core/vdp.hpp
@@ -62,3 +58,15 @@ clean:
 	cd src/sdl2 && make clean
 	cd src/rpizero2 && make clean
 	cd example/01_hello && make clean
+
+ci:
+	make sdcc-4.1.0-amd64-unknown-linux2.5.tar.bz2
+	make ./sdcc/bin/sdcc
+	cd test && make PATH="`pwd`/sdcc/bin:${PATH}"
+
+./sdcc/bin/sdcc:
+	tar xvf sdcc-4.1.0-amd64-unknown-linux2.5.tar.bz2
+
+sdcc-4.1.0-amd64-unknown-linux2.5.tar.bz2:
+	wget https://sourceforge.net/projects/sdcc/files/sdcc-linux-amd64/4.1.0/sdcc-4.1.0-amd64-unknown-linux2.5.tar.bz2
+
