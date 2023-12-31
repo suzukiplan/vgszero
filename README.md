@@ -9,10 +9,11 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 ## VGS-Zero Feature
 
 - CPU: Z80 16MHz (16,777,216Hz)
-  - Z80 アセンブリ言語でプログラミング可能: [Programming Guide](#programming-guide)を参照
-  - C言語 (SDCC) でもプログラミング可能: [Programming Guide](#programming-guide)を参照
-  - 最大 2MB (8kb × 256) のプログラムとデータ (※音声データを除く)
-  - RAM サイズ 16KB (PV16相当!)
+  - Z80 アセンブリ言語でプログラミング可能（[Programming Guide](#programming-guide)を参照）
+  - C言語 (SDCC) でもプログラミング可能（[Programming Guide](#programming-guide)を参照）
+  - ゲーム実行形式ファイル（[game.pkg](#gamepkg)）は最大 128 メガビット（100メガショック!）
+  - [最大 2MB (8kb × 256banks)](#cpu-memory-map) のプログラムとデータ (※音声データを除く)
+  - [RAM サイズ 16KB](#cpu-memory-map) (PV16相当!)
   - [セーブ機能](#save-data)に対応
 - VDP (映像処理)
   - [VRAM](#vram-memory-map) サイズ 16KB (TMS9918A 相当!)
@@ -20,7 +21,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - 32,768 色中 256 色を同時発色可能
   - 8x8 ピクセルの[キャラクタパターン](#character-pattern-table)を最大 256 枚 (8KB) 定義可能
   - [BG](#bg), [FG](#fg) の[ネームテーブル](#name-table)サイズ: 32x32 (256x256 ピクセル)
-  - [ハードウェアスクロール](#hardware-scroll)対応
+  - [ハードウェアスクロール](#hardware-scroll)対応（[BG](#bg), [FG](#fg) 各）
   - 最大 256 枚の[スプライト](#sprite)を表示可能（水平上限なし）
   - [BG](#bg), [FG](#fg), [スプライト](#sprite) にそれぞれで異なる [キャラクタパターン](#character-pattern-table)（最大 768 枚）を設定できる [Direct Pattern Mapping](#direct-pattern-mapping) 機能に対応
 - DMA (ダイレクトメモリアクセス)
@@ -96,6 +97,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 
 | Directory | Language | Description |
 | :-------- | :------- | :---------- |
+| [example/01_hello-asm](./example/01_hello-asm/) | Z80 | `HELLO,WORLD!` を表示 |
 | [example/01_hello](./example/01_hello/) | C言語 | `HELLO,WORLD!` を表示 |
 | [example/02_global](./example/02_global/) | C言語 | グローバル変数の使用例 |
 | [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
@@ -108,11 +110,11 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 
 ## Joypad
 
-VGS-Zero は、カーソル（D-PAD）、Aボタン、Bボタン、SELECTボタン、STARTボタンの8ボタン式の USB ジョイパッドによる入力をサポートしています。
+VGS-Zero は、カーソル（D-PAD）、Aボタン、Bボタン、SELECTボタン、STARTボタンの8ボタン式 USB ジョイパッドによる入力のみサポートしています。
 
 ![joypad.png](joypad.png)
 
-RaspberryPi Zero 2W に接続する USB ジョイパッドのキー割当（key config）は、[config.sys](#configsys) ファイルによりカスタマイズが可能です。
+RaspberryPi Zero 2W に接続する USB ジョイパッドのボタン割当（key config）は、[config.sys](#configsys) ファイルにより利用者が自由にカスタマイズできます。
 
 PC（[SDL2](./src/sdl2/) 版）のキー割当は次の通りです:
 
@@ -165,11 +167,11 @@ key_name △ AXIS_{0-1} △ {<|>} △ {0-255}
 
 カーソルに `BUTTON_` を割り当てたり、ボタンに `AXIS_` を割り当てることもできます。
 
-[tools/joypad](./tools/joypad/) を用いればお手持ちの USB ジョイパッドのボタン内容をチェックできます。
+[tools/joypad](./tools/joypad/) を用いれば、お手持ちの USB ジョイパッドのボタン内容をチェックできます。
 
 ## game.pkg
 
-game.pkg は、再配布可能な VGS-Zero のゲーム実行形式で、ツールチェインの [makepkg コマンド](./tools/makepkg/) で生成することができます。
+game.pkg は VGS-Zero のゲーム実行形式ファイルで、ツールチェインの [makepkg コマンド](./tools/makepkg/) で生成することができます。
 
 ```
 makepkg  -o /path/to/output.pkg
@@ -182,7 +184,7 @@ makepkg  -o /path/to/output.pkg
 - [bgm.dat](#bgmdat): BGM データ
 - [se.dat](#sedat): 効果音データ
 
-なお、game.pkg のサイズは **16MB以下** でなければなりません。
+なお、game.pkg の最大サイズは **16MB (128Mbits)** です。
 
 ### game.rom
 
