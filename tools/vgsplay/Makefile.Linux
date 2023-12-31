@@ -11,4 +11,4 @@ all: build
 build: vgsplay
 
 vgsplay: $(SOURCE)
-	g++ -std=c++11 -Os -o vgsplay $(SOURCE) -lasound
+	g++ -std=c++11 -Os -o vgsplay $(SOURCE) -lasound -lpthread
