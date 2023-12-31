@@ -1,8 +1,6 @@
 # Change Log
 
-## Version 1.0.0 (2024.xx.xx)
+## Version 1.0.0 (2024.01.01)
 
 初期リリース
-
-> WIP (現在作業中)
 
