@@ -167,6 +167,24 @@
  */
 #define VGS0_ADDR_CHARACTER ((uint8_t*)0xA000)
 
+/** @def
+ * BG Direct Pattern Mapping
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#direct-pattern-mapping
+ */
+#define VGS0_ADDR_BG_DPM ((uint8_t*)0x9608)
+
+/** @def
+ * FG Direct Pattern Mapping
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#direct-pattern-mapping
+ */
+#define VGS0_ADDR_FG_DPM ((uint8_t*)0x9609)
+
+/** @def
+ * Sprite Direct Pattern Mapping
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#direct-pattern-mapping
+ */
+#define VGS0_ADDR_SPRITE_DPM ((uint8_t*)0x960A)
+
 //! stdint compatible (8bit unsigned)
 typedef unsigned char uint8_t;
 

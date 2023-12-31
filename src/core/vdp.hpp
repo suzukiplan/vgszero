@@ -20,6 +20,8 @@ class VDP
     void (*externalRedneringCallback)(void* arg);
 
   private:
+    const unsigned char* rom;
+    int romSize;
     void (*detectEndOfFrame)(void* arg);
     void (*detectIRQ)(void* arg);
     void* arg;
@@ -34,6 +36,9 @@ class VDP
     inline unsigned char getRegisterBgScrollY() { return this->ctx.ram[0x1603]; }
     inline unsigned char getRegisterFgScrollX() { return this->ctx.ram[0x1604]; }
     inline unsigned char getRegisterFgScrollY() { return this->ctx.ram[0x1605]; }
+    inline int getBgDPM() { return ((int)this->ctx.ram[0x1608]) * 0x2000 % this->romSize; }
+    inline int getFgDPM() { return ((int)this->ctx.ram[0x1609]) * 0x2000 % this->romSize; }
+    inline int getSpriteDPM() { return ((int)this->ctx.ram[0x160A]) * 0x2000 % this->romSize; }
     inline unsigned char getRegisterIRQ() { return this->ctx.ram[0x1606]; }
     inline unsigned char* getOamAddr() { return &this->ctx.ram[0x1000]; }
     inline bool isAttrVisible(unsigned char attr) { return attr & 0x80; }
@@ -80,7 +85,15 @@ class VDP
         this->detectEndOfFrame = detectEndOfFrame;
         this->detectIRQ = detectIRQ;
         this->arg = arg;
+        this->rom = nullptr;
+        this->romSize = 0;
         this->externalRedneringCallback = nullptr;
+    }
+
+    void setROM(const void* rom_, size_t romSize_)
+    {
+        this->rom = (const unsigned char*)rom_;
+        this->romSize = (int)romSize_;
     }
 
     void* getRAM(size_t* size)
@@ -177,11 +190,18 @@ class VDP
         int offset = (((y + 8) / 8) & 0x1F) * 32;
         unsigned char* nametbl = this->getBgNameTableAddr() + offset;
         unsigned char* attrtbl = this->getBgAttrTableAddr() + offset;
+        const unsigned char* ptntbl;
+        int dpm = this->getBgDPM();
+        if (dpm) {
+            ptntbl = &this->rom[dpm];
+        } else {
+            ptntbl = this->getPatternTableAddr();
+        }
         for (int x = this->getRegisterBgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
             offset = (x >> 3) & 0x1F;
             unsigned char ptn = nametbl[offset];
             unsigned char attr = attrtbl[offset];
-            unsigned char* chrtbl = this->getPatternTableAddr();
+            const unsigned char* chrtbl = ptntbl;
             chrtbl += ptn << 5;
             chrtbl += (this->isAttrFlipV(attr) ? 7 - (y & 7) : y & 7) << 2;
             int pal;
@@ -203,12 +223,19 @@ class VDP
         int offset = (((y + 8) / 8) & 0x1F) * 32;
         unsigned char* nametbl = this->getFgNameTableAddr() + offset;
         unsigned char* attrtbl = this->getFgAttrTableAddr() + offset;
+        const unsigned char* ptntbl;
+        int dpm = this->getFgDPM();
+        if (dpm) {
+            ptntbl = &this->rom[dpm];
+        } else {
+            ptntbl = this->getPatternTableAddr();
+        }
         for (int x = this->getRegisterFgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
             offset = (x >> 3) & 0x1F;
             unsigned char ptn = nametbl[offset];
             unsigned char attr = attrtbl[offset];
             if (!this->isAttrVisible(attr)) continue;
-            unsigned char* chrtbl = this->getPatternTableAddr();
+            const unsigned char* chrtbl = ptntbl;
             chrtbl += ptn << 5;
             chrtbl += (this->isAttrFlipV(attr) ? 7 - (y & 7) : y & 7) << 2;
             int pal;
@@ -230,10 +257,17 @@ class VDP
         unsigned char* oam = this->getOamAddr();
         unsigned short* display = &this->display[(scanline - 8) * 240];
         oam += 255 * 4;
+        const unsigned char* ptntbl;
+        int dpm = this->getSpriteDPM();
+        if (dpm) {
+            ptntbl = &this->rom[dpm];
+        } else {
+            ptntbl = this->getPatternTableAddr();
+        }
         for (int i = 0; i < 256; i++, oam -= 4) {
             if (!this->isAttrVisible(oam[3])) continue;
             if (0 == oam[1] || 248 <= oam[1] || scanline < oam[0] || oam[0] + 8 <= scanline) continue;
-            unsigned char* chrtbl = this->getPatternTableAddr();
+            const unsigned char* chrtbl = ptntbl;
             chrtbl += oam[2] << 5;
             int dy = scanline - oam[0];
             chrtbl += (this->isAttrFlipV(oam[3]) ? 7 - (dy & 7) : dy & 7) << 2;
