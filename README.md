@@ -42,6 +42,8 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要
   - 本体 ROM ([`game.rom`](#gamerom)) とは別アセット（[`se.dat`](#sedat)）
   - 最大 256 個
+- [Joypad](#joypad)
+  - 8ボタン形式（カーソルキー、A/B、START/SELECT）のジョイパッドをサポート
 
 ## How to Execute
 
@@ -56,7 +58,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [https://www.amazon.co.jp/dp/B0B55MFH1D/](https://www.amazon.co.jp/dp/B0B55MFH1D/)
 - HDMI ケーブル (mini HDMI Type C → HDMI Type A)
   - [https://www.amazon.co.jp/dp/B08R7BVL7T/](https://www.amazon.co.jp/dp/B08R7BVL7T/)
-- USB ゲームパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
+- USB ジョイパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
   - [https://www.amazon.co.jp/dp/B07M7SYX11/](https://www.amazon.co.jp/dp/B07M7SYX11/)
   - [https://www.amazon.co.jp/dp/B08BNFKCYM/](https://www.amazon.co.jp/dp/B08BNFKCYM/)
 - USB 電源
@@ -84,7 +86,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 2. SD カードのルートディレクトリに [./image](./image) 以下のファイルをコピー
 3. [game.pkg](#gamepkg) を起動対象のゲームに置き換える
 4. SD カードを RaspberryPi Zero 2W に挿入
-5. RaspberryPi Zero 2W に USB ゲームパッドを接続
+5. RaspberryPi Zero 2W に USB ジョイパッドを接続
 6. RaspberryPi Zero 2W とテレビを HDMI ケーブルで接続
 7. RaspberryPi Zero 2W に電源を接続して ON
 
@@ -102,6 +104,59 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の負荷を最大化する検査用プログラム |
 | [example/05_sprite256](./example/05_sprite256/) | C言語 | スプライトを256表示して動かす例 |
 | [example/06_save](./example/06_save/) | C言語 | [セーブ機能](#save-data)の例 |
+
+## Joypad
+
+VGS-Zero は、カーソル（D-PAD）、Aボタン、Bボタン、SELECTボタン、STARTボタンの8ボタン式の USB ジョイパッドによる入力をサポートしています。
+
+![joypad.png](joypad.png)
+
+RaspberryPi Zero 2W に接続する USB ジョイパッドのキー割当（key config）は、[config.sys](#configsys) ファイルによりカスタマイズが可能です。
+
+## config.sys
+
+RaspberryPi Zero 2W に挿入する SD カードのルートディレクトリに `config.sys` ファイルを配置することで色々なカスタマイズができます。
+
+### Joypad Button Assign
+
+```
+#--------------------
+# JoyPad settings
+#--------------------
+A BUTTON_1
+B BUTTON_0
+SELECT BUTTON_8
+START BUTTON_9
+UP AXIS_1 < 64
+DOWN AXIS_1 > 192
+LEFT AXIS_0 < 64
+RIGHT AXIS_0 > 192
+```
+
+（凡例）
+
+```
+# ボタン設定
+key_name △ BUTTON_{0-31}
+
+# AXIS設定
+key_name △ AXIS_{0-1} △ {<|>} △ {0-255}
+```
+
+`key_name`:
+
+- `A` Aボタン
+- `B` Bボタン
+- `START` STARTボタン
+- `SELECT` Aボタン
+- `UP` 上カーソル
+- `DOWN` 下カーソル
+- `LEFT` 左カーソル
+- `RIGHT` 右カーソル
+
+カーソルに `BUTTON_` を割り当てたり、ボタンに `AXIS_` を割り当てることもできます。
+
+TOOD: 現在押されている `BUTTON_` や `AXIS_` を特定できるツールを提供したい
 
 ## game.pkg
 
@@ -557,7 +612,7 @@ README.txtの記載凡例:
   - https://www.amazon.co.jp/dp/B0B55MFH1D/
 ・HDMI ケーブル (mini HDMI Type C → HDMI Type A)
   - https://www.amazon.co.jp/dp/B08R7BVL7T/
-・USB ゲームパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
+・USB ジョイパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
   - https://www.amazon.co.jp/dp/B07M7SYX11/
   - https://www.amazon.co.jp/dp/B08BNFKCYM/
 ・USB 電源
