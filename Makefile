@@ -62,7 +62,7 @@ clean:
 ci:
 	make sdcc-4.1.0-amd64-unknown-linux2.5.tar.bz2
 	make ./sdcc/bin/sdcc
-	cd test && make PATH="`pwd`/sdcc/bin:${PATH}"
+	cd test && make PATH="`pwd`/../sdcc/bin:${PATH}"
 
 ./sdcc/bin/sdcc:
 	tar xvf sdcc-4.1.0-amd64-unknown-linux2.5.tar.bz2

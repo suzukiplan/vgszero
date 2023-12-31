@@ -1,3 +1,2 @@
 all:
-	cd 01_degrade && make
-
+	cd 01_degrade && make PATH=${PATH}
