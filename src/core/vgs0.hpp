@@ -126,6 +126,7 @@ class VGS0
         this->rom.data = (const unsigned char*)data;
         this->rom.size = size & 0x001FFFFF; // max 2MB
         this->rom.size -= size % 0x2000;    // ignore additional not 8KB data
+        this->vdp->setROM(this->rom.data, this->rom.size);
     }
 
     void loadBgm(const void* buffer, size_t size)

@@ -22,6 +22,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [BG](#bg), [FG](#fg) の[ネームテーブル](#name-table)サイズ: 32x32 (256x256 ピクセル)
   - [ハードウェアスクロール](#hardware-scroll)対応
   - 最大 256 枚の[スプライト](#sprite)を表示可能（水平上限なし）
+  - [Direct Pattern Mapping](#direct-pattern-mapping) による [BG](#bg), [FG](#fg), [スプライト](#sprite) のそれぞれで異なる [キャラクタパターン](#character-pattern-table)（最大 768 枚）
 - DMA (ダイレクトメモリアクセス)
   - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
   - [C言語の `memset` に相当する高速 DMA 転送機能を実装](#memset-dma)
@@ -330,6 +331,9 @@ VGS-Zero 向けに開発されるゲームは、ゲームの利用者が **可�
 | 0x9605          | 0x1605          | Register #5: [FG](#fg) [Scroll](#hardware-scroll) Y |
 | 0x9606          | 0x1606          | Register #6: IRQ scanline position (NOTE: 0 is disable) |
 | 0x9607          | 0x1607          | Register #7: [Status](#vdp-status) (read only) |
+| 0x9608          | 0x1608          | [BG](#bg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x9609          | 0x1609          | [FG](#fg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x960A          | 0x160A          | [スプライト](#sprite) の [Direct Pattern Maaping](#direct-pattern-mapping) |
 | 0xA000 ~ $BFFF  | 0x2000 ~ 0x3FFF | [Character Pattern Table](#character-pattern-table) (32 x 256) |
 
 VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへのロード・ストア（LD命令等）で簡単に実行できます。
@@ -449,6 +453,14 @@ NOTE: Status register always reset after read.
 - `Lxx` : 下位 4bit (0 ~ 15 = 色番号) ※xxはバイト位置
 - FGとスプライトの場合、色番号0は常に透明色です
 - 使用するパレット番号は[属性](#attribute)に指定します
+
+#### (Direct Pattern Mapping)
+
+通常、[BG](#bg)、[FG](#fg)、[スプライト](#sprite)は共通の[キャラクターパターンテーブル](#character-pattern-table)を参照しますが、0x9608、0x9609、0x960A に **0以外** の値を書き込むことで、その値に対応する ROM バンクをそれぞれの[キャラクターパターンテーブル](#character-pattern-table)とすることができる DPM; Direct Pattern Mapping 機能を利用することができます。
+
+- 0x9608: [BG](#bg) の DPM
+- 0x9609: [FG](#fg) の DPM
+- 0x960A: [スプライト](#sprite) の DPM
 
 ### I/O Map
 
