@@ -18,12 +18,12 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 - VDP (映像処理)
   - [VRAM](#vram-memory-map) サイズ 16KB (TMS9918A 相当!)
   - 解像度: 240x192 ピクセル
-  - 32,768 色中 256 色を同時発色可能
+  - [16 個の 16 色パレット](#palette)に対応（32,768 色中 256 色を同時発色可能）
   - 8x8 ピクセルの[キャラクタパターン](#character-pattern-table)を最大 256 枚 (8KB) 定義可能
   - [BG](#bg), [FG](#fg) の[ネームテーブル](#name-table)サイズ: 32x32 (256x256 ピクセル)
   - [ハードウェアスクロール](#hardware-scroll)対応（[BG](#bg), [FG](#fg) 各）
   - 最大 256 枚の[スプライト](#sprite)を表示可能（水平上限なし）
-  - [BG](#bg), [FG](#fg), [スプライト](#sprite) にそれぞれで異なる [キャラクタパターン](#character-pattern-table)（最大 768 枚）を設定できる [Direct Pattern Mapping](#direct-pattern-mapping) 機能に対応
+  - [BG](#bg), [FG](#fg), [スプライト](#sprite) にそれぞれ異なる[キャラクタパターン](#character-pattern-table)を設定できる [Direct Pattern Mapping](#direct-pattern-mapping) 機能に対応（最大 768 枚のキャラクターパターンを同時に表示可能）
 - DMA (ダイレクトメモリアクセス)
   - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
   - [C言語の `memset` に相当する高速 DMA 転送機能を実装](#memset-dma)
@@ -107,6 +107,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/07_palette](./example/07_palette/) | C言語 | 16個の[パレット](#palette)を全て使った例 |
 | [example/08_map-scroll](./example/08_map-scroll/) | C言語 | Tiled Map Editor で作ったマップデータのスクロール |
 | [example/09_joypad](./example/09_joypad/) | C言語 | ジョイパッドの入力結果をプレビュー |
+| [example/10_chr720](./example/10_chr720/) | C言語 | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
 
 ## Joypad
 
@@ -269,29 +270,29 @@ open doc/html/index.html
 
 ### Create Sound Data
 
-- VGS 形式の Music Macro Language (MML) で音楽データを記述できます
-- 効果音には 44100Hz 16bits 1ch (モノラル) の wav ファイルを用いることができます
+- VGS 形式の Music Macro Language (MML) で [音楽データ](#bgmdat) を作成できます
+- 44100Hz 16bits 1ch (モノラル) の wav ファイルで [効果音データ](#sedat) を作成できます
 
 ### Joypad Recommended Usage
 
-VGS-Zero 向けに開発されるゲームは、ゲームの利用者が **可能な限りドキュメントなどを読まず** にゲームをプレイできるようにすることを目的として、敢えてジョイパッドのボタンをシンプルな 8 ボタン式（D-PAD, A/B, Select/Start）に固定しています。
+VGS-Zero 向けに開発されるゲームは、ゲームの利用者が **可能な限りドキュメントなどを読まず** にゲームをプレイできるようにすることを目的として、敢えて [ジョイパッドのボタンをシンプルな 8 ボタン式（D-PAD, A/B, Select/Start）に固定](#joypad)しています。
 
 - D-PAD usage
   - キャラクタやカーソルの移動などの目的で使用してください
 - B button usage
-  - 利用者が頻繁に叩く（連打する）ことが想定されるボタンです
-  - 利用例: シューティングのショット、ファイアボールの発射、ダッシュなど
-  - 選択項目のキャンセル操作は B ボタンを利用することが望ましいです
+  - 利用者が **頻繁に叩く（連打する）** ことが想定される操作に適したボタンです
+  - 利用例: シューティングのショット、配管工によるファイアボールの発射、押したままカーソル入力でダッシュなど
+  - RPG 等のコマンド操作のキャンセルは B ボタンを利用することが望ましいです
 - A button usage
-  - 利用者が慎重に叩くことが想定されるボタンです
-  - 利用例: シューティングのボンバー、ジャンプなど
-  - 選択項目の決定操作は A ボタンを利用することが望ましいです
+  - 利用者が **慎重に叩く** ことが想定される操作に適したボタンです
+  - 利用例: シューティングのボンバー、ジャンプ、スナイピングショットなど
+  - RPG 等のコマンド操作の決定は A ボタンを利用することが望ましいです
 - START button usage
   - システム操作で押すことが想定されるボタンです
   - 利用例: ゲーム開始、ポーズ、コマンドを開くなど
 - SELECT button usage
-  - あまり利用することが想定されないボタンです
-  - 利用例: アーケード風ゲームのコインの投下など
+  - あまり利用することが想定されないボタンなので、積極的な利用は避けた方が良いと考えられます
+  - 利用例: アーケード風ゲームのコイン投下など
 
 ### How to Debug
 
@@ -463,6 +464,17 @@ NOTE: Status register always reset after read.
 - 0x9608: [BG](#bg) の DPM
 - 0x9609: [FG](#fg) の DPM
 - 0x960A: [スプライト](#sprite) の DPM
+
+```z80
+LD HL, 0x9608
+LD (HL), 0x10   # BG = Bank 16
+INC HL
+LD (HL), 0x11   # FG = Bank 17
+INC HL
+LD (HL), 0x12   # Sprite = Bank 18
+```
+
+> バンク切り替えアニメーションをしたい場合、[キャラクタパターンテーブル](#character-pattern-table) を [DMA](#rom-to-character-dma) で切り替えるよりも DPM を用いた方が CPU リソースを節約できます。
 
 ### I/O Map
 
@@ -686,7 +698,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 
 
 【連絡先】
-<<<Twitterアカウントやeメールアドレスなどを記載>>>
+<<<Twitter（通称X）のアカウントなどを記載>>>
 ```
 
 通販で販売する場合、ロット数が多い場合は同人ショップでの委託販売が良いかもしれませんが、小ロット（100本以下程度）であればメルカリあたりが手軽で良いかもしれません。
