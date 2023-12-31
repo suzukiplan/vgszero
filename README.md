@@ -1,14 +1,10 @@
-# [WIP] Video Game System - Zero [![suzukiplan](https://circleci.com/gh/suzukiplan/vgszero.svg?style=svg)](https://app.circleci.com/pipelines/github/suzukiplan/vgszero)
+# Video Game System - Zero [![suzukiplan](https://circleci.com/gh/suzukiplan/vgszero.svg?style=svg)](https://app.circleci.com/pipelines/github/suzukiplan/vgszero)
 
 ![logo](logo.png)
 
 Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル環境で動作するゲーム機です。
 
 本リポジトリは、VGS-Zero の本体コード、配布イメージ、SDK、パソコン（Linux または macOS）で動作するエミュレータを提供します。
-
-## WIP status
-
-[issues のラベル WIP を参照](https://github.com/suzukiplan/vgszero/issues?q=is%3Aopen+is%3Aissue+label%3AWIP)
 
 ## VGS-Zero Feature
 
