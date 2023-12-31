@@ -1,4 +1,4 @@
-# [WIP] Video Game System - Zero
+# [WIP] Video Game System - Zero [![suzukiplan](https://circleci.com/gh/suzukiplan/vgszero.svg?style=svg)](https://app.circleci.com/pipelines/github/suzukiplan/vgszero)
 
 ![logo](logo.png)
 
