@@ -9,6 +9,7 @@ build:
 	cd 06_save && make build
 	cd 07_palette && make build
 	cd 08_map-scroll && make build
+	cd 09_joypad && make build
 
 clean:
 	cd 01_hello && make clean
@@ -19,3 +20,4 @@ clean:
 	cd 06_save && make clean
 	cd 07_palette && make clean
 	cd 08_map-scroll && make clean
+	cd 09_joypad && make clean
