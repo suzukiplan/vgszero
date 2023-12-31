@@ -159,7 +159,7 @@ key_name △ AXIS_{0-1} △ {<|>} △ {0-255}
 
 カーソルに `BUTTON_` を割り当てたり、ボタンに `AXIS_` を割り当てることもできます。
 
-TOOD: 現在押されている `BUTTON_` や `AXIS_` を特定できるツールを提供したい
+[tools/joypad](./tools/joypad/) を用いればお手持ちの USB ジョイパッドのボタン内容をチェックできます。
 
 ## game.pkg
 
