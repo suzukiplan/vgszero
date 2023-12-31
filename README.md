@@ -104,6 +104,9 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の負荷を最大化する検査用プログラム |
 | [example/05_sprite256](./example/05_sprite256/) | C言語 | スプライトを256表示して動かす例 |
 | [example/06_save](./example/06_save/) | C言語 | [セーブ機能](#save-data)の例 |
+| [example/07_palette](./example/07_palette/) | C言語 | 16個の[パレット](#palette)を全て使った例 |
+| [example/08_map-scroll](./example/08_map-scroll/) | C言語 | Tiled Map Editor で作ったマップデータのスクロール |
+| [example/09_joypad](./example/09_joypad/) | C言語 | ジョイパッドの入力結果をプレビュー |
 
 ## Joypad
 
