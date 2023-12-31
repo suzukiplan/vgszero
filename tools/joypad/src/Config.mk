@@ -1,0 +1,2 @@
+RASPPI = 3
+AARCH = 64

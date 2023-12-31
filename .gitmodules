@@ -4,3 +4,6 @@
 [submodule "src/rpizero2/src/circle"]
 	path = src/rpizero2/src/circle
 	url = https://github.com/rsta2/circle
+[submodule "tools/joypad/src/circle"]
+	path = tools/joypad/src/circle
+	url = https://github.com/rsta2/circle
