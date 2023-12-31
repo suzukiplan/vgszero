@@ -1,11 +1,12 @@
 【媒体格納イメージについての解説】
 
-VGS-Zero 対応ゲームに最低限必要なファイルは以下の 4 ファイルです。
+VGS-Zero 対応ゲームに最低限必要なファイルは以下の 5 ファイルです。
 
 1. bootcode.bin (VideoCore IV のファームウェア)
 2. start.elf (RaspberryPi 1~3, Zero, Zero 2用の VideoCore IV のファームウェア)
 3. kernel8.img (VGS-Zero のカーネルイメージ)
-4. game.pkg (ゲーム本体)
+4. config.sys (VGS-Zero カーネルの動作設定)
+5. game.pkg (ゲーム本体)
 
 これらのファイルを FAT フォーマットされた SD カードのルートディレクトリに配置して RaspberryPi Zero 2W を起動すればゲームが起動します。
 ※現時点の game.pkg は Hello, World! を表示する example なので適宜適当な game.pkg に置き換えてください
