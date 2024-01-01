@@ -238,6 +238,10 @@ makese コマンドに指定できる .wav ファイルは、次の形式でな�
 
 ## Programming Guide
 
+ゲームを開発する時の初期プロジェクトについては次のリポジトリを参考にしてください。
+
+[https://github.com/suzukiplan/vgszero-empty-project](https://github.com/suzukiplan/vgszero-empty-project)
+
 ### Programming Language
 
 - VGS-Zero のゲームは Z80 アセンブリ言語 または C言語 で記述することができます
