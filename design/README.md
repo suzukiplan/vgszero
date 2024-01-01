@@ -5,6 +5,7 @@
 ## Assets
 
 | name | image | memo |
+| :--- | :---: | :--- |
 | [logo1_basic_192x72.png](./logo1_basic_192x72.png) | ![logo1_basic_192x72.png](./logo1_basic_192x72.png) | ロゴ（基本形） |
 | [logo1_transparent_192x72.png](./logo1_transparent_192x72.png) | ![logo1_transparent_192x72.png](./logo1_transparent_192x72.png) | ロゴ（透明） |
 | [logo1_edge_192x72.png](./logo1_edge_192x72.png) | ![logo1_edge_192x72.png](./logo1_edge_192x72.png) | ロゴ（縁取り） |
