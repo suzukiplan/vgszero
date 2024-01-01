@@ -8,13 +8,13 @@ const char* makeDump(int addr, char* data, int size)
     static char result[1024];
     char tmp[80];
     char ascii[80];
-    sprintf(result, "%04X: ", addr);
+    snprintf(result, sizeof(result), "%04X: ", addr);
     memset(ascii, 0, sizeof(ascii));
     for (int i = 0; i < size; i++) {
         if (i) {
-            sprintf(tmp, ", %02X", (int)((unsigned char)(data[i])));
+            snprintf(tmp, sizeof(tmp), ", %02X", (int)((unsigned char)(data[i])));
         } else {
-            sprintf(tmp, "%02X", (int)((unsigned char)(data[i])));
+            snprintf(tmp, sizeof(tmp), "%02X", (int)((unsigned char)(data[i])));
         }
         strcat(result, tmp);
         ascii[i] = isprint(data[i]) ? data[i] : '.';
