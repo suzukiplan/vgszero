@@ -283,54 +283,44 @@ int main(int argc, char* argv[])
     unsigned char msxKeyCodeMap[16];
     memset(msxKeyCodeMap, 0, sizeof(msxKeyCodeMap));
     bool stabled = false;
-    bool hotKey = false;
     unsigned char key1 = 0;
     while (!halt) {
         loopCount++;
         auto start = std::chrono::system_clock::now();
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_KEYDOWN) {
-                if (hotKey) {
-                    key1 = 0;
-                    switch (event.key.keysym.sym) {
-                        case SDLK_q: halt = true; break;
-                        case SDLK_s: {
-                            log("Save RAM (ram.bin) and VRAM (vram.bin)");
-                            FILE* fp = fopen("ram.bin", "wb");
-                            if (fp) {
-                                fwrite(vgs0.ctx.ram, 1, sizeof(vgs0.ctx.ram), fp);
-                                fclose(fp);
-                            }
-                            fp = fopen("vram.bin", "wb");
-                            if (fp) {
-                                fwrite(vgs0.vdp->ctx.ram, 1, sizeof(vgs0.vdp->ctx.ram), fp);
-                                fclose(fp);
-                            }
-                            break;
+                switch (event.key.keysym.sym) {
+                    case SDLK_q: halt = true; break;
+                    case SDLK_UP: key1 |= VGS0_JOYPAD_UP; break;
+                    case SDLK_DOWN: key1 |= VGS0_JOYPAD_DW; break;
+                    case SDLK_LEFT: key1 |= VGS0_JOYPAD_LE; break;
+                    case SDLK_RIGHT: key1 |= VGS0_JOYPAD_RI; break;
+                    case SDLK_SPACE: key1 |= VGS0_JOYPAD_ST; break;
+                    case SDLK_ESCAPE: key1 |= VGS0_JOYPAD_SE; break;
+                    case SDLK_x: key1 |= VGS0_JOYPAD_T1; break;
+                    case SDLK_z: key1 |= VGS0_JOYPAD_T2; break;
+                    case SDLK_s: {
+                        log("Save RAM (ram.bin) and VRAM (vram.bin)");
+                        FILE* fp = fopen("ram.bin", "wb");
+                        if (fp) {
+                            fwrite(vgs0.ctx.ram, 1, sizeof(vgs0.ctx.ram), fp);
+                            fclose(fp);
                         }
-                        case SDLK_r: {
-                            log("Reset");
-                            vgs0.reset();
-                            break;
+                        fp = fopen("vram.bin", "wb");
+                        if (fp) {
+                            fwrite(vgs0.vdp->ctx.ram, 1, sizeof(vgs0.vdp->ctx.ram), fp);
+                            fclose(fp);
                         }
+                        break;
                     }
-                } else {
-                    switch (event.key.keysym.sym) {
-                        case 0x400000E3: hotKey = true; break;
-                        case SDLK_q: halt = true; break;
-                        case SDLK_UP: key1 |= VGS0_JOYPAD_UP; break;
-                        case SDLK_DOWN: key1 |= VGS0_JOYPAD_DW; break;
-                        case SDLK_LEFT: key1 |= VGS0_JOYPAD_LE; break;
-                        case SDLK_RIGHT: key1 |= VGS0_JOYPAD_RI; break;
-                        case SDLK_SPACE: key1 |= VGS0_JOYPAD_ST; break;
-                        case SDLK_ESCAPE: key1 |= VGS0_JOYPAD_SE; break;
-                        case SDLK_x: key1 |= VGS0_JOYPAD_T1; break;
-                        case SDLK_z: key1 |= VGS0_JOYPAD_T2; break;
+                    case SDLK_r: {
+                        log("Reset");
+                        vgs0.reset();
+                        break;
                     }
                 }
             } else if (event.type == SDL_KEYUP) {
                 switch (event.key.keysym.sym) {
-                    case 0x400000E3: hotKey = false; break;
                     case SDLK_UP: key1 ^= VGS0_JOYPAD_UP; break;
                     case SDLK_DOWN: key1 ^= VGS0_JOYPAD_DW; break;
                     case SDLK_LEFT: key1 ^= VGS0_JOYPAD_LE; break;

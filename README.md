@@ -328,19 +328,19 @@ VGS-Zero 向けに開発されるゲームは、ゲームの利用者が **可�
 | 0x8400 ~ 0x87FF | 0x0400 ~ 0x07FF | [BG](#bg) [Attribute](#attribute) Table (32 x 32) |
 | 0x8800 ~ 0x8BFF | 0x0800 ~ 0x0BFF | [FG](#fg) [Name Table](#name-table) (32 x 32) |
 | 0x8C00 ~ 0x8FFF | 0x0C00 ~ 0x0FFF | [FG](#fg) [Attribute](#attribute) Table (32 x 32) |
-| 0x9000 ~ 0x93FF | 0x1000 ~ 0x13FF | [OAM](#oam); Object Attribute Memory (4 x 256) |
-| 0x9400 ~ 0x95FF | 0x1400 ~ 0x15FF | [Palette](#palette) Table (2 x 16 x 16) |
-| 0x9600          | 0x1600	        | Register #0: Vertical [Scanline Counter](#scanline-counter) (read only) |
-| 0x9601          | 0x1601          | Register #1: Horizontal [Scanline Counter](#scanline-counter) (read only) |
-| 0x9602          | 0x1602          | Register #2: [BG](#bg) [Scroll](#hardware-scroll) X |
-| 0x9603          | 0x1603          | Register #3: [BG](#bg) [Scroll](#hardware-scroll) Y |
-| 0x9604          | 0x1604          | Register #4: [FG](#fg) [Scroll](#hardware-scroll) X |
-| 0x9605          | 0x1605          | Register #5: [FG](#fg) [Scroll](#hardware-scroll) Y |
-| 0x9606          | 0x1606          | Register #6: IRQ scanline position (NOTE: 0 is disable) |
-| 0x9607          | 0x1607          | Register #7: [Status](#vdp-status) (read only) |
-| 0x9608          | 0x1608          | [BG](#bg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
-| 0x9609          | 0x1609          | [FG](#fg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
-| 0x960A          | 0x160A          | [スプライト](#sprite) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x9000 ~ 0x97FF | 0x1000 ~ 0x17FF | [OAM](#oam); Object Attribute Memory (8 x 256) |
+| 0x9800 ~ 0x99FF | 0x1800 ~ 0x19FF | [Palette](#palette) Table (2 x 16 x 16) |
+| 0x9F00          | 0x1F00	        | Register #0: Vertical [Scanline Counter](#scanline-counter) (read only) |
+| 0x9F01          | 0x1F01          | Register #1: Horizontal [Scanline Counter](#scanline-counter) (read only) |
+| 0x9F02          | 0x1F02          | Register #2: [BG](#bg) [Scroll](#hardware-scroll) X |
+| 0x9F03          | 0x1F03          | Register #3: [BG](#bg) [Scroll](#hardware-scroll) Y |
+| 0x9F04          | 0x1F04          | Register #4: [FG](#fg) [Scroll](#hardware-scroll) X |
+| 0x9F05          | 0x1F05          | Register #5: [FG](#fg) [Scroll](#hardware-scroll) Y |
+| 0x9F06          | 0x1F06          | Register #6: IRQ scanline position (NOTE: 0 is disable) |
+| 0x9F07          | 0x1F07          | Register #7: [Status](#vdp-status) (read only) |
+| 0x9F08          | 0x1F08          | [BG](#bg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x9F09          | 0x1F09          | [FG](#fg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x9F0A          | 0x1F0A          | [スプライト](#sprite) の [Direct Pattern Maaping](#direct-pattern-mapping) |
 | 0xA000 ~ $BFFF  | 0x2000 ~ 0x3FFF | [Character Pattern Table](#character-pattern-table) (32 x 256) |
 
 VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへのロード・ストア（LD命令等）で簡単に実行できます。
@@ -371,8 +371,9 @@ VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへ�
 - [BG](#bg) の前面 & [FG](#fg) の背面 に表示されます
 - ゲームのキャラクタ表示に利用することを想定しています
 - 最大 256 枚を同時に表示できます
-- [OAM](#oam) に表示座標、[キャラクタ番号](#character-pattern-table)、[属性](#attribute)を指定することで表示できます
+- [OAM](#oam) に表示座標、[キャラクタ番号](#character-pattern-table)、[属性](#attribute)、サイズを指定することで表示できます
 - [属性](#attribute)の指定で描画を非表示（hidden）にすることができ、デフォルトは非表示になっています
+- サイズはデフォルトは 1x1 パターン（8x8ピクセル）ですが最大で 16x16 パターン（128x128ピクセル）のものを1枚のスプライトとして表示できます（詳細は [OAM](#oam) の `widthMinus1` と `heightMinus1` の解説を参照）
 
 #### (Name Table)
 
@@ -408,23 +409,37 @@ struct OAM {
     unsigned char x;
     unsigned char pattern;
     unsigned char attribute;
+    unsigned char heightMinus1;
+    unsigned char widthMinus1;
+    unsigned char reserved[2];
 } oam[256];
 ```
+
+`widthMinus1` と `heightMinus1` は 0 〜 15 の範囲で指定でき、1 以上の値を設定することで複数パターンを並べて表示します。
+
+`widthMinus1` が 2 で `heightMinus` が 3 の場合 24x32 ピクセル（3x4 キャラクタ）のスプライトを下表のパターンで表示します。
+
+|`\`|0|1|2|
+|:-:|:-:|:-:|:-:|
+|0|pattern+0x00|pattern+0x01|pattern+0x02|
+|1|pattern+0x10|pattern+0x11|pattern+0x12|
+|2|pattern+0x20|pattern+0x21|pattern+0x22|
+|3|pattern+0x30|pattern+0x31|pattern+0x32|
 
 VGS-Zero では最大 256 枚のスプライトを同時に表示でき、水平方向の表示数に上限がありません。
 
 #### (Scanline Counter)
 
 - スキャンラインカウンタは、VDP のピクセルレンダリング位置を特定することができる読み取り専用の VDP レジスタです
-- `0x9600` が垂直方向で `0x9601` が水平方向です
+- `0x9F00` が垂直方向で `0x9F01` が水平方向です
 - 垂直方向の値を待機することでラスター[スクロール](#hardware-scroll)等の処理を **割り込み無し** で実装することができます
 - 水平方向は高速に切り替わるため使い所は無いかもしれません
 
 #### (Hardware Scroll)
 
-- [BG](#bg) は `0x9602` に X 座標, `0x9603` に Y 座標の描画起点座標を指定することができます
-- [FG](#fg) は `0x9604` に X 座標, `0x9605` に Y 座標の描画起点座標を指定することができます
-- `0x9602` ~ `0x9605` を読み取ることで現在のスクロール位置を取得することもできます
+- [BG](#bg) は `0x9F02` に X 座標, `0x9F03` に Y 座標の描画起点座標を指定することができます
+- [FG](#fg) は `0x9F04` に X 座標, `0x9F05` に Y 座標の描画起点座標を指定することができます
+- `0x9F02` ~ `0x9F05` を読み取ることで現在のスクロール位置を取得することもできます
 
 #### (VDP Status)
 
@@ -463,14 +478,14 @@ NOTE: Status register always reset after read.
 
 #### (Direct Pattern Mapping)
 
-通常、[BG](#bg)、[FG](#fg)、[スプライト](#sprite)は共通の[キャラクターパターンテーブル](#character-pattern-table)を参照しますが、0x9608、0x9609、0x960A に **0以外** の値を書き込むことで、その値に対応する ROM バンクをそれぞれの[キャラクターパターンテーブル](#character-pattern-table)とすることができる DPM; Direct Pattern Mapping 機能を利用することができます。
+通常、[BG](#bg)、[FG](#fg)、[スプライト](#sprite)は共通の[キャラクターパターンテーブル](#character-pattern-table)を参照しますが、0x9F08、0x9F09、0x9F0A に **0以外** の値を書き込むことで、その値に対応する ROM バンクをそれぞれの[キャラクターパターンテーブル](#character-pattern-table)とすることができる DPM; Direct Pattern Mapping 機能を利用することができます。
 
-- 0x9608: [BG](#bg) の DPM
-- 0x9609: [FG](#fg) の DPM
-- 0x960A: [スプライト](#sprite) の DPM
+- 0x9F08: [BG](#bg) の DPM
+- 0x9F09: [FG](#fg) の DPM
+- 0x9F0A: [スプライト](#sprite) の DPM
 
 ```z80
-LD HL, 0x9608
+LD HL, 0x9F08
 LD (HL), 0x10   # BG = Bank 16
 INC HL
 LD (HL), 0x11   # FG = Bank 17

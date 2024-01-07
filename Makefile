@@ -38,6 +38,9 @@ format:
 	make execute-format FILENAME=./example/06_save/program.c
 	make execute-format FILENAME=./example/07_palette/program.c
 	make execute-format FILENAME=./example/08_map-scroll/program.c
+	make execute-format FILENAME=./example/09_joypad/program.c
+	make execute-format FILENAME=./example/10_chr720/program.c
+	make execute-format FILENAME=./example/11_bigsprite/program.c
 	make execute-format FILENAME=./lib/sdcc/vgs0lib.h
 
 execute-format:

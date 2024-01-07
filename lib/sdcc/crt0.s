@@ -3,7 +3,7 @@
 .ORG 0x0000
     im 1
     di
-    ld hl, #0x9607
+    ld hl, #0x9F07
 wait_vdp_standby:
     ld a, (hl)
     and #0x80

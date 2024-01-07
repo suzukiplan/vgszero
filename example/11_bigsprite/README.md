@@ -1,6 +1,8 @@
-# Heavy 
+# BigSprite
 
-このサンプルは、VGS-Zero のエミュレーション動作に最もオーバーヘッドが掛かる状態を検証するためのプログラムです。
+3x3 キャラクタ (24x24 ピクセル) のスプライト描画
+
+![preview](preview.png)
 
 ## How to build
 
@@ -17,7 +19,7 @@
 
 ```zsh
 git clone https://github.com/suzukiplan/vgszero
-cd vgszero/example/04_heavy
+cd vgszero/example/11_bigsprite
 make
 ```
 
@@ -29,16 +31,4 @@ make
 
 - Bank 0: program
 - Bank 1: program
-- Bank 2: font.chr
-
-## BGM structure
-
-- BGM 0 ~ 255: [./bgm.mml](./bgm.mml)
-
-## Sound Effect structure
-
-- SE 0 ~ 255: [./se.wav](./se.wav)
-
-## Note
-
-効果音の作成には [Jfxr](https://github.com/ttencate/jfxr) を使用しています。
+- Bank 2: image.chr

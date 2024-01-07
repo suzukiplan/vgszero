@@ -102,64 +102,66 @@
  * - Sprite: https://github.com/suzukiplan/vgszero/blob/master/README.md#sprite
  * - OAM: https://github.com/suzukiplan/vgszero/blob/master/README.md#oam
  */
-#define vgs0_oam_set(NUM, X, Y, ATTR, PTN) \
-    VGS0_ADDR_OAM[NUM].x = X;              \
-    VGS0_ADDR_OAM[NUM].y = Y;              \
-    VGS0_ADDR_OAM[NUM].attr = ATTR;        \
-    VGS0_ADDR_OAM[NUM].ptn = PTN
+#define vgs0_oam_set(NUM, X, Y, ATTR, PTN, W, H) \
+    VGS0_ADDR_OAM[NUM].x = X;                    \
+    VGS0_ADDR_OAM[NUM].y = Y;                    \
+    VGS0_ADDR_OAM[NUM].attr = ATTR;              \
+    VGS0_ADDR_OAM[NUM].ptn = PTN;                \
+    VGS0_ADDR_OAM[NUM].widthMinus1 = W;          \
+    VGS0_ADDR_OAM[NUM].heightMinus1 = H
 
 /** @def
  * Palette table
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#palette
  */
-#define VGS0_ADDR_PALETTE ((uint16_t*)0x9400)
+#define VGS0_ADDR_PALETTE ((uint16_t*)0x9800)
 
 /** @def
  * Vertical rendering counter
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#scanline-counter
  */
-#define VGS0_ADDR_COUNT_V ((uint8_t*)0x9600)
+#define VGS0_ADDR_COUNT_V ((uint8_t*)0x9F00)
 
 /** @def
  * Horizontal rendering counter
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#scanline-counter
  */
-#define VGS0_ADDR_COUNT_H ((uint8_t*)0x9601)
+#define VGS0_ADDR_COUNT_H ((uint8_t*)0x9F01)
 
 /** @def
  * BG scroll X
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
-#define VGS0_ADDR_BG_SCROLL_X ((uint8_t*)0x9602)
+#define VGS0_ADDR_BG_SCROLL_X ((uint8_t*)0x9F02)
 
 /** @def
  * BG scroll Y
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
-#define VGS0_ADDR_BG_SCROLL_Y ((uint8_t*)0x9603)
+#define VGS0_ADDR_BG_SCROLL_Y ((uint8_t*)0x9F03)
 
 /** @def
  * FG scroll X
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
-#define VGS0_ADDR_FG_SCROLL_X ((uint8_t*)0x9604)
+#define VGS0_ADDR_FG_SCROLL_X ((uint8_t*)0x9F04)
 
 /** @def
  * FG scroll Y
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
-#define VGS0_ADDR_FG_SCROLL_Y ((uint8_t*)0x9605)
+#define VGS0_ADDR_FG_SCROLL_Y ((uint8_t*)0x9F05)
 
 /** @def
  * IRQ scanline position
  */
-#define VGS0_ADDR_IRQ_SCANLINE ((uint8_t*)0x9606)
+#define VGS0_ADDR_IRQ_SCANLINE ((uint8_t*)0x9F06)
 
 /** @def
  * VDP status
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#vdp-status
  */
-#define VGS0_ADDR_STATUS ((uint8_t*)0x9607)
+#define VGS0_ADDR_STATUS ((uint8_t*)0x9F07)
 
 /** @def
  * Character pattern table
@@ -171,19 +173,19 @@
  * BG Direct Pattern Mapping
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#direct-pattern-mapping
  */
-#define VGS0_ADDR_BG_DPM ((uint8_t*)0x9608)
+#define VGS0_ADDR_BG_DPM ((uint8_t*)0x9F08)
 
 /** @def
  * FG Direct Pattern Mapping
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#direct-pattern-mapping
  */
-#define VGS0_ADDR_FG_DPM ((uint8_t*)0x9609)
+#define VGS0_ADDR_FG_DPM ((uint8_t*)0x9F09)
 
 /** @def
  * Sprite Direct Pattern Mapping
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#direct-pattern-mapping
  */
-#define VGS0_ADDR_SPRITE_DPM ((uint8_t*)0x960A)
+#define VGS0_ADDR_SPRITE_DPM ((uint8_t*)0x9F0A)
 
 //! stdint compatible (8bit unsigned)
 typedef unsigned char uint8_t;
@@ -222,6 +224,12 @@ typedef struct {
     uint8_t ptn;
     //! Attribute value: https://github.com/suzukiplan/vgszero/blob/master/README.md#attribute
     uint8_t attr;
+    //! height - 1
+    uint8_t heightMinus1;
+    //! width - 1
+    uint8_t widthMinus1;
+    //! padding
+    uint8_t reserved[2];
 } OAM;
 
 /**
