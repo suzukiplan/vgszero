@@ -308,6 +308,11 @@ int main(int argc, char* argv[])
                             }
                             break;
                         }
+                        case SDLK_r: {
+                            log("Reset");
+                            vgs0.reset();
+                            break;
+                        }
                     }
                 } else {
                     switch (event.key.keysym.sym) {
