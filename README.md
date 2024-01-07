@@ -20,6 +20,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - 解像度: 240x192 ピクセル
   - [16 個の 16 色パレット](#palette)に対応（32,768 色中 256 色を同時発色可能）
   - 8x8 ピクセルの[キャラクタパターン](#character-pattern-table)を最大 256 枚 (8KB) 定義可能
+  - [スプライト](#sprite)は複数の[キャラクタパターン](#character-pattern-table)を並べて表示できるハードウェア機能を提供しており、最大 16x16 パターン（128x128 ピクセル）の巨大な画像を1枚の[スプライト](#sprite)として表示可能
   - [BG](#bg), [FG](#fg) の[ネームテーブル](#name-table)サイズ: 32x32 (256x256 ピクセル)
   - [ハードウェアスクロール](#hardware-scroll)対応（[BG](#bg), [FG](#fg) 各）
   - 最大 256 枚の[スプライト](#sprite)を表示可能（水平上限なし）
