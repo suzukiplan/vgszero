@@ -9,6 +9,22 @@ SDCC_FLAGS += --xram-loc 0xC000
 SDCC_FLAGS += --xram-size 0x4000 
 SDCC_FLAGS += --no-std-crt0
 SDCC_FLAGS += -Wl../../lib/sdcc/vgs0.lib
+IMAGES = image00.chr
+IMAGES += image01.chr
+IMAGES += image02.chr
+IMAGES += image03.chr
+IMAGES += image04.chr
+IMAGES += image05.chr
+IMAGES += image06.chr
+IMAGES += image07.chr
+IMAGES += image08.chr
+IMAGES += image09.chr
+IMAGES += image10.chr
+IMAGES += image11.chr
+IMAGES += image12.chr
+IMAGES += image13.chr
+IMAGES += image14.chr
+IMAGES += image15.chr
 
 all: build
 	cd ../../src/sdl2 && make
@@ -38,12 +54,14 @@ tools:
 game.pkg: ${PROJECT}.rom
 	${MAKEPKG} -o game.pkg -r ${PROJECT}.rom
 
-${PROJECT}.rom: image.chr program.bin
-	${MAKEROM} ${PROJECT}.rom program.bin image.chr
+${PROJECT}.rom: ${IMAGES} program.bin
+	${MAKEROM} ${PROJECT}.rom program.bin ${IMAGES}
 
 program.bin: program.c palette.h ../../lib/sdcc/vgs0.lib ../../lib/sdcc/vgs0lib.h
 	sdcc ${SDCC_FLAGS} program.c
 	makebin -s 16384 program.ihx program.bin
 
-image.chr: image.bmp
-	${BMP2CHR} image.bmp image.chr palette.h
+.SUFFIXES: .chr .bmp
+
+%.chr: %.bmp
+	${BMP2CHR} $< $@ palette.h

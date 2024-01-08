@@ -1,6 +1,6 @@
 # BigSprite
 
-3x3 キャラクタ (24x24 ピクセル) のスプライト描画
+3x3 キャラクタ (24x24 ピクセル) と 12x12 キャラクタ (96x96 ピクセル) のスプライト描画
 
 ![preview](preview.png)
 
@@ -26,9 +26,24 @@ make
 ## ROM structure
 
 ```
-8KB x 3 banks = 24KB ROM
+8KB x 18 banks = 144KB ROM
 ```
 
 - Bank 0: program
 - Bank 1: program
-- Bank 2: image.chr
+- Bank 2: image00.chr
+- Bank 3: image01.chr
+- Bank 4: image02.chr
+- Bank 5: image03.chr
+- Bank 6: image04.chr
+- Bank 7: image05.chr
+- Bank 8: image06.chr
+- Bank 9: image07.chr
+- Bank 10: image08.chr
+- Bank 11: image09.chr
+- Bank 12: image10.chr
+- Bank 13: image11.chr
+- Bank 14: image12.chr
+- Bank 15: image13.chr
+- Bank 16: image14.chr
+- Bank 17: image15.chr

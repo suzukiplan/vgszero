@@ -8,6 +8,7 @@ typedef struct {
     // スプライトの表示情報
     struct Obj {
         int8_t flag;
+        int8_t big;
         int8_t x;
         int8_t y;
         uint8_t an;
@@ -16,7 +17,7 @@ typedef struct {
 } GlobalVariables;
 #define GV ((GlobalVariables*)0xC000)
 
-// パターン番号
+// image00 のパターン番号
 const uint8_t ptnnum[10] = {
     0x00, 0x03, 0x06, 0x09, 0x0C, 0x30, 0x33, 0x36, 0x39, 0x3C};
 
@@ -53,38 +54,58 @@ void main(void)
     // メインループ
     uint8_t n = 0;
     uint8_t r = 0;
-    uint8_t i;
     while (1) {
         // V-BLANK を待機
         vgs0_wait_vsync();
 
         // 爆発を追加
-        for (i = 0; i < 2; i++) {
+        if (0 == GV->obj[n].flag) {
             GV->obj[n].flag = 1;
+            if (n & 7) {
+                GV->obj[n].big = 0;
+            } else {
+                GV->obj[n].big = 1;
+            }
             GV->obj[n].an = 0;
             GV->obj[n].pi = 0;
             GV->obj[n].x = random[r];
             r++;
             GV->obj[n].y = random[r] % 192;
             r++;
-            vgs0_oam_set(n, GV->obj[n].x, GV->obj[n].y, 0x80 + i * 0x40 + ((n & 1) * 0x20), ptnnum[0], 2, 2);
+            if (GV->obj[n].big) {
+                vgs0_oam_set(n, GV->obj[n].x, GV->obj[n].y, 0x80 + ((n & 1) * 0x20), 0, 11, 11);
+                VGS0_ADDR_OAM[n].bank = 3;
+            } else {
+                vgs0_oam_set(n, GV->obj[n].x, GV->obj[n].y, 0x80 + ((n & 1) * 0x20), ptnnum[0], 2, 2);
+            }
             n++;
         }
 
         // スプライトを4フレームに1回アニメーション
-        i = 0;
+        uint8_t i = 0;
         do {
             if (GV->obj[i].flag) {
                 GV->obj[i].an++;
                 GV->obj[i].an &= 0x03;
                 if (0 == GV->obj[i].an) {
-                    GV->obj[i].pi++;
-                    if (GV->obj[i].pi < 10) {
-                        VGS0_ADDR_OAM[i].ptn = ptnnum[GV->obj[i].pi];
+                    if (GV->obj[i].big) {
+                        // 12x12 の超スプライトはバンク切り替えでアニメーション
+                        VGS0_ADDR_OAM[i].bank += 1;
+                        if (17 < VGS0_ADDR_OAM[i].bank) {
+                            // 削除
+                            GV->obj[i].flag = 0;
+                            VGS0_ADDR_OAM[i].attr = 0;
+                        }
                     } else {
-                        // 削除
-                        GV->obj[i].flag = 0;
-                        VGS0_ADDR_OAM[i].attr = 0;
+                        // 3x3 の巨大スプライトはパターン切り替えでアニメーション
+                        GV->obj[i].pi++;
+                        if (GV->obj[i].pi < 10) {
+                            VGS0_ADDR_OAM[i].ptn = ptnnum[GV->obj[i].pi];
+                        } else {
+                            // 削除
+                            GV->obj[i].flag = 0;
+                            VGS0_ADDR_OAM[i].attr = 0;
+                        }
                     }
                 }
             }
