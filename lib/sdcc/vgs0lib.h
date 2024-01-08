@@ -108,7 +108,8 @@
     VGS0_ADDR_OAM[NUM].attr = ATTR;              \
     VGS0_ADDR_OAM[NUM].ptn = PTN;                \
     VGS0_ADDR_OAM[NUM].widthMinus1 = W;          \
-    VGS0_ADDR_OAM[NUM].heightMinus1 = H
+    VGS0_ADDR_OAM[NUM].heightMinus1 = H;         \
+    VGS0_ADDR_OAM[NUM].bank = 0
 
 /** @def
  * Palette table
@@ -224,12 +225,14 @@ typedef struct {
     uint8_t ptn;
     //! Attribute value: https://github.com/suzukiplan/vgszero/blob/master/README.md#attribute
     uint8_t attr;
-    //! height - 1
+    //! OAM Pattern Size (height - 1) 
     uint8_t heightMinus1;
-    //! width - 1
+    //! OAM Pattern Size (width - 1)
     uint8_t widthMinus1;
+    //! OAM Bank
+    uint8_t bank;
     //! padding
-    uint8_t reserved[2];
+    uint8_t reserved;
 } OAM;
 
 /**

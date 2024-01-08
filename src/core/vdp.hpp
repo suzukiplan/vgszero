@@ -259,17 +259,19 @@ class VDP
         oam += 255 * 8;
         const unsigned char* ptntbl;
         int dpm = this->getSpriteDPM();
-        if (dpm) {
-            ptntbl = &this->rom[dpm];
-        } else {
-            ptntbl = this->getPatternTableAddr();
-        }
         for (int i = 0; i < 256; i++, oam -= 8) {
             if (!this->isAttrVisible(oam[3])) continue;
             int height = (oam[4] & 0x0F) + 1;
             int width = (oam[5] & 0x0F) + 1;
             bool flipH = this->isAttrFlipH(oam[3]);
             bool flipV = this->isAttrFlipV(oam[3]);
+            if (oam[6]) {
+                ptntbl = &this->rom[oam[6] * 0x2000 % this->romSize];
+            } else if (dpm) {
+                ptntbl = &this->rom[dpm];
+            } else {
+                ptntbl = this->getPatternTableAddr();
+            }
             for (int cy = 0; cy < height; cy++) {
                 for (int cx = 0; cx < width; cx++) {
                     unsigned char y = (unsigned char)(oam[0] + cy * 8);

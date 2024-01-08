@@ -15,16 +15,17 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [最大 2MB (8kb × 256banks)](#cpu-memory-map) のプログラムとデータ (※音声データを除く)
   - [RAM サイズ 16KB](#cpu-memory-map) (PV16相当!)
   - [セーブ機能](#save-data)に対応
-- VDP (映像処理)
+- VDP; VGS-Video (映像処理)
   - [VRAM](#vram-memory-map) サイズ 16KB (TMS9918A 相当!)
   - 解像度: 240x192 ピクセル
   - [16 個の 16 色パレット](#palette)に対応（32,768 色中 256 色を同時発色可能）
   - 8x8 ピクセルの[キャラクタパターン](#character-pattern-table)を最大 256 枚 (8KB) 定義可能
-  - [スプライト](#sprite)は複数の[キャラクタパターン](#character-pattern-table)を並べて表示できるハードウェア機能を提供しており、最大 16x16 パターン（128x128 ピクセル）の巨大な画像を1枚の[スプライト](#sprite)として表示可能
   - [BG](#bg), [FG](#fg) の[ネームテーブル](#name-table)サイズ: 32x32 (256x256 ピクセル)
   - [ハードウェアスクロール](#hardware-scroll)対応（[BG](#bg), [FG](#fg) 各）
   - 最大 256 枚の[スプライト](#sprite)を表示可能（水平上限なし）
   - [BG](#bg), [FG](#fg), [スプライト](#sprite) にそれぞれ異なる[キャラクタパターン](#character-pattern-table)を設定できる [Direct Pattern Mapping](#direct-pattern-mapping) 機能に対応（最大 768 枚のキャラクターパターンを同時に表示可能）
+  - [スプライト](#sprite)に複数の[キャラクタパターン](#character-pattern-table)を並べて表示できるハードウェア機能（[OAM Pattern Size](#oam-pattern-size)）を提供
+  - [スプライト](#sprite)の [OAM](#oam) 毎に異なるバンクを指定できるハードウェア機能（[OAM Bank](#oam-bank)）を提供
 - DMA (ダイレクトメモリアクセス)
   - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
   - [C言語の `memset` に相当する高速 DMA 転送機能を実装](#memset-dma)
@@ -402,7 +403,13 @@ VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへ�
 
 #### (OAM)
 
-OAM はスプライトの表示座標、[キャラクタパターン](#character-pattern-table)番号、[属性](#attribute) の要素を持つ構造体です。
+OAM は次のの要素を持つ構造体です。
+
+1. スプライトの表示座標
+2. [キャラクタパターン](#character-pattern-table)番号
+3. [属性](#attribute)
+4. [サイズ](#oam-pattern-size)
+5. [OAM別バンク番号](#oam-bank)
 
 ```c
 struct OAM {
@@ -412,13 +419,18 @@ struct OAM {
     unsigned char attribute;
     unsigned char heightMinus1;
     unsigned char widthMinus1;
-    unsigned char reserved[2];
+    unsigned char bank;
+    unsigned char reserved;
 } oam[256];
 ```
 
-`widthMinus1` と `heightMinus1` は 0 〜 15 の範囲で指定でき、1 以上の値を設定することで複数パターンを並べて表示します。
+VGS-Zero では最大 256 枚のスプライトを同時に表示でき、水平方向の表示数に上限がありません。
 
-`widthMinus1` が 2 で `heightMinus` が 3 の場合 24x32 ピクセル（3x4 キャラクタ）のスプライトを下表のパターンで表示します。
+#### (OAM Pattern Size)
+
+[OAM](#oam) の `widthMinus1` と `heightMinus1` に 0 〜 15 の範囲で指定でき、1 以上の値を設定することで複数の[キャラクタパターン](#character-pattern-table)を並べて表示し、この時の[キャラクタパターン](#character-pattern-table)番号は、水平方向が +1、垂直方向は +16 (+0x10) づつ加算されます。
+
+例えば `widthMinus1` が 2 で `heightMinus` が 3 の場合、下表の[キャラクタパターン](#character-pattern-table)グループを 1 枚のスプライトとして表示します。
 
 |`\`|0|1|2|
 |:-:|:-:|:-:|:-:|
@@ -427,7 +439,17 @@ struct OAM {
 |2|pattern+0x20|pattern+0x21|pattern+0x22|
 |3|pattern+0x30|pattern+0x31|pattern+0x32|
 
-VGS-Zero では最大 256 枚のスプライトを同時に表示でき、水平方向の表示数に上限がありません。
+#### (OAM Bank)
+
+[OAM](#oam) の `bank` が 0 の場合、スプライトのキャラクタパターンには VRAM 上の[キャラクタパターン](#character-pattern-table)か、[Direct Pattern Mapping](#direct-pattern-mapping) で指定されたバンクのものが用いられますが、1 以上の値が指定されている場合、その指定値のバンク番号がその OAM のキャラクタパターンになります。
+
+設定の優先度:
+
+1. OAM Bank **(最優先)**
+2. [Direct Pattern Mapping](#direct-pattern-mapping)
+3. VRAM 上の[キャラクタパターン](#character-pattern-table) **(デフォルト)**
+
+OAM Bank を用いることで、OAM 毎に異なるキャラクタパターンを使用できます。
 
 #### (Scanline Counter)
 
