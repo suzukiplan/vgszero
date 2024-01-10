@@ -155,6 +155,7 @@ __asm
     // value-> a
     ld a, (ix)
     inc ix
+    inc ix
     // dst -> bc
     ld c, (ix)
     inc ix
