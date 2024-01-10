@@ -210,6 +210,7 @@ __asm
     // l -> l
     ld l, (ix)
     inc ix
+    inc ix
     // h -> h
     ld h, (ix)
     pop ix
@@ -229,6 +230,7 @@ __asm
     // l -> l
     ld l, (ix)
     inc ix
+    inc ix
     // h -> h
     ld h, (ix)
     pop ix
@@ -247,6 +249,7 @@ __asm
     add ix, sp
     // l -> l
     ld l, (ix)
+    inc ix
     inc ix
     // h -> h
     ld h, (ix)
