@@ -32,7 +32,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [C言語の `memcpy` に相当する高速 DMA 転送機能を実装](#memcpy-dma)
 - HAG (High-speed Accumulator for Game)
   - [ハードウェア当たり判定機能を実装](#collision-detection)
-  - [ハードウェア乗算・除算・剰余残](hardware-calculation)
+  - [ハードウェア乗算・除算・剰余算数](hardware-calculation)
 - [BGM](#bgmdat)
   - VGS の MML で記述された BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
@@ -536,7 +536,7 @@ LD (HL), 0x12   # Sprite = Bank 18
 |   0xC2    |  -  |  o  | [memset 相当の DMA](#memset-dma) |
 |   0xC3    |  -  |  o  | [memcpy 相当の DMA](#memcpy-dma) |
 |   0xC4    |  o  |  -  | [当たり判定](#collision-detection) |
-|   0xC5    |  -  |  o  | [乗算・除算・剰余残](hardware-calculation) |
+|   0xC5    |  -  |  o  | [乗算・除算・剰余算](hardware-calculation) |
 |   0xDA    |  o  |  o  | [データのセーブ・ロード](#save-data) |
 |   0xE0    |  -  |  o  | BGM を[再生](#play-bgm) |
 |   0xE1    |  -  |  o  | BGM を[中断](#pause-bgm)、[再開](#resume-bgm)、[フェードアウト](#fadeout-bgm) |
@@ -613,7 +613,7 @@ JZ NOT_HIT      # 非衝突
 
 #### (Hardware Calculation)
 
-0xC5 の OUT により Z80 が苦手とする乗算、除算、剰余残を高速に実行できます。
+0xC5 の OUT により Z80 が苦手とする乗算、除算、剰余算を高速に実行できます。
 
 ```
 # 8bit 演算命令
