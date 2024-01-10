@@ -225,7 +225,7 @@ typedef struct {
     uint8_t ptn;
     //! Attribute value: https://github.com/suzukiplan/vgszero/blob/master/README.md#attribute
     uint8_t attr;
-    //! OAM Pattern Size (height - 1) 
+    //! OAM Pattern Size (height - 1)
     uint8_t heightMinus1;
     //! OAM Pattern Size (width - 1)
     uint8_t widthMinus1;
@@ -350,6 +350,60 @@ void vgs0_memcpy(uint16_t dst, uint16_t src, uint16_t cnt) __smallc;
  * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#collision-detection
  */
 uint8_t vgs0_collision_check(uint16_t addr) __z88dk_fastcall;
+
+/**
+ * @brief hl = h * l
+ * @param h Number to be calculated
+ * @param l Multiplier
+ * @return Calculation result
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_mul(uint8_t h, uint8_t l) __smallc;
+
+/**
+ * @brief hl = h / l
+ * @param h Number to be calculated
+ * @param l Divisor
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_div(uint8_t h, uint8_t l) __smallc;
+
+/**
+ * @brief hl = h % l
+ * @param h Number to be calculated
+ * @param l Modulator
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_mod(uint8_t h, uint8_t l) __smallc;
+
+/**
+ * @brief hl = hl * c
+ * @param hl Number to be calculated
+ * @param c Multiplier
+ * @return Calculation result mod 0x10000
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_mul16(uint16_t hl, uint8_t c) __smallc;
+
+/**
+ * @brief hl = hl / c
+ * @param hl Number to be calculated
+ * @param c Divisor
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_div16(uint16_t hl, uint8_t c) __smallc;
+
+/**
+ * @brief hl = hl % c
+ * @param hl Number to be calculated
+ * @param c Modulator
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_mod16(uint16_t hl, uint8_t c) __smallc;
 
 /**
  * @brief Continuously writes the specified ASCII code and attribute values to BG's NameTable

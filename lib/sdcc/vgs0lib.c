@@ -201,6 +201,132 @@ __asm
 __endasm;
 }
 
+uint16_t vgs0_mul(uint8_t h, uint8_t l) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x00
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+uint16_t vgs0_div(uint8_t h, uint8_t l) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x01
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+uint16_t vgs0_mod(uint8_t h, uint8_t l) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x02
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+uint16_t vgs0_mul16(uint16_t hl, uint8_t c) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // c -> c
+    ld c, (ix)
+    inc ix
+    inc ix
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x80
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+uint16_t vgs0_div16(uint16_t hl, uint8_t c) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // c -> c
+    ld c, (ix)
+    inc ix
+    inc ix
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x81
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+uint16_t vgs0_mod16(uint16_t hl, uint8_t c) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // c -> c
+    ld c, (ix)
+    inc ix
+    inc ix
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x82
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
 void vgs0_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
 {
     x &= 0x1F;

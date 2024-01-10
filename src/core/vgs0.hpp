@@ -316,7 +316,7 @@ class VGS0
                 int y2 = this->readMemory(addr++);
                 int w2 = this->readMemory(addr++);
                 int h2 = this->readMemory(addr);
-                return y1 < y2 + h2 && y2 < y1 + h1 &&  x1 < x2 + w2 && x2 < x1 + w1 ? 0x01 : 0x00;
+                return y1 < y2 + h2 && y2 < y1 + h1 && x1 < x2 + w2 && x2 < x1 + w1 ? 0x01 : 0x00;
             }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
@@ -380,6 +380,55 @@ class VGS0
                 for (int i = 0; i < count; i++, addrTo++, addrFrom++) {
                     this->writeMemory(addrTo, this->readMemory(addrFrom));
                 }
+                break;
+            }
+            case 0xC5: {
+                unsigned short result = 0;
+                switch (value) {
+                    case 0x00:
+                        result = this->cpu->reg.pair.H;
+                        result *= this->cpu->reg.pair.L;
+                        break;
+                    case 0x01:
+                        if (this->cpu->reg.pair.L) {
+                            result = this->cpu->reg.pair.H;
+                            result /= this->cpu->reg.pair.L;
+                        } else {
+                            result = 0xFFFF;
+                        }
+                        break;
+                    case 0x02:
+                        if (this->cpu->reg.pair.L) {
+                            result = this->cpu->reg.pair.H;
+                            result %= this->cpu->reg.pair.L;
+                        } else {
+                            result = 0xFFFF;
+                        }
+                        break;
+                    case 0x80:
+                    case 0x81:
+                    case 0x82: {
+                        unsigned short hl = this->cpu->reg.pair.H;
+                        hl <<= 8;
+                        hl |= this->cpu->reg.pair.L;
+                        if (0x80 == value) {
+                            unsigned int tmp = hl;
+                            tmp *= this->cpu->reg.pair.C;
+                            result = tmp & 0xFFFF;
+                        } else if (0 == this->cpu->reg.pair.C) {
+                            result = 0xFFFF;
+                        } else if (0x81 == value) {
+                            result = hl;
+                            result /= this->cpu->reg.pair.C;
+                        } else {
+                            result = hl;
+                            result %= this->cpu->reg.pair.C;
+                        }
+                        break;
+                    }
+                }
+                this->cpu->reg.pair.H = (result & 0xFF00) >> 8;
+                this->cpu->reg.pair.L = result & 0xFF;
                 break;
             }
             case 0xDA: {
