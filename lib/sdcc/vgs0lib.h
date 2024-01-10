@@ -344,6 +344,14 @@ void vgs0_memset(uint16_t dst, uint8_t value, uint16_t cnt) __smallc;
 void vgs0_memcpy(uint16_t dst, uint16_t src, uint16_t cnt) __smallc;
 
 /**
+ * @brief Collision detection check
+ * @param addr pointer of two rectangle structures (8 bytes)
+ * @return 0x01 = Detected, 0x00 = Not detected
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#collision-detection
+ */
+uint8_t vgs0_collision_check(uint16_t addr) __z88dk_fastcall;
+
+/**
  * @brief Continuously writes the specified ASCII code and attribute values to BG's NameTable
  * @param x X-coordinate (0-31)
  * @param y Y-coordinate (0-31)

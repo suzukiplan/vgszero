@@ -192,6 +192,15 @@ __asm
 __endasm;
 }
 
+uint8_t vgs0_collision_check(uint16_t addr) __z88dk_fastcall
+{
+__asm
+    in a, (#0xC4)
+    ld l, a
+    ret
+__endasm;
+}
+
 void vgs0_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
 {
     x &= 0x1F;

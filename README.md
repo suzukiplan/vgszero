@@ -26,10 +26,12 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [BG](#bg), [FG](#fg), [スプライト](#sprite) にそれぞれ異なる[キャラクタパターン](#character-pattern-table)を設定できる [Direct Pattern Mapping](#direct-pattern-mapping) 機能に対応（最大 768 枚のキャラクターパターンを同時に表示可能）
   - [スプライト](#sprite)に複数の[キャラクタパターン](#character-pattern-table)を並べて表示できるハードウェア機能（[OAM Pattern Size](#oam-pattern-size)）を提供
   - [スプライト](#sprite)の [OAM](#oam) 毎に異なるバンクを指定できるハードウェア機能（[OAM Bank](#oam-bank)）を提供
-- DMA (ダイレクトメモリアクセス)
+- DMA (Direct Memory Access)
   - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
   - [C言語の `memset` に相当する高速 DMA 転送機能を実装](#memset-dma)
   - [C言語の `memcpy` に相当する高速 DMA 転送機能を実装](#memcpy-dma)
+- HAG (High-speed Accumulator for Game)
+  - [ハードウェア当たり判定機能を実装](#collision-detection)
 - [BGM](#bgmdat)
   - VGS の MML で記述された BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
@@ -532,6 +534,7 @@ LD (HL), 0x12   # Sprite = Bank 18
 |   0xC0    |  -  |  o  | [ROM to Character DMA](#rom-to-character-dma) |
 |   0xC2    |  -  |  o  | [memset 相当の DMA](#memset-dma) |
 |   0xC3    |  -  |  o  | [memcpy 相当の DMA](#memcpy-dma) |
+|   0xC4    |  o  |  -  | [当たり判定](#collision-detection) |
 |   0xDA    |  o  |  o  | [データのセーブ・ロード](#save-data) |
 |   0xE0    |  -  |  o  | BGM を[再生](#play-bgm) |
 |   0xE1    |  -  |  o  | BGM を[中断](#pause-bgm)、[再開](#resume-bgm)、[フェードアウト](#fadeout-bgm) |
@@ -584,6 +587,26 @@ LD BC, 0xC000   # 転送先アドレス (RAM)
 LD DE, 0x6000   # 転送元アドレス (ROM Bank 3)
 LD HL, 0x2000   # 転送バイト数 (8KB)
 OUT (0xC3), A   # memcpy (※書き込んだ値は無視されるので何でもOK)
+```
+
+#### (Collision Detection)
+
+以下の 8 bytes の構造体が格納されたアドレスを HL に指定して 0xC4 を IN することで当たり判定ができます。
+
+```c
+struct rect {
+    uint8_t x;      // X座標
+    uint8_t y;      // Y座標
+    uint8_t width;  // 幅
+    uint8_t height; // 高さ
+} chr[2];           // それらを 2 キャラクタ分（8bytes）
+```
+
+```z80
+LD HL, 0xC000   # 構造体の先頭アドレス
+IN A, (0xC4)    # チェック実行
+JNZ DETECT_HIT  # 衝突を検出
+JZ NOT_HIT      # 非衝突
 ```
 
 #### (Save Data)
