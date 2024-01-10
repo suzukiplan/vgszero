@@ -30,16 +30,16 @@ class VDP
     inline unsigned char* getBgAttrTableAddr() { return &this->ctx.ram[0x0400]; }
     inline unsigned char* getFgNameTableAddr() { return &this->ctx.ram[0x0800]; }
     inline unsigned char* getFgAttrTableAddr() { return &this->ctx.ram[0x0C00]; }
-    inline unsigned short* getColorTableAddr() { return (unsigned short*)&this->ctx.ram[0x1400]; }
+    inline unsigned short* getColorTableAddr() { return (unsigned short*)&this->ctx.ram[0x1800]; }
     inline unsigned char* getPatternTableAddr() { return &this->ctx.ram[0x2000]; }
-    inline unsigned char getRegisterBgScrollX() { return this->ctx.ram[0x1602]; }
-    inline unsigned char getRegisterBgScrollY() { return this->ctx.ram[0x1603]; }
-    inline unsigned char getRegisterFgScrollX() { return this->ctx.ram[0x1604]; }
-    inline unsigned char getRegisterFgScrollY() { return this->ctx.ram[0x1605]; }
-    inline int getBgDPM() { return ((int)this->ctx.ram[0x1608]) * 0x2000 % this->romSize; }
-    inline int getFgDPM() { return ((int)this->ctx.ram[0x1609]) * 0x2000 % this->romSize; }
-    inline int getSpriteDPM() { return ((int)this->ctx.ram[0x160A]) * 0x2000 % this->romSize; }
-    inline unsigned char getRegisterIRQ() { return this->ctx.ram[0x1606]; }
+    inline unsigned char getRegisterBgScrollX() { return this->ctx.ram[0x1F02]; }
+    inline unsigned char getRegisterBgScrollY() { return this->ctx.ram[0x1F03]; }
+    inline unsigned char getRegisterFgScrollX() { return this->ctx.ram[0x1F04]; }
+    inline unsigned char getRegisterFgScrollY() { return this->ctx.ram[0x1F05]; }
+    inline int getBgDPM() { return ((int)this->ctx.ram[0x1F08]) * 0x2000 % this->romSize; }
+    inline int getFgDPM() { return ((int)this->ctx.ram[0x1F09]) * 0x2000 % this->romSize; }
+    inline int getSpriteDPM() { return ((int)this->ctx.ram[0x1F0A]) * 0x2000 % this->romSize; }
+    inline unsigned char getRegisterIRQ() { return this->ctx.ram[0x1F06]; }
     inline unsigned char* getOamAddr() { return &this->ctx.ram[0x1000]; }
     inline bool isAttrVisible(unsigned char attr) { return attr & 0x80; }
     inline bool isAttrFlipH(unsigned char attr) { return attr & 0x40; }
@@ -112,9 +112,9 @@ class VDP
     {
         addr &= 0x3FFF;
         switch (addr) {
-            case 0x1600: return this->ctx.countV < 200 ? this->ctx.countV : 0xFF;
-            case 0x1601: return this->ctx.countH < 256 ? this->ctx.countH : 0xFF;
-            case 0x1607: {
+            case 0x1F00: return this->ctx.countV < 200 ? this->ctx.countV : 0xFF;
+            case 0x1F01: return this->ctx.countH < 256 ? this->ctx.countH : 0xFF;
+            case 0x1F07: {
                 unsigned char result = this->ctx.status;
                 this->ctx.status = 0;
                 return result;
@@ -127,8 +127,8 @@ class VDP
     {
         addr &= 0x3FFF;
         this->ctx.ram[addr] = value;
-        if (0x1400 <= addr && addr < 0x1600) {
-            this->updatePaletteCache((addr - 0x1400) / 2);
+        if (0x1800 <= addr && addr < 0x1A00) {
+            this->updatePaletteCache((addr - 0x1800) / 2);
         }
     }
 
@@ -256,33 +256,46 @@ class VDP
     {
         unsigned char* oam = this->getOamAddr();
         unsigned short* display = &this->display[(scanline - 8) * 240];
-        oam += 255 * 4;
+        oam += 255 * 8;
         const unsigned char* ptntbl;
         int dpm = this->getSpriteDPM();
-        if (dpm) {
-            ptntbl = &this->rom[dpm];
-        } else {
-            ptntbl = this->getPatternTableAddr();
-        }
-        for (int i = 0; i < 256; i++, oam -= 4) {
+        for (int i = 0; i < 256; i++, oam -= 8) {
             if (!this->isAttrVisible(oam[3])) continue;
-            if (0 == oam[1] || 248 <= oam[1] || scanline < oam[0] || oam[0] + 8 <= scanline) continue;
-            const unsigned char* chrtbl = ptntbl;
-            chrtbl += oam[2] << 5;
-            int dy = scanline - oam[0];
-            chrtbl += (this->isAttrFlipV(oam[3]) ? 7 - (dy & 7) : dy & 7) << 2;
+            int height = (oam[4] & 0x0F) + 1;
+            int width = (oam[5] & 0x0F) + 1;
             bool flipH = this->isAttrFlipH(oam[3]);
-            for (int j = 0, x = oam[1]; j < 8; j++, x++) {
-                if (x < 8 || 248 <= x) continue;
-                int pal;
-                if (flipH) {
-                    int jj = 7 - j;
-                    pal = jj & 1 ? chrtbl[jj >> 1] & 0x0F : (chrtbl[jj >> 1] & 0xF0) >> 4;
-                } else {
-                    pal = j & 1 ? chrtbl[j >> 1] & 0x0F : (chrtbl[j >> 1] & 0xF0) >> 4;
-                }
-                if (pal) {
-                    display[x - 8] = this->paletteCache[pal + this->paletteFromAttr(oam[3])];
+            bool flipV = this->isAttrFlipV(oam[3]);
+            if (oam[6]) {
+                ptntbl = &this->rom[oam[6] * 0x2000 % this->romSize];
+            } else if (dpm) {
+                ptntbl = &this->rom[dpm];
+            } else {
+                ptntbl = this->getPatternTableAddr();
+            }
+            for (int cy = 0; cy < height; cy++) {
+                for (int cx = 0; cx < width; cx++) {
+                    unsigned char y = (unsigned char)(oam[0] + cy * 8);
+                    unsigned char x = (unsigned char)(oam[1] + cx * 8);
+                    if (x == 0 || 248 < x || scanline < y || y + 8 <= scanline) {
+                        continue;
+                    }
+                    const unsigned char* chrtbl = ptntbl;
+                    chrtbl += (oam[2] + (flipV ? height - cy - 1 : cy) * 0x10 + (flipH ? width - cx - 1 : cx)) << 5;
+                    int dy = scanline - y;
+                    chrtbl += (flipV ? 7 - (dy & 7) : dy & 7) << 2;
+                    for (int j = 0; j < 8; j++, x++) {
+                        if (x < 8 || 248 <= x) continue;
+                        int pal;
+                        if (flipH) {
+                            int jj = 7 - j;
+                            pal = jj & 1 ? chrtbl[jj >> 1] & 0x0F : (chrtbl[jj >> 1] & 0xF0) >> 4;
+                        } else {
+                            pal = j & 1 ? chrtbl[j >> 1] & 0x0F : (chrtbl[j >> 1] & 0xF0) >> 4;
+                        }
+                        if (pal) {
+                            display[x - 8] = this->paletteCache[pal + this->paletteFromAttr(oam[3])];
+                        }
+                    }
                 }
             }
         }

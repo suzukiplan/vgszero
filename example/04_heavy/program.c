@@ -26,7 +26,7 @@ void main(void)
     uint8_t n = 0;
     for (y = 0; y < 16; y++) {
         for (x = 0; x < 16; x++) {
-            vgs0_oam_set(n, 8 + x * 4, 8 + y * 4, 0x80, 'X');
+            vgs0_oam_set(n, 8 + x * 4, 8 + y * 4, 0x80, 'X', 0, 0);
             n++;
         }
     }

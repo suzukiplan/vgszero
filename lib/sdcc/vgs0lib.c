@@ -101,7 +101,7 @@ __endasm;
 void vgs0_wait_vsync(void) __z88dk_fastcall
 {
 __asm
-    ld hl, #0x9607
+    ld hl, #0x9F07
 wait_vblank_loop:
     ld a, (hl)
     and #0x80
@@ -118,7 +118,7 @@ void vgs0_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b) _
     col |= g & 0x1F;
     col <<= 5;
     col |= b & 0x1F;
-    addr = 0x9400;
+    addr = 0x9800;
     addr += pn << 5;
     addr += pi << 1;
     *((uint16_t*)addr) = col;
@@ -127,7 +127,7 @@ void vgs0_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b) _
 void vgs0_palette_set_rgb555(uint8_t pn, uint8_t pi, uint16_t rgb555) __smallc
 {
     uint16_t addr;
-    addr = 0x9400;
+    addr = 0x9800;
     addr += pn << 5;
     addr += pi << 1;
     *((uint16_t*)addr) = rgb555;

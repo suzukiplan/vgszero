@@ -10,7 +10,7 @@ org $0000
     ; パレットを初期化
     ld bc, 8
     ld hl, palette0_data
-    ld de, $9400
+    ld de, $9800
     ldir
 
     ; Bank 1 を Character Pattern Table ($A000) に転送 (DMA)
@@ -33,7 +33,7 @@ mainloop:
     ld b, a
 
     ; 左カーソルが押されているかチェック（押されている場合は左スクロール）
-    ld hl, $9602
+    ld hl, $9F02
     and %00100000
     jp nz, mainloop_check_right
     inc (hl)
@@ -46,7 +46,7 @@ mainloop_check_right:
     dec (hl)
 mainloop_check_up:
     ; 上カーソルが押されているかチェック（押されている場合は上スクロール）
-    ld hl, $9603
+    ld hl, $9F03
     ld a, b
     and %10000000
     jp nz, mainloop_check_down
@@ -63,7 +63,7 @@ mainloop_check_end:
 
 ; VBLANKになるまで待機
 .wait_vblank
-    ld hl, $9607
+    ld hl, $9F07
 wait_vblank_loop:
     ld a, (hl)
     and $80
