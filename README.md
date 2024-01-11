@@ -540,6 +540,9 @@ LD (HL), 0x12   # Sprite = Bank 18
 |   0xC3    |  -  |  o  | [memcpy 相当の DMA](#memcpy-dma) |
 |   0xC4    |  o  |  -  | [当たり判定](#collision-detection) |
 |   0xC5    |  -  |  o  | [乗算・除算・剰余算](hardware-calculation) |
+|   0xC6    |  -  |  o  | [ハードウェア sin テーブル](#hardware-sin-table) |
+|   0xC7    |  -  |  o  | [ハードウェア cos テーブル](#hardware-cos-table) |
+|   0xC8    |  o  |  -  | [ハードウェア atan2 テーブル](#hardware-atan2-table) |
 |   0xDA    |  o  |  o  | [データのセーブ・ロード](#save-data) |
 |   0xE0    |  -  |  o  | BGM を[再生](#play-bgm) |
 |   0xE1    |  -  |  o  | BGM を[中断](#pause-bgm)、[再開](#resume-bgm)、[フェードアウト](#fadeout-bgm) |
