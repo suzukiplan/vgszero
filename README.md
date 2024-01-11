@@ -32,7 +32,10 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [C言語の `memcpy` に相当する高速 DMA 転送機能を実装](#memcpy-dma)
 - HAG (High-speed Accumulator for Game)
   - [ハードウェア当たり判定機能を実装](#collision-detection)
-  - [ハードウェア乗算・除算・剰余算数](hardware-calculation)
+  - [ハードウェア乗算・除算・剰余算数](#hardware-calculation)
+  - [ハードウェア sin テーブル](#hardware-sin-table)
+  - [ハードウェア cos テーブル](#hardware-cos-table)
+  - [ハードウェア atan2 テーブル](#hardware-atan2-table)
 - [BGM](#bgmdat)
   - VGS の MML で記述された BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
@@ -627,6 +630,28 @@ OUT (0xC5), 0x81 ... HL = HL / C
 OUT (0xC5), 0x82 ... HL = HL % C
 
 ※ゼロ除算が実行された場合の HL は 0xFFFF
+```
+
+#### (Hardware SIN table)
+
+```z80
+LD A, 123      # A に求めるテーブル要素番号を指定
+OUT (0xC6), A  # A = sin(A × π ÷ 128.0)
+```
+
+#### (Hardware COS table)
+
+```z80
+LD A, 123      # A に求めるテーブル要素番号を指定
+OUT (0xC7), A  # A = cos(A × π ÷ 128.0)
+```
+
+#### (Hardware ATAN2 table)
+
+```z80
+LD H, <<<y1 - y2>>>   # H に Y 座標の差を設定
+LD L, <<<x1 - x2>>>   # L に X 座標の差を設定
+IN A, (0xC8)          # A に (x1, y1) と (x2, y2) の角度を求める
 ```
 
 #### (Save Data)

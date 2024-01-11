@@ -330,6 +330,44 @@ __asm
 __endasm;
 }
 
+uint8_t vgs0_sin(uint8_t a) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xC6), a
+    ld l, a
+    ret
+__endasm;
+}
+
+uint8_t vgs0_cos(uint8_t a) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xC7), a
+    ld l, a
+    ret
+__endasm;
+}
+
+uint8_t vgs0_atan2(uint16_t hl) __z88dk_fastcall
+{
+__asm
+    in a, (#0xC8)
+    ld l, a
+    ret
+__endasm;
+}
+
+uint8_t vgs0_angle(uint8_t sx, uint8_t sy, uint8_t dx, uint8_t dy) __smallc
+{
+    uint16_t hl = sy - dy;
+    hl <<= 8;
+    hl += (uint8_t)(sx- dx);
+    return vgs0_atan2(hl) - 64;
+}
+
+
 void vgs0_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
 {
     x &= 0x1F;

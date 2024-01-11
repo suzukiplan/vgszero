@@ -212,6 +212,28 @@ typedef unsigned long long uint64_t;
 //! stdint compatible (64bit signed)
 typedef signed long long int64_t;
 
+//! Real number type with fixed-point numbers
+typedef union {
+    uint16_t value;
+    uint8_t raw[2];
+} var16_t;
+
+//! Rentangle (signed position)
+typedef struct {
+    int8_t x;
+    int8_t y;
+    uint8_t width;
+    uint8_t height;
+} rect_t;
+
+//! Rentangle (unsigned position)
+typedef struct {
+    uint8_t x;
+    uint8_t y;
+    uint8_t width;
+    uint8_t height;
+} urect_t;
+
 /**
  * Object Attribute Memory
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#oam
@@ -404,6 +426,41 @@ uint16_t vgs0_div16(uint16_t hl, uint8_t c) __smallc;
  * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
  */
 uint16_t vgs0_mod16(uint16_t hl, uint8_t c) __smallc;
+
+/**
+ * @brief Acquire sin from table
+ * @param a number of table array
+ * @return sin(a × π ÷ 128.0)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-sin-table
+ */
+uint8_t vgs0_sin(uint8_t a) __z88dk_fastcall;
+
+/**
+ * @brief Acquire cos from table
+ * @param a number of table array
+ * @return cos(a × π ÷ 128.0)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-cos-table
+ */
+uint8_t vgs0_cos(uint8_t a) __z88dk_fastcall;
+
+/**
+ * @brief Acquire atan2 from table
+ * @param hl number of table array
+ * @return atan2(-h, l)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-atan2-table
+ */
+uint8_t vgs0_atan2(uint16_t hl) __z88dk_fastcall;
+
+/**
+ * @brief Acquire angle
+ * @param sx source X
+ * @param sy source Y
+ * @param dx distance X
+ * @param dy distance Y
+ * @return angle
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-atan2-table
+ */
+uint8_t vgs0_angle(uint8_t sx, uint8_t sy, uint8_t dx, uint8_t dy) __smallc;
 
 /**
  * @brief Continuously writes the specified ASCII code and attribute values to BG's NameTable

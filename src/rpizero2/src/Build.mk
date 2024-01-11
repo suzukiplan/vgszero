@@ -22,6 +22,7 @@ OBJS += splash.o
 OBJS += sderror.o
 OBJS += lz4.o
 OBJS += vgstone.o
+OBJS += vgs0math.o
 LIBS = $(CIRCLEHOME)/lib/libcircle.a
 LIBS += $(CIRCLEHOME)/lib/fs/libfs.a
 LIBS += $(CIRCLEHOME)/lib/input/libinput.a

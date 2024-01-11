@@ -11,6 +11,12 @@
 #include "vgsdecv.hpp"
 #include "z80.hpp"
 
+extern "C" {
+    extern signed char vgs0_sin_table[256];
+    extern signed char vgs0_cos_table[256];
+    extern unsigned char vgs0_atan2_table[256][256];
+};
+
 class VGS0
 {
   private:
@@ -318,6 +324,9 @@ class VGS0
                 int h2 = this->readMemory(addr);
                 return y1 < y2 + h2 && y2 < y1 + h1 && x1 < x2 + w2 && x2 < x1 + w1 ? 0x01 : 0x00;
             }
+            case 0xC8: {
+                return vgs0_atan2_table[this->cpu->reg.pair.H][this->cpu->reg.pair.L];
+            }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
                 unsigned short addr = this->cpu->reg.pair.B;
@@ -431,6 +440,8 @@ class VGS0
                 this->cpu->reg.pair.L = result & 0xFF;
                 break;
             }
+            case 0xC6: this->cpu->reg.pair.A = (unsigned char)vgs0_sin_table[value]; break;
+            case 0xC7: this->cpu->reg.pair.A = (unsigned char)vgs0_cos_table[value]; break;
             case 0xDA: {
                 if (this->saveCallback) {
                     unsigned short addr = this->cpu->reg.pair.B;
