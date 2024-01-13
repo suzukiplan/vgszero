@@ -153,23 +153,46 @@ int main(int argc, char* argv[])
         goto ENDPROC;
     }
 
-    /* パレットデータの先頭16色をC形式で書き出す */
+    /* パレットデータを書き出す */
     if (4 <= argc) {
         fclose(fpW);
-        if (NULL == (fpW = fopen(argv[3], "wt"))) {
-            fprintf(stderr, "ERROR: Could not open: %s\n", argv[3]);
-            goto ENDPROC;
+        const char* ext = strrchr(argv[3], '.');
+        if (ext && 0 == strcmp(ext, ".bin")) {
+            /* バイナリ形式で書き出す */
+            if (NULL == (fpW = fopen(argv[3], "wb"))) {
+                fprintf(stderr, "ERROR: Could not open: %s\n", argv[3]);
+                goto ENDPROC;
+            }
+            unsigned int* pal = dh.bits == 8 ? pal256 : pal16;
+            unsigned short rgb[4096];
+            memset(rgb, 0xFF, sizeof(rgb));
+            for (int i = 0; i < (dh.bits == 8 ? 256 : 16); i++) {
+                unsigned short r = (pal[i] & 0x00F80000) >> 9;
+                unsigned short g = (pal[i] & 0x0000F800) >> 6;
+                unsigned short b = (pal[i] & 0x000000F8) >> 3;
+                rgb[i] = r | g | b;
+            }
+            if (sizeof(rgb) != fwrite(rgb, 1, sizeof(rgb), fpW)) {
+                fprintf(stderr, "ERROR: Could not write: %s\n", argv[3]);
+                goto ENDPROC;
+            }
+        } else {
+            /* C形式で書き出す */
+            if (NULL == (fpW = fopen(argv[3], "wt"))) {
+                fprintf(stderr, "ERROR: Could not open: %s\n", argv[3]);
+                goto ENDPROC;
+            }
+            unsigned int* pal = dh.bits == 8 ? pal256 : pal16;
+            fprintf(fpW, "void init_palette(void)\n");
+            fprintf(fpW, "{\n");
+            for (int i = 0; i < (dh.bits == 8 ? 256 : 16); i++) {
+                int r = (pal[i] & 0x00F80000) >> 19;
+                int g = (pal[i] & 0x0000F800) >> 11;
+                int b = (pal[i] & 0x000000F8) >> 3;
+                fprintf(fpW, "    vgs0_palette_set(%d, %d, %d, %d, %d);\n", i / 16, i % 16, r, g, b);
+            }
+            fprintf(fpW, "}\n");
         }
-        unsigned int* pal = dh.bits == 8 ? pal256 : pal16;
-        fprintf(fpW, "void init_palette(void)\n");
-        fprintf(fpW, "{\n");
-        for (int i = 0; i < (dh.bits == 8 ? 256 : 16); i++) {
-            int r = (pal[i] & 0x00F80000) >> 19;
-            int g = (pal[i] & 0x0000F800) >> 11;
-            int b = (pal[i] & 0x000000F8) >> 3;
-            fprintf(fpW, "    vgs0_palette_set(%d, %d, %d, %d, %d);\n", i / 16, i % 16, r, g, b);
-        }
-        fprintf(fpW, "}\n");
     }
 
     rc = 0;
