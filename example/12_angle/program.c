@@ -34,8 +34,8 @@ void main(void)
 
     // 座標初期化
     vgs0_memset(0xC000, 0x00, sizeof(GlobalVariables));
-    GV->x = (256 - 16) / 2;
-    GV->y = (200 - 16) / 2 + 64;
+    GV->x = 120;
+    GV->y = 156;
 
     // スプライト表示
     vgs0_oam_set(0, GV->x, GV->y, 0x80, 9, 0, 0);
@@ -96,8 +96,8 @@ void main(void)
             GV->bullets[GV->bulletIndex].x.raw[1] = 124;
             GV->bullets[GV->bulletIndex].y.raw[1] = 100;
             uint8_t r = vgs0_angle(127, 104, GV->x + 8, GV->y + 8);
-            GV->bullets[GV->bulletIndex].vx.value = (uint16_t)((signed char)vgs0_sin(r) * 3);
-            GV->bullets[GV->bulletIndex].vy.value = (uint16_t)((signed char)vgs0_cos(r) * 3);
+            GV->bullets[GV->bulletIndex].vx.value = (uint16_t)(vgs0_sin(r) * 3);
+            GV->bullets[GV->bulletIndex].vy.value = (uint16_t)(vgs0_cos(r) * 3);
             GV->bulletIndex++;
             GV->bulletIndex &= 0x7F;
             VGS0_ADDR_FG->ptn[2][8] = '0' + vgs0_div(r, 100);

@@ -330,7 +330,7 @@ __asm
 __endasm;
 }
 
-uint8_t vgs0_sin(uint8_t a) __z88dk_fastcall
+int8_t vgs0_sin(uint8_t a) __z88dk_fastcall
 {
 __asm
     ld a, l
@@ -340,7 +340,7 @@ __asm
 __endasm;
 }
 
-uint8_t vgs0_cos(uint8_t a) __z88dk_fastcall
+int8_t vgs0_cos(uint8_t a) __z88dk_fastcall
 {
 __asm
     ld a, l

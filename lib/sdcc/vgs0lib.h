@@ -433,7 +433,7 @@ uint16_t vgs0_mod16(uint16_t hl, uint8_t c) __smallc;
  * @return sin(a × π ÷ 128.0)
  * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-sin-table
  */
-uint8_t vgs0_sin(uint8_t a) __z88dk_fastcall;
+int8_t vgs0_sin(uint8_t a) __z88dk_fastcall;
 
 /**
  * @brief Acquire cos from table
@@ -441,7 +441,7 @@ uint8_t vgs0_sin(uint8_t a) __z88dk_fastcall;
  * @return cos(a × π ÷ 128.0)
  * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-cos-table
  */
-uint8_t vgs0_cos(uint8_t a) __z88dk_fastcall;
+int8_t vgs0_cos(uint8_t a) __z88dk_fastcall;
 
 /**
  * @brief Acquire atan2 from table
