@@ -41,6 +41,7 @@ format:
 	make execute-format FILENAME=./example/09_joypad/program.c
 	make execute-format FILENAME=./example/10_chr720/program.c
 	make execute-format FILENAME=./example/11_bigsprite/program.c
+	make execute-format FILENAME=./example/12_angle/program.c
 	make execute-format FILENAME=./lib/sdcc/vgs0lib.h
 
 execute-format:
