@@ -12,9 +12,9 @@
 #include "z80.hpp"
 
 extern "C" {
-    extern signed char vgs0_sin_table[256];
-    extern signed char vgs0_cos_table[256];
-    extern unsigned char vgs0_atan2_table[256][256];
+extern signed char vgs0_sin_table[256];
+extern signed char vgs0_cos_table[256];
+extern unsigned char vgs0_atan2_table[256][256];
 };
 
 class VGS0
