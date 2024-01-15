@@ -143,11 +143,11 @@ const void* get_bitmap(const unsigned short* display, size_t* size)
             rgb888 <<= 8;
             rgb888 |= bit5To8(col & 0b0000000000011111);
             memcpy(&buf[ptr + 240 * 8], &rgb888, 4);
-            unsigned int n = rgb888 & 0xE0E0E0E0;
+            unsigned int n = rgb888 & 0xF0F0F0F0;
             memcpy(&buf[ptr + 240 * 8 + 4], &n, 4);
-            n = rgb888 & 0x6F6F6F6F;
+            n = rgb888 & 0x8F8F8F8F;
             memcpy(&buf[ptr], &n, 4);
-            n &= 0x60606060;
+            n &= 0x80808080;
             memcpy(&buf[ptr + 4], &n, 4);
             ptr += 8;
         }
@@ -433,9 +433,9 @@ int main(int argc, char* argv[])
                 rgb888 |= bit5To8(rgb555 & 0b0000000000011111);
                 rgb888 |= windowSurface->format->Amask;
                 pcDisplay[offsetX + x * 2] = rgb888;
-                pcDisplay[offsetX + x * 2 + 1] = rgb888 & 0xE0E0E0E0;
-                pcDisplay[offsetX + pitch + x * 2] = rgb888 & 0x6F6F6F6F;
-                pcDisplay[offsetX + pitch + x * 2 + 1] = rgb888 & 0x60606060;
+                pcDisplay[offsetX + x * 2 + 1] = rgb888 & 0xF0F0F0F0;
+                pcDisplay[offsetX + pitch + x * 2] = rgb888 & 0x8F8F8F8F;
+                pcDisplay[offsetX + pitch + x * 2 + 1] = rgb888 & 0x80808080;
             }
             vgsDisplay += 240;
             pcDisplay += pitch * 2;
