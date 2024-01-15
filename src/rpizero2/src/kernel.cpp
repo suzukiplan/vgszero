@@ -27,7 +27,7 @@ UINT saveDataSize_;
 CLogger* logger_;
 SystemConfiguration* config_;
 
-CKernel::CKernel(void) : screen(240, 192),
+CKernel::CKernel(void) : screen(480, 384),
                          timer(&interrupt),
                          logger(LogPanic, nullptr),
                          usb(&interrupt, &timer, TRUE),
@@ -61,9 +61,15 @@ boolean CKernel::initialize(void)
     uint16_t* splashPtr = (uint16_t*)splash;
     buffer->WaitForVerticalSync();
     for (int y = 0; y < 192; y++) {
-        memcpy(bptr, splashPtr, 240 * 2);
-        bptr += hdmiPitch_;
-        splashPtr += 240;
+        for (int x = 0; x < 240; x++) {
+            auto col = *splashPtr;
+            splashPtr++;
+            bptr[x * 2] = col;
+            bptr[x * 2 + 1] = col & 0b1110011100011100; 
+            bptr[hdmiPitch_ + x * 2] = col & 0b1001110011110011;
+            bptr[hdmiPitch_ + x * 2 + 1] = col & 0b1000010000010000;
+        }
+        bptr += hdmiPitch_ * 2;
     }
 
     if (bOK) {

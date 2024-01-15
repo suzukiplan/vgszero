@@ -73,9 +73,15 @@ void MultiCoreManager::IPIHandler(unsigned nCore, unsigned nIPI)
             uint16_t* display = vgs0_->getDisplay();
             uint16_t* hdmi = hdmiBuffer_;
             for (int y = 0; y < 192; y++) {
-                memcpy(hdmi, display, 240 * 2);
-                display += 240;
-                hdmi += hdmiPitch_;
+                for (int x = 0; x < 240; x++) {
+                    auto col = *display;
+                    display++;
+                    hdmi[x * 2] = col;
+                    hdmi[x * 2 + 1] = col & 0b1110011100011100; 
+                    hdmi[hdmiPitch_ + x * 2] = col & 0b1001110011110011;
+                    hdmi[hdmiPitch_ + x * 2 + 1] = col & 0b1000010000010000;
+                }
+                hdmi += hdmiPitch_ * 2;
             }
         }
     }
