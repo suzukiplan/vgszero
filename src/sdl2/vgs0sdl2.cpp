@@ -30,6 +30,20 @@ class Binary
     }
 };
 
+typedef struct BitmapHeader_ {
+    int isize;             /* 情報ヘッダサイズ */
+    int width;             /* 幅 */
+    int height;            /* 高さ */
+    unsigned short planes; /* プレーン数 */
+    unsigned short bits;   /* 色ビット数 */
+    unsigned int ctype;    /* 圧縮形式 */
+    unsigned int gsize;    /* 画像データサイズ */
+    int xppm;              /* X方向解像度 */
+    int yppm;              /* Y方向解像度 */
+    unsigned int cnum;     /* 使用色数 */
+    unsigned int inum;     /* 重要色数 */
+} BitmapHeader;
+
 static pthread_mutex_t soundMutex = PTHREAD_MUTEX_INITIALIZER;
 static bool halt = false;
 
@@ -88,6 +102,59 @@ static Binary* loadBinary(const char* path)
     }
     fclose(fp);
     return new Binary(result, size);
+}
+
+const void* get_bitmap(const unsigned short* display, size_t* size)
+{
+    static unsigned char buf[14 + 40 + 480 * 384 * 4];
+    int iSize = (int)sizeof(buf);
+    *size = iSize;
+    memset(buf, 0, sizeof(buf));
+    int ptr = 0;
+    buf[ptr++] = 'B';
+    buf[ptr++] = 'M';
+    memcpy(&buf[ptr], &iSize, 4);
+    ptr += 4;
+    ptr += 4;
+    iSize = 14 + 40;
+    memcpy(&buf[ptr], &iSize, 4);
+    ptr += 4;
+    BitmapHeader header;
+    header.isize = 40;
+    header.width = 480;
+    header.height = 384;
+    header.planes = 1;
+    header.bits = 32;
+    header.ctype = 0;
+    header.gsize = header.width * header.height * (header.bits / 8);
+    header.xppm = 1;
+    header.yppm = 1;
+    header.cnum = 0;
+    header.inum = 0;
+    memcpy(&buf[ptr], &header, sizeof(header));
+    ptr += sizeof(header);
+    for (int y = 0; y < 192; y++) {
+        for (int x = 0; x < 240; x++) {
+            auto col = display[(191 - y) * 240 + x];
+            unsigned int rgb888 = 0;
+            rgb888 |= bit5To8((col & 0b0111110000000000) >> 10);
+            rgb888 <<= 8;
+            rgb888 |= bit5To8((col & 0b0000001111100000) >> 5);
+            rgb888 <<= 8;
+            rgb888 |= bit5To8(col & 0b0000000000011111);
+            memcpy(&buf[ptr + 240 * 8], &rgb888, 4);
+            unsigned int n = rgb888 & 0xE0E0E0E0;
+            memcpy(&buf[ptr + 240 * 8 + 4], &n, 4);
+            n = rgb888 & 0x6F6F6F6F;
+            memcpy(&buf[ptr], &n, 4);
+            n &= 0x60606060;
+            memcpy(&buf[ptr + 4], &n, 4);
+            ptr += 8;
+        }
+        ptr += 240 * 8;
+    }
+    *size = ptr;
+    return buf;
 }
 
 int main(int argc, char* argv[])
@@ -300,7 +367,7 @@ int main(int argc, char* argv[])
                     case SDLK_x: key1 |= VGS0_JOYPAD_T1; break;
                     case SDLK_z: key1 |= VGS0_JOYPAD_T2; break;
                     case SDLK_s: {
-                        log("Save RAM (ram.bin) and VRAM (vram.bin)");
+                        log("Save ram.bin, vram.bin and screen.bmp");
                         FILE* fp = fopen("ram.bin", "wb");
                         if (fp) {
                             fwrite(vgs0.ctx.ram, 1, sizeof(vgs0.ctx.ram), fp);
@@ -309,6 +376,13 @@ int main(int argc, char* argv[])
                         fp = fopen("vram.bin", "wb");
                         if (fp) {
                             fwrite(vgs0.vdp->ctx.ram, 1, sizeof(vgs0.vdp->ctx.ram), fp);
+                            fclose(fp);
+                        }
+                        fp = fopen("screen.bmp", "wb");
+                        if (fp) {
+                            size_t bmpSize;
+                            const void* bmp = get_bitmap(vgs0.getDisplay(), &bmpSize);
+                            fwrite(bmp, 1, bmpSize, fp);
                             fclose(fp);
                         }
                         break;
@@ -359,10 +433,11 @@ int main(int argc, char* argv[])
                 rgb888 |= bit5To8(rgb555 & 0b0000000000011111);
                 rgb888 |= windowSurface->format->Amask;
                 pcDisplay[offsetX + x * 2] = rgb888;
-                pcDisplay[offsetX + x * 2 + 1] = rgb888;
+                pcDisplay[offsetX + x * 2 + 1] = rgb888 & 0xE0E0E0E0;
+                pcDisplay[offsetX + pitch + x * 2] = rgb888 & 0x6F6F6F6F;
+                pcDisplay[offsetX + pitch + x * 2 + 1] = rgb888 & 0x60606060;
             }
             vgsDisplay += 240;
-            memcpy(&pcDisplay[pitch], &pcDisplay[0], windowSurface->pitch);
             pcDisplay += pitch * 2;
         }
         SDL_UpdateWindowSurface(window);
