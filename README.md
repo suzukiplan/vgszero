@@ -627,10 +627,18 @@ OUT (0xC5), 0x00 ... HL = H * L
 OUT (0xC5), 0x01 ... HL = H / L
 OUT (0xC5), 0x02 ... HL = H % L
 
+# 8bit 演算命令 (符号付き)
+OUT (0xC5), 0x40 ... HL = H * L
+OUT (0xC5), 0x41 ... HL = H / L
+
 # 16bit 演算命令
 OUT (0xC5), 0x80 ... HL = HL * C (※HL: 演算結果 mod 65536)
 OUT (0xC5), 0x81 ... HL = HL / C
 OUT (0xC5), 0x82 ... HL = HL % C
+
+# 16bit 演算命令 (符号付き)
+OUT (0xC5), 0xC0 ... HL = HL * C (※HL: 演算結果 mod 65536)
+OUT (0xC5), 0xC1 ... HL = HL / C
 
 ※ゼロ除算が実行された場合の HL は 0xFFFF
 ```

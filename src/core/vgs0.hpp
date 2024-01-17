@@ -414,6 +414,23 @@ class VGS0
                             result = 0xFFFF;
                         }
                         break;
+                    case 0x40: {
+                        signed char sh = (signed char)this->cpu->reg.pair.H;
+                        signed char sl = (signed char)this->cpu->reg.pair.L;
+                        signed short tmp = sh * sl;
+                        result = (short)tmp;
+                        break;
+                    }
+                    case 0x41:
+                        if (this->cpu->reg.pair.L) {
+                            signed char sh = (signed char)this->cpu->reg.pair.H;
+                            signed char sl = (signed char)this->cpu->reg.pair.L;
+                            signed short tmp = sh / sl;
+                            result = (short)tmp;
+                        } else {
+                            result = 0xFFFF;
+                        }
+                        break;
                     case 0x80:
                     case 0x81:
                     case 0x82: {
@@ -432,6 +449,23 @@ class VGS0
                         } else {
                             result = hl;
                             result %= this->cpu->reg.pair.C;
+                        }
+                        break;
+                    }
+                    case 0xC0:
+                    case 0xC1: {
+                        unsigned short hl = this->cpu->reg.pair.H;
+                        hl <<= 8;
+                        hl |= this->cpu->reg.pair.L;
+                        int tmp = (signed short)hl;
+                        if (0x80 == value) {
+                            tmp *= (signed char)this->cpu->reg.pair.C;
+                            result = (unsigned short)tmp;
+                        } else if (0 == this->cpu->reg.pair.C) {
+                            result = 0xFFFF;
+                        } else {
+                            tmp /= (signed char)this->cpu->reg.pair.C;
+                            result = (unsigned short)tmp;
                         }
                         break;
                     }
