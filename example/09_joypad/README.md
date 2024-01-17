@@ -2,6 +2,8 @@
 
 ジョイパッドの入力状態をチェックします
 
+[!preview.png](preview.png)
+
 ## How to build
 
 ### Pre-request

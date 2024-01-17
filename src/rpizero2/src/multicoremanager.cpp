@@ -69,20 +69,22 @@ void MultiCoreManager::IPIHandler(unsigned nCore, unsigned nIPI)
     } else if (nIPI == IPI_USER + 2) {
         // CPU3: execute VDP's rendering 1 scanline procedure
         if (vgs0_->executeExternalRendering()) {
-            // copy to the mailbox buffer
-            uint16_t* display = vgs0_->getDisplay();
-            uint16_t* hdmi = hdmiBuffer_;
-            for (int y = 0; y < 192; y++) {
-                for (int x = 0; x < 240; x++) {
-                    auto col = *display;
-                    display++;
-                    hdmi[x * 2] = col;
-                    hdmi[x * 2 + 1] = col & 0b1110011100011100; 
-                    hdmi[hdmiPitch_ + x * 2] = col & 0b1001110011110011;
-                    hdmi[hdmiPitch_ + x * 2 + 1] = col & 0b1000010000010000;
-                }
-                hdmi += hdmiPitch_ * 2;
+            CMultiCoreSupport::SendIPI(2, IPI_USER + 3); // request execute mailbox buffering (vgs)
+        }
+    } else if (nIPI == IPI_USER + 3) {
+        // CPU2: copy to the mailbox buffer
+        uint16_t* display = vgs0_->getDisplay();
+        uint16_t* hdmi = hdmiBuffer_;
+        for (int y = 0; y < 192; y++) {
+            for (int x = 0; x < 240; x++) {
+                auto col = *display;
+                display++;
+                hdmi[x * 2] = col;
+                hdmi[x * 2 + 1] = col & 0b1110011100011100; 
+                hdmi[hdmiPitch_ + x * 2] = col & 0b1001110011110011;
+                hdmi[hdmiPitch_ + x * 2 + 1] = col & 0b1000010000010000;
             }
+            hdmi += hdmiPitch_ * 2;
         }
     }
 }
