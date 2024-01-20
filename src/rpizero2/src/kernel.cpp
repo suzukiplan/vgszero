@@ -296,7 +296,9 @@ TShutdownMode CKernel::run(void)
         buffer->SetVirtualOffset(0, swap);
 
         // playback sound
-        while (sound.PlaybackActive()) scheduler.Sleep(1);
+        while (sound.PlaybackActive()) {
+            ;
+        }
         sound.Playback(pcmData_, 735, 1, 16);
 
         // save if needed
