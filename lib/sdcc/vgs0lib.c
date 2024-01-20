@@ -221,6 +221,26 @@ __asm
 __endasm;
 }
 
+int16_t vgs0_smul(int8_t h, int8_t l) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // l -> l
+    ld l, (ix)
+    inc ix
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x40
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
 uint16_t vgs0_div(uint8_t h, uint8_t l) __smallc
 {
 __asm
@@ -236,6 +256,26 @@ __asm
     pop ix
     // execute HAG
     ld a, #0x01
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+int16_t vgs0_sdiv(int8_t h, int8_t l) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // l -> l
+    ld l, (ix)
+    inc ix
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x41
     out (#0xC5), a
     ret
 __endasm;
@@ -284,6 +324,29 @@ __asm
 __endasm;
 }
 
+int16_t vgs0_smul16(int16_t hl, int8_t c) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // c -> c
+    ld c, (ix)
+    inc ix
+    inc ix
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0xC0
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
 uint16_t vgs0_div16(uint16_t hl, uint8_t c) __smallc
 {
 __asm
@@ -302,6 +365,29 @@ __asm
     pop ix
     // execute HAG
     ld a, #0x81
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+int16_t vgs0_sdiv16(int16_t hl, int8_t c) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // c -> c
+    ld c, (ix)
+    inc ix
+    inc ix
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0xC1
     out (#0xC5), a
     ret
 __endasm;

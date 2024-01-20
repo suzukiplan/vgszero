@@ -17,7 +17,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [セーブ機能](#save-data)に対応
 - VDP; VGS-Video (映像処理)
   - [VRAM](#vram-memory-map) サイズ 16KB (TMS9918A 相当!)
-  - 解像度: 240x192 ピクセル
+  - 解像度: 240x192 ピクセル (TMS9918A より少しだけ狭い!)
   - [16 個の 16 色パレット](#palette)に対応（32,768 色中 256 色を同時発色可能）
   - 8x8 ピクセルの[キャラクタパターン](#character-pattern-table)を最大 256 枚 (8KB) 定義可能
   - [BG](#bg), [FG](#fg) の[ネームテーブル](#name-table)サイズ: 32x32 (256x256 ピクセル)
@@ -32,7 +32,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [C言語の `memcpy` に相当する高速 DMA 転送機能を実装](#memcpy-dma)
 - HAG (High-speed Accumulator for Game)
   - [ハードウェア当たり判定機能を実装](#collision-detection)
-  - [ハードウェア乗算・除算・剰余算数](#hardware-calculation)
+  - [ハードウェア乗算・除算・剰余算](#hardware-calculation)
   - [ハードウェア sin テーブル](#hardware-sin-table)
   - [ハードウェア cos テーブル](#hardware-cos-table)
   - [ハードウェア atan2 テーブル](#hardware-atan2-table)
@@ -76,7 +76,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 - テレビなど（以下の条件のもの）
   - HDMI入力対応
   - リフレッシュレート60Hz
-  - 解像度 240x192 ピクセル以上
+  - 解像度 480x384 ピクセル以上
   - オーディオ出力対応
 
 > Amazon の商品リスト:
@@ -627,10 +627,18 @@ OUT (0xC5), 0x00 ... HL = H * L
 OUT (0xC5), 0x01 ... HL = H / L
 OUT (0xC5), 0x02 ... HL = H % L
 
+# 8bit 演算命令 (符号付き)
+OUT (0xC5), 0x40 ... HL = H * L
+OUT (0xC5), 0x41 ... HL = H / L
+
 # 16bit 演算命令
 OUT (0xC5), 0x80 ... HL = HL * C (※HL: 演算結果 mod 65536)
 OUT (0xC5), 0x81 ... HL = HL / C
 OUT (0xC5), 0x82 ... HL = HL % C
+
+# 16bit 演算命令 (符号付き)
+OUT (0xC5), 0xC0 ... HL = HL * C (※HL: 演算結果 mod 65536)
+OUT (0xC5), 0xC1 ... HL = HL / C
 
 ※ゼロ除算が実行された場合の HL は 0xFFFF
 ```
@@ -790,7 +798,7 @@ README.txtの記載凡例:
 ・テレビなど（以下の条件のもの）
   - HDMI入力対応
   - リフレッシュレート60Hz
-  - 解像度 240x192 ピクセル以上
+  - 解像度 480x384 ピクセル以上
   - オーディオ出力対応
 
 Amazon の商品リスト:

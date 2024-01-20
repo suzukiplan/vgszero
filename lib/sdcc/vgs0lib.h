@@ -383,6 +383,15 @@ uint8_t vgs0_collision_check(uint16_t addr) __z88dk_fastcall;
 uint16_t vgs0_mul(uint8_t h, uint8_t l) __smallc;
 
 /**
+ * @brief hl = h * l (as signed)
+ * @param h Number to be calculated
+ * @param l Multiplier
+ * @return Calculation result
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+int16_t vgs0_smul(int8_t h, int8_t l) __smallc;
+
+/**
  * @brief hl = h / l
  * @param h Number to be calculated
  * @param l Divisor
@@ -390,6 +399,15 @@ uint16_t vgs0_mul(uint8_t h, uint8_t l) __smallc;
  * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
  */
 uint16_t vgs0_div(uint8_t h, uint8_t l) __smallc;
+
+/**
+ * @brief hl = h / l (signed)
+ * @param h Number to be calculated
+ * @param l Divisor
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+int16_t vgs0_sdiv(int8_t h, int8_t l) __smallc;
 
 /**
  * @brief hl = h % l
@@ -410,6 +428,15 @@ uint16_t vgs0_mod(uint8_t h, uint8_t l) __smallc;
 uint16_t vgs0_mul16(uint16_t hl, uint8_t c) __smallc;
 
 /**
+ * @brief hl = hl * c (signed)
+ * @param hl Number to be calculated
+ * @param c Multiplier
+ * @return Calculation result mod 0x10000
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+int16_t vgs0_smul16(int16_t hl, int8_t c) __smallc;
+
+/**
  * @brief hl = hl / c
  * @param hl Number to be calculated
  * @param c Divisor
@@ -417,6 +444,15 @@ uint16_t vgs0_mul16(uint16_t hl, uint8_t c) __smallc;
  * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
  */
 uint16_t vgs0_div16(uint16_t hl, uint8_t c) __smallc;
+
+/**
+ * @brief hl = hl / c (signed)
+ * @param hl Number to be calculated
+ * @param c Divisor
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+int16_t vgs0_sdiv16(int16_t hl, int8_t c) __smallc;
 
 /**
  * @brief hl = hl % c
