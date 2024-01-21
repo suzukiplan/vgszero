@@ -47,9 +47,6 @@ boolean MultiCoreManager::Initialize(void)
 void MultiCoreManager::Run(unsigned nCore)
 {
     assert(1 <= nCore && nCore < CORES);
-    char buf[80];
-    sprintf(buf, "cpu#%u idle", nCore);
-    logger_->Write("MCM", LogNotice, buf);
     coreStatus[nCore] = CoreStatus::Idle;
     if (1 <= nCore && nCore < 4) {
         while (1) {
