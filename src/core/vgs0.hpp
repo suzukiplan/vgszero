@@ -189,8 +189,12 @@ class VGS0
 
     void tick(unsigned char pad)
     {
-        this->ctx.pad = 0xFF ^ pad;
-        this->cpu->execute(0x7FFFFFFF);
+        if ((pad & VGS0_RESET_KEY) == VGS0_RESET_KEY) {
+            this->reset();
+        } else {
+            this->ctx.pad = 0xFF ^ pad;
+            this->cpu->execute(0x7FFFFFFF);
+        }
     }
 
     unsigned short* getDisplay() { return this->vdp->display; }
