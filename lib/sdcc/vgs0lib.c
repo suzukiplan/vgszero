@@ -101,7 +101,7 @@ __endasm;
 void vgs0_wait_vsync(void) __z88dk_fastcall
 {
 __asm
-    ld hl, #0x9607
+    ld hl, #0x9F07
 wait_vblank_loop:
     ld a, (hl)
     and #0x80
@@ -118,7 +118,7 @@ void vgs0_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b) _
     col |= g & 0x1F;
     col <<= 5;
     col |= b & 0x1F;
-    addr = 0x9400;
+    addr = 0x9800;
     addr += pn << 5;
     addr += pi << 1;
     *((uint16_t*)addr) = col;
@@ -127,7 +127,7 @@ void vgs0_palette_set(uint8_t pn, uint8_t pi, uint8_t r, uint8_t g, uint8_t b) _
 void vgs0_palette_set_rgb555(uint8_t pn, uint8_t pi, uint16_t rgb555) __smallc
 {
     uint16_t addr;
-    addr = 0x9400;
+    addr = 0x9800;
     addr += pn << 5;
     addr += pi << 1;
     *((uint16_t*)addr) = rgb555;
@@ -154,6 +154,7 @@ __asm
     inc ix
     // value-> a
     ld a, (ix)
+    inc ix
     inc ix
     // dst -> bc
     ld c, (ix)
@@ -191,6 +192,268 @@ __asm
 __endasm;
 }
 
+uint8_t vgs0_collision_check(uint16_t addr) __z88dk_fastcall
+{
+__asm
+    in a, (#0xC4)
+    ld l, a
+    ret
+__endasm;
+}
+
+uint16_t vgs0_mul(uint8_t h, uint8_t l) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // l -> l
+    ld l, (ix)
+    inc ix
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x00
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+int16_t vgs0_smul(int8_t h, int8_t l) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // l -> l
+    ld l, (ix)
+    inc ix
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x40
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+uint16_t vgs0_div(uint8_t h, uint8_t l) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // l -> l
+    ld l, (ix)
+    inc ix
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x01
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+int16_t vgs0_sdiv(int8_t h, int8_t l) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // l -> l
+    ld l, (ix)
+    inc ix
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x41
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+uint16_t vgs0_mod(uint8_t h, uint8_t l) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // l -> l
+    ld l, (ix)
+    inc ix
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x02
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+uint16_t vgs0_mul16(uint16_t hl, uint8_t c) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // c -> c
+    ld c, (ix)
+    inc ix
+    inc ix
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x80
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+int16_t vgs0_smul16(int16_t hl, int8_t c) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // c -> c
+    ld c, (ix)
+    inc ix
+    inc ix
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0xC0
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+uint16_t vgs0_div16(uint16_t hl, uint8_t c) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // c -> c
+    ld c, (ix)
+    inc ix
+    inc ix
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x81
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+int16_t vgs0_sdiv16(int16_t hl, int8_t c) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // c -> c
+    ld c, (ix)
+    inc ix
+    inc ix
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0xC1
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+uint16_t vgs0_mod16(uint16_t hl, uint8_t c) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // c -> c
+    ld c, (ix)
+    inc ix
+    inc ix
+    // l -> l
+    ld l, (ix)
+    inc ix
+    // h -> h
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    ld a, #0x82
+    out (#0xC5), a
+    ret
+__endasm;
+}
+
+int8_t vgs0_sin(uint8_t a) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xC6), a
+    ld l, a
+    ret
+__endasm;
+}
+
+int8_t vgs0_cos(uint8_t a) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xC7), a
+    ld l, a
+    ret
+__endasm;
+}
+
+uint8_t vgs0_atan2(uint16_t hl) __z88dk_fastcall
+{
+__asm
+    in a, (#0xC8)
+    ld l, a
+    ret
+__endasm;
+}
+
+uint8_t vgs0_angle(uint8_t sx, uint8_t sy, uint8_t dx, uint8_t dy) __smallc
+{
+    uint16_t hl = sy - dy;
+    hl <<= 8;
+    hl += (uint8_t)(sx- dx);
+    return vgs0_atan2(hl) - 64;
+}
+
+
 void vgs0_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
 {
     x &= 0x1F;
@@ -217,6 +480,19 @@ void vgs0_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __small
         *((uint8_t*)addrA) = attr;
         addrC++;
         addrA++;
+        str++;
+    }
+}
+
+void vgs0_putstr(NameTable* namtbl, uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
+{
+    x &= 0x1F;
+    y &= 0x1F;
+    while (*str) {
+        namtbl->ptn[y][x] = *str;
+        namtbl->attr[y][x] = attr;
+        x++;
+        x &= 0x1F;
         str++;
     }
 }

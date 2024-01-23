@@ -6,3 +6,4 @@
 *.map
 lz4.c
 vgstone.c
+vgs0math.c

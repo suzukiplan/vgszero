@@ -15,19 +15,27 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [最大 2MB (8kb × 256banks)](#cpu-memory-map) のプログラムとデータ (※音声データを除く)
   - [RAM サイズ 16KB](#cpu-memory-map) (PV16相当!)
   - [セーブ機能](#save-data)に対応
-- VDP (映像処理)
+- VDP; VGS-Video (映像処理)
   - [VRAM](#vram-memory-map) サイズ 16KB (TMS9918A 相当!)
-  - 解像度: 240x192 ピクセル
+  - 解像度: 240x192 ピクセル (TMS9918A より少しだけ狭い!)
   - [16 個の 16 色パレット](#palette)に対応（32,768 色中 256 色を同時発色可能）
   - 8x8 ピクセルの[キャラクタパターン](#character-pattern-table)を最大 256 枚 (8KB) 定義可能
   - [BG](#bg), [FG](#fg) の[ネームテーブル](#name-table)サイズ: 32x32 (256x256 ピクセル)
   - [ハードウェアスクロール](#hardware-scroll)対応（[BG](#bg), [FG](#fg) 各）
   - 最大 256 枚の[スプライト](#sprite)を表示可能（水平上限なし）
   - [BG](#bg), [FG](#fg), [スプライト](#sprite) にそれぞれ異なる[キャラクタパターン](#character-pattern-table)を設定できる [Direct Pattern Mapping](#direct-pattern-mapping) 機能に対応（最大 768 枚のキャラクターパターンを同時に表示可能）
-- DMA (ダイレクトメモリアクセス)
+  - [スプライト](#sprite)に複数の[キャラクタパターン](#character-pattern-table)を並べて表示できるハードウェア機能（[OAM Pattern Size](#oam-pattern-size)）を提供
+  - [スプライト](#sprite)の [OAM](#oam) 毎に異なるバンクを指定できるハードウェア機能（[OAM Bank](#oam-bank)）を提供
+- DMA (Direct Memory Access)
   - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
   - [C言語の `memset` に相当する高速 DMA 転送機能を実装](#memset-dma)
   - [C言語の `memcpy` に相当する高速 DMA 転送機能を実装](#memcpy-dma)
+- HAGe (High-speed Accumulator for Game)
+  - [ハードウェア当たり判定機能を実装](#collision-detection)
+  - [ハードウェア乗算・除算・剰余算](#hardware-calculation)
+  - [ハードウェア sin テーブル](#hardware-sin-table)
+  - [ハードウェア cos テーブル](#hardware-cos-table)
+  - [ハードウェア atan2 テーブル](#hardware-atan2-table)
 - [BGM](#bgmdat)
   - VGS の MML で記述された BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
@@ -68,7 +76,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 - テレビなど（以下の条件のもの）
   - HDMI入力対応
   - リフレッシュレート60Hz
-  - 解像度 240x192 ピクセル以上
+  - 解像度 480x384 ピクセル以上
   - オーディオ出力対応
 
 > Amazon の商品リスト:
@@ -328,19 +336,19 @@ VGS-Zero 向けに開発されるゲームは、ゲームの利用者が **可�
 | 0x8400 ~ 0x87FF | 0x0400 ~ 0x07FF | [BG](#bg) [Attribute](#attribute) Table (32 x 32) |
 | 0x8800 ~ 0x8BFF | 0x0800 ~ 0x0BFF | [FG](#fg) [Name Table](#name-table) (32 x 32) |
 | 0x8C00 ~ 0x8FFF | 0x0C00 ~ 0x0FFF | [FG](#fg) [Attribute](#attribute) Table (32 x 32) |
-| 0x9000 ~ 0x93FF | 0x1000 ~ 0x13FF | [OAM](#oam); Object Attribute Memory (4 x 256) |
-| 0x9400 ~ 0x95FF | 0x1400 ~ 0x15FF | [Palette](#palette) Table (2 x 16 x 16) |
-| 0x9600          | 0x1600	        | Register #0: Vertical [Scanline Counter](#scanline-counter) (read only) |
-| 0x9601          | 0x1601          | Register #1: Horizontal [Scanline Counter](#scanline-counter) (read only) |
-| 0x9602          | 0x1602          | Register #2: [BG](#bg) [Scroll](#hardware-scroll) X |
-| 0x9603          | 0x1603          | Register #3: [BG](#bg) [Scroll](#hardware-scroll) Y |
-| 0x9604          | 0x1604          | Register #4: [FG](#fg) [Scroll](#hardware-scroll) X |
-| 0x9605          | 0x1605          | Register #5: [FG](#fg) [Scroll](#hardware-scroll) Y |
-| 0x9606          | 0x1606          | Register #6: IRQ scanline position (NOTE: 0 is disable) |
-| 0x9607          | 0x1607          | Register #7: [Status](#vdp-status) (read only) |
-| 0x9608          | 0x1608          | [BG](#bg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
-| 0x9609          | 0x1609          | [FG](#fg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
-| 0x960A          | 0x160A          | [スプライト](#sprite) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x9000 ~ 0x97FF | 0x1000 ~ 0x17FF | [OAM](#oam); Object Attribute Memory (8 x 256) |
+| 0x9800 ~ 0x99FF | 0x1800 ~ 0x19FF | [Palette](#palette) Table (2 x 16 x 16) |
+| 0x9F00          | 0x1F00	        | Register #0: Vertical [Scanline Counter](#scanline-counter) (read only) |
+| 0x9F01          | 0x1F01          | Register #1: Horizontal [Scanline Counter](#scanline-counter) (read only) |
+| 0x9F02          | 0x1F02          | Register #2: [BG](#bg) [Scroll](#hardware-scroll) X |
+| 0x9F03          | 0x1F03          | Register #3: [BG](#bg) [Scroll](#hardware-scroll) Y |
+| 0x9F04          | 0x1F04          | Register #4: [FG](#fg) [Scroll](#hardware-scroll) X |
+| 0x9F05          | 0x1F05          | Register #5: [FG](#fg) [Scroll](#hardware-scroll) Y |
+| 0x9F06          | 0x1F06          | Register #6: IRQ scanline position (NOTE: 0 is disable) |
+| 0x9F07          | 0x1F07          | Register #7: [Status](#vdp-status) (read only) |
+| 0x9F08          | 0x1F08          | [BG](#bg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x9F09          | 0x1F09          | [FG](#fg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x9F0A          | 0x1F0A          | [スプライト](#sprite) の [Direct Pattern Maaping](#direct-pattern-mapping) |
 | 0xA000 ~ $BFFF  | 0x2000 ~ 0x3FFF | [Character Pattern Table](#character-pattern-table) (32 x 256) |
 
 VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへのロード・ストア（LD命令等）で簡単に実行できます。
@@ -371,8 +379,9 @@ VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへ�
 - [BG](#bg) の前面 & [FG](#fg) の背面 に表示されます
 - ゲームのキャラクタ表示に利用することを想定しています
 - 最大 256 枚を同時に表示できます
-- [OAM](#oam) に表示座標、[キャラクタ番号](#character-pattern-table)、[属性](#attribute)を指定することで表示できます
+- [OAM](#oam) に表示座標、[キャラクタ番号](#character-pattern-table)、[属性](#attribute)、サイズを指定することで表示できます
 - [属性](#attribute)の指定で描画を非表示（hidden）にすることができ、デフォルトは非表示になっています
+- サイズはデフォルトは 1x1 パターン（8x8ピクセル）ですが最大で 16x16 パターン（128x128ピクセル）のものを1枚のスプライトとして表示できます（詳細は [OAM](#oam) の `widthMinus1` と `heightMinus1` の解説を参照）
 
 #### (Name Table)
 
@@ -400,7 +409,13 @@ VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへ�
 
 #### (OAM)
 
-OAM はスプライトの表示座標、[キャラクタパターン](#character-pattern-table)番号、[属性](#attribute) の要素を持つ構造体です。
+OAM は次の要素を持つ構造体です。
+
+1. スプライトの表示座標
+2. [キャラクタパターン](#character-pattern-table)番号
+3. [属性](#attribute)
+4. [サイズ](#oam-pattern-size)
+5. [OAM別バンク番号](#oam-bank)
 
 ```c
 struct OAM {
@@ -408,23 +423,52 @@ struct OAM {
     unsigned char x;
     unsigned char pattern;
     unsigned char attribute;
+    unsigned char heightMinus1;
+    unsigned char widthMinus1;
+    unsigned char bank;
+    unsigned char reserved;
 } oam[256];
 ```
 
 VGS-Zero では最大 256 枚のスプライトを同時に表示でき、水平方向の表示数に上限がありません。
 
+#### (OAM Pattern Size)
+
+[OAM](#oam) の `widthMinus1` と `heightMinus1` に 0 〜 15 の範囲で指定でき、1 以上の値を設定することで複数の[キャラクタパターン](#character-pattern-table)を並べて表示し、この時の[キャラクタパターン](#character-pattern-table)番号は、水平方向が +1、垂直方向は +16 (+0x10) づつ加算されます。
+
+例えば `widthMinus1` が 2 で `heightMinus` が 3 の場合、下表の[キャラクタパターン](#character-pattern-table)グループを 1 枚のスプライトとして表示します。
+
+|`\`|0|1|2|
+|:-:|:-:|:-:|:-:|
+|0|pattern+0x00|pattern+0x01|pattern+0x02|
+|1|pattern+0x10|pattern+0x11|pattern+0x12|
+|2|pattern+0x20|pattern+0x21|pattern+0x22|
+|3|pattern+0x30|pattern+0x31|pattern+0x32|
+
+#### (OAM Bank)
+
+[OAM](#oam) の `bank` が 0 の場合、スプライトのキャラクタパターンには VRAM 上の[キャラクタパターン](#character-pattern-table)か、[Direct Pattern Mapping](#direct-pattern-mapping) で指定されたバンクのものが用いられますが、1 以上の値が指定されている場合、その指定値のバンク番号がその OAM のキャラクタパターンになります。
+
+設定の優先度:
+
+1. OAM Bank **(最優先)**
+2. [Direct Pattern Mapping](#direct-pattern-mapping)
+3. VRAM 上の[キャラクタパターン](#character-pattern-table) **(デフォルト)**
+
+OAM Bank を用いることで、OAM 毎に異なるキャラクタパターンを使用できます。
+
 #### (Scanline Counter)
 
 - スキャンラインカウンタは、VDP のピクセルレンダリング位置を特定することができる読み取り専用の VDP レジスタです
-- `0x9600` が垂直方向で `0x9601` が水平方向です
+- `0x9F00` が垂直方向で `0x9F01` が水平方向です
 - 垂直方向の値を待機することでラスター[スクロール](#hardware-scroll)等の処理を **割り込み無し** で実装することができます
 - 水平方向は高速に切り替わるため使い所は無いかもしれません
 
 #### (Hardware Scroll)
 
-- [BG](#bg) は `0x9602` に X 座標, `0x9603` に Y 座標の描画起点座標を指定することができます
-- [FG](#fg) は `0x9604` に X 座標, `0x9605` に Y 座標の描画起点座標を指定することができます
-- `0x9602` ~ `0x9605` を読み取ることで現在のスクロール位置を取得することもできます
+- [BG](#bg) は `0x9F02` に X 座標, `0x9F03` に Y 座標の描画起点座標を指定することができます
+- [FG](#fg) は `0x9F04` に X 座標, `0x9F05` に Y 座標の描画起点座標を指定することができます
+- `0x9F02` ~ `0x9F05` を読み取ることで現在のスクロール位置を取得することもできます
 
 #### (VDP Status)
 
@@ -461,16 +505,18 @@ NOTE: Status register always reset after read.
 - FGとスプライトの場合、色番号0は常に透明色です
 - 使用するパレット番号は[属性](#attribute)に指定します
 
+Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)、[FG](#fg)、[スプライト](#sprite) の全てを [Direct Pattern Mapping](#direct-pattern-mapping) にすることで 8KB の RAM 相当の領域とすることができます。更に、この領域は DMA による高速なバンクロードにも対応しているため、シューティングゲームや RPG などの広大なマップデータ（1 チップ 1 バイトなら最大で 128x128 チップ!!）の展開先領域として最適かもしれません。
+
 #### (Direct Pattern Mapping)
 
-通常、[BG](#bg)、[FG](#fg)、[スプライト](#sprite)は共通の[キャラクターパターンテーブル](#character-pattern-table)を参照しますが、0x9608、0x9609、0x960A に **0以外** の値を書き込むことで、その値に対応する ROM バンクをそれぞれの[キャラクターパターンテーブル](#character-pattern-table)とすることができる DPM; Direct Pattern Mapping 機能を利用することができます。
+通常、[BG](#bg)、[FG](#fg)、[スプライト](#sprite)は共通の[キャラクターパターンテーブル](#character-pattern-table)を参照しますが、0x9F08、0x9F09、0x9F0A に **0以外** の値を書き込むことで、その値に対応する ROM バンクをそれぞれの[キャラクターパターンテーブル](#character-pattern-table)とすることができる DPM; Direct Pattern Mapping 機能を利用することができます。
 
-- 0x9608: [BG](#bg) の DPM
-- 0x9609: [FG](#fg) の DPM
-- 0x960A: [スプライト](#sprite) の DPM
+- 0x9F08: [BG](#bg) の DPM
+- 0x9F09: [FG](#fg) の DPM
+- 0x9F0A: [スプライト](#sprite) の DPM
 
 ```z80
-LD HL, 0x9608
+LD HL, 0x9F08
 LD (HL), 0x10   # BG = Bank 16
 INC HL
 LD (HL), 0x11   # FG = Bank 17
@@ -492,6 +538,11 @@ LD (HL), 0x12   # Sprite = Bank 18
 |   0xC0    |  -  |  o  | [ROM to Character DMA](#rom-to-character-dma) |
 |   0xC2    |  -  |  o  | [memset 相当の DMA](#memset-dma) |
 |   0xC3    |  -  |  o  | [memcpy 相当の DMA](#memcpy-dma) |
+|   0xC4    |  o  |  -  | [当たり判定](#collision-detection) |
+|   0xC5    |  -  |  o  | [乗算・除算・剰余算](hardware-calculation) |
+|   0xC6    |  -  |  o  | [ハードウェア sin テーブル](#hardware-sin-table) |
+|   0xC7    |  -  |  o  | [ハードウェア cos テーブル](#hardware-cos-table) |
+|   0xC8    |  o  |  -  | [ハードウェア atan2 テーブル](#hardware-atan2-table) |
 |   0xDA    |  o  |  o  | [データのセーブ・ロード](#save-data) |
 |   0xE0    |  -  |  o  | BGM を[再生](#play-bgm) |
 |   0xE1    |  -  |  o  | BGM を[中断](#pause-bgm)、[再開](#resume-bgm)、[フェードアウト](#fadeout-bgm) |
@@ -544,6 +595,74 @@ LD BC, 0xC000   # 転送先アドレス (RAM)
 LD DE, 0x6000   # 転送元アドレス (ROM Bank 3)
 LD HL, 0x2000   # 転送バイト数 (8KB)
 OUT (0xC3), A   # memcpy (※書き込んだ値は無視されるので何でもOK)
+```
+
+#### (Collision Detection)
+
+以下の 8 bytes の構造体が格納されたアドレスを HL に指定して 0xC4 を IN することで当たり判定ができます。
+
+```c
+struct rect {
+    uint8_t x;      // X座標
+    uint8_t y;      // Y座標
+    uint8_t width;  // 幅
+    uint8_t height; // 高さ
+} chr[2];           // それらを 2 キャラクタ分（8bytes）
+```
+
+```z80
+LD HL, 0xC000   # 構造体の先頭アドレス
+IN A, (0xC4)    # チェック実行
+JNZ DETECT_HIT  # 衝突を検出
+JZ NOT_HIT      # 非衝突
+```
+
+#### (Hardware Calculation)
+
+0xC5 の OUT により Z80 が苦手とする乗算、除算、剰余算を高速に実行できます。
+
+```
+# 8bit 演算命令
+OUT (0xC5), 0x00 ... HL = H * L
+OUT (0xC5), 0x01 ... HL = H / L
+OUT (0xC5), 0x02 ... HL = H % L
+
+# 8bit 演算命令 (符号付き)
+OUT (0xC5), 0x40 ... HL = H * L
+OUT (0xC5), 0x41 ... HL = H / L
+
+# 16bit 演算命令
+OUT (0xC5), 0x80 ... HL = HL * C (※HL: 演算結果 mod 65536)
+OUT (0xC5), 0x81 ... HL = HL / C
+OUT (0xC5), 0x82 ... HL = HL % C
+
+# 16bit 演算命令 (符号付き)
+OUT (0xC5), 0xC0 ... HL = HL * C (※HL: 演算結果 mod 65536)
+OUT (0xC5), 0xC1 ... HL = HL / C
+
+※ゼロ除算が実行された場合の HL は 0xFFFF
+```
+
+#### (Hardware SIN table)
+
+```z80
+LD A, 123      # A に求めるテーブル要素番号を指定
+OUT (0xC6), A  # A = sin(A × π ÷ 128.0)
+```
+
+#### (Hardware COS table)
+
+```z80
+LD A, 123      # A に求めるテーブル要素番号を指定
+OUT (0xC7), A  # A = cos(A × π ÷ 128.0)
+```
+
+#### (Hardware ATAN2 table)
+
+```z80
+LD H, <<<y1 - y2>>>   # H に Y 座標の差を設定
+LD L, <<<x1 - x2>>>   # L に X 座標の差を設定
+IN A, (0xC8)          # A に (x1, y1) と (x2, y2) の角度を求める
 ```
 
 #### (Save Data)
@@ -679,7 +798,7 @@ README.txtの記載凡例:
 ・テレビなど（以下の条件のもの）
   - HDMI入力対応
   - リフレッシュレート60Hz
-  - 解像度 240x192 ピクセル以上
+  - 解像度 480x384 ピクセル以上
   - オーディオ出力対応
 
 Amazon の商品リスト:
@@ -723,3 +842,163 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 > VGS-Zero Library for Z80 のみ[game.pkg](#gamepkg)内に組み込まれる場合がありますが、その他の OSS はすべてカーネル（VGS-Zero本体）側で利用しているものなので、開発したゲームのライセンスに影響しません。
 >
 > ただし、再配布時に同梱する場合は [./image/README](./image/README) に記載されている事項を遵守する必要がありますので、内容を注意深くご確認ください。
+
+## Design Concept
+
+後々、「これはどういう意図で作ったものなのか」をついつい忘れがちなので、設計思想を備忘録として記しておきます。
+
+### Kernel Design Concept
+
+ラズパイ全般（※Picoを除く）は Linux で動かすのが一般的ですが、VGS-Zero は **OS 無しのベアメタル環境** で動作するので、レインボースクリーン（VideoCoreIVの初期化処理）の後、わずか2〜3秒でゲームが起動します。
+
+GPi Case や Rockchip や AllWinner などの Linux を用いたよくあるエミュレータゲーム機とは異なり、永い OS のブート待ちに暇を持て余したり、SD カード破損のリスクに怯えることなくサクッとゲームをプレイできます。
+
+些細なことかもしれませんが、どうやら私にとってそれはかなり重要な事のようです。
+
+_3秒間で仕度しな！（超絶アスペ？）_
+
+これは、私が超絶アスペという訳ではなく、ポケットから取り出して瞬時にスリープモードから復帰してプレイアブルな状態になるデバイス（スマートフォン）に慣れきってしまった現代人にとって死活問題なのかもしれません。
+
+私は GPi Case や中華ゲーム機（RG350など）といったガジェットが結構好きなので何台か持っているのですが、結局のところ **Linux + SD カードという組み合わせの悪さ** に起因する諸問題がダルくなって遊ばなくなる傾向が見受けられます。
+
+起動速度だけが問題であれば気にならないという、私と違って人間ができた方も多くいらっしゃると思われますが「媒体の耐久性の低さ」は問題だと思う方も多いのではないでしょうか。
+
+一般的な Linux カーネルは OS を起動するだけでも無数のファイル入出力を行うため、入出力（特に出力）の耐久性が極めて低い SD カードで Linux を動かすと、電源断によるデータ破損やファイルシステム不整合などに陥りやすく、メディア交換や OS 再インストールなどの面倒な作業がカジュアルに発生します。
+
+そもそも、Linux カーネルは SD カードにインストールして動かすことを想定した設計ではないと思われます。_（参考までにリーナス・トーバルズが Linux の開発を始めたのは 1991 年で、SD カードの規格が制定されたのは 1999 年です）_
+
+一方、VGS-Zero は Linux とは異なる [Circle](https://github.com/rsta2/circle) ベースの独自カーネルです。
+
+Linux カーネルはサーバ用途、デスクトップ用途、プログラミング用途、ゲーム用途など「何にでも使える汎用性」がありますが、VGS-Zero カーネルは **ゲーム（[game.pkg](#gamepkg)）しか** 動かすことができません。
+
+VGS-Zero カーネルが SD カードへの I/O を行うのは、ブート時の game.pkg の読み込み（read only）と、save.dat（セーブデータ）のロードとセーブに限られています。
+
+game.pkg のサイズは最大 16 MB (128メガビット) です。
+
+「100メガショック」で有名なあの NEO-GEO を上回る巨大なサイズですが、RaspberryPi Zero 2W には無限に等しいサイズの RAM（512MB）が搭載されているので、ブート時に全て読み込んで記憶することが可能です。
+
+また、VGS-Zero のセーブデータは最大でも 16KB と極めて小さく、更にデータの中身に更新が無いセーブデータの保存リクエストはカーネルが write skip することで、書き込み耐久性が極めて弱い SD カード媒体の寿命を最大限に延ばす「SD カードに優しいデザイン」になっています。
+
+VGS-Zero 独自カーネルは RaspberryPi Zero 2W のクアッドコア（4 コア）の CPU リソースのほぼ全てを余すこと無く使用して Z80、VDP、VGS（音声システム）のエミュレーションによりゲームを動かします。
+
+ゲームを動かすのにエミュレーション技術を採用する目的は、**VGS-Zero カーネルとゲームのコードバイナリの分離** です。
+
+Windowsなら.exe、Linux なら elf に相当するものが VGS-Zero の [game.pkg](#gamepkg) です。
+
+VGS-Zero カーネルは、GPL の OSS などもゴリゴリ使っているため、実行形式ファイルをカーネルから分離しなければゲーム側のライセンスを自由に設定できない不自由が生じます。
+
+そのような不自由は避けたかったため、[game.pkg](#gamepkg) をカーネルから分離しました。
+
+なお、それだけの理由なら .exe や elf などと同じようにネイティブコード（ARMv8）の実行形式ファイルにした方が性能面でのメリットが大きいです。
+
+しかし、ゲームのコードが ARMv8 に依存すると将来的に互換性の問題が発生することになるので、VGS-Zero では LLVM の代用として Z80 を採用しました。
+
+幅広いプログラミングを行う上で Z80 では不便なところも多いかもしれませんが、ゲームのプログラミングであれば Z80 で必要十分だと私は考えています。
+
+これは、若干暴論かもしれません。
+
+ただし、少なくとも私が創りたいゲームに関しては Z80 で必要十分だという点については断言できるので、[色々な都合の良い Z80 エミュレータ](https://github.com/suzukiplan/z80) も自作した形です。
+
+### Hardware Design Concept
+
+VGS-Zero には 16MHz の高速な Z80 CPU（エミュレータ）が搭載されていて、更に 16KB の巨大な RAM 領域の全てを **ゲームプログラムで専有** することができます。
+
+実際に Z80 CPU のコンピュータでプログラミングした経験があれば、16KB は必ずしも「巨大なサイズ」ではないと感じるかもしれません。
+
+> 例えば MSX2 なら最低でも 64KB の RAM が搭載されていますし、PC-8801 のメイン RAM も 64KB です。
+
+VGS-Zero は 16KB の RAM でも必要十分になるようにハードウェア全体での最適化設計がされているため、実際にプログラムを組んでみると大きすぎて持て余す筈です。
+
+> 参考までに、後述の Battle Marine が使用している RAM サイズは（スタック領域と合算しても）2KB 以下です。これは、メモリ削減に苦労した結果ではなく、むしろ（何も考えずに）かなり冗長に作った結果が 2KB でした。つまり、その 8 倍の 16KB もあれば、プログラマが「メモリが足りない!!」と嘆くことはほぼ無いと想定しています。
+
+#### (Split Sound System from game core)
+
+Z80 時代の一般的なゲームコンソールでは、AY-3-8910 (PSG 音源) や FM 音源などのチップチューン音源で音楽や効果音を再生するため、チップチューン音源の制御プログラム（音源ドライバ）に一定量の CPU リソースを割り当てる必要があり、また音楽や効果音のシーケンスデータやシーケンス制御処理用に一定量の RAM リソースを割り当てる必要があります。
+
+VGS-Zero には VGS (Video Game Sound) という SUZUKIPLAN が開発した独自のチップチューン音源を搭載していますが、この音源ドライバ・プログラムは RaspberryPi Zero 2W のネイティブ・コード (ARMv8) で動作し、音楽（MML）と効果音（.wav）のデータもネイティブ RAM (512MB) 側で管理しているため、ゲーム側（Z80）の CPU と RAM を一切専有する必要がありません。
+
+また、開発難度が高い音源ドライバの開発リソース（予算）をゼロに出来る点も大きいかもしれません。
+
+> 音源ドライバを開発するのはそこそこ大変なので、PC-9801 版の東方 Project（旧作）でも [PMD](http://www5.airnet.ne.jp/kajapon/tool.html) という音源ドライバが使われています。PMD は商用のゲームソフトでも使われているものが多くあります。PC-9801 では PMD 以外にも [FMP](https://www.vector.co.jp/soft/dos/art/se003498.html) やツクールシリーズの [MUSIC.COM](https://wangzhi.hatenablog.jp/entry/2012/01/28/233554) なども有名だったかもしれません。
+
+#### (VDP specialized for Z80)
+
+VGS-Zero は、VDP（Video Display Processor）を用いてグラフィック出力をする古典的なテクノロジーを採用したゲーム機です。
+
+そのため、MSX、ファミコン、SG-1000、セガ・マスターシステム、ゲームギア、メガドライブ、スーパーファミコン、X68000 あたりの VDP (PPU) を搭載したコンピュータでゲーム開発経験があるプログラマであれば、ほぼ学習無し（[VRAM メモリマップ](#vram-memory-map)を参照するだけ）でプログラミングできるものと思われます。
+
+フルアセンブリ言語で記述する必要が無い分、それらのコンピュータよりも更に難度が低い筈です。
+
+また、一般的な VDP では 2 回の OUT ポート出力で VRAM アドレスをセットしてから I/O で VRAM の入出力をする必要がありますが、VGS-Zero の VDP（VGS-Video）は VRAM が Z80 から見えるメモリ上（0x8000〜0xBFFF）にマッピング（mmap）されているので、I/O 命令無しで VRAM へのアクセスができます。
+
+そのため、仮にフルアセンブリ言語で組むにしても MSX やセガ・マスターシステムよりも簡単にプログラミングができます。
+
+VGS-Video では、BG（背景）、FG（前景）、スプライトの3レイヤーを扱うことができ、BG/FGを独立してハードウェアスクロールすることができ、スプライトは256個を同時に表示でき、水平上限がありません。（これは Z80 全盛期の時代のハードウェアでは実現が難しかった）
+
+スキャンライン位置は、セガ・マスターシステム、ゲームギア、メガドライブなどと同様にVカウンタで取得できるため、ラスタースクロールの為に IRQ を実装する必要がありません。
+
+一応 IRQ を使うこともできるようになっていますが、IRQ 一切無しでプログラミング可能なハード仕様にしました。
+
+VGS-Video の弱点としては、スーパーファミコンやメガ CD の VDP のような回転、拡大・縮小、半透明には対応していない点かと思われます。
+
+また、ポリゴンは使えません。
+
+**メガドライブや X68000 相当の VDP をシンプルに強化したイメージ** でハードウェア仕様を設計しています。
+
+#### (Hardware Accumulator for Z80)
+
+Z80 でゲームプログラミングをすると、2のn乗を除く乗算、除算、剰余算やアークタンジェント（角度を求めるために必要な三角関数）の計算処理がボトルネックになりがちですが、それらの計算処理を高速に実行できる HAGe; `H`igh-speed `A`ccumulator for `G`am`e` と呼ばれるゲーム向けの演算用途に特化したハードウェアを搭載しています。
+
+これらの演算はゲームで必要になるシーンが多いので、ゲームを高速に動かす上では非常に有用です。
+
+また、C言語の `memset`, `memcpy`, `memmove` に相当する DMA ハードウェアも搭載しているので、メモリ間のブロック転送が（LDIRよりも）かなり高速に実行できます。
+
+これらの特徴により **「C言語のみ」でもメガドライブの商用ゲーム相当のゲームが開発可能** にすることがゲームハードウェアとしての VGS-Zero の基本コンセプトです。
+
+### Programming Language Concept
+
+一般的な Z80 を搭載しているゲーム機（セガ・マスターシステム、ゲームギアなど）やパソコン（MSX、PC-88など）でクオリティの高い商用ゲーム開発をするにはフルアセンブリ言語でのプログラミングがほぼ必須です。
+
+もちろん、性能がそれほど要求されないタイプのゲーム（ADVやSLGなど）であれば、商用ゲームでもC言語やBASICで作られたものもあったかもしれませんが、Z80全盛期（1980年代〜1990年代前半ごろ）のゲームの花形はアクションゲームで、大量のキャラクタを滑らかに動かす必要があります。
+
+大量のキャラクタを滑らかに動かそうとすると、BASICはもちろんC言語でも結構厳しくなります。
+
+> 私は VGS-Zero 以外にも、Z80A 相当（約4MHz）の CPU を搭載した [FCS80](https://github.com/suzukiplan/fcs80) というゲーム機も別途開発しましたが、実際に FCS80 で 256 個のスプライトを滑らかに動かす example を実装してみたところ、[アセンブリ言語のみ](https://github.com/suzukiplan/fcs80/tree/master/example/sprite)で書けば滑らかに動きましたが、[C言語](https://github.com/suzukiplan/fcs80/tree/master/example/sprite-sdcc)ではスプライト数を64個まで減らす必要がありました。（Cコンパイラの最適化がイマイチという説もあります）
+
+ですが、__VGS-Zeroなら[C言語](https://github.com/suzukiplan/vgszero/tree/master/example/05_sprite256)で256個のスプライトを滑らかに動かせます!!__
+
+商用ゲームでもC言語が使われ始めたのは16ビットCPU以降（パソコンならPC-9801やX68000など）かと思われます。
+
+> _私はその時代の商用ゲームを作ったことが無いので実際のところは分かりませんが、16ビットの時代はフルアセンブリ言語で作られたプログラムが神格化されつつあり、32ビット時代になると完全なオーパーツ（幻想入り）になったという印象です。_
+
+ですが、VGS-Zeroのスペック（16MHz）なら 8 ビット CPU でもC言語で十分商用クオリティのゲーム開発が可能だと考えています。
+
+ちなみに Z80 を 16MHz にした理由は、ターゲットデバイス（RaspberryPi Zero 2W）のベアメタル環境（OSを用いずCPUとRAMを完全専有できる環境）のシングルコアで Z80 エミュレータ（自作）を動かす限界性能が 16MHz だったためです。
+
+https://note.com/suzukiplan/n/nfc0106624c1f
+
+> ターゲットデバイスを RaspberryPi 4 にすれば、Zero2 の 1.5 倍ぐらいの速度なので 24MHz ぐらいでもイケたのですが、4は結構高い（1万円ぐらいする）ので、約 3,000 円ぐらいでお手軽に購入できる Zero2 を採用しました。
+
+本当はもう少しだけ速くしたかったですが...
+
+_（具体的には 80486 ぐらいの性能が欲しかった）_
+
+実現できるかは分かりませんが、VGS-Zero の SDK を 任天堂Switch に移植する計画があり、任天堂Switch なら RaspberryPi Zero 2W よりも確実に性能が良い筈なので、任天堂Switch 版 VGS-Zero SDK では Z80 のクロックレートをもっと引き上げるかもしれません。
+
+### Marketing Concept
+
+VGS-Zero は一応「ゲーム機」と名乗ってますが、既存のゲーム機に競合するつもりは全く無くて、仮に何らかのマーケットを狙うとすれば **新しいゲームを開発する上でのテストプラットフォーム** のようなポジションです。
+
+もちろん、Unreal Engine などのガチのゲームエンジンと競合するつもりはなくて、ハイクオリティな（AAAタイトル等の）ゲーム開発なら VGS-Zero よりも Unreal Engine 等の方が優れているのは明白です。
+
+ですが、開発予算はかなり抑える事ができます。
+
+具体的には、**ゲーム開発を専門とする企業が本気で開発しても** スーパーファミコンやメガドライブの頃のソフト（1タイトル1,000〜5,000万円ぐらい）ぐらいの予算感でゲーム開発＆販売が可能です。
+
+BGM（VGS）の仕様のクセが強めですが、サウンド系のプログラミングが不要というメリットがあるので、サウンドドライバのプログラミングが必要だったスーファミやメガドラの開発費よりも安く抑えられるかもしれません。_（BGM のクオリティ面ではVGSの「BGMだけ」でもヒットアプリを創ることができたので問題無いかなと）_
+
+先ずは 3,000 万円前後のお手頃な予算で VGS-Zero 向けにゲームをサクッと作って販売し、そこでヒットしたタイトル（ドラクエなりFFなりのようなタイトル）が創れたら Switch や PlayStation 向けにしっかりとした予算（うん億円？）を組み、Unreal Engine なりを使ってゲームを開発すれば、投資効率良くハイクオリティな面白いゲームを世に出せるのではないか？...と、思ったり思わなかったりしています。
+
+実のところ私は AAA タイトルのようなものには全然興味が無くて、ゲームはPCエンジンやメガドライブぐらいの頃のものが混沌としていて面白かったと思っている節もあります。
+
+私が VGS; Video Game System で創りたいものは **「私にとって最もビデオゲームが創作しやすいプラットフォームの創出」** の一点のみで、この点に限れば VGS の初期設計をした 10 年以上前からずっと揺らいでいません。

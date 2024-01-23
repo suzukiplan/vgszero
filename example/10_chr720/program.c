@@ -31,8 +31,8 @@ void main(void)
     for (y = 128 + 8; y < 200; y += 8) {
         uint8_t x2 = 0x80;
         for (x = 0; x < 128; x += 8, x2 += 8) {
-            vgs0_oam_set(n1, x, y, 0x80, n1);
-            vgs0_oam_set(n2, x2, y, 0x80, n2);
+            vgs0_oam_set(n1, x, y, 0x80, n1, 0, 0);
+            vgs0_oam_set(n2, x2, y, 0x80, n2, 0, 0);
             n1 += 1;
             n2 += 1;
         }

@@ -18,51 +18,50 @@ static const uint8_t joypad[10 * 23] = {
     0x70, 0x84, 0x77, 0x77, 0x77, 0x77, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x71, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x84,
     0x94, 0x95, 0x96, 0x77, 0x97, 0x98, 0x99, 0x9A, 0x9B, 0x9B, 0x9C, 0x9D, 0x9B, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7,
     0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAD, 0xAE, 0xAF, 0xAF, 0xB0, 0xB1, 0xAF, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB,
-    0xBC, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBE
-};
+    0xBC, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBD, 0xBE};
 
 // カーソルのスプライト初期化
 inline void set_sprite_cursor(int x, int y)
 {
-    vgs0_oam_set(GV->n, x + 36, y + 36, 0x00, 0x01);
+    vgs0_oam_set(GV->n, x + 36, y + 36, 0x00, 0x01, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36 + 8, y + 36, 0x00, 0x02);
+    vgs0_oam_set(GV->n, x + 36 + 8, y + 36, 0x00, 0x02, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36, y + 36 + 8, 0x00, 0x03);
+    vgs0_oam_set(GV->n, x + 36, y + 36 + 8, 0x00, 0x03, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36 + 8, y + 36 + 8, 0x00, 0x04);
+    vgs0_oam_set(GV->n, x + 36 + 8, y + 36 + 8, 0x00, 0x04, 0, 0);
     GV->n += 1;
 }
 
 // SELECT/STARTのスプライト初期化
 inline void set_sprite_ctrl(int x, int y)
 {
-    vgs0_oam_set(GV->n, x + 36, y + 36, 0x00, 0x05);
+    vgs0_oam_set(GV->n, x + 36, y + 36, 0x00, 0x05, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36 + 8, y + 36, 0x00, 0x06);
+    vgs0_oam_set(GV->n, x + 36 + 8, y + 36, 0x00, 0x06, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36 + 16, y + 36, 0x00, 0x07);
+    vgs0_oam_set(GV->n, x + 36 + 16, y + 36, 0x00, 0x07, 0, 0);
     GV->n += 1;
 }
 
 // A/Bのスプライト初期化
 inline void set_sprite_button(int x, int y)
 {
-    vgs0_oam_set(GV->n, x + 36, y + 36, 0x00, 0xC0);
+    vgs0_oam_set(GV->n, x + 36, y + 36, 0x00, 0xC0, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36 + 8, y + 36, 0x00, 0xC1);
+    vgs0_oam_set(GV->n, x + 36 + 8, y + 36, 0x00, 0xC1, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36 + 16, y + 36, 0x00, 0xC2);
+    vgs0_oam_set(GV->n, x + 36 + 16, y + 36, 0x00, 0xC2, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36, y + 36 + 8, 0x00, 0xD0);
+    vgs0_oam_set(GV->n, x + 36, y + 36 + 8, 0x00, 0xD0, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36 + 8, y + 36 + 8, 0x00, 0xD1);
+    vgs0_oam_set(GV->n, x + 36 + 8, y + 36 + 8, 0x00, 0xD1, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36 + 16, y + 36 + 8, 0x00, 0xD2);
+    vgs0_oam_set(GV->n, x + 36 + 16, y + 36 + 8, 0x00, 0xD2, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36, y + 36 + 16, 0x00, 0xE0);
+    vgs0_oam_set(GV->n, x + 36, y + 36 + 16, 0x00, 0xE0, 0, 0);
     GV->n += 1;
-    vgs0_oam_set(GV->n, x + 36 + 8, y + 36 + 16, 0x00, 0xE1);
+    vgs0_oam_set(GV->n, x + 36 + 8, y + 36 + 16, 0x00, 0xE1, 0, 0);
     GV->n += 1;
 }
 
@@ -101,12 +100,12 @@ void main(void)
 
     // スプライト準備
     GV->n = 0;
-    set_sprite_cursor(24, 32); // 上カーソル (0~3)
-    set_sprite_cursor(24, 56); // 下カーソル (4~7)
-    set_sprite_cursor(12, 44); // 左カーソル (8~11)
-    set_sprite_cursor(36, 44); // 右カーソル (12~15)
-    set_sprite_ctrl(60, 61); // SELECT (16~18)
-    set_sprite_ctrl(88, 61); // START (19~21)
+    set_sprite_cursor(24, 32);  // 上カーソル (0~3)
+    set_sprite_cursor(24, 56);  // 下カーソル (4~7)
+    set_sprite_cursor(12, 44);  // 左カーソル (8~11)
+    set_sprite_cursor(36, 44);  // 右カーソル (12~15)
+    set_sprite_ctrl(60, 61);    // SELECT (16~18)
+    set_sprite_ctrl(88, 61);    // START (19~21)
     set_sprite_button(124, 50); // B (22~29)
     set_sprite_button(150, 50); // B (30~37)
 

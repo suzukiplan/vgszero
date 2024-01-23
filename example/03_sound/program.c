@@ -18,7 +18,7 @@ void main(void)
     vgs0_bg_putstr(8, 13, 0x80, "PAUSE");
     vgs0_bg_putstr(8, 15, 0x80, "RESUME");
     vgs0_bg_putstr(8, 17, 0x80, "FADEOUT");
-    vgs0_oam_set(0, 6 * 8, 7 * 8, 0x80, '>');
+    vgs0_oam_set(0, 6 * 8, 7 * 8, 0x80, '>', 0, 0);
 
     // ボタン入力制御変数を準備
     uint8_t pushing = 0;

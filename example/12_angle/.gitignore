@@ -1,0 +1,13 @@
+*.rel
+*.chr
+*.lst
+*.sym
+*.asm
+*.ihx
+*.map
+*.bin
+*.lk
+*.noi
+*.rom
+bgm.bin
+save.dat

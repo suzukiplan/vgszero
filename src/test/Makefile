@@ -22,6 +22,7 @@ HEADER_FILES += ../core/*.h
 OBJECTS = vgs0test.o
 OBJECTS += lz4.o
 OBJECTS += vgstone.o
+OBJECTS += vgs0math.o
 
 all: vgs0test
 
@@ -39,4 +40,7 @@ lz4.o: ../core/lz4.c $(HEADER_FILES) ./Makefile
 	$(CC) -c $<
 
 vgstone.o: ../core/vgstone.c $(HEADER_FILES) ./Makefile
+	$(CC) -c $<
+
+vgs0math.o: ../core/vgs0math.c $(HEADER_FILES) ./Makefile
 	$(CC) -c $<

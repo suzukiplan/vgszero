@@ -11,6 +11,12 @@
 #include "vgsdecv.hpp"
 #include "z80.hpp"
 
+extern "C" {
+extern signed char vgs0_sin_table[256];
+extern signed char vgs0_cos_table[256];
+extern unsigned char vgs0_atan2_table[256][256];
+};
+
 class VGS0
 {
   private:
@@ -183,8 +189,12 @@ class VGS0
 
     void tick(unsigned char pad)
     {
-        this->ctx.pad = 0xFF ^ pad;
-        this->cpu->execute(0x7FFFFFFF);
+        if ((pad & VGS0_RESET_KEY) == VGS0_RESET_KEY) {
+            this->reset();
+        } else {
+            this->ctx.pad = 0xFF ^ pad;
+            this->cpu->execute(0x7FFFFFFF);
+        }
     }
 
     unsigned short* getDisplay() { return this->vdp->display; }
@@ -304,6 +314,23 @@ class VGS0
             case 0xB1: return this->ctx.romBank[1];
             case 0xB2: return this->ctx.romBank[2];
             case 0xB3: return this->ctx.romBank[3];
+            case 0xC4: {
+                unsigned short addr = this->cpu->reg.pair.H;
+                addr <<= 8;
+                addr |= this->cpu->reg.pair.L;
+                int x1 = this->readMemory(addr++);
+                int y1 = this->readMemory(addr++);
+                int w1 = this->readMemory(addr++);
+                int h1 = this->readMemory(addr++);
+                int x2 = this->readMemory(addr++);
+                int y2 = this->readMemory(addr++);
+                int w2 = this->readMemory(addr++);
+                int h2 = this->readMemory(addr);
+                return y1 < y2 + h2 && y2 < y1 + h1 && x1 < x2 + w2 && x2 < x1 + w1 ? 0x01 : 0x00;
+            }
+            case 0xC8: {
+                return vgs0_atan2_table[this->cpu->reg.pair.H][this->cpu->reg.pair.L];
+            }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
                 unsigned short addr = this->cpu->reg.pair.B;
@@ -368,6 +395,91 @@ class VGS0
                 }
                 break;
             }
+            case 0xC5: {
+                unsigned short result = 0;
+                switch (value) {
+                    case 0x00:
+                        result = this->cpu->reg.pair.H;
+                        result *= this->cpu->reg.pair.L;
+                        break;
+                    case 0x01:
+                        if (this->cpu->reg.pair.L) {
+                            result = this->cpu->reg.pair.H;
+                            result /= this->cpu->reg.pair.L;
+                        } else {
+                            result = 0xFFFF;
+                        }
+                        break;
+                    case 0x02:
+                        if (this->cpu->reg.pair.L) {
+                            result = this->cpu->reg.pair.H;
+                            result %= this->cpu->reg.pair.L;
+                        } else {
+                            result = 0xFFFF;
+                        }
+                        break;
+                    case 0x40: {
+                        signed char sh = (signed char)this->cpu->reg.pair.H;
+                        signed char sl = (signed char)this->cpu->reg.pair.L;
+                        signed short tmp = sh * sl;
+                        result = (short)tmp;
+                        break;
+                    }
+                    case 0x41:
+                        if (this->cpu->reg.pair.L) {
+                            signed char sh = (signed char)this->cpu->reg.pair.H;
+                            signed char sl = (signed char)this->cpu->reg.pair.L;
+                            signed short tmp = sh / sl;
+                            result = (short)tmp;
+                        } else {
+                            result = 0xFFFF;
+                        }
+                        break;
+                    case 0x80:
+                    case 0x81:
+                    case 0x82: {
+                        unsigned short hl = this->cpu->reg.pair.H;
+                        hl <<= 8;
+                        hl |= this->cpu->reg.pair.L;
+                        if (0x80 == value) {
+                            unsigned int tmp = hl;
+                            tmp *= this->cpu->reg.pair.C;
+                            result = tmp & 0xFFFF;
+                        } else if (0 == this->cpu->reg.pair.C) {
+                            result = 0xFFFF;
+                        } else if (0x81 == value) {
+                            result = hl;
+                            result /= this->cpu->reg.pair.C;
+                        } else {
+                            result = hl;
+                            result %= this->cpu->reg.pair.C;
+                        }
+                        break;
+                    }
+                    case 0xC0:
+                    case 0xC1: {
+                        unsigned short hl = this->cpu->reg.pair.H;
+                        hl <<= 8;
+                        hl |= this->cpu->reg.pair.L;
+                        int tmp = (signed short)hl;
+                        if (0x80 == value) {
+                            tmp *= (signed char)this->cpu->reg.pair.C;
+                            result = (unsigned short)tmp;
+                        } else if (0 == this->cpu->reg.pair.C) {
+                            result = 0xFFFF;
+                        } else {
+                            tmp /= (signed char)this->cpu->reg.pair.C;
+                            result = (unsigned short)tmp;
+                        }
+                        break;
+                    }
+                }
+                this->cpu->reg.pair.H = (result & 0xFF00) >> 8;
+                this->cpu->reg.pair.L = result & 0xFF;
+                break;
+            }
+            case 0xC6: this->cpu->reg.pair.A = (unsigned char)vgs0_sin_table[value]; break;
+            case 0xC7: this->cpu->reg.pair.A = (unsigned char)vgs0_cos_table[value]; break;
             case 0xDA: {
                 if (this->saveCallback) {
                     unsigned short addr = this->cpu->reg.pair.B;

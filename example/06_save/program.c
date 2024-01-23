@@ -34,10 +34,10 @@ void main(void)
     }
 
     // スプライト表示
-    vgs0_oam_set(0, GV->x, GV->y, 0x80, 9);
-    vgs0_oam_set(1, GV->x + 8, GV->y, 0x80 | 0x40, 9);
-    vgs0_oam_set(2, GV->x, GV->y + 8, 0x80, 10); // NOTE: sdcc 4.3.0 for macOS has a bug that prevents the process of setting the value to the sprite 2 attribute address (0x900A) from being written, so the use of sprite 2 is avoided.
-    vgs0_oam_set(3, GV->x + 8, GV->y + 8, 0x80 | 0x40, 10);
+    vgs0_oam_set(0, GV->x, GV->y, 0x80, 9, 0, 0);
+    vgs0_oam_set(1, GV->x + 8, GV->y, 0x80 | 0x40, 9, 0, 0);
+    vgs0_oam_set(2, GV->x, GV->y + 8, 0x80, 10, 0, 0); // NOTE: sdcc 4.3.0 for macOS has a bug that prevents the process of setting the value to the sprite 2 attribute address (0x900A) from being written, so the use of sprite 2 is avoided.
+    vgs0_oam_set(3, GV->x + 8, GV->y + 8, 0x80 | 0x40, 10, 0, 0);
 
     // BGM を再生
     vgs0_bgm_play(0);

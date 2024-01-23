@@ -102,64 +102,67 @@
  * - Sprite: https://github.com/suzukiplan/vgszero/blob/master/README.md#sprite
  * - OAM: https://github.com/suzukiplan/vgszero/blob/master/README.md#oam
  */
-#define vgs0_oam_set(NUM, X, Y, ATTR, PTN) \
-    VGS0_ADDR_OAM[NUM].x = X;              \
-    VGS0_ADDR_OAM[NUM].y = Y;              \
-    VGS0_ADDR_OAM[NUM].attr = ATTR;        \
-    VGS0_ADDR_OAM[NUM].ptn = PTN
+#define vgs0_oam_set(NUM, X, Y, ATTR, PTN, W, H) \
+    VGS0_ADDR_OAM[NUM].x = X;                    \
+    VGS0_ADDR_OAM[NUM].y = Y;                    \
+    VGS0_ADDR_OAM[NUM].attr = ATTR;              \
+    VGS0_ADDR_OAM[NUM].ptn = PTN;                \
+    VGS0_ADDR_OAM[NUM].widthMinus1 = W;          \
+    VGS0_ADDR_OAM[NUM].heightMinus1 = H;         \
+    VGS0_ADDR_OAM[NUM].bank = 0
 
 /** @def
  * Palette table
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#palette
  */
-#define VGS0_ADDR_PALETTE ((uint16_t*)0x9400)
+#define VGS0_ADDR_PALETTE ((uint16_t*)0x9800)
 
 /** @def
  * Vertical rendering counter
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#scanline-counter
  */
-#define VGS0_ADDR_COUNT_V ((uint8_t*)0x9600)
+#define VGS0_ADDR_COUNT_V ((uint8_t*)0x9F00)
 
 /** @def
  * Horizontal rendering counter
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#scanline-counter
  */
-#define VGS0_ADDR_COUNT_H ((uint8_t*)0x9601)
+#define VGS0_ADDR_COUNT_H ((uint8_t*)0x9F01)
 
 /** @def
  * BG scroll X
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
-#define VGS0_ADDR_BG_SCROLL_X ((uint8_t*)0x9602)
+#define VGS0_ADDR_BG_SCROLL_X ((uint8_t*)0x9F02)
 
 /** @def
  * BG scroll Y
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
-#define VGS0_ADDR_BG_SCROLL_Y ((uint8_t*)0x9603)
+#define VGS0_ADDR_BG_SCROLL_Y ((uint8_t*)0x9F03)
 
 /** @def
  * FG scroll X
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
-#define VGS0_ADDR_FG_SCROLL_X ((uint8_t*)0x9604)
+#define VGS0_ADDR_FG_SCROLL_X ((uint8_t*)0x9F04)
 
 /** @def
  * FG scroll Y
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-scroll
  */
-#define VGS0_ADDR_FG_SCROLL_Y ((uint8_t*)0x9605)
+#define VGS0_ADDR_FG_SCROLL_Y ((uint8_t*)0x9F05)
 
 /** @def
  * IRQ scanline position
  */
-#define VGS0_ADDR_IRQ_SCANLINE ((uint8_t*)0x9606)
+#define VGS0_ADDR_IRQ_SCANLINE ((uint8_t*)0x9F06)
 
 /** @def
  * VDP status
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#vdp-status
  */
-#define VGS0_ADDR_STATUS ((uint8_t*)0x9607)
+#define VGS0_ADDR_STATUS ((uint8_t*)0x9F07)
 
 /** @def
  * Character pattern table
@@ -171,19 +174,19 @@
  * BG Direct Pattern Mapping
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#direct-pattern-mapping
  */
-#define VGS0_ADDR_BG_DPM ((uint8_t*)0x9608)
+#define VGS0_ADDR_BG_DPM ((uint8_t*)0x9F08)
 
 /** @def
  * FG Direct Pattern Mapping
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#direct-pattern-mapping
  */
-#define VGS0_ADDR_FG_DPM ((uint8_t*)0x9609)
+#define VGS0_ADDR_FG_DPM ((uint8_t*)0x9F09)
 
 /** @def
  * Sprite Direct Pattern Mapping
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#direct-pattern-mapping
  */
-#define VGS0_ADDR_SPRITE_DPM ((uint8_t*)0x960A)
+#define VGS0_ADDR_SPRITE_DPM ((uint8_t*)0x9F0A)
 
 //! stdint compatible (8bit unsigned)
 typedef unsigned char uint8_t;
@@ -209,6 +212,28 @@ typedef unsigned long long uint64_t;
 //! stdint compatible (64bit signed)
 typedef signed long long int64_t;
 
+//! Real number type with fixed-point numbers
+typedef union {
+    uint16_t value;
+    uint8_t raw[2];
+} var16_t;
+
+//! Rentangle (signed position)
+typedef struct {
+    int8_t x;
+    int8_t y;
+    uint8_t width;
+    uint8_t height;
+} rect_t;
+
+//! Rentangle (unsigned position)
+typedef struct {
+    uint8_t x;
+    uint8_t y;
+    uint8_t width;
+    uint8_t height;
+} urect_t;
+
 /**
  * Object Attribute Memory
  * https://github.com/suzukiplan/vgszero/blob/master/README.md#oam
@@ -222,6 +247,14 @@ typedef struct {
     uint8_t ptn;
     //! Attribute value: https://github.com/suzukiplan/vgszero/blob/master/README.md#attribute
     uint8_t attr;
+    //! OAM Pattern Size (height - 1)
+    uint8_t heightMinus1;
+    //! OAM Pattern Size (width - 1)
+    uint8_t widthMinus1;
+    //! OAM Bank
+    uint8_t bank;
+    //! padding
+    uint8_t reserved;
 } OAM;
 
 /**
@@ -333,6 +366,139 @@ void vgs0_memset(uint16_t dst, uint8_t value, uint16_t cnt) __smallc;
 void vgs0_memcpy(uint16_t dst, uint16_t src, uint16_t cnt) __smallc;
 
 /**
+ * @brief Collision detection check
+ * @param addr pointer of two rectangle structures (8 bytes)
+ * @return 0x01 = Detected, 0x00 = Not detected
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#collision-detection
+ */
+uint8_t vgs0_collision_check(uint16_t addr) __z88dk_fastcall;
+
+/**
+ * @brief hl = h * l
+ * @param h Number to be calculated
+ * @param l Multiplier
+ * @return Calculation result
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_mul(uint8_t h, uint8_t l) __smallc;
+
+/**
+ * @brief hl = h * l (as signed)
+ * @param h Number to be calculated
+ * @param l Multiplier
+ * @return Calculation result
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+int16_t vgs0_smul(int8_t h, int8_t l) __smallc;
+
+/**
+ * @brief hl = h / l
+ * @param h Number to be calculated
+ * @param l Divisor
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_div(uint8_t h, uint8_t l) __smallc;
+
+/**
+ * @brief hl = h / l (signed)
+ * @param h Number to be calculated
+ * @param l Divisor
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+int16_t vgs0_sdiv(int8_t h, int8_t l) __smallc;
+
+/**
+ * @brief hl = h % l
+ * @param h Number to be calculated
+ * @param l Modulator
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_mod(uint8_t h, uint8_t l) __smallc;
+
+/**
+ * @brief hl = hl * c
+ * @param hl Number to be calculated
+ * @param c Multiplier
+ * @return Calculation result mod 0x10000
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_mul16(uint16_t hl, uint8_t c) __smallc;
+
+/**
+ * @brief hl = hl * c (signed)
+ * @param hl Number to be calculated
+ * @param c Multiplier
+ * @return Calculation result mod 0x10000
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+int16_t vgs0_smul16(int16_t hl, int8_t c) __smallc;
+
+/**
+ * @brief hl = hl / c
+ * @param hl Number to be calculated
+ * @param c Divisor
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_div16(uint16_t hl, uint8_t c) __smallc;
+
+/**
+ * @brief hl = hl / c (signed)
+ * @param hl Number to be calculated
+ * @param c Divisor
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+int16_t vgs0_sdiv16(int16_t hl, int8_t c) __smallc;
+
+/**
+ * @brief hl = hl % c
+ * @param hl Number to be calculated
+ * @param c Modulator
+ * @return Calculation result (0xFFFF: 0 divied)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-calculation
+ */
+uint16_t vgs0_mod16(uint16_t hl, uint8_t c) __smallc;
+
+/**
+ * @brief Acquire sin from table
+ * @param a number of table array
+ * @return sin(a × π ÷ 128.0)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-sin-table
+ */
+int8_t vgs0_sin(uint8_t a) __z88dk_fastcall;
+
+/**
+ * @brief Acquire cos from table
+ * @param a number of table array
+ * @return cos(a × π ÷ 128.0)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-cos-table
+ */
+int8_t vgs0_cos(uint8_t a) __z88dk_fastcall;
+
+/**
+ * @brief Acquire atan2 from table
+ * @param hl number of table array
+ * @return atan2(-h, l)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-atan2-table
+ */
+uint8_t vgs0_atan2(uint16_t hl) __z88dk_fastcall;
+
+/**
+ * @brief Acquire angle
+ * @param sx source X
+ * @param sy source Y
+ * @param dx distance X
+ * @param dy distance Y
+ * @return angle
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-atan2-table
+ */
+uint8_t vgs0_angle(uint8_t sx, uint8_t sy, uint8_t dx, uint8_t dy) __smallc;
+
+/**
  * @brief Continuously writes the specified ASCII code and attribute values to BG's NameTable
  * @param x X-coordinate (0-31)
  * @param y Y-coordinate (0-31)
@@ -349,6 +515,16 @@ void vgs0_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __small
  * @param str '\0' terminated string
  */
 void vgs0_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc;
+
+/**
+ * @brief Continuously writes the specified ASCII code and attribute values to the NameTable
+ * @param namtbl Target Name Table
+ * @param x X-coordinate (0-31)
+ * @param y Y-coordinate (0-31)
+ * @param attr attribute value https://github.com/suzukiplan/vgszero/blob/master/README.md#attribute
+ * @param str '\0' terminated string
+ */
+void vgs0_putstr(NameTable* namtbl, uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc;
 
 /**
  * @brief Acquire joypad input status

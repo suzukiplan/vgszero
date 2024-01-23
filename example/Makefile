@@ -10,6 +10,9 @@ build:
 	cd 07_palette && make build
 	cd 08_map-scroll && make build
 	cd 09_joypad && make build
+	cd 10_chr720 && make build
+	cd 11_bigsprite && make build
+	cd 12_angle && make build
 
 clean:
 	cd 01_hello && make clean
@@ -21,3 +24,6 @@ clean:
 	cd 07_palette && make clean
 	cd 08_map-scroll && make clean
 	cd 09_joypad && make clean
+	cd 10_chr720 && make clean
+	cd 11_bigsprite && make clean
+	cd 12_angle && make clean
