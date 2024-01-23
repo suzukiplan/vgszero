@@ -484,6 +484,19 @@ void vgs0_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __small
     }
 }
 
+void vgs0_putstr(NameTable* namtbl, uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
+{
+    x &= 0x1F;
+    y &= 0x1F;
+    while (*str) {
+        namtbl->ptn[y][x] = *str;
+        namtbl->attr[y][x] = attr;
+        x++;
+        x &= 0x1F;
+        str++;
+    }
+}
+
 uint8_t vgs0_joypad_get(void) __z88dk_fastcall
 {
 __asm

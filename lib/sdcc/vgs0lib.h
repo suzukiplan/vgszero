@@ -517,6 +517,16 @@ void vgs0_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __small
 void vgs0_fg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc;
 
 /**
+ * @brief Continuously writes the specified ASCII code and attribute values to the NameTable
+ * @param namtbl Target Name Table
+ * @param x X-coordinate (0-31)
+ * @param y Y-coordinate (0-31)
+ * @param attr attribute value https://github.com/suzukiplan/vgszero/blob/master/README.md#attribute
+ * @param str '\0' terminated string
+ */
+void vgs0_putstr(NameTable* namtbl, uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc;
+
+/**
  * @brief Acquire joypad input status
  * @return joypad input status
  * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#joypad
