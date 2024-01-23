@@ -116,6 +116,8 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/08_map-scroll](./example/08_map-scroll/) | C言語 | Tiled Map Editor で作ったマップデータのスクロール |
 | [example/09_joypad](./example/09_joypad/) | C言語 | ジョイパッドの入力結果をプレビュー |
 | [example/10_chr720](./example/10_chr720/) | C言語 | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
+| [example/11_bigsprite](./example/11_bigsprite/) | C言語 | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の指定により巨大なスプライトを表示する例 |
+| [example/12_angle](./example/12_angle) | C言語 | [ハードウェア atan2 テーブル](#hardware-atan2-table) を用いて完全な自機狙いを実装する例 |
 
 ## Joypad
 
