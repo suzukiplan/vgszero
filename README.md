@@ -30,7 +30,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
   - [C言語の `memset` に相当する高速 DMA 転送機能を実装](#memset-dma)
   - [C言語の `memcpy` に相当する高速 DMA 転送機能を実装](#memcpy-dma)
-- HAG (High-speed Accumulator for Game)
+- HAGe (High-speed Accumulator for Game)
   - [ハードウェア当たり判定機能を実装](#collision-detection)
   - [ハードウェア乗算・除算・剰余算](#hardware-calculation)
   - [ハードウェア sin テーブル](#hardware-sin-table)
