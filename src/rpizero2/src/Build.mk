@@ -1,5 +1,5 @@
 CIRCLEHOME = ./circle
-CHECK_DEPS = 1
+CHECK_DEPS = 0
 STANDARD = -std=c++17
 CFLAGS = -O3
 CFLAGS += -I../../core
@@ -20,7 +20,6 @@ OBJS += kernel.o
 OBJS += multicoremanager.o
 OBJS += splash.o
 OBJS += sderror.o
-OBJS += lz4.o
 OBJS += vgstone.o
 OBJS += vgs0math.o
 LIBS = $(CIRCLEHOME)/lib/libcircle.a

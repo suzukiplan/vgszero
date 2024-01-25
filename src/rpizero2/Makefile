@@ -1,7 +1,6 @@
 all:
 	cd src && git submodule update --init circle
 	cp src/Config.mk src/circle
-	cp -p ../core/lz4.c src
 	cp -p ../core/vgstone.c src
 	cp -p ../core/vgs0math.c src
 	cd src/circle && ./makeall --nosample

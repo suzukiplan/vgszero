@@ -4,7 +4,6 @@
  * (C)2023, SUZUKI PLAN
  */
 
-#include "lz4.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -224,10 +223,11 @@ class VGSDecoder
 
     bool load(const void* data, size_t size)
     {
-        this->bgm.size = LZ4_decompress_safe((const char*)data,
-                                             (char*)this->bgm.data,
-                                             (int)size,
-                                             (int)sizeof(this->bgm.data));
+        if (sizeof(this->bgm.data) < size) {
+            return false;
+        }
+        memcpy(this->bgm.data, data, size);
+        this->bgm.size = size;
         if (16 < this->bgm.size && 0 == memcmp(this->bgm.data, "VGSBGM-V", 8)) {
             memcpy(&this->bgm.lengthTime, &this->bgm.data[8], 4);
             memcpy(&this->bgm.loopTime, &this->bgm.data[12], 4);
