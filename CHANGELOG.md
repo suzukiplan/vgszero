@@ -1,5 +1,9 @@
 # Change Log
 
+## [Version 1.2.1 (2024.01.25)](https://github.com/suzukiplan/vgszero/releases/tag/1.2.1)
+
+- ラズパイでBGMが再生されない問題を修正
+
 ## [Version 1.2.0 (2024.01.25)](https://github.com/suzukiplan/vgszero/releases/tag/1.2.0)
 
 - LZ4 を削除
