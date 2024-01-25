@@ -1,6 +1,6 @@
 # Change Log
 
-## [Version 1.2.0 (2024.01.25)]()
+## [Version 1.2.0 (2024.01.25)](https://github.com/suzukiplan/vgszero/releases/tag/1.2.0)
 
 - LZ4 を削除
 
