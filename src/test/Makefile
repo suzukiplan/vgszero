@@ -20,7 +20,6 @@ HEADER_FILES = ../core/*.hpp
 HEADER_FILES += ../core/*.h
 
 OBJECTS = vgs0test.o
-OBJECTS += lz4.o
 OBJECTS += vgstone.o
 OBJECTS += vgs0math.o
 

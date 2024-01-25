@@ -1,5 +1,9 @@
 # Change Log
 
+## [Version 1.2.0 (2024.01.25)](https://github.com/suzukiplan/vgszero/releases/tag/1.2.0)
+
+- LZ4 を削除
+
 ## [Version 1.1.0 (2024.01.23)](https://github.com/suzukiplan/vgszero/releases/tag/1.1.0)
 
 - OAM の構造を変更

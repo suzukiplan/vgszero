@@ -24,7 +24,6 @@ HEADER_FILES = ../core/*.hpp
 HEADER_FILES += ../core/*.h
 
 OBJECTS = vgs0sdl2.o
-OBJECTS += lz4.o
 OBJECTS += vgstone.o
 OBJECTS += vgs0math.o
 
@@ -39,9 +38,6 @@ vgs0: $(OBJECTS)
 
 vgs0sdl2.o: vgs0sdl2.cpp $(HEADER_FILES) ./Makefile
 	$(CPP) -c $<
-
-lz4.o: ../core/lz4.c $(HEADER_FILES) ./Makefile
-	$(CC) -c $<
 
 vgstone.o: ../core/vgstone.c $(HEADER_FILES) ./Makefile
 	$(CC) -c $<
