@@ -1,5 +1,5 @@
 CIRCLEHOME = ./circle
-CHECK_DEPS = 0
+CHECK_DEPS = 1 
 STANDARD = -std=c++17
 CFLAGS = -O3
 CFLAGS += -I../../core

@@ -57,6 +57,7 @@ class VGS0
     VGSDecoder* vgsdec;
     bool (*saveCallback)(VGS0* vgs0, const void* data, size_t size);
     bool (*loadCallback)(VGS0* vgs0, void* data, size_t size);
+    void (*resetCallback)(VGS0* vgs0);
 
     struct Context {
         int64_t bobo;
@@ -85,6 +86,7 @@ class VGS0
         this->vgsdec = new VGSDecoder();
         this->saveCallback = nullptr;
         this->loadCallback = nullptr;
+        this->resetCallback = nullptr;
         this->reset();
     }
 
@@ -125,6 +127,13 @@ class VGS0
         this->vdp->reset();
         memset(&this->cpu->reg, 0, sizeof(this->cpu->reg));
         this->cpu->reg.SP = 0xFFFF;
+        this->ctx.bgm.playing = false;
+        for (int i = 0; i < 256; i++) {
+            this->ctx.se[i].playing = false;
+        }
+        if (this->resetCallback) {
+            this->resetCallback(this);
+        }
     }
 
     void loadRom(const void* data, size_t size)

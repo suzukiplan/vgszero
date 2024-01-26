@@ -1,5 +1,9 @@
 # Change Log
 
+## [Version 1.2.2 (2024.01.26)](https://github.com/suzukiplan/vgszero/releases/tag/1.2.2)
+
+- ラズパイでリセット時に 16 フレームの空白フレームを挿入
+
 ## [Version 1.2.1 (2024.01.25)](https://github.com/suzukiplan/vgszero/releases/tag/1.2.1)
 
 - ラズパイでBGMが再生されない問題を修正
