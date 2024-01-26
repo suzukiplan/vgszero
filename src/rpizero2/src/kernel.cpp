@@ -17,6 +17,7 @@ static UINT pkgSize_;
 extern "C" const unsigned short splash[46080];
 extern "C" const unsigned short sderror[3072];
 VGS0* vgs0_;
+int pendingCounter_;
 uint8_t pad1_;
 size_t hdmiPitch_;
 uint16_t* hdmiBuffer_;
@@ -276,6 +277,10 @@ TShutdownMode CKernel::run(void)
             return false;
         }
     };
+    vgs0.resetCallback = [](VGS0* vgs0) {
+        pendingCounter_ = 16;
+    };
+    pendingCounter_ = 0;
     vgs0_ = &vgs0;
 
     int swap = 0;
@@ -283,6 +288,26 @@ TShutdownMode CKernel::run(void)
     while (1) {
         // update status of the peripheral devices
         updateUsbStatus();
+
+        // reset pending
+        if (pendingCounter_) {
+            uint16_t col = 0b0001100011100111;
+            auto hdmi = hdmiBuffer_;
+            for (int y = 0; y < 192; y++) {
+                for (int x = 0; x < 240; x++) {
+                    hdmi[x * 2] = col;
+                    hdmi[x * 2 + 1] = col & 0b1110011100011100; 
+                    hdmi[hdmiPitch_ + x * 2] = col & 0b1001110011110011;
+                    hdmi[hdmiPitch_ + x * 2 + 1] = col & 0b1000010000010000;
+                }
+                hdmi += hdmiPitch_ * 2;
+            }
+            buffer->WaitForVerticalSync();
+            swap = 192 - swap;
+            buffer->SetVirtualOffset(0, swap);
+            pendingCounter_--;
+            continue;
+        }
 
         // request to the another cpus
         CMultiCoreSupport::SendIPI(1, IPI_USER + 0); // request execute main core (z80)
