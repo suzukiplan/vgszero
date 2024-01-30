@@ -1,5 +1,9 @@
 # Change Log
 
+## [Version 1.2.3 (2024.01.30)](https://github.com/suzukiplan/vgszero/releases/tag/1.2.3)
+
+- ラズパイで config.sys が正常に読み込まれない不具合を修正
+
 ## [Version 1.2.2 (2024.01.26)](https://github.com/suzukiplan/vgszero/releases/tag/1.2.2)
 
 - ラズパイでリセット時に 16 フレームの空白フレームを挿入

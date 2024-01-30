@@ -4,7 +4,9 @@
  * (C)2023, SUZUKI PLAN
  */
 #pragma once
+#ifndef TEST
 #include <circle/usb/usbgamepad.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -29,14 +31,13 @@ public:
     {
     public:
         ButtonType type;
-
-    private:
         unsigned bitMask;
         bool isAxis;
         int axisIndex;
         bool compareLessThan;
         int compareValue;
 
+    private:
         void setup(ButtonType type_, unsigned bitMask_)
         {
             this->type = type_;
@@ -70,28 +71,28 @@ public:
             }
             ButtonType type_ = ButtonType::Unknown;
             if (0 == strncmp(text, "START", 5)) {
-                type = ButtonType::START;
+                type_ = ButtonType::START;
                 text += 5;
             } else if (0 == strncmp(text, "SELECT", 6)) {
-                type = ButtonType::SELECT;
+                type_ = ButtonType::SELECT;
                 text += 6;
             } else if (0 == strncmp(text, "UP", 2)) {
-                type = ButtonType::UP;
+                type_ = ButtonType::UP;
                 text += 2;
             } else if (0 == strncmp(text, "DOWN", 4)) {
-                type = ButtonType::DOWN;
+                type_ = ButtonType::DOWN;
                 text += 4;
             } else if (0 == strncmp(text, "LEFT", 4)) {
-                type = ButtonType::LEFT;
+                type_ = ButtonType::LEFT;
                 text += 4;
             } else if (0 == strncmp(text, "RIGHT", 5)) {
-                type = ButtonType::RIGHT;
+                type_ = ButtonType::RIGHT;
                 text += 5;
             } else if (0 == strncmp(text, "A", 1)) {
-                type = ButtonType::A;
+                type_ = ButtonType::A;
                 text += 1;
             } else if (0 == strncmp(text, "B", 1)) {
-                type = ButtonType::A;
+                type_ = ButtonType::B;
                 text += 1;
             } else {
                 this->setup(ButtonType::Unknown, 0);
@@ -107,14 +108,30 @@ public:
             } else if (0 == strncmp(text, "AXIS_", 5)) {
                 text += 5;
                 int axisIndex_ = atoi(text);
+                if (!isdigit(*text)) {
+                    this->setup(ButtonType::Unknown, 0);
+                    return;
+                }
                 while (isdigit(*text)) {
                     text++;
+                }
+                if (' ' != *text && '\t' != *text) {
+                    this->setup(ButtonType::Unknown, 0);
+                    return;
                 }
                 while (' ' == *text || '\t' == *text) {
                     text++;
                 }
+                if ('<' != *text && '>' != *text) {
+                    this->setup(ButtonType::Unknown, 0);
+                    return;
+                }
                 bool compareLessThan_ = *text == '<';
                 text++;
+                if (' ' != *text && '\t' != *text) {
+                    this->setup(ButtonType::Unknown, 0);
+                    return;
+                }
                 while (' ' == *text || '\t' == *text) {
                     text++;
                 }
@@ -128,6 +145,7 @@ public:
         Button(ButtonType type_, unsigned bitMask_) { this->setup(type_, bitMask_); }
         Button(ButtonType type_, int axisIndex_, bool compareLessThan_, int compareValue_) { this->setup(type_, axisIndex_, compareLessThan_, compareValue_); }
 
+#ifndef TEST
         bool check(const TGamePadState* state)
         {
             if (this->isAxis) {
@@ -140,6 +158,7 @@ public:
                 return state->buttons & this->bitMask ? true : false;
             }
         }
+#endif
     };
 
     Button* buttonA;
