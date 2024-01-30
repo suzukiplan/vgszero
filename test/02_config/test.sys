@@ -1,0 +1,13 @@
+#--------------------
+# JoyPad settings
+#--------------------
+A AXIS_255 < 1
+B AXIS_0 > 2
+SELECT BUTTON_31
+START BUTTON_0
+UP BUTTON_32
+DOWN BUTTON_-1
+LEFT AXIS_-1 < 1
+RIGHT AXIS_
+
+
