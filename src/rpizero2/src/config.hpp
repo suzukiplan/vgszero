@@ -108,14 +108,30 @@ public:
             } else if (0 == strncmp(text, "AXIS_", 5)) {
                 text += 5;
                 int axisIndex_ = atoi(text);
+                if (!isdigit(*text)) {
+                    this->setup(ButtonType::Unknown, 0);
+                    return;
+                }
                 while (isdigit(*text)) {
                     text++;
+                }
+                if (' ' != *text && '\t' != *text) {
+                    this->setup(ButtonType::Unknown, 0);
+                    return;
                 }
                 while (' ' == *text || '\t' == *text) {
                     text++;
                 }
+                if ('<' != *text && '>' != *text) {
+                    this->setup(ButtonType::Unknown, 0);
+                    return;
+                }
                 bool compareLessThan_ = *text == '<';
                 text++;
+                if (' ' != *text && '\t' != *text) {
+                    this->setup(ButtonType::Unknown, 0);
+                    return;
+                }
                 while (' ' == *text || '\t' == *text) {
                     text++;
                 }
