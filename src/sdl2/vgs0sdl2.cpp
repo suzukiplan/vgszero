@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <vector>
 
-#define WINDOW_TITLE "VGS0 for SDL2"
+#define WINDOW_TITLE "VGS-Zero for SDL2"
 
 class Binary
 {
