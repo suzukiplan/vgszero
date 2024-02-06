@@ -593,4 +593,9 @@ uint8_t vgs0_save(uint16_t addr, uint16_t size) __smallc;
  */
 uint8_t vgs0_load(uint16_t addr, uint16_t size) __smallc;
 
+/**
+ * @brief Halt this game (NOTE: do not call this function on the RaspberryPi version)
+ */
+void vgs0_exit(void) __z88dk_fastcall;
+
 #endif

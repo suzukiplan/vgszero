@@ -427,6 +427,10 @@ int main(int argc, char* argv[])
         pthread_mutex_lock(&soundMutex);
         vgs0.tick(key1);
         pthread_mutex_unlock(&soundMutex);
+        if (vgs0.cpu->reg.IFF & 0x80) {
+            log("Detected the HALT");
+            break;
+        }
 
         // render graphics
         auto vgsDisplay = vgs0.getDisplay();
