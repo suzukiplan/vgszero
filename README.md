@@ -79,11 +79,19 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - 解像度 480x384 ピクセル以上
   - オーディオ出力対応
 
-> Amazon の商品リスト:
-> 
-> [https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H](https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H)
-> 
-> Amazon で購入すると割高ですが、それでも全部合計で1万円弱です。(2023.12.29時点: 9,207円)
+#### (Supported USB Joypad)
+
+VGS-Zero での USB ジョイパッドのサポートリストを示します。
+
+|製品名|サポート|補足事項|
+|:-|:-:|:-|
+|[suily USBコントローラー NESゲーム用（有線）](https://www.amazon.co.jp/dp/B07M7SYX11/)|`OK`|完全に動作します|
+|[Elecom JC-U3312シリーズ](https://www.amazon.co.jp/dp/B003UIRHLE/)|`OK`|完全に動作します|
+|[HORI リアルアーケードPro V3SA (PS3用)](https://www.amazon.co.jp/dp/B002YT9PSI)|`OK`|完全に動作します|
+|[HORI グリップコントローラーアタッチメントセット for Nintendo Switch](https://www.amazon.co.jp/dp/B09JP9MFFY/)|`△`|十字キーが使用不可|
+|[ロジクール (ロジテック) F310](https://www.amazon.co.jp/dp/B00CDG799E/)|`NG`|接続不可|
+|[Kiwitata gamepad](https://github.com/rsta2/circle/wiki/Device-compatibility-list)|`NG`|Circleが非サポート|
+|[Xbox 360 wired gamepad clone](https://github.com/rsta2/circle/wiki/Device-compatibility-list)|`NG`|Circleが非サポート|
 
 #### (Launch Sequence)
 
@@ -802,9 +810,6 @@ README.txtの記載凡例:
   - リフレッシュレート60Hz
   - 解像度 480x384 ピクセル以上
   - オーディオ出力対応
-
-Amazon の商品リスト:
-https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H
 
 
 【起動方法】
