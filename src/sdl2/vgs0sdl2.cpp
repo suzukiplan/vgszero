@@ -361,7 +361,9 @@ int main(int argc, char* argv[])
         loopCount++;
         auto start = std::chrono::system_clock::now();
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_KEYDOWN) {
+            if (event.type == SDL_QUIT) {
+                halt = true;
+            } else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
                     case SDLK_q: halt = true; break;
                     case SDLK_UP: key1 |= VGS0_JOYPAD_UP; break;
