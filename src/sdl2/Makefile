@@ -31,7 +31,7 @@ all: vgs0
 
 clean:
 	rm -f $(OBJECTS)
-	rm -f vgszero 
+	rm -f vgs0 
 
 vgs0: $(OBJECTS)
 	$(CPP) -o vgs0 $(OBJECTS) -L/usr/local/lib -lSDL2

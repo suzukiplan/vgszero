@@ -20,7 +20,7 @@ cd vgszero/src/sdl2
 make
 
 # execute
-./vgszero ../../example/01_hello/game.pkg
+./vgs0 ../../example/01_hello/game.pkg
 ```
 
 ### Linux
@@ -46,7 +46,7 @@ cd vgszero/src/sdl2
 make
 
 # execute
-./vgszero ../../example/01_hello/game.pkg
+./vgs0 ../../example/01_hello/game.pkg
 ```
 
 ## Usage
