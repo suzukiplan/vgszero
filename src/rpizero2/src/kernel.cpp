@@ -36,6 +36,14 @@ CKernel::CKernel(void) : screen(480, 384),
                          sound(&vchiq, (TVCHIQSoundDestination)options.GetSoundOption()),
                          emmc(&interrupt, &timer, &led),
                          mcm(CMemorySystem::Get()),
+                         gpioUp(22, GPIOModeInputPullUp),
+                         gpioDown(5, GPIOModeInputPullUp),
+                         gpioLeft(26, GPIOModeInputPullUp),
+                         gpioRight(6, GPIOModeInputPullUp),
+                         gpioA(24, GPIOModeInputPullUp),
+                         gpioB(25, GPIOModeInputPullUp),
+                         gpioStart(4, GPIOModeInputPullUp),
+                         gpioSelect(23, GPIOModeInputPullUp),
                          gamePad(nullptr)
 {
     led.Blink(5);
@@ -295,6 +303,31 @@ TShutdownMode CKernel::run(void)
     while (1) {
         // update status of the peripheral devices
         updateUsbStatus();
+
+        // Check GPIO joystick if usb gamepad is not connected
+        if (!gamePad) {
+            auto up = gpioUp.Read();
+            auto dw = gpioDown.Read();
+            auto le = gpioLeft.Read();
+            auto ri = gpioRight.Read();
+            auto t1 = gpioA.Read();
+            auto t2 = gpioB.Read();
+            auto st = gpioStart.Read();
+            auto se = gpioSelect.Read();
+            if (LOW == le && LOW == ri) {
+                ; // 左右を同時に押している場合は入力を無視
+            } else {
+                pad1_ = 0;
+                pad1_ |= LOW == t1 ? VGS0_JOYPAD_T1 : 0;
+                pad1_ |= LOW == t2 ? VGS0_JOYPAD_T2 : 0;
+                pad1_ |= LOW == st ? VGS0_JOYPAD_ST : 0;
+                pad1_ |= LOW == se ? VGS0_JOYPAD_SE : 0;
+                pad1_ |= LOW == up ? VGS0_JOYPAD_UP : 0;
+                pad1_ |= LOW == dw ? VGS0_JOYPAD_DW : 0;
+                pad1_ |= LOW == le ? VGS0_JOYPAD_LE : 0;
+                pad1_ |= LOW == ri ? VGS0_JOYPAD_RI : 0;
+            }
+        }
 
         // reset pending
         if (pendingCounter_) {

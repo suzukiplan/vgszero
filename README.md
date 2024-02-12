@@ -98,6 +98,29 @@ VGS-Zero での USB ジョイパッドのサポートリストを示します。
 > パソコンでの利用に際して専用のデバイスドライバを必要とするものや、XInput対応のゲームコントローラー（比較的新しいゲームコントローラー）は、全く認識できなかったり、認識できても一部のキー入力が効かないものが多い傾向があるので非推奨です。
 > SUZUKIPLAN が主に使用している製品は Elecom JC-U3312 と HXBE37823 です。Elecom JC-U3312 は EOL (製造終了) の商品のため入手が難しいかもしれません。HXBE37823 は [Aliexpress](https://ja.aliexpress.com/item/1005001905753033.html) に 300 円前後の安価なものが沢山あり、[Amazon](https://www.amazon.co.jp/dp/B07M7SYX11/) でも購入可能です。（ただし、HXBE37823 は上下左右の移動をする時に斜め入力が入ってしまうものがあり、感度の品質面に難があるかもしれませんが、[Battle Marine](https://github.com/suzukiplan/bmarine-zero/) のように左右に移動方向を絞ったゲームであれば快適にプレイできます）
 
+#### (GPIO Joypad)
+
+RaspberryPi Zero 2W の GPIO に次のピンアサインで直接ボタンを接続することもできます。
+
+| Button | GPIO |
+|:------:|:----:|
+| Up     | 22   |
+| Down   | 5    |
+| Left   | 26   |
+| Right  | 6    |
+| A      | 24   |
+| B      | 25   |
+| Start  | 4    |
+| Select | 23   |
+
+RaspberryPi Zero 2W Pin Map
+
+_※ GND の接続も必要です_
+
+> GPIO 接続に関する詳細は [こちらの記事](https://note.com/suzukiplan/n/ncccafb305eae) をご参照ください。
+>
+> VGS-Zero 対応のジョイスティック・ジョイパッドは、企業（商業ハード）or 個人（同人ハード）に関係なく SUZUKIPLAN からのライセンス不要で自由に開発・販売していただくことが可能です。_（ライセンスは不要ですがサポートもしないスタイルなので、販売に伴う消費者へのサポート対応等は販売元の責任で行ってください）_
+
 #### (Launch Sequence)
 
 起動手順は次の通りです。
