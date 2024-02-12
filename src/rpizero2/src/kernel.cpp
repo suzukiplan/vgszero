@@ -283,6 +283,13 @@ TShutdownMode CKernel::run(void)
     pendingCounter_ = 0;
     vgs0_ = &vgs0;
 
+    // fill empty buffer to the sound queue
+    memset(pcmData_, 0, sizeof(pcmData_));
+    for (int i = 0; i < 8; i++) {
+        sound.Playback(pcmData_, 735, 1, 16);
+        scheduler.Yield(); // ensure the VCHIQ tasks can run
+    }
+
     int swap = 0;
     auto buffer = screen.GetFrameBuffer();
     while (1) {
@@ -321,10 +328,8 @@ TShutdownMode CKernel::run(void)
         buffer->SetVirtualOffset(0, swap);
 
         // playback sound
-        while (sound.PlaybackActive()) {
-            ;
-        }
         sound.Playback(pcmData_, 735, 1, 16);
+        scheduler.Yield(); // ensure the VCHIQ tasks can run
 
         // save if needed
         if (saveDataChanged_ && 0 < saveDataSize_ && saveDataSize_ < sizeof(saveDataCache_)) {
