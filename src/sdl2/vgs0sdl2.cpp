@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <vector>
 
-#define WINDOW_TITLE "VGS0 for SDL2"
+#define WINDOW_TITLE "VGS-Zero for SDL2"
 
 class Binary
 {
@@ -104,7 +104,7 @@ static Binary* loadBinary(const char* path)
     return new Binary(result, size);
 }
 
-const void* get_bitmap(const unsigned short* display, size_t* size)
+const void* get_bitmap(const unsigned short* display, size_t* size, bool interlace)
 {
     static unsigned char buf[14 + 40 + 480 * 384 * 4];
     int iSize = (int)sizeof(buf);
@@ -121,8 +121,8 @@ const void* get_bitmap(const unsigned short* display, size_t* size)
     ptr += 4;
     BitmapHeader header;
     header.isize = 40;
-    header.width = 480;
-    header.height = 384;
+    header.width = interlace ? 480 : 240;
+    header.height = interlace ? 384 : 192;
     header.planes = 1;
     header.bits = 32;
     header.ctype = 0;
@@ -143,15 +143,21 @@ const void* get_bitmap(const unsigned short* display, size_t* size)
             rgb888 <<= 8;
             rgb888 |= bit5To8(col & 0b0000000000011111);
             memcpy(&buf[ptr + 240 * 8], &rgb888, 4);
-            unsigned int n = rgb888 & 0xF0F0F0F0;
-            memcpy(&buf[ptr + 240 * 8 + 4], &n, 4);
-            n = rgb888 & 0x8F8F8F8F;
-            memcpy(&buf[ptr], &n, 4);
-            n &= 0x80808080;
-            memcpy(&buf[ptr + 4], &n, 4);
-            ptr += 8;
+            if (interlace) {
+                unsigned int n = rgb888 & 0xF0F0F0F0;
+                memcpy(&buf[ptr + 240 * 8 + 4], &n, 4);
+                n = rgb888 & 0x8F8F8F8F;
+                memcpy(&buf[ptr], &n, 4);
+                n &= 0x80808080;
+                memcpy(&buf[ptr + 4], &n, 4);
+                ptr += 8;
+            } else {
+                ptr += 4;
+            }
         }
-        ptr += 240 * 8;
+        if (interlace) {
+            ptr += 240 * 8;
+        }
     }
     *size = ptr;
     return buf;
@@ -355,7 +361,9 @@ int main(int argc, char* argv[])
         loopCount++;
         auto start = std::chrono::system_clock::now();
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_KEYDOWN) {
+            if (event.type == SDL_QUIT) {
+                halt = true;
+            } else if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
                     case SDLK_q: halt = true; break;
                     case SDLK_UP: key1 |= VGS0_JOYPAD_UP; break;
@@ -367,7 +375,7 @@ int main(int argc, char* argv[])
                     case SDLK_x: key1 |= VGS0_JOYPAD_T1; break;
                     case SDLK_z: key1 |= VGS0_JOYPAD_T2; break;
                     case SDLK_s: {
-                        log("Save ram.bin, vram.bin and screen.bmp");
+                        log("Save ram.bin, vram.bin, screen_480x384.bmp, screen_240x192.bmp");
                         FILE* fp = fopen("ram.bin", "wb");
                         if (fp) {
                             fwrite(vgs0.ctx.ram, 1, sizeof(vgs0.ctx.ram), fp);
@@ -378,10 +386,17 @@ int main(int argc, char* argv[])
                             fwrite(vgs0.vdp->ctx.ram, 1, sizeof(vgs0.vdp->ctx.ram), fp);
                             fclose(fp);
                         }
-                        fp = fopen("screen.bmp", "wb");
+                        fp = fopen("screen_480x384.bmp", "wb");
                         if (fp) {
                             size_t bmpSize;
-                            const void* bmp = get_bitmap(vgs0.getDisplay(), &bmpSize);
+                            const void* bmp = get_bitmap(vgs0.getDisplay(), &bmpSize, true);
+                            fwrite(bmp, 1, bmpSize, fp);
+                            fclose(fp);
+                        }
+                        fp = fopen("screen_240x192.bmp", "wb");
+                        if (fp) {
+                            size_t bmpSize;
+                            const void* bmp = get_bitmap(vgs0.getDisplay(), &bmpSize, false);
                             fwrite(bmp, 1, bmpSize, fp);
                             fclose(fp);
                         }
@@ -414,6 +429,12 @@ int main(int argc, char* argv[])
         pthread_mutex_lock(&soundMutex);
         vgs0.tick(key1);
         pthread_mutex_unlock(&soundMutex);
+        if (vgs0.cpu->reg.IFF & 0x80) {
+            if (0 == (vgs0.cpu->reg.IFF & 0x01)) {
+                log("Detected the HALT while DI");
+                break;
+            }
+        }
 
         // render graphics
         auto vgsDisplay = vgs0.getDisplay();

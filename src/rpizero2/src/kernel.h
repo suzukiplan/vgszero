@@ -19,6 +19,7 @@
 #include <circle/types.h>
 #include <circle/usb/usbgamepad.h>
 #include <circle/usb/usbhcidevice.h>
+#include <circle/gpiopin.h>
 #include <fatfs/ff.h>
 #include <vc4/sound/vchiqsoundbasedevice.h>
 #include <vc4/sound/vchiqsounddevice.h>
@@ -58,6 +59,14 @@ class CKernel
     CEMMCDevice emmc;
     FATFS fatFs;
     MultiCoreManager mcm;
+    CGPIOPin gpioUp;
+    CGPIOPin gpioDown;
+    CGPIOPin gpioLeft;
+    CGPIOPin gpioRight;
+    CGPIOPin gpioA;
+    CGPIOPin gpioB;
+    CGPIOPin gpioStart;
+    CGPIOPin gpioSelect;
     CUSBGamePadDevice* volatile gamePad;
     void updateUsbStatus(void);
 };

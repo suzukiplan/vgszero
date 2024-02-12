@@ -79,11 +79,47 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - 解像度 480x384 ピクセル以上
   - オーディオ出力対応
 
-> Amazon の商品リスト:
-> 
-> [https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H](https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H)
-> 
-> Amazon で購入すると割高ですが、それでも全部合計で1万円弱です。(2023.12.29時点: 9,207円)
+#### (Supported USB Joypad)
+
+VGS-Zero での USB ジョイパッドのサポートリストを示します。
+
+|製品名|サポート|補足事項|
+|:-|:-:|:-|
+|[HXBE37823 (XINYUANSHUNTONG)](https://ja.aliexpress.com/item/1005001905753033.html)|`OK`|完全に動作します|
+|[suily USBコントローラー NESゲーム用（有線）](https://www.amazon.co.jp/dp/B07M7SYX11/)|`OK`|完全に動作します|
+|[Elecom JC-U3312シリーズ](https://www.amazon.co.jp/dp/B003UIRHLE/)|`OK`|完全に動作します|
+|[HORI リアルアーケードPro V3SA (PS3用)](https://www.amazon.co.jp/dp/B002YT9PSI)|`OK`|完全に動作します|
+|[HORI グリップコントローラーアタッチメントセット for Nintendo Switch](https://www.amazon.co.jp/dp/B09JP9MFFY/)|`△`|十字キーが使用不可|
+|[ロジクール (ロジテック) F310](https://www.amazon.co.jp/dp/B00CDG799E/)|`NG`|接続不可|
+|[Kiwitata gamepad](https://github.com/rsta2/circle/wiki/Device-compatibility-list)|`NG`|Circleが非サポート|
+|[Xbox 360 wired gamepad clone](https://github.com/rsta2/circle/wiki/Device-compatibility-list)|`NG`|Circleが非サポート|
+
+> 標準 HID 準拠のジョイパッド（ゲームコントローラー）であれば動作できる可能性が高いです。
+> パソコンでの利用に際して専用のデバイスドライバを必要とするものや、XInput対応のゲームコントローラー（比較的新しいゲームコントローラー）は、全く認識できなかったり、認識できても一部のキー入力が効かないものが多い傾向があるので非推奨です。
+> SUZUKIPLAN が主に使用している製品は Elecom JC-U3312 と HXBE37823 です。Elecom JC-U3312 は EOL (製造終了) の商品のため入手が難しいかもしれません。HXBE37823 は [Aliexpress](https://ja.aliexpress.com/item/1005001905753033.html) に 300 円前後の安価なものが沢山あり、[Amazon](https://www.amazon.co.jp/dp/B07M7SYX11/) でも購入可能です。（ただし、HXBE37823 は上下左右の移動をする時に斜め入力が入ってしまうものがあり、感度の品質面に難があるかもしれませんが、[Battle Marine](https://github.com/suzukiplan/bmarine-zero/) のように左右に移動方向を絞ったゲームであれば快適にプレイできます）
+
+#### (GPIO Joypad)
+
+RaspberryPi Zero 2W の GPIO に次のピンアサインで直接ボタンを接続することもできます。
+
+| Button | GPIO |
+|:------:|:----:|
+| Up     | 22   |
+| Down   | 5    |
+| Left   | 26   |
+| Right  | 6    |
+| A      | 24   |
+| B      | 25   |
+| Start  | 4    |
+| Select | 23   |
+
+RaspberryPi Zero 2W Pin Map
+
+_※ GND の接続も必要です_
+
+> GPIO 接続に関する詳細は [こちらの記事](https://note.com/suzukiplan/n/ncccafb305eae) をご参照ください。
+>
+> VGS-Zero 対応のジョイスティック・ジョイパッドは、企業（商業ハード）or 個人（同人ハード）に関係なく SUZUKIPLAN からのライセンス不要で自由に開発・販売していただくことが可能です。_（ライセンスは不要ですがサポートもしないスタイルなので、販売に伴う消費者へのサポート対応等は販売元の責任で行ってください）_
 
 #### (Launch Sequence)
 
@@ -802,9 +838,6 @@ README.txtの記載凡例:
   - リフレッシュレート60Hz
   - 解像度 480x384 ピクセル以上
   - オーディオ出力対応
-
-Amazon の商品リスト:
-https://www.amazon.co.jp/hz/wishlist/ls/3NJAWPV24UQ7H
 
 
 【起動方法】

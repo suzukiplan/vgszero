@@ -1,2 +1,6 @@
 *.o
 vgs0
+screen*.bmp
+ram.bin
+vram.bin
+

@@ -1,5 +1,15 @@
 # Change Log
 
+## [Version 1.3.0 (2024.02.12)](https://github.com/suzukiplan/vgszero/releases/tag/1.3.0)
+
+- vgs0lib に `vgs0_exit` 関数（割り込み禁止状態で HALT）を追加
+- ラズパイ版で GPIO ジョイパッドによる入力に対応
+- ラズパイ版で検証済みの USB ジョイパッドをドキュメント記載
+- SDL2 版で `DI` している状態での `HALT` を検出した時にプロセスを停止するように変更
+- SDL2 版でウィンドウの閉じるボタン（×）を押してもプロセスが終了しない不具合を修正
+- SDL2 版でプログレッシブ表示（240x192）のキャプチャ保存に対応
+- SDL2 版のウィンドウタイトル表示変更: VGS0 -> VGS-Zero
+
 ## [Version 1.2.3 (2024.01.30)](https://github.com/suzukiplan/vgszero/releases/tag/1.2.3)
 
 - ラズパイで config.sys が正常に読み込まれない不具合を修正

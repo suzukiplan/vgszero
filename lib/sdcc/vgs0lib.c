@@ -610,3 +610,11 @@ __asm
     ret
 __endasm;
 }
+
+void vgs0_exit(void) __z88dk_fastcall
+{
+__asm
+    di
+    halt
+__endasm;
+}
