@@ -115,6 +115,8 @@ RaspberryPi Zero 2W の GPIO に次のピンアサインで直接ボタンを接
 
 RaspberryPi Zero 2W Pin Map
 
+![joypad_pin.jpeg](joypad_pin.jpeg)
+
 _※ GND の接続も必要です_
 
 > GPIO 接続に関する詳細は [こちらの記事](https://note.com/suzukiplan/n/ncccafb305eae) をご参照ください。
