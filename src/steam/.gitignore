@@ -1,2 +1,6 @@
 sdk/public
 sdk/redistributable_bin
+bin2var.obj
+bin2var.exe
+src/gamepkg.h
+src/gamepkg.c
