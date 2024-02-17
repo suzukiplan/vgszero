@@ -21,7 +21,18 @@
 
 [./src](./src) 以下のファイルは自由に改変できますが、改変したファイルは GPLv3 ライセンスに基づきソースコードの開示義務が生じる点をご注意ください。
 
-なお、ジョイパッドの入力は Steam クライアントから起動して SteamInput の設定でレイアウトを指定することで利用できるようになります。詳細は Steamworks で公開されている SteamInput のマニュアルをご確認ください。
+## Trouble Shooting
+
+- Q. ビルドが成功したが起動しない
+  - A. steam_appid.txt が正しいかご確認ください
+- Q. 落ちるetc
+  - A. log.txt をご確認ください
+- Q. ジョイパッドが効かない
+  - A. ジョイパッドの入力は Steam クライアントから起動して SteamInput の設定でレイアウトを指定することで利用できるようになります。詳細は Steamworks で公開されている SteamInput のマニュアルをご確認ください。
+- Q. バグを見つけた
+  - A. [issues](https://github.com/suzukiplan/vgszero/issues) でチケットを切ってください
+- Q. VisualStudio の IDE で動かしたい
+  - A. (　･ω･)もきゅ？
 
 ## Licenses
 
