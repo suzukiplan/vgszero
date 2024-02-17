@@ -453,6 +453,37 @@ uint8_t vgs0_angle(uint8_t sx, uint8_t sy, uint8_t dx, uint8_t dy) __smallc
     return vgs0_atan2(hl) - 64;
 }
 
+void vgs0_srand8(uint8_t l) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xC9), a
+__endasm;
+}
+
+uint8_t vgs0_rand8(void) __z88dk_fastcall
+{
+__asm
+    in a, (#0xC9)
+    ret
+__endasm;
+}
+
+void vgs0_srand16(uint16_t hl) __z88dk_fastcall
+{
+__asm
+    out (#0xCA), a
+__endasm;
+}
+
+uint16_t vgs0_rand16(void) __z88dk_fastcall
+{
+__asm
+    in a, (#0xCA)
+    ret
+__endasm;
+}
+
 
 void vgs0_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
 {

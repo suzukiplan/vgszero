@@ -488,6 +488,34 @@ int8_t vgs0_cos(uint8_t a) __z88dk_fastcall;
 uint8_t vgs0_atan2(uint16_t hl) __z88dk_fastcall;
 
 /**
+ * @brief Set 8-bits random seed
+ * @param l random seed
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-random
+ */
+void vgs0_srand8(uint8_t l) __z88dk_fastcall;
+
+/**
+ * @brief Get 8-bits random
+ * @return 8-bits random value
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-random
+ */
+uint8_t vgs0_rand8(void) __z88dk_fastcall;
+
+/**
+ * @brief Set 16-bits random seed
+ * @param hl random seed
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-random
+ */
+void vgs0_srand16(uint16_t hl) __z88dk_fastcall;
+
+/**
+ * @brief Get 16-bits random
+ * @return 16-bits random value
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-random
+ */
+uint16_t vgs0_rand16(void) __z88dk_fastcall;
+
+/**
  * @brief Acquire angle
  * @param sx source X
  * @param sy source Y

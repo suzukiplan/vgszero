@@ -12,9 +12,11 @@
 #include "z80.hpp"
 
 extern "C" {
-extern signed char vgs0_sin_table[256];
-extern signed char vgs0_cos_table[256];
-extern unsigned char vgs0_atan2_table[256][256];
+extern const signed char vgs0_sin_table[256];
+extern const signed char vgs0_cos_table[256];
+extern const unsigned char vgs0_atan2_table[256][256];
+extern const unsigned char vgs0_rand8[256];
+extern const unsigned short vgs0_rand16[65536];
 };
 
 class VGS0
@@ -64,7 +66,8 @@ class VGS0
         unsigned char ram[0x4000];
         unsigned char romBank[4];
         unsigned char pad;
-        unsigned char reserved[3];
+        unsigned char ri8;
+        unsigned short ri16;
         struct BgmContext {
             bool playing;
             bool fadeout;
@@ -340,6 +343,17 @@ class VGS0
             case 0xC8: {
                 return vgs0_atan2_table[this->cpu->reg.pair.H][this->cpu->reg.pair.L];
             }
+            case 0xC9:
+                this->ctx.ri8++;
+                this->ctx.ri8 &= 0xFF;
+                this->cpu->reg.pair.L = vgs0_rand8[this->ctx.ri8];
+                return this->cpu->reg.pair.L;
+            case 0xCA:
+                this->ctx.ri16++;
+                this->ctx.ri16 &= 0xFFFF;
+                this->cpu->reg.pair.L = vgs0_rand16[this->ctx.ri16] & 0xFF;
+                this->cpu->reg.pair.H = (vgs0_rand16[this->ctx.ri16] & 0xFF00) >> 8;
+                return this->cpu->reg.pair.L;
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
                 unsigned short addr = this->cpu->reg.pair.B;
@@ -489,6 +503,12 @@ class VGS0
             }
             case 0xC6: this->cpu->reg.pair.A = (unsigned char)vgs0_sin_table[value]; break;
             case 0xC7: this->cpu->reg.pair.A = (unsigned char)vgs0_cos_table[value]; break;
+            case 0xC9: this->ctx.ri8 = value; break;
+            case 0xCA:
+                this->ctx.ri16 = this->cpu->reg.pair.H;
+                this->ctx.ri16 <<= 8;
+                this->ctx.ri16 |= this->cpu->reg.pair.L;
+                break;
             case 0xDA: {
                 if (this->saveCallback) {
                     unsigned short addr = this->cpu->reg.pair.B;
