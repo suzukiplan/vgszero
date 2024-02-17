@@ -15,9 +15,8 @@
 販売時に同梱する [README.txt](./README.txt) に次のライセンス情報を必ず記載してください。
 
 1. PicoJSON - a C++ JSON parser / serializer (2-clause BSD)
-2. VGS-Zero SDK for Steam (MIT)
-3. VGS-Zero Library for Z80 (MIT)
-4. VGS-Zero (GPLv3)
-5. SUZUKIPLAN - Z80 Emulator (MIT)
+2. VGS-Zero Library for Z80 (MIT)
+3. VGS-Zero (GPLv3)
+4. SUZUKIPLAN - Z80 Emulator (MIT)
 
-VGS-Zero のライセンスは GPLv3 ですが DLL 形式でバイナリが分割されているため、販売するゲームのソースコード（Z80）のライセンスに影響しません。
+VGS-Zero のライセンスは GPLv3 ですが game.pkg のバイナリが分割されているため、販売するゲームのソースコード（Z80）のライセンスに影響しません。
