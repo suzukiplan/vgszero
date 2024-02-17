@@ -34,6 +34,8 @@ Battle Marine で Steam のバイナリ審査と SteamDeck 互換性審査（con
   - A. log.txt をご確認ください
 - Q. ジョイパッドが効かない
   - A. ジョイパッドの入力は Steam クライアントから起動して SteamInput の設定でレイアウトを指定することで利用できるようになります。詳細は Steamworks で公開されている SteamInput のマニュアルをご確認ください。
+- Q. なにゆえ SteamInput？ (XInputｶﾞﾖｶｯﾀﾉﾆ...)
+  - A. SteamDeck の互換性審査を通すため
 - Q. バグを見つけた
   - A. [issues](https://github.com/suzukiplan/vgszero/issues) でチケットを切ってください
 - Q. VisualStudio の IDE で動かしたい

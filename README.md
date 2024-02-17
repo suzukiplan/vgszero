@@ -798,6 +798,8 @@ JZ  EFF03_IS_NOT_PLAYING
 
 ## How to Sell Your Game
 
+### RaspberryPi Zero 2W
+
 コミックマーケットや通販で VGS-Zero 用のゲームを販売する時は、
 
 1. FAT32 でフォーマットした micro SD カードを準備
@@ -862,6 +864,14 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 通販で販売する場合、ロット数が多い場合は同人ショップでの委託販売が良いかもしれませんが、小ロット（100本以下程度）であればメルカリあたりが手軽で良いかもしれません。
 
 販売により得られた収益の SUZUKIPLAN へのペイバック（ライセンス料）等は一切不要です。
+
+### Steam
+
+[VGS-Zero SDK for Steam](./src/steam/) を使えば Steam (Windows & SteamDeck) 版を簡単に作成できます。
+
+### Nintendo Switch
+
+将来的に対応したいと思っています（[参考](https://qiita.com/suzukiplan/items/8a740b593816ef9ef565#%E4%BB%BB%E5%A4%A9%E5%A0%82switch%E5%AF%BE%E5%BF%9C%E4%BA%88%E5%AE%9A)）
 
 ## License
 
