@@ -45,8 +45,7 @@ all: VGSZERO.exe steam_api.dll
 	copy VGSZERO.exe release
 	copy VGSZERO.exe.manifest release
 	copy steam_api.dll release
-	copy README.txt release\README.TXT
-	copy game.pkg release
+	copy README.txt release
 	copy LICENSE-PICOJSON.txt release
 	copy LICENSE-VGS0.txt release
 	copy LICENSE-VGS0LIB.txt release

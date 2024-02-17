@@ -302,38 +302,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     putlog("Initializing VGS-Zero emulator...");
-    void* pkg = nullptr;
     const void* rom = nullptr;
     const void* bgm = nullptr;
     const void* se = nullptr;
-    unsigned int pkgSize = 0;
     unsigned int romSize = 0;
     unsigned int bgmSize = 0;
     unsigned int seSize = 0;
     {
-        FILE* fp = fopen("game.pkg", "rb");
-        if (!fp) {
-            putlog("game.pkg not found");
-            exit(-1);
-        }
-        fseek(fp, 0, SEEK_END);
-        pkgSize = (int)ftell(fp);
-        if (pkgSize < 8192) {
-            putlog("invalid game.pkg size: %ld bytes", pkgSize);
-            exit(-1);
-        }
-        fseek(fp, 0, SEEK_SET);
-        pkg = malloc(pkgSize);
-        if (!pkg) {
-            putlog("No memory");
-            exit(-1);
-        }
-        if (pkgSize != fread(pkg, 1, pkgSize, fp)) {
-            putlog("game.pkg read error.");
-            exit(-1);
-        }
-        fclose(fp);
-        const unsigned char* ptr = (const unsigned char*)pkg;
+        HRSRC gamepkg = FindResource(0, MAKEINTRESOURCE(IDR_GAMEPKG), TEXT("BIN"));
+        const BYTE* ptr = (const BYTE*)LockResource(LoadResource(0, gamepkg));
         ptr += 8;
         memcpy(&romSize, ptr, 4);
         ptr += 4;
@@ -541,7 +518,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     term_sound();
     gterm();
     delete steam;
-    free(pkg);
     putlog("The all of resources are released");
 
     return (int)msg.wParam;
