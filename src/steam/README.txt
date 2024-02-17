@@ -37,7 +37,6 @@ Licenses
 This product uses the following Open Source Software:
 
 1. PicoJSON - a C++ JSON parser / serializer (LICENSE-PICOJSON.txt)
-2. VGS-Zero SDK for Steam (LICENSE-VGS0STEAM.txt)
-3. VGS-Zero Library for Z80 (LICENSE-VGS0LIB.txt)
-4. VGS-Zero (LICENSE-VGS0.txt)
-5. SUZUKIPLAN - Z80 Emulator (LICENSE-Z80.txt)
+2. VGS-Zero Library for Z80 (LICENSE-VGS0LIB.txt)
+3. VGS-Zero (LICENSE-VGS0.txt)
+4. SUZUKIPLAN - Z80 Emulator (LICENSE-Z80.txt)
