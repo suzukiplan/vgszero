@@ -1,9 +1,14 @@
-# VGS-Zero SDK for Steam
+# WIP: VGS-Zero SDK for Steam
 
 - Steam (Windows) で VGS-Zero のゲームを販売するための SDK です
 - ビルド前に [Steamworks](https://partner.steamgames.com/) への加入と Steamworks SDK の入手が必要です
 - ビルドは Visual Studio のコマンドライン環境（32bit）で行います
 - Visual Studio のバージョンは不問ですがなるべく新しい方が良いかもしれません
+  - 推奨: Visual Studio 2022
+
+## WIP status
+
+Battle Marine で Steam のバイナリ審査と SteamDeck 互換性審査（confirmed を取得するまで）の間は SDK 仕様の大幅な変更が発生する可能性があります。
 
 ## How to Build
 
