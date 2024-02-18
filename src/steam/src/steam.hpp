@@ -68,7 +68,7 @@ class CSteam
                     putlog("Error: \"Start\" action handle does not exist!");
                 }
                 this->actSelect = SteamInput()->GetDigitalActionHandle("Select");
-                if (!this->actB) {
+                if (!this->actSelect) {
                     putlog("Error: \"Select\" action handle does not exist!");
                 }
                 this->actMove = SteamInput()->GetAnalogActionHandle("Move");
