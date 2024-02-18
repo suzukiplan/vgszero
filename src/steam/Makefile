@@ -31,7 +31,7 @@ CFLAGS = /permissive-\
 	/FC\
 	/EHsc\
 	/nologo\
-	/Fp"game.pch"\
+	/Fp"VGSZERO.pch"\
 	/diagnostics:column
 
 OBJECTS = winmain.obj\
@@ -60,7 +60,7 @@ VGSZERO.exe: $(OBJECTS)
 	/OUT:VGSZERO.exe\
 	/MANIFEST\
 	/NXCOMPAT\
-	/PDB:game.pdb\
+	/PDB:VGSZERO.pdb\
 	/DYNAMICBASE\
 	"kernel32.lib"\
 	"user32.lib"\
@@ -90,7 +90,7 @@ VGSZERO.exe: $(OBJECTS)
 	/ManifestFile:"VGSZERO.exe.manifest"\
 	/OPT:ICF\
 	/ERRORREPORT:PROMPT\
-	/ILK:"game.ilk"\
+	/ILK:"VGSZERO.ilk"\
 	/NOLOGO\
 	/TLBID:1\
 	$(OBJECTS)
