@@ -389,9 +389,9 @@ VGS-Zero 向けに開発されるゲームは、ゲームの利用者が **可�
 | 0x9F05          | 0x1F05          | Register #5: [FG](#fg) [Scroll](#hardware-scroll) Y |
 | 0x9F06          | 0x1F06          | Register #6: IRQ scanline position (NOTE: 0 is disable) |
 | 0x9F07          | 0x1F07          | Register #7: [Status](#vdp-status) (read only) |
-| 0x9F08          | 0x1F08          | [BG](#bg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
-| 0x9F09          | 0x1F09          | [FG](#fg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
-| 0x9F0A          | 0x1F0A          | [スプライト](#sprite) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x9F08          | 0x1F08          | Register #8: [BG](#bg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x9F09          | 0x1F09          | Register #9: [FG](#fg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x9F0A          | 0x1F0A          | Register #10: [スプライト](#sprite) の [Direct Pattern Maaping](#direct-pattern-mapping) |
 | 0xA000 ~ $BFFF  | 0x2000 ~ 0x3FFF | [Character Pattern Table](#character-pattern-table) (32 x 256) |
 
 VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへのロード・ストア（LD命令等）で簡単に実行できます。
