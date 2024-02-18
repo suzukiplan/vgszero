@@ -1,5 +1,21 @@
 # Change Log
 
+## [Version 1.4.0 (2024.02.18)](https://github.com/suzukiplan/vgszero/releases/tag/1.4.0)
+
+- VGS-Zero SDK for Steam を追加
+- HAGe に収束型乱数（8bits, 16bits）を取得する機能を追加
+- HAGe にパーリンノイズを取得する機能を追加
+- vgs0lib に以下の関数を追加:
+  - `vgs0_srand8` : 8-bits 乱数シードを設定
+  - `vgs0_rand8` : 8-bits 乱数を取得
+  - `vgs0_srand16` : 16-bits 乱数シードを設定
+  - `vgs0_rand16` : 16-bits 乱数を取得
+  - `vgs0_noise_seed` : パーリンノイズのシードを設定
+  - `vgs0_noise_limitX` : パーリンノイズの X 座標縮尺を設定
+  - `vgs0_noise_limitY` : パーリンノイズの Y 座標縮尺を設定
+  - `vgs0_noise` : パーリンノイズを取得
+  - `vgs0_noise_oct` : パーリンノイズを取得（オクターブあり）
+
 ## [Version 1.3.0 (2024.02.12)](https://github.com/suzukiplan/vgszero/releases/tag/1.3.0)
 
 - vgs0lib に `vgs0_exit` 関数（割り込み禁止状態で HALT）を追加

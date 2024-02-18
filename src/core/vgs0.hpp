@@ -6,15 +6,18 @@
 
 #ifndef INCLUDE_VGS0_HPP
 #define INCLUDE_VGS0_HPP
+#include "perlinnoise.hpp"
 #include "vdp.hpp"
 #include "vgs0def.h"
 #include "vgsdecv.hpp"
 #include "z80.hpp"
 
 extern "C" {
-extern signed char vgs0_sin_table[256];
-extern signed char vgs0_cos_table[256];
-extern unsigned char vgs0_atan2_table[256][256];
+extern const signed char vgs0_sin_table[256];
+extern const signed char vgs0_cos_table[256];
+extern const unsigned char vgs0_atan2_table[256][256];
+extern const unsigned char vgs0_rand8[256];
+extern const unsigned short vgs0_rand16[65536];
 };
 
 class VGS0
@@ -55,6 +58,7 @@ class VGS0
     Z80* cpu;
     VDP* vdp;
     VGSDecoder* vgsdec;
+    PerlinNoise* noise;
     bool (*saveCallback)(VGS0* vgs0, const void* data, size_t size);
     bool (*loadCallback)(VGS0* vgs0, void* data, size_t size);
     void (*resetCallback)(VGS0* vgs0);
@@ -64,7 +68,8 @@ class VGS0
         unsigned char ram[0x4000];
         unsigned char romBank[4];
         unsigned char pad;
-        unsigned char reserved[3];
+        unsigned char ri8;
+        unsigned short ri16;
         struct BgmContext {
             bool playing;
             bool fadeout;
@@ -84,6 +89,7 @@ class VGS0
         this->vdp = new VDP(
             colorMode, this, [](void* arg) { ((VGS0*)arg)->cpu->requestBreak(); }, [](void* arg) { ((VGS0*)arg)->cpu->generateIRQ(0x07); });
         this->vgsdec = new VGSDecoder();
+        this->noise = new PerlinNoise(vgs0_rand16, 0);
         this->saveCallback = nullptr;
         this->loadCallback = nullptr;
         this->resetCallback = nullptr;
@@ -92,6 +98,7 @@ class VGS0
 
     ~VGS0()
     {
+        delete this->noise;
         delete this->vgsdec;
         delete this->vdp;
         delete this->cpu;
@@ -253,6 +260,7 @@ class VGS0
         size_t result = sizeof(this->ctx);
         result += sizeof(this->cpu->reg);
         result += sizeof(this->vdp->ctx);
+        result += sizeof(this->noise->ctx);
         return result;
     }
 
@@ -264,6 +272,8 @@ class VGS0
         memcpy(bufferPtr, &this->cpu->reg, sizeof(this->cpu->reg));
         bufferPtr += sizeof(this->cpu->reg);
         memcpy(bufferPtr, &this->vdp->ctx, sizeof(this->vdp->ctx));
+        bufferPtr += sizeof(this->vdp->ctx);
+        memcpy(bufferPtr, &this->noise->ctx, sizeof(this->noise->ctx));
     }
 
     void loadState(const void* buffer)
@@ -275,6 +285,8 @@ class VGS0
         memcpy(&this->cpu->reg, bufferPtr, sizeof(this->cpu->reg));
         bufferPtr += sizeof(this->cpu->reg);
         memcpy(&this->vdp->ctx, bufferPtr, sizeof(this->vdp->ctx));
+        bufferPtr += sizeof(this->vdp->ctx);
+        memcpy(&this->noise->ctx, bufferPtr, sizeof(this->noise->ctx));
         this->vdp->refreshDisplay();
         if (this->bgm[this->ctx.bgm.playingIndex].data) {
             this->vgsdec->load(this->bgm[this->ctx.bgm.playingIndex].data, this->bgm[this->ctx.bgm.playingIndex].size);
@@ -339,6 +351,35 @@ class VGS0
             }
             case 0xC8: {
                 return vgs0_atan2_table[this->cpu->reg.pair.H][this->cpu->reg.pair.L];
+            }
+            case 0xC9:
+                this->ctx.ri8++;
+                this->ctx.ri8 &= 0xFF;
+                this->cpu->reg.pair.L = vgs0_rand8[this->ctx.ri8];
+                return this->cpu->reg.pair.L;
+            case 0xCA:
+                this->ctx.ri16++;
+                this->ctx.ri16 &= 0xFFFF;
+                this->cpu->reg.pair.L = vgs0_rand16[this->ctx.ri16] & 0xFF;
+                this->cpu->reg.pair.H = (vgs0_rand16[this->ctx.ri16] & 0xFF00) >> 8;
+                return this->cpu->reg.pair.L;
+            case 0xCE: {
+                unsigned short x = this->cpu->reg.pair.H;
+                x <<= 8;
+                x |= this->cpu->reg.pair.L;
+                unsigned short y = this->cpu->reg.pair.D;
+                y <<= 8;
+                y |= this->cpu->reg.pair.E;
+                return this->noise->noise(x, y);
+            }
+            case 0xCF: {
+                unsigned short x = this->cpu->reg.pair.H;
+                x <<= 8;
+                x |= this->cpu->reg.pair.L;
+                unsigned short y = this->cpu->reg.pair.D;
+                y <<= 8;
+                y |= this->cpu->reg.pair.E;
+                return this->noise->octave(this->cpu->reg.pair.A, x, y);
             }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
@@ -489,6 +530,33 @@ class VGS0
             }
             case 0xC6: this->cpu->reg.pair.A = (unsigned char)vgs0_sin_table[value]; break;
             case 0xC7: this->cpu->reg.pair.A = (unsigned char)vgs0_cos_table[value]; break;
+            case 0xC9: this->ctx.ri8 = value; break;
+            case 0xCA:
+                this->ctx.ri16 = this->cpu->reg.pair.H;
+                this->ctx.ri16 <<= 8;
+                this->ctx.ri16 |= this->cpu->reg.pair.L;
+                break;
+            case 0xCB: {
+                unsigned short hl = this->cpu->reg.pair.H;
+                hl <<= 8;
+                hl |= this->cpu->reg.pair.L;
+                this->noise->seed(vgs0_rand16, hl);
+                break;
+            }
+            case 0xCC: {
+                unsigned short hl = this->cpu->reg.pair.H;
+                hl <<= 8;
+                hl |= this->cpu->reg.pair.L;
+                this->noise->limitX(hl | 1);
+                break;
+            }
+            case 0xCD: {
+                unsigned short hl = this->cpu->reg.pair.H;
+                hl <<= 8;
+                hl |= this->cpu->reg.pair.L;
+                this->noise->limitY(hl | 1);
+                break;
+            }
             case 0xDA: {
                 if (this->saveCallback) {
                     unsigned short addr = this->cpu->reg.pair.B;

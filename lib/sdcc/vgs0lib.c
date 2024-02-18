@@ -453,6 +453,106 @@ uint8_t vgs0_angle(uint8_t sx, uint8_t sy, uint8_t dx, uint8_t dy) __smallc
     return vgs0_atan2(hl) - 64;
 }
 
+void vgs0_srand8(uint8_t l) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xC9), a
+__endasm;
+}
+
+uint8_t vgs0_rand8(void) __z88dk_fastcall
+{
+__asm
+    in a, (#0xC9)
+    ret
+__endasm;
+}
+
+void vgs0_srand16(uint16_t hl) __z88dk_fastcall
+{
+__asm
+    out (#0xCA), a
+__endasm;
+}
+
+uint16_t vgs0_rand16(void) __z88dk_fastcall
+{
+__asm
+    in a, (#0xCA)
+    ret
+__endasm;
+}
+
+void vgs0_noise_seed(uint16_t hl) __z88dk_fastcall
+{
+__asm
+    out (#0xCB), a
+__endasm;
+}
+
+void vgs0_noise_limitX(uint16_t hl) __z88dk_fastcall
+{
+__asm
+    out (#0xCC), a
+__endasm;
+}
+
+void vgs0_noise_limitY(uint16_t hl) __z88dk_fastcall
+{
+__asm
+    out (#0xCD), a
+__endasm;
+}
+
+uint8_t vgs0_noise(uint16_t x, uint16_t y) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // y -> DE
+    ld e, (ix)
+    inc ix
+    ld d, (ix)
+    inc ix
+    // x -> HL
+    ld l, (ix)
+    inc ix
+    ld h, (ix)
+    pop ix
+    // execute HAG
+    in a, (#0xCE)
+    ld l, a
+    ret
+__endasm;
+}
+
+uint8_t vgs0_noise_oct(uint8_t oct, uint16_t x, uint16_t y) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // y -> DE
+    ld e, (ix)
+    inc ix
+    ld d, (ix)
+    inc ix
+    // x -> HL
+    ld l, (ix)
+    inc ix
+    ld h, (ix)
+    inc ix
+    // oct -> A
+    ld a, (ix)
+    pop ix
+    // execute HAG
+    in a, (#0xCF)
+    ld l, a
+    ret
+__endasm;
+}
 
 void vgs0_bg_putstr(uint8_t x, uint8_t y, uint8_t attr, const char* str) __smallc
 {

@@ -499,6 +499,73 @@ uint8_t vgs0_atan2(uint16_t hl) __z88dk_fastcall;
 uint8_t vgs0_angle(uint8_t sx, uint8_t sy, uint8_t dx, uint8_t dy) __smallc;
 
 /**
+ * @brief Set 8-bits random seed
+ * @param l random seed
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-random
+ */
+void vgs0_srand8(uint8_t l) __z88dk_fastcall;
+
+/**
+ * @brief Get 8-bits random
+ * @return 8-bits random value
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-random
+ */
+uint8_t vgs0_rand8(void) __z88dk_fastcall;
+
+/**
+ * @brief Set 16-bits random seed
+ * @param hl random seed
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-random
+ */
+void vgs0_srand16(uint16_t hl) __z88dk_fastcall;
+
+/**
+ * @brief Get 16-bits random
+ * @return 16-bits random value
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-random
+ */
+uint16_t vgs0_rand16(void) __z88dk_fastcall;
+
+/**
+ * @brief Set perlin noise seed
+ * @param hl perlin noise seed
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-perlin-noise
+ */
+void vgs0_noise_seed(uint16_t hl) __z88dk_fastcall;
+
+/**
+ * @brief Set perlin noise limit of X
+ * @param hl perlin noise limit of X
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-perlin-noise
+ */
+void vgs0_noise_limitX(uint16_t hl) __z88dk_fastcall;
+
+/**
+ * @brief Set perlin noise limit of Y
+ * @param hl perlin noise limit of Y
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-perlin-noise
+ */
+void vgs0_noise_limitY(uint16_t hl) __z88dk_fastcall;
+
+/**
+ * @brief Get perlin noise 2D
+ * @param oct octave
+ * @param x position X
+ * @param y position Y
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-perlin-noise
+ */
+uint8_t vgs0_noise(uint16_t x, uint16_t y) __smallc;
+
+/**
+ * @brief Get perlin noise 2D (octave)
+ * @param oct octave
+ * @param x position X
+ * @param y position Y
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#hardware-perlin-noise
+ */
+uint8_t vgs0_noise_oct(uint8_t oct, uint16_t x, uint16_t y) __smallc;
+
+/**
  * @brief Continuously writes the specified ASCII code and attribute values to BG's NameTable
  * @param x X-coordinate (0-31)
  * @param y Y-coordinate (0-31)
