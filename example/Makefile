@@ -13,6 +13,7 @@ build:
 	cd 10_chr720 && make build
 	cd 11_bigsprite && make build
 	cd 12_angle && make build
+	cd 13_perlin && make build
 
 clean:
 	cd 01_hello && make clean
@@ -27,3 +28,4 @@ clean:
 	cd 10_chr720 && make clean
 	cd 11_bigsprite && make clean
 	cd 12_angle && make clean
+	cd 13_perlin && make clean

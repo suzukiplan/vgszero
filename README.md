@@ -37,6 +37,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [ハードウェア cos テーブル](#hardware-cos-table)
   - [ハードウェア atan2 テーブル](#hardware-atan2-table)
   - [ハードウェア乱数](#hardware-random)
+  - [ハードウェア・パーリンノイズ](#hardware-perlin-noise)
 - [BGM](#bgmdat)
   - VGS の MML で記述された BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
@@ -157,6 +158,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/10_chr720](./example/10_chr720/) | C言語 | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
 | [example/11_bigsprite](./example/11_bigsprite/) | C言語 | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の指定により巨大なスプライトを表示する例 |
 | [example/12_angle](./example/12_angle) | C言語 | [ハードウェア atan2 テーブル](#hardware-atan2-table) を用いて完全な自機狙いを実装する例 |
+| [example/13_perlin](./example/13_perlin) | C言語 | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
 
 ## Joypad
 
@@ -586,6 +588,11 @@ LD (HL), 0x12   # Sprite = Bank 18
 |   0xC8    |  o  |  -  | [ハードウェア atan2 テーブル](#hardware-atan2-table) |
 |   0xC9    |  o  |  o  | [ハードウェア乱数 (8-bits)](#hardware-random) |
 |   0xCA    |  o  |  o  | [ハードウェア乱数 (16-bits)](#hardware-random) |
+|   0xCB    |  -  |  o  | [パーリンノイズのシード設定](#hardware-perlin-noise) |
+|   0xCC    |  -  |  o  | [パーリンノイズのX座標縮尺を設定](#hardware-perlin-noise) |
+|   0xCD    |  -  |  o  | [パーリンノイズのY座標縮尺を設定](#hardware-perlin-noise) |
+|   0xCE    |  o  |  -  | [パーリンノイズを取得](#hardware-perlin-noise) |
+|   0xCF    |  o  |  -  | [パーリンノイズを取得（オクターブあり）](#hardware-perlin-noise) |
 |   0xDA    |  o  |  o  | [データのセーブ・ロード](#save-data) |
 |   0xE0    |  -  |  o  | BGM を[再生](#play-bgm) |
 |   0xE1    |  -  |  o  | BGM を[中断](#pause-bgm)、[再開](#resume-bgm)、[フェードアウト](#fadeout-bgm) |
@@ -729,6 +736,37 @@ OUT (0xCA), A
 
 # 16 bits 乱数を取得 (乱数は HL レジスタにも格納される点を注意)
 IN A, (0xCA)
+```
+
+#### (Hardware Perlin Noise)
+
+パーリンノイズを取得することができます。
+
+> 詳細は [./example/13_perlin](./example/13_perlin/) を参照
+
+```z80
+# 乱数シードを設定
+LD HL, 12345
+OUT (0xCB), A
+
+# X方向の縮尺を設定（小さいほど縮尺が大きい）
+LD HL, 123
+OUT (0xCC), A
+
+# Y方向の縮尺を設定（小さいほど縮尺が大きい）
+LD HL, 456
+OUT (0xCD), A
+
+# パーリンノイズを取得
+LD HL, 789 # X座標
+LD DE, 123 # Y座標
+IN A, (0xCE)
+
+# パーリンノイズをオクターブ指定して取得
+LD HL, 789 # X座標
+LD DE, 123 # Y座標
+LD A, 10   # オクターブ
+IN A, (0xCF)
 ```
 
 #### (Save Data)

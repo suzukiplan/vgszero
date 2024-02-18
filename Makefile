@@ -11,6 +11,8 @@ format:
 	make execute-format FILENAME=./src/core/vgsdecv.hpp
 	make execute-format FILENAME=./src/core/vgstone.c
 	make execute-format FILENAME=./src/core/z80.hpp
+	make execute-format FILENAME=./src/core/vgs0math.c
+	make execute-format FILENAME=./src/core/perlinnoise.hpp
 	make execute-format FILENAME=./src/rpizero/src/kernel.cpp
 	make execute-format FILENAME=./src/rpizero/src/kernel.h
 	make execute-format FILENAME=./src/rpizero/src/main.cpp
@@ -42,6 +44,7 @@ format:
 	make execute-format FILENAME=./example/10_chr720/program.c
 	make execute-format FILENAME=./example/11_bigsprite/program.c
 	make execute-format FILENAME=./example/12_angle/program.c
+	make execute-format FILENAME=./example/13_perlin/program.c
 	make execute-format FILENAME=./lib/sdcc/vgs0lib.h
 
 execute-format:
