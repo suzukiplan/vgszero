@@ -30,8 +30,10 @@ int main(int argc, char* argv[])
     unsigned char bh, bl;
     unsigned char mh[4];
     int i, j, k, y, x, a;
-    char bmp[16384];
-    char chr[8192];
+    char bmp128[16384];
+    char bmp256[65536];
+    char chr256[8192];
+    char chr1024[8192 * 4];
 
     /* 引数チェック */
     rc++;
@@ -70,12 +72,15 @@ int main(int argc, char* argv[])
 
     printf("INPUT: width=%d, height=%d, bits=%d(%d), cmp=%d\n", dh.width, dh.height, (int)dh.bits, dh.cnum, dh.ctype);
 
-    /* 128x128でなければエラー扱い */
+    /* 128x128 or 256x256 でなければエラー扱い */
     rc++;
     if (128 != dh.width || 128 != dh.height) {
-        fprintf(stderr, "ERROR: Invalid input bitmap size. (128x128 only)");
-        goto ENDPROC;
+        if (256 != dh.width || 256 != dh.height) {
+            fprintf(stderr, "ERROR: Invalid input bitmap size. (128x128 only)");
+            goto ENDPROC;
+        }
     }
+    int is1024 = dh.width / 256;
 
     /* 8ビットカラーと4ビットカラー以外は弾く */
     rc++;
@@ -100,15 +105,28 @@ int main(int argc, char* argv[])
         }
         /* 画像データを上下反転しながら読み込む */
         rc++;
-        for (i = 127; 0 <= i; i--) {
-            if (128 != fread(&bmp[i * 128], 1, 128, fpR)) {
-                fprintf(stderr, "ERROR: Could not read graphic data.\n");
-                goto ENDPROC;
+        if (is1024) {
+            for (i = 255; 0 <= i; i--) {
+                if (256 != fread(&bmp256[i * 256], 1, 256, fpR)) {
+                    fprintf(stderr, "ERROR: Could not read graphic data.\n");
+                    goto ENDPROC;
+                }
             }
-        }
-        /* 色情報を mod 16 (0~15) にしておく*/
-        for (i = 0; i < 16384; i++) {
-            bmp[i] = bmp[i] & 0x0F;
+            /* 色情報を mod 16 (0~15) にしておく*/
+            for (i = 0; i < 65536; i++) {
+                bmp256[i] = bmp256[i] & 0x0F;
+            }
+        } else {
+            for (i = 127; 0 <= i; i--) {
+                if (128 != fread(&bmp128[i * 128], 1, 128, fpR)) {
+                    fprintf(stderr, "ERROR: Could not read graphic data.\n");
+                    goto ENDPROC;
+                }
+            }
+            /* 色情報を mod 16 (0~15) にしておく*/
+            for (i = 0; i < 16384; i++) {
+                bmp128[i] = bmp128[i] & 0x0F;
+            }
         }
     } else {
         if (sizeof(pal16) != fread(pal16, 1, sizeof(pal16), fpR)) {
@@ -117,26 +135,53 @@ int main(int argc, char* argv[])
         }
         /* 画像データを上下反転しながら読み込む */
         rc++;
-        unsigned char tmp[64];
-        for (i = 127; 0 <= i; i--) {
-            if (64 != fread(&tmp, 1, 64, fpR)) {
-                fprintf(stderr, "ERROR: Could not read graphic data.\n");
-                goto ENDPROC;
+        if (is1024) {
+            unsigned char tmp[256];
+            for (i = 255; 0 <= i; i--) {
+                if (256 != fread(&tmp, 1, 256, fpR)) {
+                    fprintf(stderr, "ERROR: Could not read graphic data.\n");
+                    goto ENDPROC;
+                }
+                for (int j = 0; j < 256; j++) {
+                    bmp256[i * 256 + j] = j & 1 ? tmp[j / 2] & 0x0F : (tmp[j / 2] & 0xF0) >> 4;
+                }
             }
-            for (int j = 0; j < 128; j++) {
-                bmp[i * 128 + j] = j & 1 ? tmp[j / 2] & 0x0F : (tmp[j / 2] & 0xF0) >> 4;
+        } else {
+            unsigned char tmp[64];
+            for (i = 127; 0 <= i; i--) {
+                if (64 != fread(&tmp, 1, 64, fpR)) {
+                    fprintf(stderr, "ERROR: Could not read graphic data.\n");
+                    goto ENDPROC;
+                }
+                for (int j = 0; j < 128; j++) {
+                    bmp128[i * 128 + j] = j & 1 ? tmp[j / 2] & 0x0F : (tmp[j / 2] & 0xF0) >> 4;
+                }
             }
         }
     }
 
     /* Bitmap を CHR に変換 */
-    for (y = 0; y < 16; y++) {
-        for (x = 0; x < 16; x++) {
-            for (j = 0; j < 8; j++) {
-                for (i = 0; i < 4; i++) {
-                    chr[y * 512 + x * 32 + j * 4 + i] = bmp[y * 1024 + x * 8 + j * 128 + i * 2];
-                    chr[y * 512 + x * 32 + j * 4 + i] <<= 4;
-                    chr[y * 512 + x * 32 + j * 4 + i] |= bmp[y * 1024 + x * 8 + j * 128 + i * 2 + 1];
+    if (is1024) {
+        for (y = 0; y < 32; y++) {
+            for (x = 0; x < 32; x++) {
+                for (j = 0; j < 8; j++) {
+                    for (i = 0; i < 4; i++) {
+                        chr1024[y * 512 + x * 32 + j * 4 + i] = bmp256[y * 4096 + x * 8 + j * 256 + i * 2];
+                        chr1024[y * 512 + x * 32 + j * 4 + i] <<= 4;
+                        chr1024[y * 512 + x * 32 + j * 4 + i] |= bmp256[y * 4096 + x * 8 + j * 256 + i * 2 + 1];
+                    }
+                }
+            }
+        }
+    } else {
+        for (y = 0; y < 16; y++) {
+            for (x = 0; x < 16; x++) {
+                for (j = 0; j < 8; j++) {
+                    for (i = 0; i < 4; i++) {
+                        chr256[y * 512 + x * 32 + j * 4 + i] = bmp128[y * 1024 + x * 8 + j * 128 + i * 2];
+                        chr256[y * 512 + x * 32 + j * 4 + i] <<= 4;
+                        chr256[y * 512 + x * 32 + j * 4 + i] |= bmp128[y * 1024 + x * 8 + j * 128 + i * 2 + 1];
+                    }
                 }
             }
         }
@@ -148,9 +193,16 @@ int main(int argc, char* argv[])
         fprintf(stderr, "ERROR: Could not open: %s\n", argv[2]);
         goto ENDPROC;
     }
-    if (sizeof(chr) != fwrite(chr, 1, sizeof(chr), fpW)) {
-        fprintf(stderr, "ERROR: File write error: %s\n", argv[2]);
-        goto ENDPROC;
+    if (is1024) {
+        if (sizeof(chr1024) != fwrite(chr1024, 1, sizeof(chr1024), fpW)) {
+            fprintf(stderr, "ERROR: File write error: %s\n", argv[2]);
+            goto ENDPROC;
+        }
+    } else {
+        if (sizeof(chr256) != fwrite(chr256, 1, sizeof(chr256), fpW)) {
+            fprintf(stderr, "ERROR: File write error: %s\n", argv[2]);
+            goto ENDPROC;
+        }
     }
 
     /* パレットデータを書き出す */
