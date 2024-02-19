@@ -1,4 +1,4 @@
-PROJECT = save
+PROJECT = perlin
 BMP2CHR = ../../tools/bmp2chr/bmp2chr
 MAKEROM = ../../tools/makerom/makerom
 MAKEPKG = ../../tools/makepkg/makepkg
