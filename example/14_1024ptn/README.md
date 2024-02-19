@@ -1,10 +1,10 @@
-# Full screen character display 
+# 1024 Patterns Mode
 
-Direct Pattern Mapping を用いて全画面に異なるパターン（30x24=720）を表示します。
+1024 パターンを表示する機能を用いる例です。
 
 ![preview.png](preview.png)
 
-> [1024 パターンモード](../14_1024ptn/) を用いればよりスマートにこの目的を実現できます。
+カーソルで上下左右にスクロールできます。
 
 ## How to build
 
@@ -21,18 +21,17 @@ Direct Pattern Mapping を用いて全画面に異なるパターン（30x24=720
 
 ```zsh
 git clone https://github.com/suzukiplan/vgszero
-cd vgszero/example/10_chr720
+cd vgszero/example/14_1024ptn
 make
 ```
 
 ## ROM structure
 
 ```
-8KB x 5 banks = 40KB ROM
+8KB x 7 banks = 56KB ROM
 ```
 
 - Bank 0: program
 - Bank 1: program
-- Bank 2: bg.chr
-- Bank 3: fg.chr
-- Bank 4: sprite.chr
+- Bank 2: palette
+- Bank 3~6: image.chr

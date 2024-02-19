@@ -1,4 +1,4 @@
-PROJECT = perlin
+PROJECT = ptn1024
 BMP2CHR = ../../tools/bmp2chr/bmp2chr
 MAKEROM = ../../tools/makerom/makerom
 MAKEPKG = ../../tools/makepkg/makepkg
@@ -38,12 +38,12 @@ tools:
 game.pkg: ${PROJECT}.rom
 	${MAKEPKG} -o game.pkg -r ${PROJECT}.rom
 
-${PROJECT}.rom: program.bin image.chr
-	${MAKEROM} ${PROJECT}.rom program.bin image.chr
+${PROJECT}.rom: image.chr program.bin
+	${MAKEROM} ${PROJECT}.rom program.bin palette.bin image.chr
 
 program.bin: program.c ../../lib/sdcc/vgs0.lib ../../lib/sdcc/vgs0lib.h
 	sdcc ${SDCC_FLAGS} program.c
 	makebin -s 16384 program.ihx program.bin
 
 image.chr: image.bmp
-	${BMP2CHR} image.bmp image.chr
+	${BMP2CHR} image.bmp image.chr palette.bin

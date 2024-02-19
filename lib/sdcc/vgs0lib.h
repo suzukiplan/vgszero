@@ -188,6 +188,12 @@
  */
 #define VGS0_ADDR_SPRITE_DPM ((uint8_t*)0x9F0A)
 
+/** @def
+ * 1024 Patterns Mode
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#1024-patterns-mode
+ */
+#define VGS0_ADDR_PTN1024 ((uint8_t*)0x9F0B)
+
 //! stdint compatible (8bit unsigned)
 typedef unsigned char uint8_t;
 
