@@ -136,9 +136,9 @@ int main(int argc, char* argv[])
         /* 画像データを上下反転しながら読み込む */
         rc++;
         if (is1024) {
-            unsigned char tmp[256];
+            unsigned char tmp[128];
             for (i = 255; 0 <= i; i--) {
-                if (256 != fread(&tmp, 1, 256, fpR)) {
+                if (128 != fread(&tmp, 1, 128, fpR)) {
                     fprintf(stderr, "ERROR: Could not read graphic data.\n");
                     goto ENDPROC;
                 }
@@ -166,9 +166,9 @@ int main(int argc, char* argv[])
             for (x = 0; x < 32; x++) {
                 for (j = 0; j < 8; j++) {
                     for (i = 0; i < 4; i++) {
-                        chr1024[y * 512 + x * 32 + j * 4 + i] = bmp256[y * 4096 + x * 8 + j * 256 + i * 2];
-                        chr1024[y * 512 + x * 32 + j * 4 + i] <<= 4;
-                        chr1024[y * 512 + x * 32 + j * 4 + i] |= bmp256[y * 4096 + x * 8 + j * 256 + i * 2 + 1];
+                        chr1024[y * 1024 + x * 32 + j * 4 + i] = bmp256[y * 2048 + x * 8 + j * 256 + i * 2];
+                        chr1024[y * 1024 + x * 32 + j * 4 + i] <<= 4;
+                        chr1024[y * 1024 + x * 32 + j * 4 + i] |= bmp256[y * 2048 + x * 8 + j * 256 + i * 2 + 1];
                     }
                 }
             }
