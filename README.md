@@ -570,6 +570,10 @@ LD (HL), 0x12   # Sprite = Bank 18
 - 16〜23行目: Pattern Bank = DPM + 2
 - 24〜31行目: Pattern Bank = DPM + 3
 
+[bmp2chr](./tools/bmp2chr/) に 256x256 ピクセルの `.bmp` ファイルを入力すれば、本モード用の 4 バンクセットの chr データを簡単に生成することができます。
+
+> 詳細は [./example/14_1024ptn](./example/14_1024ptn/) を参照
+
 #### (Character Pattern Table)
 
 - キャラクタパターンテーブルには 8x8 ピクセルのキャラクタパターンを最大 256 個定義できます
