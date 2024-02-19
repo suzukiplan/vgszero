@@ -1,5 +1,9 @@
 # Change Log
 
+## [Version 1.5.0 (2024.02.xx)](https://github.com/suzukiplan/vgszero/releases/tag/1.5.0)
+
+- BG/FG に 1024 パターンモード を追加
+
 ## [Version 1.4.0 (2024.02.18)](https://github.com/suzukiplan/vgszero/releases/tag/1.4.0)
 
 - VGS-Zero SDK for Steam を追加
