@@ -142,6 +142,10 @@ _※ GND の接続も必要です_
 
 SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コマンドラインオプションに起動対象の [game.pkg](#gamepkg) を指定して実行してください。
 
+### on Steam for Sale (Windows)
+
+VGS-Zero SDK for Steam（[./src/steam](./src/steam/)）を用いることで、最小限の労力で [Steam で販売](#steam) できる [game.pkg](#gamepkg) の EXE ファイルを作成することができます。
+
 ## Examples
 
 | Directory | Language | Description |
