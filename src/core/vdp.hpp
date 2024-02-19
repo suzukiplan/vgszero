@@ -39,6 +39,8 @@ class VDP
     inline int getBgDPM() { return ((int)this->ctx.ram[0x1F08]) * 0x2000 % this->romSize; }
     inline int getFgDPM() { return ((int)this->ctx.ram[0x1F09]) * 0x2000 % this->romSize; }
     inline int getSpriteDPM() { return ((int)this->ctx.ram[0x1F0A]) * 0x2000 % this->romSize; }
+    inline bool isBG2048() { return this->ctx.ram[0x1F0B] & 0x01; }
+    inline bool isFG2048() { return this->ctx.ram[0x1F0B] & 0x02; }
     inline unsigned char getRegisterIRQ() { return this->ctx.ram[0x1F06]; }
     inline unsigned char* getOamAddr() { return &this->ctx.ram[0x1000]; }
     inline bool isAttrVisible(unsigned char attr) { return attr & 0x80; }
@@ -193,6 +195,10 @@ class VDP
         const unsigned char* ptntbl;
         int dpm = this->getBgDPM();
         if (dpm) {
+            if (this->isBG2048()) {
+                dpm += offset / 128 * 0x2000;
+                dpm %= this->romSize;
+            }
             ptntbl = &this->rom[dpm];
         } else {
             ptntbl = this->getPatternTableAddr();
@@ -226,6 +232,10 @@ class VDP
         const unsigned char* ptntbl;
         int dpm = this->getFgDPM();
         if (dpm) {
+            if (this->isFG2048()) {
+                dpm += offset / 128 * 0x2000;
+                dpm %= this->romSize;
+            }
             ptntbl = &this->rom[dpm];
         } else {
             ptntbl = this->getPatternTableAddr();

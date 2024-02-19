@@ -24,6 +24,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [ハードウェアスクロール](#hardware-scroll)対応（[BG](#bg), [FG](#fg) 各）
   - 最大 256 枚の[スプライト](#sprite)を表示可能（水平上限なし）
   - [BG](#bg), [FG](#fg), [スプライト](#sprite) にそれぞれ異なる[キャラクタパターン](#character-pattern-table)を設定できる [Direct Pattern Mapping](#direct-pattern-mapping) 機能に対応（最大 768 枚のキャラクターパターンを同時に表示可能）
+  - [BG](#bg), [FG](#fg) は最大 [2048 パターンを表示できるモード](#2048-patterns-mode) に対応
   - [スプライト](#sprite)に複数の[キャラクタパターン](#character-pattern-table)を並べて表示できるハードウェア機能（[OAM Pattern Size](#oam-pattern-size)）を提供
   - [スプライト](#sprite)の [OAM](#oam) 毎に異なるバンクを指定できるハードウェア機能（[OAM Bank](#oam-bank)）を提供
 - DMA (Direct Memory Access)
@@ -392,6 +393,7 @@ VGS-Zero 向けに開発されるゲームは、ゲームの利用者が **可�
 | 0x9F08          | 0x1F08          | Register #8: [BG](#bg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
 | 0x9F09          | 0x1F09          | Register #9: [FG](#fg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
 | 0x9F0A          | 0x1F0A          | Register #10: [スプライト](#sprite) の [Direct Pattern Maaping](#direct-pattern-mapping) |
+| 0x9F0B          | 0x1F0B          | Register #11: [BG/FG の 2048 パターンモード設定](#2048-patterns-mode) |
 | 0xA000 ~ $BFFF  | 0x2000 ~ 0x3FFF | [Character Pattern Table](#character-pattern-table) (32 x 256) |
 
 VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへのロード・ストア（LD命令等）で簡単に実行できます。
@@ -523,6 +525,50 @@ OAM Bank を用いることで、OAM 毎に異なるキャラクタパターン�
 
 NOTE: Status register always reset after read.
 
+#### (Direct Pattern Mapping)
+
+通常、[BG](#bg)、[FG](#fg)、[スプライト](#sprite)は共通の[キャラクターパターンテーブル](#character-pattern-table)を参照しますが、0x9F08、0x9F09、0x9F0A に **0以外** の値を書き込むことで、その値に対応する ROM バンクをそれぞれの[キャラクターパターンテーブル](#character-pattern-table)とすることができる DPM; Direct Pattern Mapping 機能を利用することができます。
+
+- 0x9F08: [BG](#bg) の DPM
+- 0x9F09: [FG](#fg) の DPM
+- 0x9F0A: [スプライト](#sprite) の DPM
+
+```z80
+LD HL, 0x9F08
+LD (HL), 0x10   # BG = Bank 16
+INC HL
+LD (HL), 0x11   # FG = Bank 17
+INC HL
+LD (HL), 0x12   # Sprite = Bank 18
+```
+
+> バンク切り替えアニメーションをしたい場合、[キャラクタパターンテーブル](#character-pattern-table) を [DMA](#rom-to-character-dma) で切り替えるよりも DPM を用いた方が CPU リソースを節約できます。
+
+
+#### (2048 Patterns Mode)
+
+0x9F0B の設定により BG/FG で利用できるパターン数を 2048 に拡張することができます。
+
+> なお、本機能の利用には BG/FG の [DPM](#direct-pattern-mapping) の設定が必要です。
+
+| Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|   -   |   -   |   -   |   -   |   -   |   -   | `F2k` | `B2k` |
+
+- `F2k` FG パターン数（0: 256, 1: 2048）
+- `B2k` BG パターン数（0: 256, 1: 2048）
+
+`B2k`, `F2k` をセットした場合、[ネームテーブル](#name-table) の `行÷4 + DPM` が適用されるパターンバンク番号になります。
+
+- 0〜3行目: Pattern Bank = DPM + 0
+- 4〜7行目: Pattern Bank = DPM + 1
+- 8〜11行目: Pattern Bank = DPM + 2
+- 12〜15行目: Pattern Bank = DPM + 3
+- 16〜19行目: Pattern Bank = DPM + 4
+- 20〜23行目: Pattern Bank = DPM + 5
+- 24〜27行目: Pattern Bank = DPM + 6
+- 28〜31行目: Pattern Bank = DPM + 7
+
 #### (Character Pattern Table)
 
 - キャラクタパターンテーブルには 8x8 ピクセルのキャラクタパターンを最大 256 個定義できます
@@ -549,25 +595,6 @@ NOTE: Status register always reset after read.
 - 使用するパレット番号は[属性](#attribute)に指定します
 
 Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)、[FG](#fg)、[スプライト](#sprite) の全てを [Direct Pattern Mapping](#direct-pattern-mapping) にすることで 8KB の RAM 相当の領域とすることができます。更に、この領域は DMA による高速なバンクロードにも対応しているため、シューティングゲームや RPG などの広大なマップデータ（1 チップ 1 バイトなら最大で 128x128 チップ!!）の展開先領域として最適かもしれません。
-
-#### (Direct Pattern Mapping)
-
-通常、[BG](#bg)、[FG](#fg)、[スプライト](#sprite)は共通の[キャラクターパターンテーブル](#character-pattern-table)を参照しますが、0x9F08、0x9F09、0x9F0A に **0以外** の値を書き込むことで、その値に対応する ROM バンクをそれぞれの[キャラクターパターンテーブル](#character-pattern-table)とすることができる DPM; Direct Pattern Mapping 機能を利用することができます。
-
-- 0x9F08: [BG](#bg) の DPM
-- 0x9F09: [FG](#fg) の DPM
-- 0x9F0A: [スプライト](#sprite) の DPM
-
-```z80
-LD HL, 0x9F08
-LD (HL), 0x10   # BG = Bank 16
-INC HL
-LD (HL), 0x11   # FG = Bank 17
-INC HL
-LD (HL), 0x12   # Sprite = Bank 18
-```
-
-> バンク切り替えアニメーションをしたい場合、[キャラクタパターンテーブル](#character-pattern-table) を [DMA](#rom-to-character-dma) で切り替えるよりも DPM を用いた方が CPU リソースを節約できます。
 
 ### I/O Map
 
