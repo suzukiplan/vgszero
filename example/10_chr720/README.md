@@ -4,6 +4,8 @@ Direct Pattern Mapping を用いて全画面に異なるパターン（30x24=720
 
 ![preview.png](preview.png)
 
+> [1024 パターンモード](../14_1024ptn/) を用いればよりスマートにこの目的を実現できます。
+
 ## How to build
 
 ### Pre-request
