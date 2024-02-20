@@ -1,0 +1,9 @@
+sdk/public
+sdk/redistributable_bin
+release
+libsteam_api.so
+vgszero
+save
+steam_appid.txt
+game.pkg
+*.o

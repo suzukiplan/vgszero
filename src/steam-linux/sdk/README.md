@@ -1,0 +1,1 @@
+Steamworks SDK の `public` と `redistributable_bin` フォルダをこのフォルダにコピーしてください。
