@@ -144,7 +144,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 
 ### on Steam for Sale (Windows)
 
-VGS-Zero SDK for Steam（[./src/steam](./src/steam/)）を用いることで、最小限の労力で [Steam で販売](#steam) できる [game.pkg](#gamepkg) の EXE ファイルを作成することができます。
+[VGS-Zero SDK for Steam](https://github.com/suzukiplan/vgszero-steam) を用いることで、最小限の労力で [Steam で販売](#steam) できる [game.pkg](#gamepkg) のバイナリ（Windows, Linux, macOS）を作成することができます。
 
 ## Examples
 
@@ -965,7 +965,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 
 ### Steam
 
-- [VGS-Zero SDK for Steam](./src/steam/) を使えば Steam (Windows & SteamDeck) 版を簡単に作成できます
+- [VGS-Zero SDK for Steam](https://github.com/suzukiplan/vgszero-steam) を使えば Steam (Windows & SteamDeck) 版を簡単に作成できます
 - VGS-Zero SDK for Steam の利用には Steamworks への加入と App クレジットの購入が必要です
 - 販売により得られた収益の SUZUKIPLAN へのペイバック（ライセンス料）等は一切不要です
 
