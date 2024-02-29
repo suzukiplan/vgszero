@@ -1,5 +1,9 @@
 # Change Log
 
+## [Version 1.7.0 (2024.xx.xx)](https://github.com/suzukiplan/vgszero/releases/tag/1.7.0)
+
+- BGM/SE のボリューム設定インタフェースを追加
+
 ## [Version 1.6.0 (2024.02.23)](https://github.com/suzukiplan/vgszero/releases/tag/1.6.0)
 
 - [VGS-Zero SDK for Steam](https://github.com/suzukiplan/vgszero-steam) のリポジトリを分割
