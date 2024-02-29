@@ -53,6 +53,7 @@ class VGS0
     Binary rom;
     Binary bgm[256];
     SoundEffect se[256];
+    int bgmVolume;
     int seVolume;
 
   public:
@@ -94,6 +95,7 @@ class VGS0
         this->saveCallback = nullptr;
         this->loadCallback = nullptr;
         this->resetCallback = nullptr;
+        this->setBgmVolume(100);
         this->setSeVolume(100);
         this->reset();
     }
@@ -232,6 +234,14 @@ class VGS0
             } else {
                 this->ctx.bgm.seekPosition = (unsigned int)this->vgsdec->getDurationTime();
             }
+            if (this->bgmVolume < 100) {
+                for (int i = 0; i < (int)size / 2; i++) {
+                    int w = buf[i];
+                    w *= this->bgmVolume;
+                    w /= 100;
+                    buf[i] = (short)w;
+                }
+            }
         } else {
             memset(buf, 0, size);
         }
@@ -299,11 +309,12 @@ class VGS0
     void setBgmVolume(int volume)
     {
         if (volume < 0) {
-            volume = 0;
+            this->bgmVolume = 0;
         } else if (100 < volume) {
-            volume = 100;
+            this->bgmVolume = 100;
+        } else {
+            this->bgmVolume = volume;
         }
-        this->vgsdec->setMasterVolume(volume);
     }
 
     void setSeVolume(int volume)
