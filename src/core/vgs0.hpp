@@ -53,6 +53,8 @@ class VGS0
     Binary rom;
     Binary bgm[256];
     SoundEffect se[256];
+    int bgmVolume;
+    int seVolume;
 
   public:
     Z80* cpu;
@@ -93,6 +95,8 @@ class VGS0
         this->saveCallback = nullptr;
         this->loadCallback = nullptr;
         this->resetCallback = nullptr;
+        this->setBgmVolume(100);
+        this->setSeVolume(100);
         this->reset();
     }
 
@@ -230,6 +234,14 @@ class VGS0
             } else {
                 this->ctx.bgm.seekPosition = (unsigned int)this->vgsdec->getDurationTime();
             }
+            if (this->bgmVolume < 100) {
+                for (int i = 0; i < (int)size / 2; i++) {
+                    int w = buf[i];
+                    w *= this->bgmVolume;
+                    w /= 100;
+                    buf[i] = (short)w;
+                }
+            }
         } else {
             memset(buf, 0, size);
         }
@@ -237,7 +249,7 @@ class VGS0
             if (this->ctx.se[i].playing) {
                 for (int j = 0; j < (int)size / 2; j++) {
                     int wav = buf[j];
-                    wav += this->se[i].data[this->ctx.se[i].playingIndex++];
+                    wav += ((int)this->se[i].data[this->ctx.se[i].playingIndex++]) * this->seVolume / 100;
                     if (32767 < wav) {
                         wav = 32767;
                     } else if (wav < -32768) {
@@ -291,6 +303,28 @@ class VGS0
         if (this->bgm[this->ctx.bgm.playingIndex].data) {
             this->vgsdec->load(this->bgm[this->ctx.bgm.playingIndex].data, this->bgm[this->ctx.bgm.playingIndex].size);
             this->vgsdec->seekTo(this->ctx.bgm.seekPosition);
+        }
+    }
+
+    void setBgmVolume(int volume)
+    {
+        if (volume < 0) {
+            this->bgmVolume = 0;
+        } else if (100 < volume) {
+            this->bgmVolume = 100;
+        } else {
+            this->bgmVolume = volume;
+        }
+    }
+
+    void setSeVolume(int volume)
+    {
+        if (volume < 0) {
+            this->seVolume = 0;
+        } else if (100 < volume) {
+            this->seVolume = 100;
+        } else {
+            this->seVolume = volume;
         }
     }
 
