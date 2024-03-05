@@ -19,8 +19,8 @@ MML のテキストファイルを vgsmml コマンドでコンパイルする�
 |Chunk name|Size    |Description|
 |:---------|:------:|:----------|
 |EyeCatch  |8 bytes |`VGSBGM-V` (固定)|
-|LengthTime|4 bytes |曲の長さ (全 WAIT 値の合計)|
-|LoopTime  |4 bytes |ループ起点の位置 ([JUMP](#jump) の引数値)|
+|LengthTime|4 bytes |曲の長さ (全 [WAIT](#wait) 値の合計)|
+|LoopTime  |4 bytes |ループ起点 (先頭から [JUMP](#jump) 先ノートまでの [WAIT](#wait) 値の合計)|
 |Notes     |variable|シーケンスデータ群（複数の[vgsnote](#vgsnote)）|
 
 > `LengthTime` と `LoopTime` は、東方BGM on VGS が楽曲再生時に必要なデータなので、VGS-Zero 向けのゲームであれば必ずしも正しい値を設定しなくても正常に再生することができます。
