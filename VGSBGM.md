@@ -115,7 +115,7 @@ ENV2 は [KEYOFF](#keyoff) されたチャンネルが無音になるまでの�
 
 |Sequence|bit-7|bit-6|bit-5|bit-4|bit-3|bit-2|bit-1|bit-0|
 |:-------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|byte #1 |  0  |  1  |  0  |  1  |  -  | ch  | ch  | ch  |
+|byte #1 |  0  |  1  |  0  |  1  |  0  | ch  | ch  | ch  |
 |byte #2 |tone |tone |tone |tone |tone |tone |tone |tone |
 |byte #3 | key | key | key | key | key | key | key | key |
 
@@ -139,7 +139,7 @@ ENV2 は [KEYOFF](#keyoff) されたチャンネルが無音になるまでの�
 
 |Sequence|bit-7|bit-6|bit-5|bit-4|bit-3|bit-2|bit-1|bit-0|
 |:-------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|byte #1 |  0  |  1  |  1  |  0  |  -  | ch  | ch  | ch  |
+|byte #1 |  0  |  1  |  1  |  0  |  0  | ch  | ch  | ch  |
 
 - ch は 0 ~ 5 の範囲で指定
 
