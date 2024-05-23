@@ -1,6 +1,10 @@
 # Change Log
 
-## [Version 1.7.0 (2024.xx.xx)](https://github.com/suzukiplan/vgszero/releases/tag/1.7.0)
+## [Version 1.8.0 (2024.05.23)](https://github.com/suzukiplan/vgszero/releases/tag/1.8.0)
+
+- 特定の ROM バンクの内容を任意メモリに任意サイズだけ転送する DMA 機能（ROM to Memory DMA）を追加しました
+
+## [Version 1.7.0 (2024.02.29)](https://github.com/suzukiplan/vgszero/releases/tag/1.7.0)
 
 - BGM/SE のボリューム設定インタフェースを追加
 

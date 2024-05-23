@@ -450,6 +450,47 @@ class VGS0
                 }
                 break;
             }
+            case 0xC1: {
+                int addr = this->cpu->reg.pair.A;
+                unsigned short offset = this->cpu->reg.pair.B;
+                offset <<= 8;
+                offset |= this->cpu->reg.pair.C;
+                offset &= 0x1FFF;
+                unsigned short size = this->cpu->reg.pair.D;
+                size <<= 8;
+                size |= this->cpu->reg.pair.E;
+                size = 0x2000 - offset < size ? 0x2000 - offset : size;
+                unsigned short dist = this->cpu->reg.pair.H;
+                dist <<= 8;
+                dist |= this->cpu->reg.pair.L;
+                addr *= 0x2000;
+                addr += offset;
+                // printf("DMA: BANK=0x%02X, OFFSET=0x%04X, SIZE=%d, DIST=0x%04X\n", this->cpu->reg.pair.A, offset, size, dist);
+                if (0xC000 <= dist) {
+                    // copy to RAM
+                    dist &= 0x3FFF;
+                    if (0x4000 < dist + size) {
+                        size = 0x4000 - dist;
+                    }
+                    if (addr + 0x2000 <= (int)this->rom.size) {
+                        memcpy(&this->ctx.ram[dist], &this->rom.data[addr], size);
+                    } else {
+                        memset(&this->ctx.ram[dist], 0xFF, size);
+                    }
+                } else if (0x8000 <= dist) {
+                    // copy to VRAM
+                    dist &= 0x3FFF;
+                    if (0x4000 < dist + size) {
+                        size = 0x4000 - dist;
+                    }
+                    if (addr + 0x2000 <= (int)this->rom.size) {
+                        memcpy(&this->vdp->ctx.ram[dist], &this->rom.data[addr], size);
+                    } else {
+                        memset(&this->vdp->ctx.ram[dist], 0xFF, size);
+                    }
+                }
+                break;
+            }
             case 0xC2: {
                 unsigned short addrTo = this->cpu->reg.pair.B;
                 addrTo <<= 8;
