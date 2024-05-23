@@ -354,6 +354,16 @@ void vgs0_palette_set_rgb555(uint8_t pn, uint8_t pi, uint16_t rgb555) __smallc;
 void vgs0_dma(uint8_t prg) __z88dk_fastcall;
 
 /**
+ * @brief High-speed DMA transfer of the contents of the specified ROM Bank to the RAM or VRAM
+ * @param prg ROM Bank number (0-255)
+ * @param src Offset of prg (0-8191)
+ * @param size Transfer size (1-8192)
+ * @param dst Destination address (0x0000 ~ 0xFFFF)
+ * @note https://github.com/suzukiplan/vgszero/blob/master/README.md#rom-to-memory-dma
+ */
+void vgs0_dma_ram(uint8_t prg, uint16_t offset, uint16_t size, uint16_t dst) __smallc;
+
+/**
  * @brief DMA equivalent to `memset` in C language
  * @param dst destination address
  * @param value set value

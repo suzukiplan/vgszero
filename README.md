@@ -29,6 +29,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [スプライト](#sprite)の [OAM](#oam) 毎に異なるバンクを指定できるハードウェア機能（[OAM Bank](#oam-bank)）を提供
 - DMA (Direct Memory Access)
   - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
+  - [特定の ROM バンクの内容を任意メモリに任意サイズだけ転送が可能](#rom-to-memory-dma)
   - [C言語の `memset` に相当する高速 DMA 転送機能を実装](#memset-dma)
   - [C言語の `memcpy` に相当する高速 DMA 転送機能を実装](#memcpy-dma)
 - HAGe (High-speed Accumulator for Game)
@@ -611,6 +612,7 @@ Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)�
 |   0xB2    |  o  |  o  | [ROM Bank](#bank-switch) 2 (default: 0x02) |
 |   0xB3    |  o  |  o  | [ROM Bank](#bank-switch) 3 (default: 0x03) |
 |   0xC0    |  -  |  o  | [ROM to Character DMA](#rom-to-character-dma) |
+|   0xC1    |  -  |  o  | [ROM to Memory DMA](#rom-to-memory-dma) |
 |   0xC2    |  -  |  o  | [memset 相当の DMA](#memset-dma) |
 |   0xC3    |  -  |  o  | [memcpy 相当の DMA](#memcpy-dma) |
 |   0xC4    |  o  |  -  | [当たり判定](#collision-detection) |
@@ -655,10 +657,32 @@ OUT (0xB1), A
 
 #### (ROM to Character DMA)
 
+ポート番号 0xC0 を OUT することで、特定のバンクの内容を [VRAM](#vram-memory-map) の[キャラクタパターンテーブル](#character-pattern-table)へ DMA 転送することができます。
+
 ```z80
  # バンク番号 = 0x22 をキャラクタパターンへ転送
 LD A, 0x22
 OUT (0xC0), A
+```
+
+#### (ROM to Memory DMA)
+
+ポート番号 0xC1 を OUT することで、特定のバンクの特定サイズの内容を任意のアドレスに DMA 転送することができます。
+
+この命令は BC, DE, HL に次の内容を設定します:
+
+- BC: 転送元バンク内のオフセット（0x0000〜0x1FFF）
+- DE: 転送サイズ（8192 - BC 以下）
+- HL: 転送先アドレス
+
+以下にバンク番号 0x23 の 0x1234 から 512 バイトを 0xCE00 (RAM) へ DMA 転送する例を示します。
+
+```z80
+LD A, 0x23
+LD BC, 0x1234
+LD DE, 512
+LD HL, 0xCE00
+OUT (0xC1), A
 ```
 
 #### (memset DMA)

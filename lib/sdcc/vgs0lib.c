@@ -141,6 +141,35 @@ __asm
 __endasm;
 }
 
+void vgs0_dma_ram(uint8_t prg, uint16_t offset, uint16_t size, uint16_t dst) __smallc
+{
+__asm
+    push ix
+    ld ix, #STACK_ARG_HEAD
+    add ix, sp
+    // dst -> hl
+    ld l, (ix)
+    inc ix
+    ld h, (ix)
+    inc ix
+    // size -> bc
+    ld c, (ix)
+    inc ix
+    ld b, (ix)
+    inc ix
+    // src -> bc
+    ld c, (ix)
+    inc ix
+    ld b, (ix)
+    inc ix
+    // prg-> a
+    ld a, (ix)
+    pop ix
+    // execute DMA
+    out (#0xC1), a
+__endasm;
+}
+
 void vgs0_memset(uint16_t dst, uint8_t value, uint16_t cnt) __smallc
 {
 __asm
