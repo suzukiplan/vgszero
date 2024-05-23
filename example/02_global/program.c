@@ -36,7 +36,8 @@ void main(void)
     vgs0_palette_set(0, 3, 31, 31, 31); // white
 
     // Bank 2 を Character Pattern Table ($A000) に転送 (DMA)
-    vgs0_dma(2);
+    // vgs0_dma(2);
+    vgs0_dma_ram(2, 0x0000, 8192, 0xA000);
 
     // グローバル変数を初期化
     GV->stop = 0;
