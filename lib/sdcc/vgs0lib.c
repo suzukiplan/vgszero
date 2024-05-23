@@ -156,15 +156,15 @@ __asm
     ld c, (ix)
     inc ix
     ld b, (ix)
-    pop ix
+    inc ix
     // src -> bc
     ld c, (ix)
     inc ix
     ld b, (ix)
-    pop ix
+    inc ix
     // prg-> a
     ld a, (ix)
-    inc ix
+    pop ix
     // execute DMA
     out (#0xC1), a
 __endasm;
