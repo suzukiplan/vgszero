@@ -1,8 +1,9 @@
 # Change Log
 
-## [Version 1.8.0 (2024.05.23)](https://github.com/suzukiplan/vgszero/releases/tag/1.8.0)
+## [Version 1.8.0 (2024.05.24)](https://github.com/suzukiplan/vgszero/releases/tag/1.8.0)
 
 - 特定の ROM バンクの内容を任意メモリに任意サイズだけ転送する DMA 機能（ROM to Memory DMA）を追加しました
+- vgs0lib に上記機能を使用できる `vgs0_dma_ram` 関数を追加しました
 
 ## [Version 1.7.0 (2024.02.29)](https://github.com/suzukiplan/vgszero/releases/tag/1.7.0)
 
