@@ -383,7 +383,8 @@ int main(int argc, char* argv[])
                         }
                         fp = fopen("vram.bin", "wb");
                         if (fp) {
-                            fwrite(vgs0.vdp->ctx.ram, 1, sizeof(vgs0.vdp->ctx.ram), fp);
+                            fwrite(vgs0.vdp->ctx.ram0, 1, 0x2000, fp);
+                            fwrite(&vgs0.vdp->ctx.ram1[vgs0.vdp->ctx.bank][0], 1, 0x2000, fp);
                             fclose(fp);
                         }
                         fp = fopen("screen_480x384.bmp", "wb");

@@ -114,9 +114,16 @@ class VGS0
         return this->ctx.ram;
     }
 
-    void* getVRAM(size_t* size)
+    void* getVRAM0(size_t* size)
     {
-        return this->vdp->getRAM(size);
+        *size = 0x2000;
+        return this->vdp->ctx.ram0;
+    }
+
+    void* getVRAM1(size_t* size)
+    {
+        *size = 0x2000;
+        return &this->vdp->ctx.ram1[this->vdp->ctx.bank][0];
     }
 
     void setExternalRenderingCallback(void (*externalRedneringCallback)(void* arg))
@@ -369,6 +376,7 @@ class VGS0
             case 0xB1: return this->ctx.romBank[1];
             case 0xB2: return this->ctx.romBank[2];
             case 0xB3: return this->ctx.romBank[3];
+            case 0xB4: return this->vdp->ctx.bank;
             case 0xC4: {
                 unsigned short addr = this->cpu->reg.pair.H;
                 addr <<= 8;
@@ -438,15 +446,16 @@ class VGS0
             case 0xB1: this->ctx.romBank[1] = value; break;
             case 0xB2: this->ctx.romBank[2] = value; break;
             case 0xB3: this->ctx.romBank[3] = value; break;
+            case 0xB4: this->vdp->ctx.bank = value; break;
             case 0xC0: {
                 int addr = this->cpu->reg.pair.A;
                 addr *= 0x2000;
                 if (addr + 0x2000 <= (int)this->rom.size) {
                     // printf("DMA: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu->reg.pair.A);
-                    memcpy(&this->vdp->ctx.ram[0x2000], &this->rom.data[addr], 0x2000);
+                    memcpy(&this->vdp->ctx.ram1[this->vdp->ctx.bank][0], &this->rom.data[addr], 0x2000);
                 } else {
                     // printf("DMA-error: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu->reg.pair.A);
-                    memset(&this->vdp->ctx.ram[0x2000], 0xFF, 0x2000);
+                    memset(&this->vdp->ctx.ram1[this->vdp->ctx.bank][0], 0xFF, 0x2000);
                 }
                 break;
             }
@@ -477,16 +486,27 @@ class VGS0
                     } else {
                         memset(&this->ctx.ram[dist], 0xFF, size);
                     }
-                } else if (0x8000 <= dist) {
-                    // copy to VRAM
-                    dist &= 0x3FFF;
-                    if (0x4000 < dist + size) {
-                        size = 0x4000 - dist;
+                } else if (0xA000 <= dist) {
+                    // copy to VRAM1
+                    dist &= 0x1FFF;
+                    if (0x2000 < dist + size) {
+                        size = 0x2000 - dist;
                     }
                     if (addr + 0x2000 <= (int)this->rom.size) {
-                        memcpy(&this->vdp->ctx.ram[dist], &this->rom.data[addr], size);
+                        memcpy(&this->vdp->ctx.ram1[this->vdp->ctx.bank][dist], &this->rom.data[addr], size);
                     } else {
-                        memset(&this->vdp->ctx.ram[dist], 0xFF, size);
+                        memset(&this->vdp->ctx.ram1[this->vdp->ctx.bank][dist], 0xFF, size);
+                    }
+                } else if (0x8000 <= dist) {
+                    // copy to VRAM0
+                    dist &= 0x1FFF;
+                    if (0x2000 < dist + size) {
+                        size = 0x2000 - dist;
+                    }
+                    if (addr + 0x2000 <= (int)this->rom.size) {
+                        memcpy(&this->vdp->ctx.ram0[dist], &this->rom.data[addr], size);
+                    } else {
+                        memset(&this->vdp->ctx.ram0[dist], 0xFF, size);
                     }
                 }
                 break;
