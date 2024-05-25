@@ -207,7 +207,10 @@ int main(int argc, char* argv[])
         FILE* fp = fopen((result + "_vram.bin").c_str(), "wb");
         if (fp) {
             size_t size;
-            void* data = vgs0.getVRAM(&size);
+            void* data;
+            data = vgs0.getVRAM0(&size);
+            fwrite(data, 1, size, fp);
+            data = vgs0.getVRAM1(&size);
             fwrite(data, 1, size, fp);
             fclose(fp);
         }
