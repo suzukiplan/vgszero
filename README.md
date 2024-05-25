@@ -14,6 +14,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - ゲーム実行形式ファイル（[game.pkg](#gamepkg)）は最大 128 メガビット（100メガショック!）
   - [最大 2MB (8kb × 256banks)](#cpu-memory-map) のプログラムとデータ (※音声データを除く)
   - [RAM サイズ 16KB](#cpu-memory-map) (PV16相当!)
+  - [拡張 RAM サイズ 2MB](#extra-ram-bank)
   - [セーブ機能](#save-data)に対応
 - VDP; VGS-Video (映像処理)
   - [VRAM](#vram-memory-map) サイズ 16KB (TMS9918A 相当!)
@@ -611,6 +612,7 @@ Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)�
 |   0xB1    |  o  |  o  | [ROM Bank](#bank-switch) 1 (default: 0x01) |
 |   0xB2    |  o  |  o  | [ROM Bank](#bank-switch) 2 (default: 0x02) |
 |   0xB3    |  o  |  o  | [ROM Bank](#bank-switch) 3 (default: 0x03) |
+|   0xB4    |  o  |  o  | [Extra RAM Bank](#extra-ram-bank) (default: 0x00) |
 |   0xC0    |  -  |  o  | [ROM to Character DMA](#rom-to-character-dma) |
 |   0xC1    |  -  |  o  | [ROM to Memory DMA](#rom-to-memory-dma) |
 |   0xC2    |  -  |  o  | [memset 相当の DMA](#memset-dma) |
@@ -653,6 +655,19 @@ IN A, (0xB0)
 # Switch ROM Bank 1 to No.17
 LD A, 0x11
 OUT (0xB1), A
+```
+
+#### (Extra RAM Bank)
+
+ポート番号 0xB4 を OUT することで、[Character Pattern Table](#character-pattern-table) の RAM (8KB) をバンク切り替えすることで、最大 2MB (8KB x 256) の RAM を使用することができます。
+
+```z80
+# Read Current Extra RAM Bank
+IN A, (0xB4)
+
+# Switch Extra RAM Bank to No.3
+LD A, 0x03
+OUT (0xB4), A
 ```
 
 #### (ROM to Character DMA)
