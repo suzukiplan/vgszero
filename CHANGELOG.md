@@ -3,7 +3,7 @@
 ## [Version 1.9.0 (2024.05.26)](https://github.com/suzukiplan/vgszero/releases/tag/1.9.0)
 
 - Extra RAM Bank (2MB RAM) を追加
-- vgs0lib に上記機能を使用できる `vgs0_rambank_set` 関数と `vgs0_rambank_get` 関数を追加
+- vgs0lib に上記機能を使用できる `vgs0_rambank_switch` 関数と `vgs0_rambank_get` 関数を追加
 
 ## [Version 1.8.0 (2024.05.24)](https://github.com/suzukiplan/vgszero/releases/tag/1.8.0)
 
