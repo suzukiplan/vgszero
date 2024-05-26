@@ -371,13 +371,34 @@ VGS-Zero 向けに開発されるゲームは、ゲームの利用者が **可�
 | 0x2000 ~ 0x3FFF | ROM Bank 1 |
 | 0x4000 ~ 0x5FFF | ROM Bank 2 |
 | 0x6000 ~ 0x7FFF | ROM Bank 3 |
-| 0x8000 ~ 0xBFFF | VRAM |
-| 0xC000 ~ 0xFFFF | RAM (16KB) |
+| 0x8000 ~ 0x9FFF | VRAM |
+| 0xA000 ~ 0xBFFF | Extra RAM Bank |
+| 0xC000 ~ 0xFFFF | Main RAM (16KB) |
 
 - プログラムの ROM データは 8KB 区切りになっていて最大 256 個のバンクを持つことができます
 - 電源投入またはリセットすると ROM Bank には 0〜3 がセットされ、ポート B0〜B3 の I/O で [バンク切り替え](#bank-switch) ができます
 - スタック領域は 0xFFFE から 0xC000 の方向に向かって使われます
 - グローバル変数を使用する場合 0xC000 から順番に使い、スタックによる破壊がされないように気をつけてプログラミングしてください
+
+### RAM Scheme
+
+VGS-Zero の RAM は大きく分類すると 3 種類の RAM 区画が存在します。
+
+1. VRAM (0x8000 ~ 0x9FFF) = 8KB
+2. Extra RAM Bank (0xA000 ~ 0xBFFF) = 8KB x 256 Banks (2MB)
+3. Main RAM (0xC000 ~ 0xFFFF) = 16KB
+
+VRAM は、[Name Table](#name-table)、[Attribute Table](#attribute)、[OAM](#oam)、[Palette](#palette)、VDP レジスタなどグラフィックスの表示や制御に関する機能で使用するメモリ区画です。
+
+そして、Main RAM は変数（0xC000〜）やスタック（〜0xFFFF）などのデータ保持に用いるメモリ区画です。
+
+Extra RAM Bank については VGS-Zero 特有のメモリ区画で若干特殊なもので、[Character Pattern Table](#character-pattern-table) として使うこともできますが __その他の用途で利用__ することもできます。
+
+VGS-Video では、[DPM; Direct Pattern Mapping](#direct-pattern-mapping) や [OAM Bank](#oam-bank) を用いることで ROM 上のデータをダイレクトにキャラクタパターンとして使用できるため、キャラクパターンを RAM (VRAM) へ展開する必要がありません。
+
+そのため「その他の用途での利用」が Extra RAM Bank の想定ユースケースとなっています。
+
+例えば、ローグライク RPG のマップデータなど、自動生成する広大なデータの管理などで有用です。
 
 ### VRAM Memory Map
 
@@ -601,7 +622,7 @@ LD (HL), 0x12   # Sprite = Bank 18
 - FGとスプライトの場合、色番号0は常に透明色です
 - 使用するパレット番号は[属性](#attribute)に指定します
 
-Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)、[FG](#fg)、[スプライト](#sprite) の全てを [Direct Pattern Mapping](#direct-pattern-mapping) にすることで 8KB の RAM 相当の領域とすることができます。更に、この領域は DMA による高速なバンクロードにも対応しているため、シューティングゲームや RPG などの広大なマップデータ（1 チップ 1 バイトなら最大で 128x128 チップ!!）の展開先領域として最適かもしれません。
+Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)、[FG](#fg)、[スプライト](#sprite) の全てを [Direct Pattern Mapping](#direct-pattern-mapping) にすることで 8KB の RAM 相当の領域とすることができます。更に、この領域は DMA による高速なバンクロードにも対応しているため、シューティングゲームや RPG などの広大なマップデータ（1 チップ 1 バイトなら最大で 64x128 チップ!!）の展開先領域として最適かもしれません。
 
 ### I/O Map
 
