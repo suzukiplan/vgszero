@@ -62,6 +62,14 @@ __asm
 __endasm;
 }
 
+void vgs0_rambank_switch(uint8_t n) __z88dk_fastcall
+{
+__asm
+    ld a, l
+    out (#0xB4), a
+__endasm;
+}
+
 uint8_t vgs0_bank0_get(void) __z88dk_fastcall
 {
 __asm
@@ -93,6 +101,15 @@ uint8_t vgs0_bank3_get(void) __z88dk_fastcall
 {
 __asm
     in a, (#0xB3)
+    ld l, a
+    ret
+__endasm;
+}
+
+uint8_t vgs0_rambank_get(void) __z88dk_fastcall
+{
+__asm
+    in a, (#0xB4)
     ld l, a
     ret
 __endasm;

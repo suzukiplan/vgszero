@@ -298,6 +298,12 @@ void vgs0_bank2_switch(uint8_t n) __z88dk_fastcall;
 void vgs0_bank3_switch(uint8_t n) __z88dk_fastcall;
 
 /**
+ * @brief Switch Extram RAM bank
+ * @param n number of the bank
+ */
+void vgs0_rambank_switch(uint8_t n) __z88dk_fastcall;
+
+/**
  * @brief Get current bank number of ROM bank 0
  * @return number of the bank
  */
@@ -320,6 +326,12 @@ uint8_t vgs0_bank2_get(void) __z88dk_fastcall;
  * @return number of the bank
  */
 uint8_t vgs0_bank3_get(void) __z88dk_fastcall;
+
+/**
+ * @brief Get current bank number of Extra RAM Bank
+ * @return number of the bank
+ */
+uint8_t vgs0_rambank_get(void) __z88dk_fastcall;
 
 /**
  * @brief Wait until V-Blank is detected
