@@ -14,6 +14,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - ゲーム実行形式ファイル（[game.pkg](#gamepkg)）は最大 128 メガビット（100メガショック!）
   - [最大 2MB (8kb × 256banks)](#cpu-memory-map) のプログラムとデータ (※音声データを除く)
   - [RAM サイズ 16KB](#cpu-memory-map) (PV16相当!)
+  - [拡張 RAM サイズ 2MB](#extra-ram-bank)
   - [セーブ機能](#save-data)に対応
 - VDP; VGS-Video (映像処理)
   - [VRAM](#vram-memory-map) サイズ 16KB (TMS9918A 相当!)
@@ -370,13 +371,34 @@ VGS-Zero 向けに開発されるゲームは、ゲームの利用者が **可�
 | 0x2000 ~ 0x3FFF | ROM Bank 1 |
 | 0x4000 ~ 0x5FFF | ROM Bank 2 |
 | 0x6000 ~ 0x7FFF | ROM Bank 3 |
-| 0x8000 ~ 0xBFFF | VRAM |
-| 0xC000 ~ 0xFFFF | RAM (16KB) |
+| 0x8000 ~ 0x9FFF | VRAM |
+| 0xA000 ~ 0xBFFF | Extra RAM Bank |
+| 0xC000 ~ 0xFFFF | Main RAM (16KB) |
 
 - プログラムの ROM データは 8KB 区切りになっていて最大 256 個のバンクを持つことができます
 - 電源投入またはリセットすると ROM Bank には 0〜3 がセットされ、ポート B0〜B3 の I/O で [バンク切り替え](#bank-switch) ができます
 - スタック領域は 0xFFFE から 0xC000 の方向に向かって使われます
 - グローバル変数を使用する場合 0xC000 から順番に使い、スタックによる破壊がされないように気をつけてプログラミングしてください
+
+### RAM Scheme
+
+VGS-Zero の RAM は大きく分類すると 3 種類の RAM 区画が存在します。
+
+1. VRAM (0x8000 ~ 0x9FFF) = 8KB
+2. Extra RAM Bank (0xA000 ~ 0xBFFF) = 8KB x 256 Banks (2MB)
+3. Main RAM (0xC000 ~ 0xFFFF) = 16KB
+
+VRAM は、[Name Table](#name-table)、[Attribute Table](#attribute)、[OAM](#oam)、[Palette](#palette)、VDP レジスタなどグラフィックスの表示や制御に関する機能で使用するメモリ区画です。
+
+そして、Main RAM は変数（0xC000〜）やスタック（〜0xFFFF）などのデータ保持に用いるメモリ区画です。
+
+Extra RAM Bank については VGS-Zero 特有のメモリ区画で若干特殊なもので、[Character Pattern Table](#character-pattern-table) として使うこともできますが __その他の用途で利用__ することもできます。
+
+VGS-Video では、[DPM; Direct Pattern Mapping](#direct-pattern-mapping) や [OAM Bank](#oam-bank) を用いることで ROM 上のデータをダイレクトにキャラクタパターンとして使用できるため、キャラクパターンを RAM (VRAM) へ展開する必要がありません。
+
+そのため「その他の用途での利用」が Extra RAM Bank の想定ユースケースとなっています。
+
+例えば、ローグライク RPG のマップデータなど、自動生成する広大なデータの管理などで有用です。
 
 ### VRAM Memory Map
 
@@ -445,11 +467,11 @@ VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへ�
 
 | Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `VI`  | `UD`  | `LR`  |   -   | `P3`  | `P2`  | `P1`  | `P0`  |
+| `VI`  | `LR`  | `UD`  |   -   | `P3`  | `P2`  | `P1`  | `P0`  |
 
 - `VI`: `0` = 非表示, `1` = 表示 _（※ BG に限り 0 でも表示されます）_
-- `UD`: `1` にすると上下反転で表示
 - `LR`: `1` にすると左右反転で表示
+- `UD`: `1` にすると上下反転で表示
 - `P0~P3`: [パレット](#palette)番号 (0 ~ 15)
 
 #### (Palette)
@@ -600,7 +622,7 @@ LD (HL), 0x12   # Sprite = Bank 18
 - FGとスプライトの場合、色番号0は常に透明色です
 - 使用するパレット番号は[属性](#attribute)に指定します
 
-Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)、[FG](#fg)、[スプライト](#sprite) の全てを [Direct Pattern Mapping](#direct-pattern-mapping) にすることで 8KB の RAM 相当の領域とすることができます。更に、この領域は DMA による高速なバンクロードにも対応しているため、シューティングゲームや RPG などの広大なマップデータ（1 チップ 1 バイトなら最大で 128x128 チップ!!）の展開先領域として最適かもしれません。
+Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)、[FG](#fg)、[スプライト](#sprite) の全てを [Direct Pattern Mapping](#direct-pattern-mapping) にすることで 8KB の RAM 相当の領域とすることができます。更に、この領域は DMA による高速なバンクロードにも対応しているため、シューティングゲームや RPG などの広大なマップデータ（1 チップ 1 バイトなら最大で 64x128 チップ!!）の展開先領域として最適かもしれません。
 
 ### I/O Map
 
@@ -611,6 +633,7 @@ Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)�
 |   0xB1    |  o  |  o  | [ROM Bank](#bank-switch) 1 (default: 0x01) |
 |   0xB2    |  o  |  o  | [ROM Bank](#bank-switch) 2 (default: 0x02) |
 |   0xB3    |  o  |  o  | [ROM Bank](#bank-switch) 3 (default: 0x03) |
+|   0xB4    |  o  |  o  | [Extra RAM Bank](#extra-ram-bank) (default: 0x00) |
 |   0xC0    |  -  |  o  | [ROM to Character DMA](#rom-to-character-dma) |
 |   0xC1    |  -  |  o  | [ROM to Memory DMA](#rom-to-memory-dma) |
 |   0xC2    |  -  |  o  | [memset 相当の DMA](#memset-dma) |
@@ -653,6 +676,19 @@ IN A, (0xB0)
 # Switch ROM Bank 1 to No.17
 LD A, 0x11
 OUT (0xB1), A
+```
+
+#### (Extra RAM Bank)
+
+ポート番号 0xB4 を OUT することで、[Character Pattern Table](#character-pattern-table) の RAM (8KB) をバンク切り替えすることで、最大 2MB (8KB x 256) の RAM を使用することができます。
+
+```z80
+# Read Current Extra RAM Bank
+IN A, (0xB4)
+
+# Switch Extra RAM Bank to No.3
+LD A, 0x03
+OUT (0xB4), A
 ```
 
 #### (ROM to Character DMA)

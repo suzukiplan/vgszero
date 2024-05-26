@@ -26,23 +26,23 @@ class VDP
     void (*detectIRQ)(void* arg);
     void* arg;
     ColorMode colorMode;
-    inline unsigned char* getBgNameTableAddr() { return &this->ctx.ram[0x0000]; }
-    inline unsigned char* getBgAttrTableAddr() { return &this->ctx.ram[0x0400]; }
-    inline unsigned char* getFgNameTableAddr() { return &this->ctx.ram[0x0800]; }
-    inline unsigned char* getFgAttrTableAddr() { return &this->ctx.ram[0x0C00]; }
-    inline unsigned short* getColorTableAddr() { return (unsigned short*)&this->ctx.ram[0x1800]; }
-    inline unsigned char* getPatternTableAddr() { return &this->ctx.ram[0x2000]; }
-    inline unsigned char getRegisterBgScrollX() { return this->ctx.ram[0x1F02]; }
-    inline unsigned char getRegisterBgScrollY() { return this->ctx.ram[0x1F03]; }
-    inline unsigned char getRegisterFgScrollX() { return this->ctx.ram[0x1F04]; }
-    inline unsigned char getRegisterFgScrollY() { return this->ctx.ram[0x1F05]; }
-    inline int getBgDPM() { return ((int)this->ctx.ram[0x1F08]) * 0x2000 % this->romSize; }
-    inline int getFgDPM() { return ((int)this->ctx.ram[0x1F09]) * 0x2000 % this->romSize; }
-    inline int getSpriteDPM() { return ((int)this->ctx.ram[0x1F0A]) * 0x2000 % this->romSize; }
-    inline bool isBG1024() { return this->ctx.ram[0x1F0B] & 0x01; }
-    inline bool isFG1024() { return this->ctx.ram[0x1F0B] & 0x02; }
-    inline unsigned char getRegisterIRQ() { return this->ctx.ram[0x1F06]; }
-    inline unsigned char* getOamAddr() { return &this->ctx.ram[0x1000]; }
+    inline unsigned char* getBgNameTableAddr() { return &this->ctx.ram0[0x0000]; }
+    inline unsigned char* getBgAttrTableAddr() { return &this->ctx.ram0[0x0400]; }
+    inline unsigned char* getFgNameTableAddr() { return &this->ctx.ram0[0x0800]; }
+    inline unsigned char* getFgAttrTableAddr() { return &this->ctx.ram0[0x0C00]; }
+    inline unsigned short* getColorTableAddr() { return (unsigned short*)&this->ctx.ram0[0x1800]; }
+    inline unsigned char* getPatternTableAddr() { return &this->ctx.ram1[this->ctx.bank][0]; }
+    inline unsigned char getRegisterBgScrollX() { return this->ctx.ram0[0x1F02]; }
+    inline unsigned char getRegisterBgScrollY() { return this->ctx.ram0[0x1F03]; }
+    inline unsigned char getRegisterFgScrollX() { return this->ctx.ram0[0x1F04]; }
+    inline unsigned char getRegisterFgScrollY() { return this->ctx.ram0[0x1F05]; }
+    inline int getBgDPM() { return ((int)this->ctx.ram0[0x1F08]) * 0x2000 % this->romSize; }
+    inline int getFgDPM() { return ((int)this->ctx.ram0[0x1F09]) * 0x2000 % this->romSize; }
+    inline int getSpriteDPM() { return ((int)this->ctx.ram0[0x1F0A]) * 0x2000 % this->romSize; }
+    inline bool isBG1024() { return this->ctx.ram0[0x1F0B] & 0x01; }
+    inline bool isFG1024() { return this->ctx.ram0[0x1F0B] & 0x02; }
+    inline unsigned char getRegisterIRQ() { return this->ctx.ram0[0x1F06]; }
+    inline unsigned char* getOamAddr() { return &this->ctx.ram0[0x1000]; }
     inline bool isAttrVisible(unsigned char attr) { return attr & 0x80; }
     inline bool isAttrFlipH(unsigned char attr) { return attr & 0x40; }
     inline bool isAttrFlipV(unsigned char attr) { return attr & 0x20; }
@@ -77,8 +77,10 @@ class VDP
         int countV;
         int countH;
         unsigned char status;
-        unsigned char cReserved[3];
-        unsigned char ram[0x4000];
+        unsigned char bank;
+        unsigned char cReserved[2];
+        unsigned char ram0[0x2000];
+        unsigned char ram1[256][0x2000];
     } ctx;
 
     VDP(ColorMode colorMode_, void* arg, void (*detectEndOfFrame)(void* arg), void (*detectIRQ)(void* arg))
@@ -98,12 +100,6 @@ class VDP
         this->romSize = (int)romSize_;
     }
 
-    void* getRAM(size_t* size)
-    {
-        *size = sizeof(this->ctx.ram);
-        return this->ctx.ram;
-    }
-
     void reset()
     {
         memset(&this->ctx, 0, sizeof(this->ctx));
@@ -121,16 +117,25 @@ class VDP
                 this->ctx.status = 0;
                 return result;
             }
-            default: return this->ctx.ram[addr];
+            default:
+                if (addr < 0x2000) {
+                    return this->ctx.ram0[addr];
+                } else {
+                    return this->ctx.ram1[this->ctx.bank][addr & 0x1FFF];
+                }
         }
     }
 
     inline void write(unsigned short addr, unsigned char value)
     {
         addr &= 0x3FFF;
-        this->ctx.ram[addr] = value;
-        if (0x1800 <= addr && addr < 0x1A00) {
-            this->updatePaletteCache((addr - 0x1800) / 2);
+        if (addr < 0x2000) {
+            this->ctx.ram0[addr] = value;
+            if (0x1800 <= addr && addr < 0x1A00) {
+                this->updatePaletteCache((addr - 0x1800) / 2);
+            }
+        } else {
+            this->ctx.ram1[this->ctx.bank][addr & 0x1FFF] = value;
         }
     }
 
