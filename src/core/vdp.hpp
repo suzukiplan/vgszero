@@ -31,7 +31,7 @@ class VDP
     inline unsigned char* getFgNameTableAddr() { return &this->ctx.ram0[0x0800]; }
     inline unsigned char* getFgAttrTableAddr() { return &this->ctx.ram0[0x0C00]; }
     inline unsigned short* getColorTableAddr() { return (unsigned short*)&this->ctx.ram0[0x1800]; }
-    inline unsigned char* getPatternTableAddr() { return &this->ctx.ram0[0x2000]; }
+    inline unsigned char* getPatternTableAddr() { return &this->ctx.ram1[this->ctx.bank][0]; }
     inline unsigned char getRegisterBgScrollX() { return this->ctx.ram0[0x1F02]; }
     inline unsigned char getRegisterBgScrollY() { return this->ctx.ram0[0x1F03]; }
     inline unsigned char getRegisterFgScrollX() { return this->ctx.ram0[0x1F04]; }
