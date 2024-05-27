@@ -305,34 +305,9 @@ int main(int argc, char* argv[])
         vgs0.cpu->addBreakOperand(0x00, [](void* arg, unsigned char* op, int len) {
             auto vgs0 = (VGS0*)arg;
             log("NOP at 0x%04X", vgs0->cpu->reg.PC);
-            printf("A :0x%02X F :0x%02X, B :0x%02X, C :0x%02X, D :0x%02X, E :0x%02X, H :0x%02X, L :0x%02X\n"
-                , vgs0->cpu->reg.pair.A
-                , vgs0->cpu->reg.pair.F
-                , vgs0->cpu->reg.pair.B
-                , vgs0->cpu->reg.pair.C
-                , vgs0->cpu->reg.pair.D
-                , vgs0->cpu->reg.pair.E
-                , vgs0->cpu->reg.pair.H
-                , vgs0->cpu->reg.pair.L
-            );
-            printf("A':0x%02X F':0x%02X, B':0x%02X, C':0x%02X, D':0x%02X, E':0x%02X, H':0x%02X, L':0x%02X\n"
-                , vgs0->cpu->reg.back.A
-                , vgs0->cpu->reg.back.F
-                , vgs0->cpu->reg.back.B
-                , vgs0->cpu->reg.back.C
-                , vgs0->cpu->reg.back.D
-                , vgs0->cpu->reg.back.E
-                , vgs0->cpu->reg.back.H
-                , vgs0->cpu->reg.back.L
-            );
-            printf("PC:0x%04X, SP:0x%04X, IX:0x%04X, IY:0x%04X, I :0x%02X, R :0x%02X\n"
-                , vgs0->cpu->reg.PC
-                , vgs0->cpu->reg.SP
-                , vgs0->cpu->reg.IX
-                , vgs0->cpu->reg.IY
-                , vgs0->cpu->reg.I
-                , vgs0->cpu->reg.R
-            );
+            printf("A :0x%02X F :0x%02X, B :0x%02X, C :0x%02X, D :0x%02X, E :0x%02X, H :0x%02X, L :0x%02X\n", vgs0->cpu->reg.pair.A, vgs0->cpu->reg.pair.F, vgs0->cpu->reg.pair.B, vgs0->cpu->reg.pair.C, vgs0->cpu->reg.pair.D, vgs0->cpu->reg.pair.E, vgs0->cpu->reg.pair.H, vgs0->cpu->reg.pair.L);
+            printf("A':0x%02X F':0x%02X, B':0x%02X, C':0x%02X, D':0x%02X, E':0x%02X, H':0x%02X, L':0x%02X\n", vgs0->cpu->reg.back.A, vgs0->cpu->reg.back.F, vgs0->cpu->reg.back.B, vgs0->cpu->reg.back.C, vgs0->cpu->reg.back.D, vgs0->cpu->reg.back.E, vgs0->cpu->reg.back.H, vgs0->cpu->reg.back.L);
+            printf("PC:0x%04X, SP:0x%04X, IX:0x%04X, IY:0x%04X, I :0x%02X, R :0x%02X\n", vgs0->cpu->reg.PC, vgs0->cpu->reg.SP, vgs0->cpu->reg.IX, vgs0->cpu->reg.IY, vgs0->cpu->reg.I, vgs0->cpu->reg.R);
             printf("ROM BANK: 0x%02X, 0x%02X, 0x%02X, 0x%02X\n", vgs0->ctx.romBank[0], vgs0->ctx.romBank[1], vgs0->ctx.romBank[2], vgs0->ctx.romBank[3]);
             printf("RAM BANK: 0x%02X\n", vgs0->vdp->ctx.bank);
             printf("SCANLINE: V=%d, H=%d\n", vgs0->vdp->ctx.countV, vgs0->vdp->ctx.countH);
@@ -357,12 +332,12 @@ int main(int argc, char* argv[])
                             if ('0' <= *ptr && *ptr <= '9') {
                                 addr &= 0x0FFF;
                                 addr <<= 4;
-                                addr |= (*ptr) - '0'; 
+                                addr |= (*ptr) - '0';
                                 ptr++;
                             } else if ('A' <= *ptr && *ptr <= 'F') {
                                 addr &= 0x0FFF;
                                 addr <<= 4;
-                                addr |= (*ptr) - 'A' + 10; 
+                                addr |= (*ptr) - 'A' + 10;
                                 ptr++;
                             } else {
                                 endAddr = true;
@@ -436,7 +411,6 @@ int main(int argc, char* argv[])
             }
         });
     }
-
 
     log("Initializing SDL");
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS)) {
