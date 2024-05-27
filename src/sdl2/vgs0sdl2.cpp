@@ -314,6 +314,7 @@ int main(int argc, char* argv[])
             printf("  SCROLL: BGX=%d, BGY=%d, FGX=%d, FGY=%d\n", vgs0->vdp->ctx.ram0[0x1F02], vgs0->vdp->ctx.ram0[0x1F03], vgs0->vdp->ctx.ram0[0x1F04], vgs0->vdp->ctx.ram0[0x1F05]);
             char buf[256];
             bool end = false;
+            printf("> ");
             while (!end && fgets(buf, sizeof(buf), stdin)) {
                 for (int i = 0; i < 256 && buf[i]; i++) {
                     buf[i] = toupper(buf[i]);
@@ -407,6 +408,9 @@ int main(int argc, char* argv[])
                         break;
                     default:
                         end = true;
+                }
+                if (!end) {
+                    printf("> ");
                 }
             }
         });
