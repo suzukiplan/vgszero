@@ -1,5 +1,9 @@
 # Change Log
 
+## [Version 1.10.0 (2024.05.27)](https://github.com/suzukiplan/vgszero/releases/tag/1.9.0)
+
+- [SDL2 版エミュレータ](./src/sdl2/) にデバッグオプション `-d` を追加
+
 ## [Version 1.9.0 (2024.05.26)](https://github.com/suzukiplan/vgszero/releases/tag/1.9.0)
 
 - Extra RAM Bank (2MB RAM) を追加
