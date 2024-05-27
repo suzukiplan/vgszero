@@ -46,6 +46,7 @@ typedef struct BitmapHeader_ {
 
 static pthread_mutex_t soundMutex = PTHREAD_MUTEX_INITIALIZER;
 static bool halt = false;
+static bool disasm = false;
 
 static void log(const char* format, ...)
 {
@@ -167,6 +168,7 @@ int main(int argc, char* argv[])
 {
     const char* pkgPath = nullptr;
     bool cliError = false;
+    bool debugMode = false;
     int fullScreen = 0;
     int gpuType = SDL_WINDOW_OPENGL;
 
@@ -198,6 +200,9 @@ int main(int argc, char* argv[])
             case 'h':
                 cliError = true;
                 break;
+            case 'd':
+                debugMode = true;
+                break;
             default:
                 cliError = true;
                 break;
@@ -211,6 +216,7 @@ int main(int argc, char* argv[])
         puts("                | Metal ............. GPU: Metal");
         puts("                }]");
         puts("            [-f] .................... Full Screen Mode");
+        puts("            [-d] .................... Enable Debug Mode (NOP break)");
         return 1;
     }
 
@@ -294,6 +300,121 @@ int main(int argc, char* argv[])
         fclose(fp);
         return true;
     };
+
+    if (debugMode) {
+        vgs0.cpu->addBreakOperand(0x00, [](void* arg, unsigned char* op, int len) {
+            auto vgs0 = (VGS0*)arg;
+            log("NOP at 0x%04X", vgs0->cpu->reg.PC);
+            printf("A :0x%02X F :0x%02X, B :0x%02X, C :0x%02X, D :0x%02X, E :0x%02X, H :0x%02X, L :0x%02X\n", vgs0->cpu->reg.pair.A, vgs0->cpu->reg.pair.F, vgs0->cpu->reg.pair.B, vgs0->cpu->reg.pair.C, vgs0->cpu->reg.pair.D, vgs0->cpu->reg.pair.E, vgs0->cpu->reg.pair.H, vgs0->cpu->reg.pair.L);
+            printf("A':0x%02X F':0x%02X, B':0x%02X, C':0x%02X, D':0x%02X, E':0x%02X, H':0x%02X, L':0x%02X\n", vgs0->cpu->reg.back.A, vgs0->cpu->reg.back.F, vgs0->cpu->reg.back.B, vgs0->cpu->reg.back.C, vgs0->cpu->reg.back.D, vgs0->cpu->reg.back.E, vgs0->cpu->reg.back.H, vgs0->cpu->reg.back.L);
+            printf("PC:0x%04X, SP:0x%04X, IX:0x%04X, IY:0x%04X, I :0x%02X, R :0x%02X\n", vgs0->cpu->reg.PC, vgs0->cpu->reg.SP, vgs0->cpu->reg.IX, vgs0->cpu->reg.IY, vgs0->cpu->reg.I, vgs0->cpu->reg.R);
+            printf("ROM BANK: 0x%02X, 0x%02X, 0x%02X, 0x%02X\n", vgs0->ctx.romBank[0], vgs0->ctx.romBank[1], vgs0->ctx.romBank[2], vgs0->ctx.romBank[3]);
+            printf("RAM BANK: 0x%02X\n", vgs0->vdp->ctx.bank);
+            printf("SCANLINE: V=%d, H=%d\n", vgs0->vdp->ctx.countV, vgs0->vdp->ctx.countH);
+            printf("  SCROLL: BGX=%d, BGY=%d, FGX=%d, FGY=%d\n", vgs0->vdp->ctx.ram0[0x1F02], vgs0->vdp->ctx.ram0[0x1F03], vgs0->vdp->ctx.ram0[0x1F04], vgs0->vdp->ctx.ram0[0x1F05]);
+            char buf[256];
+            bool end = false;
+            printf("> ");
+            while (!end && fgets(buf, sizeof(buf), stdin)) {
+                for (int i = 0; i < 256 && buf[i]; i++) {
+                    buf[i] = toupper(buf[i]);
+                }
+                buf[255] = 0;
+                switch (buf[0]) {
+                    case 'M': {
+                        unsigned short addr = 0xC000;
+                        unsigned short size = 256;
+                        const char* ptr = &buf[1];
+                        while (' ' == *ptr) {
+                            ptr++;
+                        }
+                        bool endAddr = false;
+                        while (!endAddr) {
+                            if ('0' <= *ptr && *ptr <= '9') {
+                                addr &= 0x0FFF;
+                                addr <<= 4;
+                                addr |= (*ptr) - '0';
+                                ptr++;
+                            } else if ('A' <= *ptr && *ptr <= 'F') {
+                                addr &= 0x0FFF;
+                                addr <<= 4;
+                                addr |= (*ptr) - 'A' + 10;
+                                ptr++;
+                            } else {
+                                endAddr = true;
+                            }
+                        }
+                        if (' ' == *ptr) {
+                            while (' ' == *ptr) {
+                                ptr++;
+                            }
+                            size = atoi(ptr);
+                        }
+                        printf("Dump from 0x%04X (%d bytes)\n", addr, size);
+                        printf("ADDR  +0 +1 +2 +3 +4 +5 +6 +7   +8 +9 +A +B +C +D +E +F  ASCII");
+                        unsigned char data[17];
+                        int dptr = 0;
+                        while (0 < size) {
+                            if (0 == dptr) {
+                                printf("\n%04X:", addr);
+                                memset(data, 0, sizeof(data));
+                            }
+                            data[dptr] = vgs0->readMemory(addr++);
+                            if (8 == dptr) {
+                                printf(" - %02X", data[dptr]);
+                            } else {
+                                printf(" %02X", data[dptr]);
+                            }
+                            if (!isprint(data[dptr])) {
+                                data[dptr] = '.';
+                            }
+                            dptr++;
+                            dptr &= 0xF;
+                            if (0 == dptr) {
+                                printf("  %s", data);
+                            }
+                            size--;
+                        }
+                        if (dptr) {
+                            for (; dptr < 16; dptr++) {
+                                if (8 == dptr) {
+                                    printf("     ");
+                                } else {
+                                    printf("   ");
+                                }
+                            }
+                            printf("  %s\n", data);
+                        } else {
+                            printf("\n");
+                        }
+                        break;
+                    }
+                    case 'H':
+                    case '?':
+                        puts("M ADDR SIZE ... Memory Dump (ADDR: HEX, SIZE: DEC)");
+                        puts("D ............. Toggle Disassemble");
+                        puts("H or ? ........ Help");
+                        puts("Other ......... Continue");
+                        break;
+                    case 'D':
+                        disasm = !disasm;
+                        if (disasm) {
+                            puts("Enabled Disassemble");
+                            vgs0->cpu->setDebugMessage([](void* arg, const char* msg) { puts(msg); });
+                        } else {
+                            puts("Disable Disassemble");
+                            vgs0->cpu->resetDebugMessage();
+                        }
+                        break;
+                    default:
+                        end = true;
+                }
+                if (!end) {
+                    printf("> ");
+                }
+            }
+        });
+    }
 
     log("Initializing SDL");
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS)) {

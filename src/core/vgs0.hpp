@@ -345,6 +345,7 @@ class VGS0
         }
     }
 
+  public:
     inline unsigned char readMemory(unsigned short addr)
     {
         if (addr < 0x8000) {
