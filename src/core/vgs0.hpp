@@ -448,6 +448,14 @@ class VGS0
             case 0xB2: this->ctx.romBank[2] = value; break;
             case 0xB3: this->ctx.romBank[3] = value; break;
             case 0xB4: this->vdp->ctx.bank = value; break;
+            case 0xB5: {
+                if (this->cpu->reg.pair.A != this->vdp->ctx.bank) {
+                    memcpy(&this->vdp->ctx.ram1[this->cpu->reg.pair.A][0],
+                           &this->vdp->ctx.ram1[this->vdp->ctx.bank][0],
+                           0x2000);
+                }
+                break;
+            }
             case 0xC0: {
                 int addr = this->cpu->reg.pair.A;
                 addr *= 0x2000;
