@@ -437,9 +437,9 @@ bool NSF::Load(UINT8* image, UINT32 size)
     regn = CONVERT_REGN[pal_ntsc & 3];
     regn_pref = CONVERT_REGN_PREF[pal_ntsc & 3];
 
-    if (speed_ntsc == 0) speed_ntsc = 16639;
-    if (speed_pal == 0) speed_pal = 19997;
-    if (speed_dendy == 0) speed_dendy = speed_pal;
+    speed_ntsc = 16639;
+    speed_pal = 19997;
+    speed_dendy = speed_pal;
 
     use_vrc6 = soundchip & 1 ? true : false;
     use_vrc7 = soundchip & 2 ? true : false;
