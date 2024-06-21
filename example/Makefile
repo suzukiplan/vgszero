@@ -15,6 +15,7 @@ build:
 	cd 12_angle && make build
 	cd 13_perlin && make build
 	cd 14_1024ptn && make build
+	cd 15_nsf && make build
 
 clean:
 	cd 01_hello && make clean
@@ -31,3 +32,5 @@ clean:
 	cd 12_angle && make clean
 	cd 13_perlin && make clean
 	cd 14_1024ptn && make clean
+	cd 15_nsf && make clean
+

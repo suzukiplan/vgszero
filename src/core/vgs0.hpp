@@ -6,6 +6,7 @@
 
 #ifndef INCLUDE_VGS0_HPP
 #define INCLUDE_VGS0_HPP
+#include "nsf/nsfplay.hpp"
 #include "perlinnoise.hpp"
 #include "vdp.hpp"
 #include "vgs0def.h"
@@ -61,6 +62,8 @@ class VGS0
     VDP* vdp;
     VGSDecoder* vgsdec;
     PerlinNoise* noise;
+    xgm::NSF nsf;
+    NSFPlayer nsfPlayer;
     bool (*saveCallback)(VGS0* vgs0, const void* data, size_t size);
     bool (*loadCallback)(VGS0* vgs0, void* data, size_t size);
     void (*resetCallback)(VGS0* vgs0);
@@ -73,8 +76,10 @@ class VGS0
         unsigned char ri8;
         unsigned short ri16;
         struct BgmContext {
+            bool isNSF;
             bool playing;
             bool fadeout;
+            int nsfFadeCounter;
             int playingIndex;
             unsigned int seekPosition;
         } bgm;
@@ -234,12 +239,16 @@ class VGS0
             return nullptr; // invalid size
         }
         if (this->ctx.bgm.playing) {
-            this->vgsdec->execute(buf, size);
-            this->ctx.bgm.playing = !this->vgsdec->isPlayEnd();
-            if (!this->ctx.bgm.playing) {
-                this->ctx.bgm.fadeout = false;
+            if (this->ctx.bgm.isNSF) {
+                this->nsfPlayer.Render(buf, size / 2);
             } else {
-                this->ctx.bgm.seekPosition = (unsigned int)this->vgsdec->getDurationTime();
+                this->vgsdec->execute(buf, size);
+                this->ctx.bgm.playing = !this->vgsdec->isPlayEnd();
+                if (!this->ctx.bgm.playing) {
+                    this->ctx.bgm.fadeout = false;
+                } else {
+                    this->ctx.bgm.seekPosition = (unsigned int)this->vgsdec->getDurationTime();
+                }
             }
             if (this->bgmVolume < 100) {
                 for (int i = 0; i < (int)size / 2; i++) {
@@ -247,6 +256,21 @@ class VGS0
                     w *= this->bgmVolume;
                     w /= 100;
                     buf[i] = (short)w;
+                }
+            }
+            if (this->ctx.bgm.isNSF && this->ctx.bgm.fadeout) {
+                this->ctx.bgm.nsfFadeCounter--;
+                if (0 < this->ctx.bgm.nsfFadeCounter) {
+                    for (int i = 0; i < (int)size / 2; i++) {
+                        int w = buf[i];
+                        w *= this->ctx.bgm.nsfFadeCounter;
+                        w /= 100;
+                        buf[i] = (short)w;
+                    }
+                } else {
+                    memset(buf, 0, size);
+                    this->ctx.bgm.fadeout = false;
+                    this->ctx.bgm.playing = false;
                 }
             }
         } else {
@@ -272,45 +296,6 @@ class VGS0
             }
         }
         return buf;
-    }
-
-    size_t getStateSize()
-    {
-        size_t result = sizeof(this->ctx);
-        result += sizeof(this->cpu->reg);
-        result += sizeof(this->vdp->ctx);
-        result += sizeof(this->noise->ctx);
-        return result;
-    }
-
-    void saveState(void* buffer)
-    {
-        unsigned char* bufferPtr = (unsigned char*)buffer;
-        memcpy(bufferPtr, &this->ctx, sizeof(this->ctx));
-        bufferPtr += sizeof(this->ctx);
-        memcpy(bufferPtr, &this->cpu->reg, sizeof(this->cpu->reg));
-        bufferPtr += sizeof(this->cpu->reg);
-        memcpy(bufferPtr, &this->vdp->ctx, sizeof(this->vdp->ctx));
-        bufferPtr += sizeof(this->vdp->ctx);
-        memcpy(bufferPtr, &this->noise->ctx, sizeof(this->noise->ctx));
-    }
-
-    void loadState(const void* buffer)
-    {
-        const unsigned char* bufferPtr = (const unsigned char*)buffer;
-        this->reset();
-        memcpy(&this->ctx, bufferPtr, sizeof(this->ctx));
-        bufferPtr += sizeof(this->ctx);
-        memcpy(&this->cpu->reg, bufferPtr, sizeof(this->cpu->reg));
-        bufferPtr += sizeof(this->cpu->reg);
-        memcpy(&this->vdp->ctx, bufferPtr, sizeof(this->vdp->ctx));
-        bufferPtr += sizeof(this->vdp->ctx);
-        memcpy(&this->noise->ctx, bufferPtr, sizeof(this->noise->ctx));
-        this->vdp->refreshDisplay();
-        if (this->bgm[this->ctx.bgm.playingIndex].data) {
-            this->vgsdec->load(this->bgm[this->ctx.bgm.playingIndex].data, this->bgm[this->ctx.bgm.playingIndex].size);
-            this->vgsdec->seekTo(this->ctx.bgm.seekPosition);
-        }
     }
 
     void setBgmVolume(int volume)
@@ -681,9 +666,21 @@ class VGS0
                 if (this->bgm[value].data) {
                     this->ctx.bgm.playing = true;
                     this->ctx.bgm.fadeout = false;
+                    this->ctx.bgm.nsfFadeCounter = 0;
                     this->ctx.bgm.seekPosition = 0;
                     this->ctx.bgm.playingIndex = value;
-                    this->vgsdec->load(this->bgm[value].data, this->bgm[value].size);
+                    if (0 == memcmp(this->bgm[value].data, "VGSBGM-V", 8)) {
+                        this->ctx.bgm.isNSF = false;
+                        this->vgsdec->load(this->bgm[value].data, this->bgm[value].size);
+                    } else {
+                        this->ctx.bgm.isNSF = true;
+                        this->nsf.Load((xgm::UINT8*)this->bgm[value].data, this->bgm[value].size);
+                        this->nsfPlayer.Load(&this->nsf);
+                        this->nsfPlayer.SetPlayFreq(44100);
+                        this->nsfPlayer.SetChannels(1);
+                        this->nsfPlayer.SetSong(0);
+                        this->nsfPlayer.Reset();
+                    }
                 }
                 break;
             case 0xE1:
@@ -695,8 +692,13 @@ class VGS0
                         this->ctx.bgm.playing = true;
                         break;
                     case 2: // fadeout
-                        this->ctx.bgm.fadeout = true;
-                        this->vgsdec->fadeout();
+                        if (this->ctx.bgm.isNSF) {
+                            this->ctx.bgm.fadeout = true;
+                            this->ctx.bgm.nsfFadeCounter = 100;
+                        } else {
+                            this->ctx.bgm.fadeout = true;
+                            this->vgsdec->fadeout();
+                        }
                         break;
                 }
                 break;
