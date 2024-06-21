@@ -1,7 +1,6 @@
 #ifndef _RCONV_H_
 #define _RCONV_H_
 #include "../device.h"
-#include "filter.h"
 
 namespace xgm
 {

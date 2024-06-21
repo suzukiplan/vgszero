@@ -126,17 +126,6 @@ bool NES_BANK::Write(UINT32 adr, UINT32 val, UINT32 id)
 #endif
 
         if (0 <= bankswitch[adr >> 12] && 0x6000 <= adr && adr < 0xe000) {
-// for detecting FDS ROMs with improper mirrored writes
-#if DETECT_FDS_MIRROR
-            for (int i = 0; i < 14; ++i) {
-                int b = adr >> 12;
-                if (i != b && bankswitch[i] == bankswitch[b]) {
-                    DEBUG_OUT("[%04X] write mirrored to [%04X] = %02X\n",
-                              adr, (i * 0x1000) | (adr & 0x0fff), val);
-                }
-            }
-#endif
-
             bank[bankswitch[adr >> 12]][adr & 0x0fff] = val;
             return true;
         }

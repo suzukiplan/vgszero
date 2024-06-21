@@ -4,7 +4,6 @@
 #include <assert.h>
 #include "../xtypes.h"
 #include "devinfo.h"
-#include "../debugout.h"
 
 namespace xgm
 {

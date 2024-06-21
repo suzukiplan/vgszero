@@ -356,8 +356,6 @@ ITrackInfo* NES_DMC::GetTrackInfo(int trk)
 
 void NES_DMC::FrameSequence(int s)
 {
-    // DEBUG_OUT("FrameSequence: %d\n",s);
-
     if (s > 3) return; // no operation in step 4
 
     if (apu) {
@@ -481,9 +479,6 @@ UINT32 NES_DMC::calc_noise(UINT32 clocks)
     UINT32 count = 0;
     UINT32 accum = counter[1] * last; // samples pending from previous calc
     UINT32 accum_clocks = counter[1];
-#ifdef _DEBUG
-    INT32 start_clocks = counter[1];
-#endif
     if (counter[1] < 0) // only happens on startup when using the randomize noise option
     {
         accum = 0;
@@ -511,10 +506,6 @@ UINT32 NES_DMC::calc_noise(UINT32 clocks)
 
     accum -= (last * counter[1]); // remove these samples which belong in the next calc
     accum_clocks -= counter[1];
-#ifdef _DEBUG
-    if (start_clocks >= 0) assert(accum_clocks == clocks); // these should be equal
-#endif
-
     UINT32 average = accum / accum_clocks;
     assert(average <= 15); // above this would indicate overflow
     return average;
@@ -843,7 +834,6 @@ bool NES_DMC::Write(UINT32 adr, UINT32 val, UINT32 id)
     }
 
     if (adr == 0x4017) {
-        // DEBUG_OUT("4017 = %02X\n", val);
         frame_irq_enable = ((val & 0x40) != 0x40);
         if (frame_irq_enable) frame_irq = false;
         cpu->UpdateIRQ(NES_CPU::IRQD_FRAME, false);
@@ -864,13 +854,7 @@ bool NES_DMC::Write(UINT32 adr, UINT32 val, UINT32 id)
         return false;
 
     reg[adr - 0x4008] = val & 0xff;
-
-    // DEBUG_OUT("$%04X %02X\n", adr, val);
-
     switch (adr) {
-
-            // tri
-
         case 0x4008:
             linear_counter_control = (val >> 7) & 1;
             linear_counter_reload = val & 0x7F;

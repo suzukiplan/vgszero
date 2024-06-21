@@ -17,15 +17,11 @@
 #include "xgm/devices/Sound/nes_mmc5.h"
 #include "xgm/devices/Sound/nes_n106.h"
 #include "xgm/devices/Sound/nes_fds.h"
-#include "xgm/devices/Audio/filter.h"
 #include "xgm/devices/Audio/mixer.h"
 #include "xgm/devices/Audio/fader.h"
 #include "xgm/devices/Audio/amplifier.h"
 #include "xgm/devices/Audio/rconv.h"
-#include "xgm/devices/Audio/echo.h"
-#include "xgm/devices/Audio/MedianFilter.h"
 #include "xgm/devices/Misc/nsf2_irq.h"
-#include "xgm/devices/Misc/nes_detect.h"
 #include <stdint.h>
 
 enum DeviceCode { APU = 0,
@@ -53,9 +49,8 @@ class NSFPlayer
     double cpu_clock_rest;
     double apu_clock_rest;
 
-    int time_in_ms;         // ���t��������(ms)
-    bool playtime_detected; // ���t���Ԃ����o���ꂽ��true
-    bool infinite;          // never fade out
+    int time_in_ms;
+    bool infinite;
 
     xgm::Bus apu_bus;
     xgm::Layer stack;
@@ -69,14 +64,10 @@ class NSFPlayer
     xgm::NSF2_Vectors nsf2_vectors;
     xgm::NSF2_IRQ nsf2_irq;
 
-    xgm::ISoundChip* sc[NES_DEVICE_MAX]; // �T�E���h�`�b�v�̃C���X�^���X
-    xgm::Amplifier amp[NES_DEVICE_MAX];  // �A���v
-    xgm::RateConverter rconv;            //
-    xgm::DCFilter dcf;                   // �ŏI�o�͒i�Ɋ|���钼���t�B���^
-    xgm::Filter lpf;                     // �ŏI�o�͂Ɋ|���郍�[�p�X�t�B���^
-    xgm::ILoopDetector* ld;              // ���[�v���o��
+    xgm::ISoundChip* sc[NES_DEVICE_MAX];
+    xgm::Amplifier amp[NES_DEVICE_MAX];
+    xgm::RateConverter rconv;
 
-    // �g���b�N�ԍ��̗�
     enum {
         APU1_TRK0 = 0,
         APU1_TRK1,
@@ -147,7 +138,6 @@ class NSFPlayer
         sc[MMC5] = (mmc5 = new xgm::NES_MMC5());
         sc[N106] = (n106 = new xgm::NES_N106());
         sc[VRC6] = (vrc6 = new xgm::NES_VRC6());
-        ld = nullptr;
         nsf2_irq.SetCPU(&cpu);
         dmc->SetAPU(apu);
         dmc->SetCPU(&cpu);
@@ -169,7 +159,6 @@ class NSFPlayer
         if (!nsf) {
             return false;
         }
-        nsf->nsfe_plst = nullptr;
         this->nsf = nsf;
         Reload();
         return true;
@@ -202,10 +191,6 @@ class NSFPlayer
         mixer.Reset();
         rconv.Reset();
         fader.Reset();
-        lpf.SetRate(rate);
-        lpf.Reset();
-        dcf.SetRate(rate);
-        dcf.Reset();
     }
 
     void SetChannels(int channels)
@@ -226,7 +211,6 @@ class NSFPlayer
     {
         time_in_ms = 0;
         silent_length = 0;
-        playtime_detected = false;
         total_render = 0;
         frame_render = (int)(rate) / 60;
         apu_clock_rest = 0.0;
@@ -250,10 +234,6 @@ class NSFPlayer
         speed = 1000000.0 / nsfspeed;
 
         int song = nsf->song;
-        if (nsf->nsfe_plst) {
-            song = nsf->nsfe_plst[song];
-        }
-
         int region_register = (region == REGION_PAL) ? 1 : 0;
         if (region == REGION_DENDY && (nsf->regn & 4)) region_register = 2; // use 2 for Dendy iff explicitly supported, otherwise 0
 
@@ -292,8 +272,6 @@ class NSFPlayer
             // warm up rconv/render with enough sample to reach a steady state
             fader.Render(b);
         }
-        // DC filter will use the current DC level as its starting state
-        dcf.SetLevel(b);
     }
 
     uint32_t Render(int16_t* stream, int length)
@@ -345,10 +323,6 @@ class NSFPlayer
             }
             last_out = outm;
 
-            // echo.FastRender(buf);
-            dcf.FastRender(buf);
-            lpf.FastRender(buf);
-
             out[0] = buf[0];
             out[1] = buf[1];
             out[0] = (out[0] * master_volume) >> 8;
@@ -379,9 +353,6 @@ class NSFPlayer
             UpdateInfo();
         }
         time_in_ms += (int)(1000 * length / rate * mult_speed / 256);
-        CheckTerminal();
-        DetectLoop();
-        DetectSilent();
         return length;
     }
 
@@ -407,16 +378,6 @@ class NSFPlayer
         layer.DetachAll();
         mixer.DetachAll();
         apu_bus.DetachAll();
-
-        // select the loop detector
-        if (ld) {
-            delete ld;
-        }
-        ld = new xgm::NESDetector();
-
-        // loop detector ends up at the front of the stack
-        // (will capture all writes, but does not capture write)
-        stack.Attach(ld);
 
         // setup player program at PLAYER_RESERVED ($4100)
         const uint8_t PLAYER_PROGRAM[] =
@@ -530,16 +491,6 @@ class NSFPlayer
 
         cpu.SetMemory(&stack);
         cpu.SetNESMemory(&mem);
-    }
-
-    void DetectLoop()
-    {
-    }
-    void DetectSilent()
-    {
-    }
-    void CheckTerminal()
-    {
     }
 
     void UpdateInfinite()

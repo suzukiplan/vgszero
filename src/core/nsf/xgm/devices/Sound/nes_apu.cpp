@@ -11,13 +11,10 @@ void NES_APU::sweep_sqr(int i)
     int shifted = freq[i] >> sweep_amount[i];
     if (i == 0 && sweep_mode[i]) shifted += 1;
     sfreq[i] = freq[i] + (sweep_mode[i] ? -shifted : shifted);
-    // DEBUG_OUT("shifted[%d] = %d (%d >> %d)\n",i,shifted,freq[i],sweep_amount[i]);
 }
 
 void NES_APU::FrameSequence(int s)
 {
-    // DEBUG_OUT("FrameSequence(%d)\n",s);
-
     if (s > 3) return; // no operation in step 4
 
     // 240hz clock
@@ -49,22 +46,14 @@ void NES_APU::FrameSequence(int s)
                 --length_counter[i];
 
             if (sweep_enable[i]) {
-                // DEBUG_OUT("Clock sweep: %d\n", i);
-
                 --sweep_div[i];
                 if (sweep_div[i] <= 0) {
-                    sweep_sqr(i); // calculate new sweep target
-
-                    // DEBUG_OUT("sweep_div[%d] (0/%d)\n",i,sweep_div_period[i]);
-                    // DEBUG_OUT("freq[%d]=%d > sfreq[%d]=%d\n",i,freq[i],i,sfreq[i]);
-
+                    sweep_sqr(i);                                                // calculate new sweep target
                     if (freq[i] >= 8 && sfreq[i] < 0x800 && sweep_amount[i] > 0) // update frequency if appropriate
                     {
                         freq[i] = sfreq[i] < 0 ? 0 : sfreq[i];
                     }
                     sweep_div[i] = sweep_div_period[i] + 1;
-
-                    // DEBUG_OUT("freq[%d]=%d\n",i,freq[i]);
                 }
 
                 if (sweep_write[i]) {
@@ -292,8 +281,6 @@ bool NES_APU::Write(UINT32 adr, UINT32 val, UINT32 id)
         0x20, 0x1E};
 
     if (0x4000 <= adr && adr < 0x4008) {
-        // DEBUG_OUT("$%04X = %02X\n",adr,val);
-
         adr &= 0xf;
         ch = adr >> 2;
         switch (adr) {

@@ -23,19 +23,11 @@ OBJECTS = vgs0test.o
 OBJECTS += vgstone.o
 OBJECTS += vgs0math.o
 OBJECTS += nsf.o
-OBJECTS += ppls.o
-OBJECTS += sstream.o
-OBJECTS += echo.o
-OBJECTS += filter.o
-OBJECTS += MedianFilter.o
 OBJECTS += rconv.o
 OBJECTS += nes_cpu.o
 OBJECTS += nes_bank.o
 OBJECTS += nes_mem.o
 OBJECTS += nsf2_vectors.o
-OBJECTS += ram64k.o
-OBJECTS += detect.o
-OBJECTS += nes_detect.o
 OBJECTS += nsf2_irq.o
 OBJECTS += nes_apu.o
 OBJECTS += nes_dmc.o
@@ -71,21 +63,6 @@ vgs0math.o: ../core/vgs0math.c $(HEADER_FILES) ./Makefile
 nsf.o: ../core/nsf/xgm/player/nsf/nsf.cpp
 	${CPP} -c $<
 
-ppls.o: ../core/nsf/xgm/player/nsf/pls/ppls.cpp
-	${CPP} -c $<
-
-sstream.o: ../core/nsf/xgm/player/nsf/pls/sstream.cpp
-	${CPP} -c $<
-
-echo.o: ../core/nsf/xgm/devices/Audio/echo.cpp
-	${CPP} -c $<
-
-filter.o: ../core/nsf/xgm/devices/Audio/filter.cpp
-	${CPP} -c $<
-
-MedianFilter.o: ../core/nsf/xgm/devices/Audio/MedianFilter.cpp
-	${CPP} -c $<
-
 rconv.o: ../core/nsf/xgm/devices/Audio/rconv.cpp
 	${CPP} -c $<
 
@@ -99,15 +76,6 @@ nes_mem.o: ../core/nsf/xgm/devices/Memory/nes_mem.cpp
 	${CPP} -c $<
 
 nsf2_vectors.o: ../core/nsf/xgm/devices/Memory/nsf2_vectors.cpp
-	${CPP} -c $<
-
-ram64k.o: ../core/nsf/xgm/devices/Memory/ram64k.cpp
-	${CPP} -c $<
-
-detect.o: ../core/nsf/xgm/devices/Misc/detect.cpp
-	${CPP} -c $<
-
-nes_detect.o: ../core/nsf/xgm/devices/Misc/nes_detect.cpp
 	${CPP} -c $<
 
 nsf2_irq.o: ../core/nsf/xgm/devices/Misc/nsf2_irq.cpp

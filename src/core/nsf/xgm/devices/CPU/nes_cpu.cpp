@@ -4,9 +4,6 @@
 #include "../Memory/nes_mem.h"
 #include "../Misc/nsf2_irq.h"
 
-#define DEBUG_RW 0
-#define TRACE 0
-
 namespace xgm
 {
 
@@ -84,21 +81,24 @@ int NES_CPU::Exec(int clocks)
 
         Uword clock_start = context.clock;
         if (!breaked) {
-            // DEBUG_OUT("PC: 0x%04X\n", context.PC);
             exec(context, bus);
             if (context.PC == breakpoint) {
                 breaked = true;
             }
         } else {
             if ((fclocks_left_in_frame >> FRAME_FIXED) < INT64(clocks)) {
-                if (fclocks_left_in_frame < 0)
+                if (fclocks_left_in_frame < 0) {
                     context.clock = 0;
-                else
+                } else {
                     context.clock = (unsigned int)(fclocks_left_in_frame >> FRAME_FIXED) + 1;
-            } else
+                }
+            } else {
                 context.clock = clocks;
+            }
         }
-        if (nsf2_irq) nsf2_irq->Clock(context.clock - clock_start);
+        if (nsf2_irq) {
+            nsf2_irq->Clock(context.clock - clock_start);
+        }
 
         if (breaked && play_ready) {
             if (play_addr >= 0) {
@@ -122,68 +122,12 @@ int NES_CPU::Exec(int clocks)
                 }
             }
             fclocks_left_in_frame += fclocks_per_frame;
-            // DEBUG_OUT("NMI\n");
         }
     }
 
     fclocks_left_in_frame -= (context.clock << FRAME_FIXED);
 
     return context.clock; // return actual number of clocks executed
-}
-
-void NES_CPU::SetMemory(IDevice* b)
-{
-    bus = b;
-}
-
-void NES_CPU::SetNESMemory(NES_MEM* b)
-{
-    nes_mem = b;
-}
-
-bool NES_CPU::Write(UINT32 adr, UINT32 val, UINT32 id)
-{
-#if DEBUG_RW
-    DEBUG_OUT("Write: 0x%04X = 0x%02X\n", adr, val);
-#endif
-
-// for blargg's CPU tests
-#if 0
-    if (adr == 0x6000)
-    {
-        DEBUG_OUT("Blargg result: %02X [");
-        UINT32 msg = 0x6004;
-        do
-        {
-            UINT32 ic;
-            Read(msg, ic);
-            if (ic == 0) break;
-            ++msg;
-            DEBUG_OUT("%c", char(ic));
-        } while (1);
-        DEBUG_OUT("]\n");
-        return false;
-    }
-#endif
-
-    if (bus)
-        return bus->Write(adr, val, id);
-    else
-        return false;
-}
-
-bool NES_CPU::Read(UINT32 adr, UINT32& val, UINT32 id)
-{
-    if (bus) {
-        bool result = bus->Read(adr, val, id);
-
-#if DEBUG_RW
-        DEBUG_OUT(" Read: 0x%04X = 0x%02X\n", adr, val);
-#endif
-
-        return result;
-    } else
-        return false;
 }
 
 void NES_CPU::Reset()
@@ -290,21 +234,6 @@ void NES_CPU::Start(
     // start of first frame
     fclocks_left_in_frame = fclocks_per_frame;
     play_ready = breaked && !extra_init;
-}
-
-unsigned int NES_CPU::GetPC() const
-{
-    return context.PC;
-}
-
-void NES_CPU::StealCycles(unsigned int cycles)
-{
-    stolen_cycles += cycles;
-}
-
-void NES_CPU::EnableNMI(bool enable)
-{
-    enable_nmi = enable;
 }
 
 void NES_CPU::UpdateIRQ(int device, bool irq)

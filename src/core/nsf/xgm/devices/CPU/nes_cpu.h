@@ -58,13 +58,13 @@ class NES_CPU : public IDevice
         bool enable_irq_,
         NSF2_IRQ* nsf2_irq_);
     int Exec(int clock); // returns number of clocks executed
-    void SetMemory(IDevice*);
-    void SetNESMemory(NES_MEM*);
-    bool Read(UINT32 adr, UINT32& val, UINT32 id = 0);
-    bool Write(UINT32 adr, UINT32 val, UINT32 id = 0);
-    unsigned int GetPC() const;
-    void StealCycles(unsigned int cycles);
-    void EnableNMI(bool enable);
+    inline void SetMemory(IDevice* b) { bus = b; }
+    inline void SetNESMemory(NES_MEM* b) { nes_mem = b; }
+    inline bool Read(UINT32 adr, UINT32& val, UINT32 id = 0) { return bus ? bus->Read(adr, val, id) : false; }
+    inline bool Write(UINT32 adr, UINT32 val, UINT32 id = 0) { return bus ? bus->Write(adr, val, id) : false; }
+    inline unsigned int GetPC() const { return context.PC; }
+    inline void StealCycles(unsigned int cycles) { stolen_cycles += cycles; }
+    inline void EnableNMI(bool enable) { enable_nmi = enable; }
 
     // IRQ devices
     enum {
