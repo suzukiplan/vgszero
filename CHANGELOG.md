@@ -1,10 +1,11 @@
 # Change Log
 
-## Version 1.11.0
+## [Version 1.11.0](https://github.com/suzukiplan/vgszero/releases/tag/1.11.0)
 
 - Extra RAM Bank の複製機能 `OUT ($B5)` を追加
+- NSF 形式 BGM 再生をサポート
 
-## [Version 1.10.0 (2024.05.27)](https://github.com/suzukiplan/vgszero/releases/tag/1.9.0)
+## [Version 1.10.0 (2024.05.27)](https://github.com/suzukiplan/vgszero/releases/tag/1.10.0)
 
 - [SDL2 版エミュレータ](./src/sdl2/) にデバッグオプション `-d` を追加
 
