@@ -1,6 +1,6 @@
-# Sound 
+# NSF
 
-- BGM を再生・ポーズ・再開・フェードアウト
+- NSF (2A03) 形式の BGM を再生・ポーズ・再開・フェードアウト
 - 効果音を再生
 - ジョイパッドで操作します
 
@@ -21,7 +21,7 @@
 
 ```zsh
 git clone https://github.com/suzukiplan/vgszero
-cd vgszero/example/03_sound
+cd vgszero/example/15_nsf
 make
 ```
 
@@ -37,9 +37,7 @@ make
 
 ## BGM structure
 
-- BGM 0: [./song1.mml](./song1.mml)
-- BGM 1: [./song2.mml](./song2.mml)
-- BGM 2: [./song3.mml](./song3.mml)
+- BGM 0: [./bgm.nsf](./bgm.nsf)
 
 ## Sound Effect structure
 

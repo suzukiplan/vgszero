@@ -261,10 +261,12 @@ usage: makerom output input1 input2 ... input256
 
 bgm.dat は 1 曲以上の楽曲データが含まれたデータセットで、ツールチェインの [makebgm コマンド](./tools/makebgm/) で生成することができます。
 
-楽曲データは次の 2 種類をサポートしています
+楽曲データは次の 2 種類のデータ形式をサポートしています
 
 - [vgsmml コマンド](./tools/vgsmml) でコンパイルされた VGS; Video Game Sound 形式の BGM データ
-- [NSF 形式](#nsf) の BGM データ
+- [NSF 形式](#nsf) の BGM データ（ただし、VRC7 を除く）
+
+なお、プログラム（Z80）側では、再生する BGM が VGS 形式か NSF 形式かを区別しません。
 
 #### (Compile MML)
 
@@ -279,6 +281,7 @@ usage: vgsmml /path/to/file.mml /path/to/file.bgm
 #### (NSF)
 
 - NSF; NES Sound Format の BGM データは [FamiStudio](https://famistudio.org/) などの NSF 形式をサポートした DAW; Digital Audio Workstation を用いて作成することができます
+- 詳しくは [example/15_nsf](example/15_nsf) を確認してください 
 - VGS-Zero では VRC7 以外の全ての形式の NSF を再生することができます
 
 #### (Make bgm.dat)
