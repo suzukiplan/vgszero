@@ -1052,6 +1052,11 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 - VGS-Zero 本体配布イメージには RaspberryPi ブートローダーが含まれます: [LICENCE.broadcom](./LICENCE.broadcom)
 - VGS-Zero 本体には Circle（GPLv3）が含まれます: [LICENSE-CIRCLE.txt](./LICENSE-CIRCLE.txt)
 - VGS-Zero 本体には SUZUKI PLAN - Z80 Emulator (MIT) が含まれます: [LICENSE-Z80.txt](./LICENSE-Z80.txt)
+- VGS-Zero 本体には NEZplug (Free Software) が含まれます: [LICENSE-NEZplug.txt](./LICENSE-km6502.txt)
+- VGS-Zero 本体には NSFPlay (GPLv3) を改変したプログラムが含まれます: [LICENSE-NSFPlay-alter.txt](./LICENSE-NSFPlay-alter.txt)
+- VGS-Zero 本体には KM6502 (Free Software) が含まれます: [LICENSE-km6502.txt](./LICENSE-km6502.txt)
+- VGS-Zero 本体には emu2149 (MIT) が含まれます: [LICENSE-emu2149.txt](./LICENSE-emu2149.txt)
+- VGS-Zero 本体には emu2212 (MIT) が含まれます: [LICENSE-emu2212.txt](./LICENSE-emu2212.txt)
 - VGS-Zero Library for Z80 は MIT ライセンスの OSS です:[LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
 
 > あなたが開発した[game.pkg](#gamepkg)の著作権はあなたに帰属し、商業利用を含む自由な利用が可能です。
