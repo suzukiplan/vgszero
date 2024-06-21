@@ -42,7 +42,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [ハードウェア乱数](#hardware-random)
   - [ハードウェア・パーリンノイズ](#hardware-perlin-noise)
 - [BGM](#bgmdat)
-  - VGS の MML で記述された BGM を再生可能
+  - [VGS の MML](#compile-mml) または [NSF 形式 (VRC7 を除く)](#nsf) の BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要!
   - 本体 ROM ([`game.rom`](#gamerom)) とは別アセット（[`bgm.dat`](#bgmdat)）
@@ -167,6 +167,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/12_angle](./example/12_angle) | C言語 | [ハードウェア atan2 テーブル](#hardware-atan2-table) を用いて完全な自機狙いを実装する例 |
 | [example/13_perlin](./example/13_perlin) | C言語 | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
 | [example/14_1024ptn](./example/14_1024ptn) | C言語 | [1024 パターンモード](#1024-patterns-mode) の利用例 |
+| [example/15_nsf](./example/15_nsf/) | C言語 | [NSF](#nsf) の利用例 |
 
 ## Joypad
 
@@ -258,7 +259,12 @@ usage: makerom output input1 input2 ... input256
 
 ### bgm.dat
 
-bgm.dat は、本リポジトリのツールチェインで提供している [vgsmml コマンド](./tools/vgsmml) でコンパイルされた1つ以上の楽曲データを纏めたデータセットで、ツールチェインの [makebgm コマンド](./tools/makebgm/) で生成することができます。
+bgm.dat は 1 曲以上の楽曲データが含まれたデータセットで、ツールチェインの [makebgm コマンド](./tools/makebgm/) で生成することができます。
+
+楽曲データは次の 2 種類をサポートしています
+
+- [vgsmml コマンド](./tools/vgsmml) でコンパイルされた VGS; Video Game Sound 形式の BGM データ
+- [NSF 形式](#nsf) の BGM データ
 
 #### (Compile MML)
 
@@ -270,13 +276,18 @@ usage: vgsmml /path/to/file.mml /path/to/file.bgm
 - [東方BGM on VGS の MML](https://github.com/suzukiplan/tohovgs-cli/tree/master/mml) が全楽曲公開されているので、実用的な使い方はそちらが参考になるかもしれません
 - MML ファイルは、ツールチェインの [vgsplay コマンド](./tools/vgsplay) を用いれば PC 上でプレビューできます
 
+#### (NSF)
+
+- NSF; NES Sound Format の BGM データは [FamiStudio](https://famistudio.org/) などの NSF 形式をサポートした DAW; Digital Audio Workstation を用いて作成することができます
+- VGS-Zero では VRC7 以外の全ての形式の NSF を再生することができます
+
 #### (Make bgm.dat)
 
 ```
 makebgm bgm.dat song1.bgm [song2.bgm [song3.bgm...]]
 ```
 
-BGM ファイルは最大 256 個指定することができます。
+BGM ファイルまたは NSF ファイルを最大 256 個指定することができます。
 
 ### se.dat
 
