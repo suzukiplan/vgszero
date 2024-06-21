@@ -7,57 +7,12 @@
 #define DEBUG_RW 0
 #define TRACE 0
 
-#if TRACE
-const char* OP_NAME[256] = {
-    /*  0x-0   0x-1   0x-2   0x-3   0x-4   0x-5   0x-6   0x-7   0x-8   0x-9   0x-A   0x-B   0x-C   0x-D   0x-E   0x-F           */
-    "BRK", "ORA", "kil", "slo", "nop", "ORA", "ASL", "slo", "PHP", "ORA", "ASL", "anc", "nop", "ORA", "ASL", "slo", /* 0x0- */
-    "BPL", "ORA", "kil", "slo", "nop", "ORA", "ASL", "slo", "CLC", "ORA", "nop", "slo", "nop", "ORA", "ASL", "slo", /* 0x1- */
-    "JSR", "AND", "kil", "rla", "BIT", "AND", "ROL", "rla", "PLP", "AND", "ROL", "anc", "BIT", "AND", "ROL", "rla", /* 0x2- */
-    "BMI", "AND", "kil", "rla", "nop", "AND", "ROL", "rla", "SEC", "AND", "nop", "rla", "nop", "AND", "ROL", "rla", /* 0x3- */
-    "RTI", "EOR", "kil", "sre", "nop", "EOR", "LSR", "sre", "PHA", "EOR", "LSR", "alr", "JMP", "EOR", "LSR", "sre", /* 0x4- */
-    "BVC", "EOR", "kil", "sre", "nop", "EOR", "LSR", "sre", "CLI", "EOR", "nop", "sre", "nop", "EOR", "LSR", "sre", /* 0x5- */
-    "RTS", "ADC", "kil", "rra", "nop", "ADC", "ROR", "rra", "PLA", "ADC", "ROR", "arr", "JMP", "ADC", "ROR", "rra", /* 0x6- */
-    "BVS", "ADC", "kil", "rra", "nop", "ADC", "ROR", "rra", "SEI", "ADC", "nop", "rra", "nop", "ADC", "ROR", "rra", /* 0x7- */
-    "nop", "STA", "nop", "sax", "STY", "STA", "STX", "sax", "DEY", "nop", "TXA", "xaa", "STY", "STA", "STX", "sax", /* 0x8- */
-    "BCC", "STA", "kil", "ahx", "STY", "STA", "STX", "sax", "TYA", "STA", "TXS", "tas", "shy", "STA", "shx", "ahx", /* 0x9- */
-    "LDY", "LDA", "LDX", "lax", "LDY", "LDA", "LDX", "lax", "TAY", "LDA", "TAX", "lax", "LDY", "LDA", "LDX", "lax", /* 0xA- */
-    "BCS", "LDA", "kil", "lax", "LDY", "LDA", "LDX", "lax", "CLV", "LDA", "TSX", "las", "LDY", "LDA", "LDX", "lax", /* 0xB- */
-    "CPY", "CMP", "nop", "dcp", "CPY", "CMP", "DEC", "dcp", "INY", "CMP", "DEX", "axs", "CPY", "CMP", "DEC", "dcp", /* 0xC- */
-    "BNE", "CMP", "kil", "dcp", "nop", "CMP", "DEC", "dcp", "CLD", "CMP", "nop", "dcp", "nop", "CMP", "DEC", "dcp", /* 0xD- */
-    "CPX", "SBC", "nop", "isc", "CPX", "SBC", "INC", "isc", "INX", "SBC", "NOP", "sbc", "CPX", "SBC", "INC", "isc", /* 0xE- */
-    "BEQ", "SBC", "kil", "isc", "nop", "SBC", "INC", "isc", "SED", "SBC", "nop", "isc", "nop", "SBC", "INC", "isc"  /* 0xF- */
-};
-#endif
-
 namespace xgm
 {
 
 inline void exec(K6502_Context& context, xgm::IDevice* bus)
 {
-#if TRACE
-    Uword TPC = context.PC;
-    UINT32 tb[3];
-    bus->Read((TPC + 0) & 0xFFFF, tb[0]);
-    bus->Read((TPC + 1) & 0xFFFF, tb[1]);
-    bus->Read((TPC + 2) & 0xFFFF, tb[2]);
-    DEBUG_OUT("%04X: A=%02X X=%02X Y=%02X P=%02X S=%02X %c > ",
-              context.PC,
-              context.A, context.X, context.Y, context.P, context.S,
-              context.iRequest ? 'I' : 'i');
-#endif
-
     K6502_Exec(&context);
-
-#if TRACE
-    DEBUG_OUT("%s", OP_NAME[context.lastcode]);
-    int oplen = context.PC - TPC; // not accurate for branch/jump but good enough
-    for (int i = 0; i < 3; ++i) {
-        if (i == 0 || i < oplen) {
-            DEBUG_OUT(" %02X", tb[i]);
-        }
-    }
-    DEBUG_OUT("\n");
-#endif
 }
 
 // bits of fixed point for timing
@@ -71,7 +26,6 @@ NES_CPU::NES_CPU(double clock)
     nes_basecycles = clock;
     bus = NULL;
     nes_mem = NULL;
-    log_cpu = NULL;
     irqs = 0;
     enable_irq = true;
     enable_nmi = false;
@@ -97,9 +51,6 @@ UINT32 Callback readByte(void* __THIS, UINT32 adr)
 
 void NES_CPU::run_from(UINT32 address)
 {
-#if TRACE
-    DEBUG_OUT("run_from($%04X)\n", address);
-#endif
     breaked = false;
     context.PC = PLAYER_RESERVED; // JSR, followed by infinite loop ("breaked")
     breakpoint = context.PC + 3;
@@ -151,8 +102,6 @@ int NES_CPU::Exec(int clocks)
 
         if (breaked && play_ready) {
             if (play_addr >= 0) {
-                if (log_cpu)
-                    log_cpu->Play();
                 run_from(play_addr);
             }
             play_ready = false;
@@ -164,8 +113,6 @@ int NES_CPU::Exec(int clocks)
                 if (nmi_play) // trigger play by NMI
                 {
                     if (enable_nmi) {
-                        if (log_cpu)
-                            log_cpu->Play();
                         context.iRequest |= IRQ_NMI;
                         breaked = false;
                     }
@@ -304,9 +251,6 @@ void NES_CPU::Start(
         nmi_play = true;
     }
 
-    if (log_cpu)
-        log_cpu->Init(song, region);
-
     context.A = song;
     context.X = region;
     context.Y = extra_init ? 0x80 : 0;
@@ -346,11 +290,6 @@ void NES_CPU::Start(
     // start of first frame
     fclocks_left_in_frame = fclocks_per_frame;
     play_ready = breaked && !extra_init;
-}
-
-void NES_CPU::SetLogger(CPULogger* logger)
-{
-    log_cpu = logger;
 }
 
 unsigned int NES_CPU::GetPC() const

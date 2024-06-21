@@ -35,7 +35,6 @@ OBJECTS += nes_mem.o
 OBJECTS += nsf2_vectors.o
 OBJECTS += ram64k.o
 OBJECTS += detect.o
-OBJECTS += log_cpu.o
 OBJECTS += nes_detect.o
 OBJECTS += nsf2_irq.o
 OBJECTS += nes_apu.o
@@ -106,9 +105,6 @@ ram64k.o: ../core/nsf/xgm/devices/Memory/ram64k.cpp
 	${CPP} -c $<
 
 detect.o: ../core/nsf/xgm/devices/Misc/detect.cpp
-	${CPP} -c $<
-
-log_cpu.o: ../core/nsf/xgm/devices/Misc/log_cpu.cpp
 	${CPP} -c $<
 
 nes_detect.o: ../core/nsf/xgm/devices/Misc/nes_detect.cpp

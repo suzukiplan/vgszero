@@ -47,7 +47,6 @@ OBJS += nes_mem.o
 OBJS += nsf2_vectors.o
 OBJS += ram64k.o
 OBJS += detect.o
-OBJS += log_cpu.o
 OBJS += nes_detect.o
 OBJS += nsf2_irq.o
 OBJS += nes_apu.o

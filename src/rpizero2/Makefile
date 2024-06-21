@@ -16,7 +16,6 @@ all:
 	cp -p ../core/nsf/xgm/devices/Memory/nsf2_vectors.cpp src
 	cp -p ../core/nsf/xgm/devices/Memory/ram64k.cpp src
 	cp -p ../core/nsf/xgm/devices/Misc/detect.cpp src
-	cp -p ../core/nsf/xgm/devices/Misc/log_cpu.cpp src
 	cp -p ../core/nsf/xgm/devices/Misc/nes_detect.cpp src
 	cp -p ../core/nsf/xgm/devices/Misc/nsf2_irq.cpp src
 	cp -p ../core/nsf/xgm/devices/Sound/nes_apu.cpp src

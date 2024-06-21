@@ -11,8 +11,6 @@
 #define External __inline
 #include "km6502/km6502m.h"
 
-#include "../Misc/log_cpu.h"
-
 namespace xgm
 {
 
@@ -42,7 +40,6 @@ class NES_CPU : public IDevice
     NES_MEM* nes_mem;
     UINT8 nsf2_bits;
     NSF2_IRQ* nsf2_irq;
-    CPULogger* log_cpu;
 
     void run_from(UINT32 address);
 
@@ -65,7 +62,6 @@ class NES_CPU : public IDevice
     void SetNESMemory(NES_MEM*);
     bool Read(UINT32 adr, UINT32& val, UINT32 id = 0);
     bool Write(UINT32 adr, UINT32 val, UINT32 id = 0);
-    void SetLogger(CPULogger* logger);
     unsigned int GetPC() const;
     void StealCycles(unsigned int cycles);
     void EnableNMI(bool enable);

@@ -239,9 +239,6 @@ class NSFPlayer
             case REGION_DENDY: cpu.nes_basecycles = 1773448; break;
         }
 
-        // if (logcpu->GetLogLevel() > 0)
-        //     logcpu->Begin(GetTitleString());
-
         Reload();
         SetPlayFreq(rate);
         stack.Reset();
@@ -420,8 +417,6 @@ class NSFPlayer
         // loop detector ends up at the front of the stack
         // (will capture all writes, but does not capture write)
         stack.Attach(ld);
-
-        cpu.SetLogger(nullptr);
 
         // setup player program at PLAYER_RESERVED ($4100)
         const uint8_t PLAYER_PROGRAM[] =
