@@ -57,6 +57,23 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - 8ボタン形式（カーソルキー、A/B、START/SELECT）のジョイパッドをサポート
   - [config.sys](#configsys) でボタン割当をカスタマイズ可能
 
+## Recommended Game Development Tools
+
+VGS-Zero のゲーム開発に適した開発ツールを紹介します。
+
+| Tool Name | Usage Type | Info |
+|:----------|:-----------|:------------|
+| [Ubuntu Desktop](https://jp.ubuntu.com/download)| OS | macOS でも可能ですがどちらかといえば Linux 推奨 |
+| [Visual Studio Code](https://code.visualstudio.com/download) | コーディング | プログラムやMMLの記述 |
+| [SDCC]((https://sdcc.sourceforge.net/)) | C コンパイラ | C 言語でゲームを開発する場合に利用を推奨<br>（だたし動作できるのはバージョン 4.1.0 のみ）|
+| [Z88DK](https://z88dk.org/site/) | アセンブラ | Z80 アセンブリ言語でゲームを開発する場合に利用を推奨 |
+| [aseprite](https://aseprite.org/) | グラフィックエディタ | 256 パレット方式で使用できます |
+| [Tiled Map Editor](https://www.mapeditor.org) | マップエディタ | ツールチェインの [csv2bin](./tools/csv2bin/) で VGS-Zero のバンクデータで扱う形式に変換できます。 |
+| [Jfxr](https://github.com/ttencate/jfxr) | 効果音エディタ | ブラウザ上でゲームの効果音を制作できるツールです |
+| [FamiStudio](https://famistudio.org/) | BGM エディタ | [NSF 形式](#nsf) の BGM を制作できる DAW です |
+
+> 必ずしも上記のツールでなければ開発できない訳ではありません。
+
 ## How to Execute
 
 ### on RaspberryPi Zero 2W
