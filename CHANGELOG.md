@@ -3,7 +3,8 @@
 ## [Version 1.11.0](https://github.com/suzukiplan/vgszero/releases/tag/1.11.0)
 
 - Extra RAM Bank の複製機能 `OUT ($B5)` を追加
-- NSF 形式 BGM の再生をサポート（bgm.dat に .nsf を組み込みそれを指定して再生することで再生可能）
+- NSF 形式 のデータを用いた BGM (ファミコン標準音源 + VRC6) の再生をサポート（bgm.dat に .nsf を組み込みそれを指定して再生することで再生可能）
+  - NSF 対応についての参考記事: https://note.com/suzukiplan/n/n94ea503ff2c8
 
 ## [Version 1.10.0 (2024.05.27)](https://github.com/suzukiplan/vgszero/releases/tag/1.10.0)
 

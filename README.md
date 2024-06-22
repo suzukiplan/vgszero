@@ -42,7 +42,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [ハードウェア乱数](#hardware-random)
   - [ハードウェア・パーリンノイズ](#hardware-perlin-noise)
 - [BGM](#bgmdat)
-  - [VGS の MML](#compile-mml) または [NSF 形式 (VRC7 を除く)](#nsf) の BGM を再生可能
+  - [VGS の MML](#compile-mml) または [NSF 形式](#nsf) の BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要!
   - 本体 ROM ([`game.rom`](#gamerom)) とは別アセット（[`bgm.dat`](#bgmdat)）
@@ -283,6 +283,7 @@ usage: vgsmml /path/to/file.mml /path/to/file.bgm
 - NSF; NES Sound Format の BGM データは [FamiStudio](https://famistudio.org/) などの NSF 形式をサポートした DAW; Digital Audio Workstation を用いて作成することができます
 - 詳しくは [example/15_nsf](example/15_nsf) を確認してください 
 - 拡張音源については VRC6 のみサポートしています（VRC7, FME7, FDS, N106, MMC5 は非サポート）
+- 参考記事: https://note.com/suzukiplan/n/n94ea503ff2c8
 
 #### (Make bgm.dat)
 
