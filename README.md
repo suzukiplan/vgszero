@@ -42,7 +42,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [ハードウェア乱数](#hardware-random)
   - [ハードウェア・パーリンノイズ](#hardware-perlin-noise)
 - [BGM](#bgmdat)
-  - VGS の MML で記述された BGM を再生可能
+  - [VGS の MML](#compile-mml) または [NSF 形式](#nsf) の BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要!
   - 本体 ROM ([`game.rom`](#gamerom)) とは別アセット（[`bgm.dat`](#bgmdat)）
@@ -167,6 +167,7 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 | [example/12_angle](./example/12_angle) | C言語 | [ハードウェア atan2 テーブル](#hardware-atan2-table) を用いて完全な自機狙いを実装する例 |
 | [example/13_perlin](./example/13_perlin) | C言語 | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
 | [example/14_1024ptn](./example/14_1024ptn) | C言語 | [1024 パターンモード](#1024-patterns-mode) の利用例 |
+| [example/15_nsf](./example/15_nsf/) | C言語 | [NSF](#nsf) の利用例 |
 
 ## Joypad
 
@@ -258,7 +259,14 @@ usage: makerom output input1 input2 ... input256
 
 ### bgm.dat
 
-bgm.dat は、本リポジトリのツールチェインで提供している [vgsmml コマンド](./tools/vgsmml) でコンパイルされた1つ以上の楽曲データを纏めたデータセットで、ツールチェインの [makebgm コマンド](./tools/makebgm/) で生成することができます。
+bgm.dat は 1 曲以上の楽曲データが含まれたデータセットで、ツールチェインの [makebgm コマンド](./tools/makebgm/) で生成することができます。
+
+楽曲データは次の 2 種類のデータ形式をサポートしています
+
+- [vgsmml コマンド](./tools/vgsmml) でコンパイルされた VGS; Video Game Sound 形式の BGM データ
+- [NSF 形式](#nsf) の BGM データ（ただし、VRC7 を除く）
+
+なお、プログラム（Z80）側では、再生する BGM が VGS 形式か NSF 形式かを区別しません。
 
 #### (Compile MML)
 
@@ -270,13 +278,20 @@ usage: vgsmml /path/to/file.mml /path/to/file.bgm
 - [東方BGM on VGS の MML](https://github.com/suzukiplan/tohovgs-cli/tree/master/mml) が全楽曲公開されているので、実用的な使い方はそちらが参考になるかもしれません
 - MML ファイルは、ツールチェインの [vgsplay コマンド](./tools/vgsplay) を用いれば PC 上でプレビューできます
 
+#### (NSF)
+
+- NSF; NES Sound Format の BGM データは [FamiStudio](https://famistudio.org/) などの NSF 形式をサポートした DAW; Digital Audio Workstation を用いて作成することができます
+- 詳しくは [example/15_nsf](example/15_nsf) を確認してください 
+- 拡張音源については VRC6 のみサポートしています（VRC7, FME7, FDS, N106, MMC5 は非サポート）
+- 参考記事: https://note.com/suzukiplan/n/n94ea503ff2c8
+
 #### (Make bgm.dat)
 
 ```
 makebgm bgm.dat song1.bgm [song2.bgm [song3.bgm...]]
 ```
 
-BGM ファイルは最大 256 個指定することができます。
+BGM ファイルまたは NSF ファイルを最大 256 個指定することができます。
 
 ### se.dat
 
@@ -392,13 +407,11 @@ VRAM は、[Name Table](#name-table)、[Attribute Table](#attribute)、[OAM](#oa
 
 そして、Main RAM は変数（0xC000〜）やスタック（〜0xFFFF）などのデータ保持に用いるメモリ区画です。
 
-Extra RAM Bank については VGS-Zero 特有のメモリ区画で若干特殊なもので、[Character Pattern Table](#character-pattern-table) として使うこともできますが __その他の用途で利用__ することもできます。
+Extra RAM Bank については VGS-Zero 特有の若干特殊なメモリ区画で、VRAM の [Character Pattern Table](#character-pattern-table)（TMS9918A と同じような用途）として使うこともできますが __その他の用途で利用__ することもできます。
 
 VGS-Video では、[DPM; Direct Pattern Mapping](#direct-pattern-mapping) や [OAM Bank](#oam-bank) を用いることで ROM 上のデータをダイレクトにキャラクタパターンとして使用できるため、キャラクパターンを RAM (VRAM) へ展開する必要がありません。
 
-そのため「その他の用途での利用」が Extra RAM Bank の想定ユースケースとなっています。
-
-例えば、ローグライク RPG のマップデータなど、自動生成する広大なデータの管理などで有用です。
+キャラクタパターンを RAM（VRAM）へ展開する必要が無い場合、Extra RAM Bank はローグライク RPG のマップデータなどの広大なデータ領域などとして利用することができます。
 
 ### VRAM Memory Map
 
@@ -634,6 +647,7 @@ Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)�
 |   0xB2    |  o  |  o  | [ROM Bank](#bank-switch) 2 (default: 0x02) |
 |   0xB3    |  o  |  o  | [ROM Bank](#bank-switch) 3 (default: 0x03) |
 |   0xB4    |  o  |  o  | [Extra RAM Bank](#extra-ram-bank) (default: 0x00) |
+|   0xB5    |  -  |  o  | [Duplicate Extra RAM Bank](#duplicate-extra-ram-bank)|
 |   0xC0    |  -  |  o  | [ROM to Character DMA](#rom-to-character-dma) |
 |   0xC1    |  -  |  o  | [ROM to Memory DMA](#rom-to-memory-dma) |
 |   0xC2    |  -  |  o  | [memset 相当の DMA](#memset-dma) |
@@ -680,7 +694,7 @@ OUT (0xB1), A
 
 #### (Extra RAM Bank)
 
-ポート番号 0xB4 を OUT することで、[Character Pattern Table](#character-pattern-table) の RAM (8KB) をバンク切り替えすることで、最大 2MB (8KB x 256) の RAM を使用することができます。
+ポート番号 0xB4 を OUT することで、Extra RAM Bank（0xA000〜0xBFFF = [Character Pattern Table](#character-pattern-table) の RAM 領域 (8KB) ）をバンク切り替えすることで、最大 2MB (8KB x 256) の RAM を使用することができます。
 
 ```z80
 # Read Current Extra RAM Bank
@@ -689,6 +703,20 @@ IN A, (0xB4)
 # Switch Extra RAM Bank to No.3
 LD A, 0x03
 OUT (0xB4), A
+```
+
+#### (Duplicate Extra RAM Bank)
+
+ポート番号 0xB5 を OUT することで、現在の Extra RAM Bank の内容を別の Extra RAM Bank へ複製することができます。
+
+```z80
+; 現在の Extra RAM Bank = 0x00
+XOR A
+OUT (0xB4), A
+
+; 0x00 の内容を 0x03 へ複製
+LD A, 0x03
+OUT (0xB5), A
 ```
 
 #### (ROM to Character DMA)
@@ -1039,6 +1067,9 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 - VGS-Zero 本体配布イメージには RaspberryPi ブートローダーが含まれます: [LICENCE.broadcom](./LICENCE.broadcom)
 - VGS-Zero 本体には Circle（GPLv3）が含まれます: [LICENSE-CIRCLE.txt](./LICENSE-CIRCLE.txt)
 - VGS-Zero 本体には SUZUKI PLAN - Z80 Emulator (MIT) が含まれます: [LICENSE-Z80.txt](./LICENSE-Z80.txt)
+- VGS-Zero 本体には NEZplug (Free Software) が含まれます: [LICENSE-NEZplug.txt](./LICENSE-NEZplug.txt)
+- VGS-Zero 本体には NSFPlay (GPLv3) を改変したプログラムが含まれます: [LICENSE-NSFPlay-alter.txt](./LICENSE-NSFPlay-alter.txt)
+- VGS-Zero 本体には KM6502 (Free Software) が含まれます: [LICENSE-km6502.txt](./LICENSE-km6502.txt)
 - VGS-Zero Library for Z80 は MIT ライセンスの OSS です:[LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
 
 > あなたが開発した[game.pkg](#gamepkg)の著作権はあなたに帰属し、商業利用を含む自由な利用が可能です。

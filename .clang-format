@@ -14,4 +14,5 @@ AllowShortCaseLabelsOnASingleLine: true
 PointerAlignment: Left
 UseTab: Never
 IndentCaseLabels: true
+SortIncludes: false
 

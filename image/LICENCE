@@ -23,3 +23,13 @@ VGS-Zero includes SUZUKI PLAN - Z80 Emulator:
 VGS-Zero Library for Z80 is OSS under MIT license:
 - Copied License: LICENSE-VGS0LIB.txt
 - Web Site: https://github.com/suzukiplan/vgszero/tree/master/lib/sdcc
+
+NSZplug:
+- Copied License: LICENSE-NEZplug.txt
+
+KM6502:
+- Copied License: LICENSE-km6502.txt
+
+NSFPlay alter version under GPLv3 license:
+- Copied License: LICENSE-NSFPlay-alter.txt
+- Web Site: https://github.com/suzukiplan/nsfplay-linux

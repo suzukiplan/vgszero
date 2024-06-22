@@ -1,0 +1,15 @@
+*.rel
+*.chr
+*.lst
+*.sym
+*.asm
+*.ihx
+*.map
+*.bin
+*.lk
+*.noi
+*.bgm
+*.rom
+bgm.dat
+se.dat
+

@@ -6,6 +6,8 @@
 #include <circle/startup.h>
 #include <stdarg.h>
 
+extern const unsigned short vgs0_rand16[65536];
+
 void exit(int code)
 {
     halt();
@@ -29,4 +31,13 @@ int printf(const char* format, ...)
 int puts(const char* text)
 {
     return 0;
+}
+
+int rand(void)
+{
+    static int ptr;
+    int result = vgs0_rand16[ptr] & 0x7FFF;
+    ptr++;
+    ptr &= 0xFFFF;
+    return result;
 }
