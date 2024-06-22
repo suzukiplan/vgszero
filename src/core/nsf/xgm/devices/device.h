@@ -3,11 +3,10 @@
 #include <stdio.h>
 #include <assert.h>
 #include "../xtypes.h"
-#include "devinfo.h"
 
 namespace xgm
 {
-const double DEFAULT_CLOCK = 1789772.0;
+const int DEFAULT_CLOCK = 1789772;
 const int DEFAULT_RATE = 48000;
 
 /**
@@ -95,14 +94,14 @@ class ISoundChip : public IDevice, virtual public IRenderable
      *
      * @param clock ������g��
      */
-    virtual void SetClock(double clock) = 0;
+    virtual void SetClock(long clock) = 0;
 
     /**
      * �����������[�g�ݒ�
      *
      * @param rate �o�͎��g��
      */
-    virtual void SetRate(double rate) = 0;
+    virtual void SetRate(long rate) = 0;
 
     /**
      * Channel mask.
@@ -123,7 +122,6 @@ class ISoundChip : public IDevice, virtual public IRenderable
     /**
      * Track info for keyboard view.
      */
-    virtual ITrackInfo* GetTrackInfo(int trk) { return NULL; }
     virtual ~ISoundChip(){};
 };
 

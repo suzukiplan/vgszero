@@ -30,7 +30,7 @@ class NES_APU : public ISoundChip
     UINT32 gclock;
     UINT8 reg[0x20];
     INT32 out[2];
-    double rate, clock;
+    long rate, clock;
 
     INT32 square_table[32]; // nonlinear mixer
     INT32 square_linear;    // linear mix approximation
@@ -63,7 +63,6 @@ class NES_APU : public ISoundChip
 
     void sweep_sqr(int ch); // calculates target sweep frequency
     INT32 calc_sqr(int ch, UINT32 clocks);
-    TrackInfoBasic trkinfo[2];
 
   public:
     NES_APU();
@@ -76,12 +75,11 @@ class NES_APU : public ISoundChip
     virtual UINT32 Render(INT32 b[2]);
     virtual bool Read(UINT32 adr, UINT32& val, UINT32 id = 0);
     virtual bool Write(UINT32 adr, UINT32 val, UINT32 id = 0);
-    virtual void SetRate(double rate);
-    virtual void SetClock(double clock);
+    virtual void SetRate(long rate);
+    virtual void SetClock(long clock);
     virtual void SetOption(int id, int b);
     virtual void SetMask(int m) { mask = m; }
     virtual void SetStereoMix(int trk, xgm::INT16 mixl, xgm::INT16 mixr);
-    virtual ITrackInfo* GetTrackInfo(int trk);
 };
 
 } // namespace xgm

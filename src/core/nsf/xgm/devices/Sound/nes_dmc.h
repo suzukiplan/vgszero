@@ -4,6 +4,8 @@
 #include "../device.h"
 #include "../CPU/nes_cpu.h"
 
+extern const short rom_tndtable[65536];
+
 namespace xgm
 {
 class NES_APU; // forward declaration
@@ -29,7 +31,7 @@ class NES_DMC : public ISoundChip
     const int GETA_BITS;
     static const UINT32 freq_table[2][16];
     static const UINT32 wavlen_table[2][16];
-    UINT32 tnd_table[2][16][16][128];
+    UINT16 tnd_table[2][16][16][128];
 
     int option[OPT_END];
     int mask;
@@ -48,7 +50,7 @@ class NES_DMC : public ISoundChip
     bool dmc_pop;
     INT32 dmc_pop_offset;
     INT32 dmc_pop_follow;
-    double clock;
+    long clock;
     UINT32 rate;
     int pal;
     int mode;
@@ -79,8 +81,6 @@ class NES_DMC : public ISoundChip
     bool enable[2];        // tri/noise enable
     int length_counter[2]; // 0=tri, 1=noise
 
-    TrackInfoBasic trkinfo[3];
-
     // frame sequencer
     NES_APU* apu;              // apu is clocked by DMC's frame sequencer
     int frame_sequence_count;  // current cycle count
@@ -100,7 +100,7 @@ class NES_DMC : public ISoundChip
     NES_DMC();
     ~NES_DMC();
 
-    void InitializeTNDTable(double wt, double wn, double wd);
+    void InitializeTNDTable(int wt, int wn, int wd);
     void SetPal(bool is_pal);
     void SetAPU(NES_APU* apu_);
     void SetMemory(IDevice* r);
@@ -113,13 +113,11 @@ class NES_DMC : public ISoundChip
     virtual UINT32 Render(INT32 b[2]);
     virtual bool Write(UINT32 adr, UINT32 val, UINT32 id = 0);
     virtual bool Read(UINT32 adr, UINT32& val, UINT32 id = 0);
-    virtual void SetRate(double rate);
-    virtual void SetClock(double rate);
+    virtual void SetRate(long rate);
+    virtual void SetClock(long clock);
     virtual void SetOption(int, int);
     virtual void SetMask(int m) { mask = m; }
     virtual void SetStereoMix(int trk, xgm::INT16 mixl, xgm::INT16 mixr);
-    virtual ITrackInfo* GetTrackInfo(int trk);
-
     void SetCPU(NES_CPU* cpu_);
 };
 

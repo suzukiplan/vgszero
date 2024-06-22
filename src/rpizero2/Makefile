@@ -12,13 +12,8 @@ all:
 	cp -p ../core/nsf/xgm/devices/Misc/nsf2_irq.cpp src
 	cp -p ../core/nsf/xgm/devices/Sound/nes_apu.cpp src
 	cp -p ../core/nsf/xgm/devices/Sound/nes_dmc.cpp src
-	cp -p ../core/nsf/xgm/devices/Sound/nes_fds.cpp src
-	cp -p ../core/nsf/xgm/devices/Sound/nes_fme7.cpp src
-	cp -p ../core/nsf/xgm/devices/Sound/nes_mmc5.cpp src
-	cp -p ../core/nsf/xgm/devices/Sound/nes_n106.cpp src
 	cp -p ../core/nsf/xgm/devices/Sound/nes_vrc6.cpp src
-	cp -p ../core/nsf/xgm/devices/Sound/legacy/emu2149.c src
-	cp -p ../core/nsf/xgm/devices/Sound/legacy/emu2212.c src
+	cp -p ../core/nsf/xgm/devices/Sound/rom_tndtable.c src
 	cd src/circle && ./makeall --nosample
 	cd src/circle/addon/fatfs && make
 	cd src/circle/addon/SDCard && make

@@ -219,12 +219,12 @@ void NES_APU::SetOption(int id, int val)
     if (id < OPT_END) option[id] = val;
 }
 
-void NES_APU::SetClock(double c)
+void NES_APU::SetClock(long c)
 {
     clock = c;
 }
 
-void NES_APU::SetRate(double r)
+void NES_APU::SetRate(long r)
 {
     rate = r ? r : DEFAULT_RATE;
 }
@@ -235,27 +235,6 @@ void NES_APU::SetStereoMix(int trk, xgm::INT16 mixl, xgm::INT16 mixr)
     if (trk > 1) return;
     sm[0][trk] = mixl;
     sm[1][trk] = mixr;
-}
-
-ITrackInfo* NES_APU::GetTrackInfo(int trk)
-{
-    trkinfo[trk]._freq = freq[trk];
-    if (freq[trk])
-        trkinfo[trk].freq = clock / 16 / (freq[trk] + 1);
-    else
-        trkinfo[trk].freq = 0;
-
-    trkinfo[trk].output = out[trk];
-    trkinfo[trk].volume = volume[trk] + (envelope_disable[trk] ? 0 : 0x10) + (envelope_loop[trk] ? 0x20 : 0);
-    trkinfo[trk].key =
-        enable[trk] &&
-        length_counter[trk] > 0 &&
-        freq[trk] >= 8 &&
-        sfreq[trk] < 0x800 &&
-        (envelope_disable[trk] ? volume[trk] : (envelope_counter[trk] > 0));
-    trkinfo[trk].tone = duty[trk];
-    trkinfo[trk].max_volume = 15;
-    return &trkinfo[trk];
 }
 
 bool NES_APU::Write(UINT32 adr, UINT32 val, UINT32 id)

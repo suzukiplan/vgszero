@@ -44,14 +44,14 @@ class NES_CPU : public IDevice
     void run_from(UINT32 address);
 
   public:
-    double nes_basecycles;
-    NES_CPU(double clock = DEFAULT_CLOCK);
+    long nes_basecycles;
+    NES_CPU(long clock = DEFAULT_CLOCK);
     ~NES_CPU();
     void Reset();
     void Start(
         int init_addr_,
         int play_addr_,
-        double play_rate,
+        long play_rate,
         int song_,
         int region_,
         UINT8 nsf2_bits_,

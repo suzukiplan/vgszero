@@ -282,7 +282,7 @@ usage: vgsmml /path/to/file.mml /path/to/file.bgm
 
 - NSF; NES Sound Format の BGM データは [FamiStudio](https://famistudio.org/) などの NSF 形式をサポートした DAW; Digital Audio Workstation を用いて作成することができます
 - 詳しくは [example/15_nsf](example/15_nsf) を確認してください 
-- VGS-Zero では VRC7 以外の全ての形式の NSF を再生することができます
+- 拡張音源については VRC6 のみサポートしています（VRC7, FME7, FDS, N106, MMC5 は非サポート）
 
 #### (Make bgm.dat)
 
@@ -1069,8 +1069,6 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 - VGS-Zero 本体には NEZplug (Free Software) が含まれます: [LICENSE-NEZplug.txt](./LICENSE-km6502.txt)
 - VGS-Zero 本体には NSFPlay (GPLv3) を改変したプログラムが含まれます: [LICENSE-NSFPlay-alter.txt](./LICENSE-NSFPlay-alter.txt)
 - VGS-Zero 本体には KM6502 (Free Software) が含まれます: [LICENSE-km6502.txt](./LICENSE-km6502.txt)
-- VGS-Zero 本体には emu2149 (MIT) が含まれます: [LICENSE-emu2149.txt](./LICENSE-emu2149.txt)
-- VGS-Zero 本体には emu2212 (MIT) が含まれます: [LICENSE-emu2212.txt](./LICENSE-emu2212.txt)
 - VGS-Zero Library for Z80 は MIT ライセンスの OSS です:[LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
 
 > あなたが開発した[game.pkg](#gamepkg)の著作権はあなたに帰属し、商業利用を含む自由な利用が可能です。

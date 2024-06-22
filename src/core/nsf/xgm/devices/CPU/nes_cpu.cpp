@@ -18,7 +18,7 @@ inline void exec(K6502_Context& context, xgm::IDevice* bus)
 // 14 used here just for one extra bit of safety
 const int FRAME_FIXED = 14;
 
-NES_CPU::NES_CPU(double clock)
+NES_CPU::NES_CPU(long clock)
 {
     nes_basecycles = clock;
     bus = NULL;
@@ -155,7 +155,7 @@ void NES_CPU::Reset()
 void NES_CPU::Start(
     int init_addr_,
     int play_addr_,
-    double play_rate,
+    long play_rate,
     int song_,
     int region_,
     UINT8 nsf2_bits_,
@@ -167,7 +167,7 @@ void NES_CPU::Start(
     play_addr = play_addr_;
     song = song_;
     region = region_;
-    fclocks_per_frame = (INT64)((double)((1 << FRAME_FIXED) * nes_basecycles) / play_rate);
+    fclocks_per_frame = (INT64)(((1 << FRAME_FIXED) * nes_basecycles) / play_rate);
     fclocks_left_in_frame = 0;
     stolen_cycles = 0;
     play_ready = false;

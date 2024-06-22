@@ -29,34 +29,12 @@ void NES_VRC6::SetStereoMix(int trk, xgm::INT16 mixl, xgm::INT16 mixr)
     sm[1][trk] = mixr;
 }
 
-ITrackInfo* NES_VRC6::GetTrackInfo(int trk)
-{
-    if (trk < 2) {
-        trkinfo[trk].max_volume = 15;
-        trkinfo[trk].volume = volume[trk];
-        trkinfo[trk]._freq = freq2[trk];
-        trkinfo[trk].freq = freq2[trk] ? clock / 16 / (freq2[trk] + 1) : 0;
-        trkinfo[trk].tone = duty[trk];
-        trkinfo[trk].key = (volume[trk] > 0) && enable[trk] && !gate[trk];
-        return &trkinfo[trk];
-    } else if (trk == 2) {
-        trkinfo[2].max_volume = 255;
-        trkinfo[2].volume = volume[2];
-        trkinfo[2]._freq = freq2[2];
-        trkinfo[2].freq = freq2[2] ? clock / 14 / (freq2[2] + 1) : 0;
-        trkinfo[2].tone = -1;
-        trkinfo[2].key = (enable[2] > 0);
-        return &trkinfo[2];
-    } else
-        return NULL;
-}
-
-void NES_VRC6::SetClock(double c)
+void NES_VRC6::SetClock(long c)
 {
     clock = c;
 }
 
-void NES_VRC6::SetRate(double r)
+void NES_VRC6::SetRate(long r)
 {
     rate = r ? r : DEFAULT_RATE;
 }

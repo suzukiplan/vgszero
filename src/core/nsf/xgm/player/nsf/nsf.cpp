@@ -172,7 +172,7 @@ bool NSF::Load(uint8_t* image, uint32_t size)
     use_n106 = soundchip & 16 ? true : false;
     use_fme7 = soundchip & 32 ? true : false;
 
-    if (use_vrc7) {
+    if (use_vrc7 || use_fme7 || use_fds || use_mmc5 || use_n106) {
         return false;
     }
     memcpy(extra, image + 0x7c, 4);

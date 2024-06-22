@@ -34,13 +34,8 @@ OBJECTS += nsf2_vectors.o
 OBJECTS += nsf2_irq.o
 OBJECTS += nes_apu.o
 OBJECTS += nes_dmc.o
-OBJECTS += nes_fds.o
-OBJECTS += nes_fme7.o
-OBJECTS += nes_mmc5.o
-OBJECTS += nes_n106.o
 OBJECTS += nes_vrc6.o
-OBJECTS += emu2149.o
-OBJECTS += emu2212.o
+OBJECTS += rom_tndtable.o
 
 all: vgs0
 
@@ -87,29 +82,8 @@ nes_apu.o: ../core/nsf/xgm/devices/Sound/nes_apu.cpp
 nes_dmc.o: ../core/nsf/xgm/devices/Sound/nes_dmc.cpp
 	${CPP} -c $<
 
-nes_fds.o: ../core/nsf/xgm/devices/Sound/nes_fds.cpp
-	${CPP} -c $<
-
-nes_fme7.o: ../core/nsf/xgm/devices/Sound/nes_fme7.cpp
-	${CPP} -c $<
-
-nes_mmc5.o: ../core/nsf/xgm/devices/Sound/nes_mmc5.cpp
-	${CPP} -c $<
-
-nes_n106.o: ../core/nsf/xgm/devices/Sound/nes_n106.cpp
-	${CPP} -c $<
-
 nes_vrc6.o: ../core/nsf/xgm/devices/Sound/nes_vrc6.cpp
 	${CPP} -c $<
 
-nes_vrc7.o: ../core/nsf/xgm/devices/Sound/nes_vrc7.cpp
-	${CPP} -c $<
-
-emu2149.o: ../core/nsf/xgm/devices/Sound/legacy/emu2149.c
-	${CC} -c $<
-
-emu2212.o: ../core/nsf/xgm/devices/Sound/legacy/emu2212.c
-	${CC} -c $<
-
-emu2413.o: ../core/nsf/xgm/devices/Sound/legacy/emu2413.c
+rom_tndtable.o: ../core/nsf/xgm/devices/Sound/rom_tndtable.c
 	${CC} -c $<

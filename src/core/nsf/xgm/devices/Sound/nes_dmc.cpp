@@ -1,6 +1,7 @@
 #include "nes_dmc.h"
 #include "nes_apu.h"
 #include <stdlib.h>
+#include <string.h>
 
 namespace xgm
 {
@@ -314,46 +315,6 @@ void NES_DMC::SetStereoMix(int trk, xgm::INT16 mixl, xgm::INT16 mixr)
     sm[1][trk] = mixr;
 }
 
-ITrackInfo* NES_DMC::GetTrackInfo(int trk)
-{
-    switch (trk) {
-        case 0:
-            trkinfo[trk].max_volume = 255;
-            trkinfo[0].key = (linear_counter > 0 && length_counter[0] > 0 && enable[0]);
-            trkinfo[0].volume = 0;
-            trkinfo[0]._freq = tri_freq;
-            if (trkinfo[0]._freq)
-                trkinfo[0].freq = clock / 32 / (trkinfo[0]._freq + 1);
-            else
-                trkinfo[0].freq = 0;
-            trkinfo[0].tone = -1;
-            trkinfo[0].output = out[0];
-            break;
-        case 1:
-            trkinfo[1].max_volume = 15;
-            trkinfo[1].volume = noise_volume + (envelope_disable ? 0 : 0x10) + (envelope_loop ? 0x20 : 0);
-            trkinfo[1].key = length_counter[1] > 0 && enable[1] &&
-                             (envelope_disable ? (noise_volume > 0) : (envelope_counter > 0));
-            trkinfo[1]._freq = reg[0x400e - 0x4008] & 0xF;
-            trkinfo[1].freq = clock / double(wavlen_table[pal][trkinfo[1]._freq] * ((noise_tap & (1 << 6)) ? 93 : 1));
-            trkinfo[1].tone = noise_tap & (1 << 6);
-            trkinfo[1].output = out[1];
-            break;
-        case 2:
-            trkinfo[2].max_volume = 127;
-            trkinfo[2].volume = reg[0x4011 - 0x4008] & 0x7F;
-            trkinfo[2].key = dlength > 0;
-            trkinfo[2]._freq = reg[0x4010 - 0x4008] & 0xF;
-            trkinfo[2].freq = clock / double(freq_table[pal][trkinfo[2]._freq]);
-            trkinfo[2].tone = (0xc000 | (adr_reg << 6));
-            trkinfo[2].output = (damp << 1) | dac_lsb;
-            break;
-        default:
-            return NULL;
-    }
-    return &trkinfo[trk];
-}
-
 void NES_DMC::FrameSequence(int s)
 {
     if (s > 3) return; // no operation in step 4
@@ -597,11 +558,13 @@ UINT32 NES_DMC::Render(INT32 b[2])
         INT32 ref = m[0] + m[1] + m[2];
         INT32 voltage = tnd_table[1][out[0]][out[1]][out[2]];
         if (ref) {
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < 3; ++i) {
                 m[i] = (m[i] * voltage) / ref;
+            }
         } else {
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < 3; ++i) {
                 m[i] = voltage;
+            }
         }
     }
 
@@ -643,12 +606,12 @@ UINT32 NES_DMC::Render(INT32 b[2])
     return 2;
 }
 
-void NES_DMC::SetClock(double c)
+void NES_DMC::SetClock(long c)
 {
     clock = c;
 }
 
-void NES_DMC::SetRate(double r)
+void NES_DMC::SetRate(long r)
 {
     rate = (UINT32)(r ? r : DEFAULT_RATE);
 }
@@ -666,37 +629,9 @@ void NES_DMC::SetAPU(NES_APU* apu_)
 }
 
 // Initializing TRI, NOISE, DPCM mixing table
-void NES_DMC::InitializeTNDTable(double wt, double wn, double wd)
+void NES_DMC::InitializeTNDTable(int wt, int wn, int wd)
 {
-
-    // volume adjusted by 0.95 based on empirical measurements
-    const double MASTER = 8192.0 * 0.95;
-    // truthfully, the nonlinear curve does not appear to match well
-    // with my tests. Do more testing of the APU/DMC DAC later.
-    // this value keeps the triangle consistent with measured levels,
-    // but not necessarily the rest of this APU channel,
-    // because of the lack of a good DAC model, currently.
-
-    { // Linear Mixer
-        for (int t = 0; t < 16; t++) {
-            for (int n = 0; n < 16; n++) {
-                for (int d = 0; d < 128; d++) {
-                    tnd_table[0][t][n][d] = (UINT32)(MASTER * (3.0 * t + 2.0 * n + d) / 208.0);
-                }
-            }
-        }
-    }
-    { // Non-Linear Mixer
-        tnd_table[1][0][0][0] = 0;
-        for (int t = 0; t < 16; t++) {
-            for (int n = 0; n < 16; n++) {
-                for (int d = 0; d < 128; d++) {
-                    if (t != 0 || n != 0 || d != 0)
-                        tnd_table[1][t][n][d] = (UINT32)((MASTER * 159.79) / (100.0 + 1.0 / ((double)t / wt + (double)n / wn + (double)d / wd)));
-                }
-            }
-        }
-    }
+    memcpy(tnd_table, rom_tndtable, sizeof(tnd_table));
 }
 
 void NES_DMC::Reset()
@@ -783,8 +718,9 @@ void NES_DMC::SetOption(int id, int val)
 {
     if (id < OPT_END) {
         option[id] = val;
-        if (id == OPT_NONLINEAR_MIXER)
+        if (id == OPT_NONLINEAR_MIXER) {
             InitializeTNDTable(8227, 12241, 22638);
+        }
     }
 }
 
