@@ -10,8 +10,8 @@ class NES_CPU; // forward declaration
 class NSF2_IRQ : public IDevice
 {
   protected:
-    UINT16 reload;
-    UINT32 count;
+    uint16_t reload;
+    uint32_t count;
     bool active;
     bool irq;
     NES_CPU* cpu;
@@ -20,10 +20,10 @@ class NSF2_IRQ : public IDevice
     NSF2_IRQ();
     ~NSF2_IRQ();
     void Reset();
-    bool Read(UINT32 adr, UINT32& val, UINT32 id = 0);
-    bool Write(UINT32 adr, UINT32 val, UINT32 id = 0);
+    bool Read(uint32_t adr, uint32_t& val, uint32_t id = 0);
+    bool Write(uint32_t adr, uint32_t val, uint32_t id = 0);
 
-    void Clock(UINT32 clocks);
+    void Clock(uint32_t clocks);
     void SetCPU(NES_CPU* cpu_);
 };
 

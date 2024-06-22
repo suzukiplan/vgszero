@@ -1,137 +1,44 @@
 #ifndef _DEVICE_H_
 #define _DEVICE_H_
 #include <stdio.h>
+#include <stdint.h>
 #include <assert.h>
-#include "../xtypes.h"
 
 namespace xgm
 {
 const int DEFAULT_CLOCK = 1789772;
 const int DEFAULT_RATE = 48000;
 
-/**
- * �G�~�����[�^�Ŏg�p����f�o�C�X�̒���
- */
 class IDevice
 {
   public:
-    /**
-     * �f�o�C�X�̃��Z�b�g
-     *
-     * <P>
-     * ���̃��\�b�h�̌Ăяo����C���̃f�o�C�X�͂ǂ̂悤�ȃ��\�b�h�̌Ă�
-     * �o���ɑ΂��Ă��C���s���G���[���N�����Ă͂Ȃ�Ȃ��D�t�ɁC���̃��\�b
-     * �h���ĂԈȑO�́C���̃��\�b�h�̓���͈�ؕۏ؂��Ȃ��Ă��ǂ��B
-     * </P>
-     */
     virtual void Reset() = 0;
-
-    /**
-     * �f�o�C�X�ւ̏�������
-     *
-     * @param adr �A�h���X
-     * @param val �������ޒl
-     * @param id  �f�o�C�X���ʏ��D��̃f�o�C�X��������IO���T�|�[�g���鎞�Ȃ�
-     * @return ������ true ���s�� false
-     */
-    virtual bool Write(UINT32 adr, UINT32 val, UINT32 id = 0) = 0;
-
-    /**
-     * �f�o�C�X����ǂݍ���
-     *
-     * @param adr �A�h���X
-     * @param val �ǂݏo�����l���󂯎��ϐ��D
-     * @return ������ true ���s�� false
-     */
-    virtual bool Read(UINT32 adr, UINT32& val, UINT32 id = 0) = 0;
-
-    /**
-     * �e��I�v�V������ݒ肷��(���������)
-     */
-    virtual void SetOption(int id, int val){};
+    virtual bool Write(uint32_t adr, uint32_t val, uint32_t id = 0) = 0;
+    virtual bool Read(uint32_t adr, uint32_t& val, uint32_t id = 0) = 0;
+    virtual void SetOption(int id, int val) {};
     virtual ~IDevice(){};
 };
 
-/**
- * �C���^�[�t�F�[�X�F�����̃����_�����O���\�ȃN���X
- */
 class IRenderable
 {
   public:
-    /**
-     * �����̃����_�����O
-     *
-     * @param b[2] �������ꂽ�f�[�^���i�[����z��D
-     * b[0]�����`�����l���Cb[1]���E�`�����l���̉����f�[�^�D
-     * @return ���������f�[�^�̃T�C�Y�D1�Ȃ烂�m�����D2�Ȃ�X�e���I�D0�͍������s�D
-     */
-    virtual UINT32 Render(INT32 b[2]) = 0;
-
-    // When seeking, this replaces Render
+    virtual uint32_t Render(int32_t b[2]) = 0;
     virtual void Skip() {}
-
-    /**
-     *  chip update/operation is now bound to CPU clocks
-     *  Render() now simply mixes and outputs sound
-     */
-    virtual void Tick(UINT32 clocks) {}
+    virtual void Tick(uint32_t clocks) {}
     virtual ~IRenderable(){};
 };
 
-/**
- * ���������`�b�v
- */
 class ISoundChip : public IDevice, virtual public IRenderable
 {
   public:
-    /**
-     * Soundchip clocked by M2 (NTSC = ~1.789MHz)
-     */
-    virtual void Tick(UINT32 clocks) = 0;
-
-    /**
-     * �`�b�v�̓���N���b�N��ݒ�
-     *
-     * @param clock ������g��
-     */
+    virtual void Tick(uint32_t clocks) = 0;
     virtual void SetClock(long clock) = 0;
-
-    /**
-     * �����������[�g�ݒ�
-     *
-     * @param rate �o�͎��g��
-     */
     virtual void SetRate(long rate) = 0;
-
-    /**
-     * Channel mask.
-     */
     virtual void SetMask(int mask) = 0;
-
-    /**
-     * Stereo mix.
-     *   mixl = 0-256
-     *   mixr = 0-256
-     *     128 = neutral
-     *     256 = double
-     *     0 = nil
-     *    <0 = inverted
-     */
-    virtual void SetStereoMix(int trk, xgm::INT16 mixl, xgm::INT16 mixr) = 0;
-
-    /**
-     * Track info for keyboard view.
-     */
+    virtual void SetStereoMix(int trk, int16_t mixl, int16_t mixr) = 0;
     virtual ~ISoundChip(){};
 };
 
-/**
- * �o�X
- *
- * <P>
- * �����̃f�o�C�X�ɁC���Z�b�g�C�������݁C�ǂݍ��ݓ�����u���[�h�L���X�g����D
- * <P>
- */
 class Bus : public IDevice
 {
   protected:
@@ -139,14 +46,6 @@ class Bus : public IDevice
     int vd_num;
 
   public:
-    /**
-     * ���Z�b�g
-     *
-     * <P>
-     * ���t�����Ă���S�Ẵf�o�C�X�́CReset���\�b�h���Ăяo���D
-     * �Ăяo�������́C�f�o�C�X�����t����ꂽ�����ɓ������D
-     * </P>
-     */
     void Reset()
     {
         for (int i = 0; i < vd_num; i++) {
@@ -154,37 +53,17 @@ class Bus : public IDevice
         }
     }
 
-    /**
-     * �S�f�o�C�X�̎��O��
-     */
     void DetachAll()
     {
         vd_num = 0;
     }
 
-    /**
-     * �f�o�C�X�̎��t��
-     *
-     * <P>
-     * ���̃o�X�Ƀf�o�C�X�����t����D
-     * </P>
-     *
-     * @param d ���t����f�o�C�X�ւ̃|�C���^
-     */
     void Attach(IDevice* d)
     {
         vd_ptr[vd_num++] = d;
     }
 
-    /**
-     * ��������
-     *
-     * <P>
-     * ���t�����Ă���S�Ẵf�o�C�X�́CWrite���\�b�h���Ăяo���D
-     * �Ăяo�������́C�f�o�C�X�����t����ꂽ�����ɓ������D
-     * </P>
-     */
-    bool Write(UINT32 adr, UINT32 val, UINT32 id = 0)
+    bool Write(uint32_t adr, uint32_t val, uint32_t id = 0)
     {
         bool ret = false;
         for (int i = 0; i < vd_num; i++) {
@@ -193,20 +72,10 @@ class Bus : public IDevice
         return ret;
     }
 
-    /**
-     * �ǂݍ���
-     *
-     * <P>
-     * ���t�����Ă���S�Ẵf�o�C�X��Read���\�b�h���Ăяo���D
-     * �Ăяo�������́C�f�o�C�X�����t����ꂽ�����ɓ������D
-     * �A��l�͗L����(Read���\�b�h��true��ԋp����)�f�o�C�X��
-     * �Ԃ�l�̘_���a�D
-     * </P>
-     */
-    bool Read(UINT32 adr, UINT32& val, UINT32 id = 0)
+    bool Read(uint32_t adr, uint32_t& val, uint32_t id = 0)
     {
         bool ret = false;
-        UINT32 vtmp = 0;
+        uint32_t vtmp = 0;
         val = 0;
         for (int i = 0; i < vd_num; i++) {
             if (vd_ptr[i]->Read(adr, vtmp)) {
@@ -218,28 +87,10 @@ class Bus : public IDevice
     }
 };
 
-/**
- * ���C���[
- *
- * <P>
- * �o�X�Ǝ��Ă��邪�C�ǂݏ����̓����S�f�o�C�X�ɓ`�d�����Ȃ��D
- * �ŏ��ɓǂݏ����ɐ��������f�o�C�X�𔭌��������_�ŏI������D
- * </P>
- */
 class Layer : public Bus
 {
-  protected:
   public:
-    /**
-     * ��������
-     *
-     * <P>
-     * ���t�����Ă���f�o�C�X��Write���\�b�h���Ăяo���D
-     * �Ăяo�������́C�f�o�C�X�����t����ꂽ�����ɓ������D
-     * Write�ɐ��������f�o�C�X�������������_�ŏI���D
-     * </P>
-     */
-    bool Write(UINT32 adr, UINT32 val, UINT32 id = 0)
+    bool Write(uint32_t adr, uint32_t val, uint32_t id = 0)
     {
         for (int i = 0; i < vd_num; i++) {
             if (vd_ptr[i]->Write(adr, val)) {
@@ -249,16 +100,7 @@ class Layer : public Bus
         return false;
     }
 
-    /**
-     * �ǂݍ���
-     *
-     * <P>
-     * ���t�����Ă���f�o�C�X��Read���\�b�h���Ăяo���D
-     * �Ăяo�������́C�f�o�C�X�����t����ꂽ�����ɓ������D
-     * Read�ɐ��������f�o�C�X�������������_�ŏI���D
-     * </P>
-     */
-    bool Read(UINT32 adr, UINT32& val, UINT32 id = 0)
+    bool Read(uint32_t adr, uint32_t& val, uint32_t id = 0)
     {
         val = 0;
         for (int i = 0; i < vd_num; i++) {

@@ -17,7 +17,7 @@ void NSF2_Vectors::Reset()
 {
 }
 
-bool NSF2_Vectors::Read(UINT32 adr, UINT32& val, UINT32 id)
+bool NSF2_Vectors::Read(uint32_t adr, uint32_t& val, uint32_t id)
 {
     if (adr < 0xFFFA) return false;
     if (adr > 0xFFFF) return false;
@@ -25,7 +25,7 @@ bool NSF2_Vectors::Read(UINT32 adr, UINT32& val, UINT32 id)
     return true;
 }
 
-bool NSF2_Vectors::Write(UINT32 adr, UINT32 val, UINT32 id)
+bool NSF2_Vectors::Write(uint32_t adr, uint32_t val, uint32_t id)
 {
     if (adr == 0x2000) {
         cpu->EnableNMI(val & 0x80);
@@ -38,7 +38,7 @@ bool NSF2_Vectors::Write(UINT32 adr, UINT32 val, UINT32 id)
     return true;
 }
 
-void NSF2_Vectors::ForceVector(int vector, UINT32 adr)
+void NSF2_Vectors::ForceVector(int vector, uint32_t adr)
 {
     if (vector < 0 || vector > 2) return;
     vectors[(vector * 2) + 0] = adr & 0xFF;

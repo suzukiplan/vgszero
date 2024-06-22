@@ -4,15 +4,12 @@
 namespace xgm
 {
 
-/**
- * 4KB*16�o���N�̃o���N���
- **/
 class NES_BANK : public IDevice
 {
   protected:
-    UINT8 null_bank[0x1000];
-    UINT8* bank[256];
-    UINT8* image;
+    uint8_t null_bank[0x1000];
+    uint8_t* bank[256];
+    uint8_t* image;
     int bankswitch[16];
     int bankdefault[16];
     bool fds_enable;
@@ -22,10 +19,10 @@ class NES_BANK : public IDevice
     NES_BANK();
     ~NES_BANK();
     void Reset();
-    bool Read(UINT32 adr, UINT32& val, UINT32 id = 0);
-    bool Write(UINT32 adr, UINT32 val, UINT32 id = 0);
-    void SetBankDefault(UINT8 bank, int value);
-    bool SetImage(UINT8* data, UINT32 offset, UINT32 size);
+    bool Read(uint32_t adr, uint32_t& val, uint32_t id = 0);
+    bool Write(uint32_t adr, uint32_t val, uint32_t id = 0);
+    void SetBankDefault(uint8_t bank, int value);
+    bool SetImage(uint8_t* data, uint32_t offset, uint32_t size);
     void SetFDSMode(bool); // enables banks 6/7 for FDS
 };
 

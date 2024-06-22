@@ -21,7 +21,7 @@ NES_VRC6::~NES_VRC6()
 {
 }
 
-void NES_VRC6::SetStereoMix(int trk, xgm::INT16 mixl, xgm::INT16 mixr)
+void NES_VRC6::SetStereoMix(int trk, int16_t mixl, int16_t mixr)
 {
     if (trk < 0) return;
     if (trk > 2) return;
@@ -70,9 +70,9 @@ void NES_VRC6::Reset()
     phase[2] = 0;
 }
 
-INT16 NES_VRC6::calc_sqr(int i, UINT32 clocks)
+int16_t NES_VRC6::calc_sqr(int i, uint32_t clocks)
 {
-    static const INT16 sqrtbl[8][16] = {
+    static const int16_t sqrtbl[8][16] = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1},
@@ -96,7 +96,7 @@ INT16 NES_VRC6::calc_sqr(int i, UINT32 clocks)
     return (gate[i] || sqrtbl[duty[i]][phase[i]]) ? volume[i] : 0;
 }
 
-INT16 NES_VRC6::calc_saw(UINT32 clocks)
+int16_t NES_VRC6::calc_saw(uint32_t clocks)
 {
     if (!enable[2])
         return 0;
@@ -122,16 +122,16 @@ INT16 NES_VRC6::calc_saw(UINT32 clocks)
     return phase[2] >> 3;
 }
 
-void NES_VRC6::Tick(UINT32 clocks)
+void NES_VRC6::Tick(uint32_t clocks)
 {
     out[0] = calc_sqr(0, clocks);
     out[1] = calc_sqr(1, clocks);
     out[2] = calc_saw(clocks);
 }
 
-UINT32 NES_VRC6::Render(INT32 b[2])
+uint32_t NES_VRC6::Render(int32_t b[2])
 {
-    INT32 m[3];
+    int32_t m[3];
     m[0] = out[0];
     m[1] = out[1];
     m[2] = out[2];
@@ -153,14 +153,14 @@ UINT32 NES_VRC6::Render(INT32 b[2])
     // b[1] >>= (7 - 7);
 
     // master volume adjustment
-    const INT32 MASTER = INT32(256.0 * 1223.0 / 1920.0);
+    const int32_t MASTER = int32_t(256.0 * 1223.0 / 1920.0);
     b[0] = (b[0] * MASTER) >> 8;
     b[1] = (b[1] * MASTER) >> 8;
 
     return 2;
 }
 
-bool NES_VRC6::Write(UINT32 adr, UINT32 val, UINT32 id)
+bool NES_VRC6::Write(uint32_t adr, uint32_t val, uint32_t id)
 {
     int ch, cmap[4] = {0, 0, 1, 2};
 
@@ -222,7 +222,7 @@ bool NES_VRC6::Write(UINT32 adr, UINT32 val, UINT32 id)
     return true;
 }
 
-bool NES_VRC6::Read(UINT32 adr, UINT32& val, UINT32 id)
+bool NES_VRC6::Read(uint32_t adr, uint32_t& val, uint32_t id)
 {
     return false;
 }

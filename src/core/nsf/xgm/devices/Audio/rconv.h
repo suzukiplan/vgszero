@@ -20,9 +20,9 @@ class RateConverter : public IRenderable
     IRenderable* target;
     long clock, rate;
     int mult;
-    INT32 tap[2][128];
+    int32_t tap[2][128];
     int hri[128];
-    UINT32 clocks; // render clocks pending Tick
+    uint32_t clocks; // render clocks pending Tick
     NES_CPU* cpu;
     NES_DMC* dmc;
     int cpu_clocks; // CPU clocks pending Tick
@@ -38,10 +38,10 @@ class RateConverter : public IRenderable
     void Reset();
     void SetClock(long clock);
     void SetRate(long rate);
-    virtual void Tick(UINT32 clocks_); // ticks get executed during Render
-    virtual UINT32 Render(INT32 b[2]);
+    virtual void Tick(uint32_t clocks_); // ticks get executed during Render
+    virtual uint32_t Render(int32_t b[2]);
     virtual void Skip(); // Does ticks in lieu of Render
-    inline UINT32 FastRender(INT32 b[2]);
+    inline uint32_t FastRender(int32_t b[2]);
 
     // call TickCPU before each Tick
     void TickCPU(int t) { cpu_clocks += t; }

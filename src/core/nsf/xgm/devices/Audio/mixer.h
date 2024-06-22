@@ -45,16 +45,16 @@ class Mixer : virtual public IRenderable
         // }
     }
 
-    virtual void Tick(UINT32 clocks)
+    virtual void Tick(uint32_t clocks)
     {
         for (int i = 0; i < dlist_num; i++) {
             dlist[i]->Tick(clocks);
         }
     }
 
-    virtual UINT32 Render(INT32 b[2])
+    virtual uint32_t Render(int32_t b[2])
     {
-        INT32 tmp[2];
+        int32_t tmp[2];
 
         b[0] = b[1] = 0;
 

@@ -673,7 +673,7 @@ class VGS0
                     if (0 == memcmp(this->bgm[value].data, "VGSBGM-V", 8)) {
                         this->vgsdec->load(this->bgm[value].data, this->bgm[value].size);
                     } else if (0 == memcmp(this->bgm[value].data, "NESM", 4)) {
-                        if (this->nsf.Load((xgm::UINT8*)this->bgm[value].data, this->bgm[value].size)) {
+                        if (this->nsf.Load((uint8_t*)this->bgm[value].data, this->bgm[value].size)) {
                             this->ctx.bgm.isNSF = true;
                             this->nsfPlayer.Load(&this->nsf);
                             this->nsfPlayer.SetPlayFreq(44100);
