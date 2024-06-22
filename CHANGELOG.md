@@ -1,5 +1,9 @@
 # Change Log
 
+## [Version 1.11.2](https://github.com/suzukiplan/vgszero/releases/tag/1.11.2)
+
+- NSF を再生した時に常にトラック0の曲が再生される（NSF の 8 バイト目で指定されているデフォルトトラックを再生するように修正）
+
 ## [Version 1.11.1](https://github.com/suzukiplan/vgszero/releases/tag/1.11.1)
 
 - 未サポートの音楽データ形式を再生しようとするとクラッシュする不具合を修正

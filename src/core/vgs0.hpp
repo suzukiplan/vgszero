@@ -678,7 +678,6 @@ class VGS0
                             this->nsfPlayer.Load(&this->nsf);
                             this->nsfPlayer.SetPlayFreq(44100);
                             this->nsfPlayer.SetChannels(1);
-                            this->nsfPlayer.SetSong(0);
                             this->nsfPlayer.Reset();
                         } else {
                             // unsupported .nsf format
