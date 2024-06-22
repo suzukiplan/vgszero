@@ -1,5 +1,9 @@
 # Change Log
 
+## [Version 1.11.1](https://github.com/suzukiplan/vgszero/releases/tag/1.11.1)
+
+- 未サポートの音楽データ形式を再生しようとするとクラッシュする不具合を修正
+
 ## [Version 1.11.0](https://github.com/suzukiplan/vgszero/releases/tag/1.11.0)
 
 - Extra RAM Bank の複製機能 `OUT ($B5)` を追加

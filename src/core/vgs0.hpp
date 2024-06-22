@@ -669,17 +669,24 @@ class VGS0
                     this->ctx.bgm.nsfFadeCounter = 0;
                     this->ctx.bgm.seekPosition = 0;
                     this->ctx.bgm.playingIndex = value;
+                    this->ctx.bgm.isNSF = false;
                     if (0 == memcmp(this->bgm[value].data, "VGSBGM-V", 8)) {
-                        this->ctx.bgm.isNSF = false;
                         this->vgsdec->load(this->bgm[value].data, this->bgm[value].size);
+                    } else if (0 == memcmp(this->bgm[value].data, "NESM", 4)) {
+                        if (this->nsf.Load((xgm::UINT8*)this->bgm[value].data, this->bgm[value].size)) {
+                            this->ctx.bgm.isNSF = true;
+                            this->nsfPlayer.Load(&this->nsf);
+                            this->nsfPlayer.SetPlayFreq(44100);
+                            this->nsfPlayer.SetChannels(1);
+                            this->nsfPlayer.SetSong(0);
+                            this->nsfPlayer.Reset();
+                        } else {
+                            // unsupported .nsf format
+                            this->ctx.bgm.playing = false;
+                        }
                     } else {
-                        this->ctx.bgm.isNSF = true;
-                        this->nsf.Load((xgm::UINT8*)this->bgm[value].data, this->bgm[value].size);
-                        this->nsfPlayer.Load(&this->nsf);
-                        this->nsfPlayer.SetPlayFreq(44100);
-                        this->nsfPlayer.SetChannels(1);
-                        this->nsfPlayer.SetSong(0);
-                        this->nsfPlayer.Reset();
+                        // unsupported format
+                        this->ctx.bgm.playing = false;
                     }
                 }
                 break;
