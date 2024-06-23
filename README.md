@@ -301,6 +301,8 @@ usage: vgsmml /path/to/file.mml /path/to/file.bgm
 - 詳しくは [example/15_nsf](example/15_nsf) を確認してください 
 - 拡張音源については VRC6 のみサポートしています（VRC7, FME7, FDS, N106, MMC5 は非サポート）
 - 参考記事: https://note.com/suzukiplan/n/n94ea503ff2c8
+- NSF はデフォルトトラック（※NSF ヘッダの 8 バイト目で指定）のみを再生対象にしています
+  - マルチトラック形式の NSF のデータを使用したい場合、デフォルトトラックを書き換えた複数の同じ NSF ファイルを bgm.dat へ組み込んでください
 
 #### (Make bgm.dat)
 
