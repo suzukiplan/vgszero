@@ -2,11 +2,13 @@
 
 ## [Version 1.11.2](https://github.com/suzukiplan/vgszero/releases/tag/1.11.2)
 
-- NSF を再生した時に常にトラック0の曲が再生される（NSF の 8 バイト目で指定されているデフォルトトラックを再生するように修正）
-
-## [Version 1.11.1](https://github.com/suzukiplan/vgszero/releases/tag/1.11.1)
-
 - 未サポートの音楽データ形式を再生しようとするとクラッシュする不具合を修正
+- RaspberryPi で NSF を再生し続けた時に `Assertion error` でクラッシュする場合がある不具合を修正
+- NSF を再生した時にデフォルトトラック（NSF の先頭から 8 バイト目で指定されたトラック）を再生するように修正
+- NSFPlayのコードリファクタ（不要コードの削除）
+- example/03_sound を VGSBGM と NSF を混在させた形に変更
+- README.md に推奨開発ツールの一覧を掲載
+- README.md でマルチトラック NSF の使い方について詳述
 
 ## [Version 1.11.0](https://github.com/suzukiplan/vgszero/releases/tag/1.11.0)
 
