@@ -360,7 +360,7 @@ open doc/html/index.html
 
 ### Create Sound Data
 
-- VGS 形式の Music Macro Language (MML) で [音楽データ](#bgmdat) を作成できます
+- VGS 形式の Music Macro Language (MML) または NSF 形式（[FamiStudio](https://famistudio.org/)等）で [音楽データ](#bgmdat) を作成できます
 - 44100Hz 16bits 1ch (モノラル) の wav ファイルで [効果音データ](#sedat) を作成できます
 
 ### Joypad Recommended Usage
