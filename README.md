@@ -57,6 +57,25 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - 8ボタン形式（カーソルキー、A/B、START/SELECT）のジョイパッドをサポート
   - [config.sys](#configsys) でボタン割当をカスタマイズ可能
 
+## Recommended Game Development Tools
+
+VGS-Zero のゲーム開発に必要な推奨開発ツールを紹介します。
+
+| Name | Type | Information |
+|:-----|:-----|:------------|
+| [Ubuntu Desktop](https://jp.ubuntu.com/download)| OS | この表で示すツールは全て Ubuntu でも動作可能 |
+| [Visual Studio Code](https://code.visualstudio.com/download) | コーディング | プログラムやMMLの記述 |
+| [SDCC](https://sdcc.sourceforge.net/) | C コンパイラ | C 言語でゲームを開発する場合に利用を推奨<br>（だたし動作できるのはバージョン 4.1.0 のみ）|
+| [Z88DK](https://z88dk.org/site/) の z80asm | アセンブラ | Z80 アセンブリ言語でゲームを開発する場合に利用を推奨 |
+| [aseprite](https://aseprite.org/) | 画像エディタ | 256 パレット方式に対応 |
+| [Tiled Map Editor](https://www.mapeditor.org) | マップエディタ | 利用例: [example/08_map-scroll](./example/08_map-scroll/) |
+| [Jfxr](https://github.com/ttencate/jfxr) | 効果音エディタ | ブラウザ上でゲームの効果音を制作 |
+| [FamiStudio](https://famistudio.org/) | BGM エディタ | [NSF 形式](#nsf) の BGM を制作できる DAW |
+
+上記のツールがあれば、ゲームに必要なプログラムとアセット（グラフィックス、効果音、音楽）の全てを開発することができ、全てのツールは無料で使うことができます。（一部有料のものもありますが自分でソースコードをダウンロードしてビルドすれば無料で使うことができます）
+
+> _必ずしも上記のツールでなければ開発できない訳ではありません。_
+
 ## How to Execute
 
 ### on RaspberryPi Zero 2W
@@ -284,6 +303,8 @@ usage: vgsmml /path/to/file.mml /path/to/file.bgm
 - 詳しくは [example/15_nsf](example/15_nsf) を確認してください 
 - 拡張音源については VRC6 のみサポートしています（VRC7, FME7, FDS, N106, MMC5 は非サポート）
 - 参考記事: https://note.com/suzukiplan/n/n94ea503ff2c8
+- NSF はデフォルトトラック（※NSF ヘッダの 8 バイト目で指定）のみを再生対象にしています
+  - マルチトラック形式の NSF のデータを使用したい場合、デフォルトトラックを書き換えた複数の同じ NSF ファイルを bgm.dat へ組み込んでください
 
 #### (Make bgm.dat)
 

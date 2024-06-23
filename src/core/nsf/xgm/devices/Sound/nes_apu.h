@@ -25,15 +25,15 @@ class NES_APU : public ISoundChip
   protected:
     int option[OPT_END]; // �e��I�v�V����
     int mask;
-    INT32 sm[2][2];
+    int32_t sm[2][2];
 
-    UINT32 gclock;
-    UINT8 reg[0x20];
-    INT32 out[2];
+    uint32_t gclock;
+    uint8_t reg[0x20];
+    int32_t out[2];
     long rate, clock;
 
-    INT32 square_table[32]; // nonlinear mixer
-    INT32 square_linear;    // linear mix approximation
+    int32_t square_table[32]; // nonlinear mixer
+    int32_t square_linear;    // linear mix approximation
 
     int scounter[2]; // frequency divider
     int sphase[2];   // phase counter
@@ -62,7 +62,7 @@ class NES_APU : public ISoundChip
     bool enable[2];
 
     void sweep_sqr(int ch); // calculates target sweep frequency
-    INT32 calc_sqr(int ch, UINT32 clocks);
+    int32_t calc_sqr(int ch, uint32_t clocks);
 
   public:
     NES_APU();
@@ -71,15 +71,15 @@ class NES_APU : public ISoundChip
     void FrameSequence(int s);
 
     virtual void Reset();
-    virtual void Tick(UINT32 clocks);
-    virtual UINT32 Render(INT32 b[2]);
-    virtual bool Read(UINT32 adr, UINT32& val, UINT32 id = 0);
-    virtual bool Write(UINT32 adr, UINT32 val, UINT32 id = 0);
+    virtual void Tick(uint32_t clocks);
+    virtual uint32_t Render(int32_t b[2]);
+    virtual bool Read(uint32_t adr, uint32_t& val, uint32_t id = 0);
+    virtual bool Write(uint32_t adr, uint32_t val, uint32_t id = 0);
     virtual void SetRate(long rate);
     virtual void SetClock(long clock);
     virtual void SetOption(int id, int b);
     virtual void SetMask(int m) { mask = m; }
-    virtual void SetStereoMix(int trk, xgm::INT16 mixl, xgm::INT16 mixr);
+    virtual void SetStereoMix(int trk, int16_t mixl, int16_t mixr);
 };
 
 } // namespace xgm

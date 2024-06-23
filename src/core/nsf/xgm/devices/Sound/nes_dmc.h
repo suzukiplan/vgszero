@@ -29,46 +29,46 @@ class NES_DMC : public ISoundChip
 
   protected:
     const int GETA_BITS;
-    static const UINT32 freq_table[2][16];
-    static const UINT32 wavlen_table[2][16];
-    UINT16 tnd_table[2][16][16][128];
+    static const uint32_t freq_table[2][16];
+    static const uint32_t wavlen_table[2][16];
+    uint16_t tnd_table[2][16][16][128];
 
     int option[OPT_END];
     int mask;
-    INT32 sm[2][3];
-    UINT8 reg[0x10];
-    UINT32 len_reg;
-    UINT32 adr_reg;
+    int32_t sm[2][3];
+    uint8_t reg[0x10];
+    uint32_t len_reg;
+    uint32_t adr_reg;
     IDevice* memory;
-    UINT32 out[3];
-    UINT32 daddress;
-    UINT32 dlength;
-    UINT32 data;
+    uint32_t out[3];
+    uint32_t daddress;
+    uint32_t dlength;
+    uint32_t data;
     bool empty;
-    INT16 damp;
+    int16_t damp;
     int dac_lsb;
     bool dmc_pop;
-    INT32 dmc_pop_offset;
-    INT32 dmc_pop_follow;
+    int32_t dmc_pop_offset;
+    int32_t dmc_pop_follow;
     long clock;
-    UINT32 rate;
+    uint32_t rate;
     int pal;
     int mode;
     bool irq;
 
-    INT32 counter[3]; // frequency dividers
-    int tphase;       // triangle phase
-    UINT32 nfreq;     // noise frequency
-    UINT32 dfreq;     // DPCM frequency
+    int32_t counter[3]; // frequency dividers
+    int tphase;         // triangle phase
+    uint32_t nfreq;     // noise frequency
+    uint32_t dfreq;     // DPCM frequency
 
-    UINT32 tri_freq;
+    uint32_t tri_freq;
     int linear_counter;
     int linear_counter_reload;
     bool linear_counter_halt;
     bool linear_counter_control;
 
     int noise_volume;
-    UINT32 noise, noise_tap;
+    uint32_t noise, noise_tap;
 
     // noise envelope
     bool envelope_loop;
@@ -92,9 +92,9 @@ class NES_DMC : public ISoundChip
 
     NES_CPU* cpu; // IRQ needs CPU access
 
-    inline UINT32 calc_tri(UINT32 clocks);
-    inline UINT32 calc_dmc(UINT32 clocks);
-    inline UINT32 calc_noise(UINT32 clocks);
+    inline uint32_t calc_tri(uint32_t clocks);
+    inline uint32_t calc_dmc(uint32_t clocks);
+    inline uint32_t calc_noise(uint32_t clocks);
 
   public:
     NES_DMC();
@@ -106,18 +106,18 @@ class NES_DMC : public ISoundChip
     void SetMemory(IDevice* r);
     void FrameSequence(int s);
     int GetDamp() { return (damp << 1) | dac_lsb; }
-    void TickFrameSequence(UINT32 clocks);
+    void TickFrameSequence(uint32_t clocks);
 
     virtual void Reset();
-    virtual void Tick(UINT32 clocks);
-    virtual UINT32 Render(INT32 b[2]);
-    virtual bool Write(UINT32 adr, UINT32 val, UINT32 id = 0);
-    virtual bool Read(UINT32 adr, UINT32& val, UINT32 id = 0);
+    virtual void Tick(uint32_t clocks);
+    virtual uint32_t Render(int32_t b[2]);
+    virtual bool Write(uint32_t adr, uint32_t val, uint32_t id = 0);
+    virtual bool Read(uint32_t adr, uint32_t& val, uint32_t id = 0);
     virtual void SetRate(long rate);
     virtual void SetClock(long clock);
     virtual void SetOption(int, int);
     virtual void SetMask(int m) { mask = m; }
-    virtual void SetStereoMix(int trk, xgm::INT16 mixl, xgm::INT16 mixr);
+    virtual void SetStereoMix(int trk, int16_t mixl, int16_t mixr);
     void SetCPU(NES_CPU* cpu_);
 };
 

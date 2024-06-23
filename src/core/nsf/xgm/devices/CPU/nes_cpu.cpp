@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <string.h>
 #include "nes_cpu.h"
 #include "../Memory/nes_mem.h"
@@ -34,24 +33,23 @@ NES_CPU::~NES_CPU()
 {
 }
 
-void Callback writeByte(void* __THIS, UINT32 adr, UINT32 val)
+void Callback writeByte(void* __THIS, uint32_t adr, uint32_t val)
 {
     static_cast<NES_CPU*>(__THIS)->Write(adr, val);
 }
 
-UINT32 Callback readByte(void* __THIS, UINT32 adr)
+uint32_t Callback readByte(void* __THIS, uint32_t adr)
 {
-    UINT32 val = 0;
+    uint32_t val = 0;
     static_cast<NES_CPU*>(__THIS)->Read(adr, val);
     return val;
 }
 
-void NES_CPU::run_from(UINT32 address)
+void NES_CPU::run_from(uint32_t address)
 {
     breaked = false;
     context.PC = PLAYER_RESERVED; // JSR, followed by infinite loop ("breaked")
     breakpoint = context.PC + 3;
-    assert(nes_mem);
     nes_mem->WriteReserved(PLAYER_RESERVED + 1, address & 0xff);
     nes_mem->WriteReserved(PLAYER_RESERVED + 2, address >> 8);
     // see PLAYER_PROGRAM in nsfplay.cpp
@@ -86,7 +84,7 @@ int NES_CPU::Exec(int clocks)
                 breaked = true;
             }
         } else {
-            if ((fclocks_left_in_frame >> FRAME_FIXED) < INT64(clocks)) {
+            if ((fclocks_left_in_frame >> FRAME_FIXED) < int64_t(clocks)) {
                 if (fclocks_left_in_frame < 0) {
                     context.clock = 0;
                 } else {
@@ -158,7 +156,7 @@ void NES_CPU::Start(
     long play_rate,
     int song_,
     int region_,
-    UINT8 nsf2_bits_,
+    uint8_t nsf2_bits_,
     bool enable_irq_,
     NSF2_IRQ* nsf2_irq_)
 {
@@ -167,7 +165,7 @@ void NES_CPU::Start(
     play_addr = play_addr_;
     song = song_;
     region = region_;
-    fclocks_per_frame = (INT64)(((1 << FRAME_FIXED) * nes_basecycles) / play_rate);
+    fclocks_per_frame = (int64_t)(((1 << FRAME_FIXED) * nes_basecycles) / play_rate);
     fclocks_left_in_frame = 0;
     stolen_cycles = 0;
     play_ready = false;
@@ -240,7 +238,7 @@ void NES_CPU::UpdateIRQ(int device, bool irq)
 {
     if (!enable_irq) return;
     if (device < 0 || device >= IRQD_COUNT) return;
-    UINT32 mask = 1 << device;
+    uint32_t mask = 1 << device;
     irqs &= ~mask;
     if (irq) irqs |= mask;
     if (irqs) {

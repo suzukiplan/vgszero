@@ -21,7 +21,7 @@ void NSF2_IRQ::Reset()
     count = reload;
 }
 
-bool NSF2_IRQ::Read(UINT32 adr, UINT32& val, UINT32 id)
+bool NSF2_IRQ::Read(uint32_t adr, uint32_t& val, uint32_t id)
 {
     if (0x401B > adr || adr > 0x401D) return false;
     switch (adr) {
@@ -41,7 +41,7 @@ bool NSF2_IRQ::Read(UINT32 adr, UINT32& val, UINT32 id)
     return true;
 }
 
-bool NSF2_IRQ::Write(UINT32 adr, UINT32 val, UINT32 id)
+bool NSF2_IRQ::Write(uint32_t adr, uint32_t val, uint32_t id)
 {
     if (0x401B > adr || adr > 0x401D) return false;
     switch (adr) {
@@ -59,7 +59,7 @@ bool NSF2_IRQ::Write(UINT32 adr, UINT32 val, UINT32 id)
     return true;
 }
 
-void NSF2_IRQ::Clock(UINT32 clocks)
+void NSF2_IRQ::Clock(uint32_t clocks)
 {
     if (!active) {
         count = reload;

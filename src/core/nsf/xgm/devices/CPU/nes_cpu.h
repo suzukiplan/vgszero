@@ -26,10 +26,10 @@ class NES_CPU : public IDevice
     int region;
     K6502_Context context;
     bool breaked;
-    INT64 fclocks_per_frame; // fCPU clocks per frame timer with fixed point precision
-    INT64 fclocks_left_in_frame;
-    UINT32 breakpoint;
-    UINT32 irqs;
+    int64_t fclocks_per_frame; // fCPU clocks per frame timer with fixed point precision
+    int64_t fclocks_left_in_frame;
+    uint32_t breakpoint;
+    uint32_t irqs;
     unsigned int stolen_cycles;
     bool enable_irq;
     bool enable_nmi;
@@ -38,10 +38,10 @@ class NES_CPU : public IDevice
     bool play_ready;
     IDevice* bus;
     NES_MEM* nes_mem;
-    UINT8 nsf2_bits;
+    uint8_t nsf2_bits;
     NSF2_IRQ* nsf2_irq;
 
-    void run_from(UINT32 address);
+    void run_from(uint32_t address);
 
   public:
     long nes_basecycles;
@@ -54,14 +54,14 @@ class NES_CPU : public IDevice
         long play_rate,
         int song_,
         int region_,
-        UINT8 nsf2_bits_,
+        uint8_t nsf2_bits_,
         bool enable_irq_,
         NSF2_IRQ* nsf2_irq_);
     int Exec(int clock); // returns number of clocks executed
     inline void SetMemory(IDevice* b) { bus = b; }
     inline void SetNESMemory(NES_MEM* b) { nes_mem = b; }
-    inline bool Read(UINT32 adr, UINT32& val, UINT32 id = 0) { return bus ? bus->Read(adr, val, id) : false; }
-    inline bool Write(UINT32 adr, UINT32 val, UINT32 id = 0) { return bus ? bus->Write(adr, val, id) : false; }
+    inline bool Read(uint32_t adr, uint32_t& val, uint32_t id = 0) { return bus ? bus->Read(adr, val, id) : false; }
+    inline bool Write(uint32_t adr, uint32_t val, uint32_t id = 0) { return bus ? bus->Write(adr, val, id) : false; }
     inline unsigned int GetPC() const { return context.PC; }
     inline void StealCycles(unsigned int cycles) { stolen_cycles += cycles; }
     inline void EnableNMI(bool enable) { enable_nmi = enable; }

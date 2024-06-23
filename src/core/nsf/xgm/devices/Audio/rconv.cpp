@@ -61,12 +61,12 @@ void RateConverter::SetRate(long r)
     rate = r;
 }
 
-void RateConverter::Tick(UINT32 clocks_)
+void RateConverter::Tick(uint32_t clocks_)
 {
     clocks += clocks_;
 }
 
-UINT32 RateConverter::Render(INT32 b[2])
+uint32_t RateConverter::Render(int32_t b[2])
 {
     return FastRender(b);
 }
@@ -89,10 +89,10 @@ void RateConverter::Skip()
 }
 
 // ���͂�-32768�`+32767�܂�
-inline UINT32 RateConverter::FastRender(INT32 b[2])
+inline uint32_t RateConverter::FastRender(int32_t b[2])
 {
-    INT64 out[2];
-    static INT32 t[2];
+    int64_t out[2];
+    static int32_t t[2];
 
     for (int i = 0; i <= mult; i++) {
         tap[0][i] = tap[0][i + mult];
@@ -123,8 +123,6 @@ inline UINT32 RateConverter::FastRender(INT32 b[2])
         tap[0][mult + i] = t[0];
         tap[1][mult + i] = t[1];
     }
-    assert(mclocks == 0); // all clocks must be used
-    assert(mcclocks == 0);
     clocks = 0;
     cpu_clocks = 0;
 
@@ -136,10 +134,10 @@ inline UINT32 RateConverter::FastRender(INT32 b[2])
         out[1] += hri[i] * (tap[1][mult + i] + tap[1][mult - i]);
     }
 
-    // b[0] = (INT32)out[0];
-    // b[1] = (INT32)out[1];
-    b[0] = INT32(out[0] >> PRECISION);
-    b[1] = INT32(out[1] >> PRECISION);
+    // b[0] = (int32_t)out[0];
+    // b[1] = (int32_t)out[1];
+    b[0] = int32_t(out[0] >> PRECISION);
+    b[1] = int32_t(out[1] >> PRECISION);
 
     return 2;
 }

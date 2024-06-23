@@ -13,6 +13,7 @@ CFLAGS += -I../../core/nsf/xgm/devices/Memory
 CFLAGS += -I../../core/nsf/xgm/devices/Misc
 CFLAGS += -I../../core/nsf/xgm/devices/Sound
 CFLAGS += -I../../core/nsf/xgm/player/nsf
+CFLAGS += -DNDEBUG
 CPPFLAGS = $(CFLAGS)
 CPPFLAGS += -DZ80_DISABLE_DEBUG
 CPPFLAGS += -DZ80_DISABLE_BREAKPOINT

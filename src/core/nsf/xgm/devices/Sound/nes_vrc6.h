@@ -13,40 +13,40 @@ class NES_VRC6 : public ISoundChip
     };
 
   protected:
-    UINT32 counter[3]; // frequency divider
-    UINT32 phase[3];   // phase counter
-    UINT32 freq2[3];   // adjusted frequency
-    int count14;       // saw 14-stage counter
+    uint32_t counter[3]; // frequency divider
+    uint32_t phase[3];   // phase counter
+    uint32_t freq2[3];   // adjusted frequency
+    int count14;         // saw 14-stage counter
 
     // int option[OPT_END];
     int mask;
-    INT32 sm[2][3]; // stereo mix
+    int32_t sm[2][3]; // stereo mix
     int duty[2];
     int volume[3];
     int enable[3];
     int gate[3];
-    UINT32 freq[3];
-    INT16 calc_sqr(int i, UINT32 clocks);
-    INT16 calc_saw(UINT32 clocks);
+    uint32_t freq[3];
+    int16_t calc_sqr(int i, uint32_t clocks);
+    int16_t calc_saw(uint32_t clocks);
     bool halt;
     int freq_shift;
     long clock, rate;
-    INT32 out[3];
+    int32_t out[3];
 
   public:
     NES_VRC6();
     ~NES_VRC6();
 
     virtual void Reset();
-    virtual void Tick(UINT32 clocks);
-    virtual UINT32 Render(INT32 b[2]);
-    virtual bool Read(UINT32 adr, UINT32& val, UINT32 id = 0);
-    virtual bool Write(UINT32 adr, UINT32 val, UINT32 id = 0);
+    virtual void Tick(uint32_t clocks);
+    virtual uint32_t Render(int32_t b[2]);
+    virtual bool Read(uint32_t adr, uint32_t& val, uint32_t id = 0);
+    virtual bool Write(uint32_t adr, uint32_t val, uint32_t id = 0);
     virtual void SetClock(long);
     virtual void SetRate(long);
     virtual void SetOption(int, int);
     virtual void SetMask(int m) { mask = m; }
-    virtual void SetStereoMix(int trk, xgm::INT16 mixl, xgm::INT16 mixr);
+    virtual void SetStereoMix(int trk, int16_t mixl, int16_t mixr);
 };
 
 } // namespace xgm

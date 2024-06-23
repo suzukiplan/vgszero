@@ -10,16 +10,16 @@ class NES_CPU; // forward declaration
 class NSF2_Vectors : public IDevice
 {
   protected:
-    UINT8 vectors[6];
+    uint8_t vectors[6];
     NES_CPU* cpu;
 
   public:
     NSF2_Vectors();
     ~NSF2_Vectors();
     void Reset();
-    bool Read(UINT32 adr, UINT32& val, UINT32 id = 0); // overlays all 3 vectors
-    bool Write(UINT32 adr, UINT32 val, UINT32 id = 0); // can write IRQ vector only
-    void ForceVector(int vector, UINT32 adr);          // write directly to the 3 vectors (0=NMI,1=Reset,2=IRQ)
+    bool Read(uint32_t adr, uint32_t& val, uint32_t id = 0); // overlays all 3 vectors
+    bool Write(uint32_t adr, uint32_t val, uint32_t id = 0); // can write IRQ vector only
+    void ForceVector(int vector, uint32_t adr);              // write directly to the 3 vectors (0=NMI,1=Reset,2=IRQ)
     void SetCPU(NES_CPU* cpu_);
 };
 } // namespace xgm
