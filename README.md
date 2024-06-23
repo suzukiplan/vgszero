@@ -6,6 +6,18 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 
 本リポジトリは、VGS-Zero の本体コード、配布イメージ、SDK、パソコン（Linux または macOS）で動作するエミュレータを提供します。
 
+## Table of Content
+
+1. [VGS-Zero Feature](#vgs-zero-feature) ... スペック概要
+1. [Recommended Game Development Tools](#recommended-game-development-tools) ... 推奨開発ツール一覧
+1. [How to Execute](#how-to-execute) ... 実行方法 & 実行に必要なハード一覧
+1. [config.sys](#configsys) ... 動作設定ファイル
+1. [game.pkg](#gamepkg) ... ゲーム実行形式ファイル
+1. [Programming Guide](#programming-guide) ... プログラム開発ガイド
+1. [How to Sell Your Game](#how-to-sell-your-game) ... セールス・ガイド
+1. [Examples](#examples) ... サンプル・プログラム一覧
+1. [License](#license) ... ライセンス情報
+
 ## VGS-Zero Feature
 
 - CPU: Z80 16MHz (16,777,216Hz)
@@ -103,6 +115,22 @@ VGS-Zero のゲーム開発に必要な推奨開発ツールを紹介します�
   - 解像度 480x384 ピクセル以上
   - オーディオ出力対応
 
+#### (Joypad)
+
+VGS-Zero は、カーソル（D-PAD）、Aボタン、Bボタン、SELECTボタン、STARTボタンの8ボタン式 USB ジョイパッドによる入力のみサポートしています。
+
+![joypad.png](joypad.png)
+
+RaspberryPi Zero 2W に接続する USB ジョイパッドのボタン割当（key config）は、[config.sys](#configsys) ファイルにより利用者が自由にカスタマイズできます。
+
+PC（[SDL2](./src/sdl2/) 版）のキー割当は次の通りです:
+
+- D-Pad: カーソルキー
+- A ボタン: `X` キー
+- B ボタン: `Z` キー
+- START ボタン: `SPACE` キー
+- SELECT ボタン: `ESC` キー
+
 #### (Supported USB Joypad)
 
 VGS-Zero での USB ジョイパッドのサポートリストを示します。
@@ -166,43 +194,6 @@ SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コ
 ### on Steam for Sale (Windows)
 
 [VGS-Zero SDK for Steam](https://github.com/suzukiplan/vgszero-steam) を用いることで、最小限の労力で [Steam で販売](#steam) できる [game.pkg](#gamepkg) のバイナリ（Windows, Linux, macOS）を作成することができます。
-
-## Examples
-
-| Directory | Language | Description |
-| :-------- | :------- | :---------- |
-| [example/01_hello-asm](./example/01_hello-asm/) | Z80 | `HELLO,WORLD!` を表示 |
-| [example/01_hello](./example/01_hello/) | C言語 | `HELLO,WORLD!` を表示 |
-| [example/02_global](./example/02_global/) | C言語 | グローバル変数の使用例 |
-| [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
-| [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の負荷を最大化する検査用プログラム |
-| [example/05_sprite256](./example/05_sprite256/) | C言語 | スプライトを256表示して動かす例 |
-| [example/06_save](./example/06_save/) | C言語 | [セーブ機能](#save-data)の例 |
-| [example/07_palette](./example/07_palette/) | C言語 | 16個の[パレット](#palette)を全て使った例 |
-| [example/08_map-scroll](./example/08_map-scroll/) | C言語 | Tiled Map Editor で作ったマップデータのスクロール |
-| [example/09_joypad](./example/09_joypad/) | C言語 | ジョイパッドの入力結果をプレビュー |
-| [example/10_chr720](./example/10_chr720/) | C言語 | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
-| [example/11_bigsprite](./example/11_bigsprite/) | C言語 | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の指定により巨大なスプライトを表示する例 |
-| [example/12_angle](./example/12_angle) | C言語 | [ハードウェア atan2 テーブル](#hardware-atan2-table) を用いて完全な自機狙いを実装する例 |
-| [example/13_perlin](./example/13_perlin) | C言語 | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
-| [example/14_1024ptn](./example/14_1024ptn) | C言語 | [1024 パターンモード](#1024-patterns-mode) の利用例 |
-| [example/15_nsf](./example/15_nsf/) | C言語 | [NSF](#nsf) の利用例 |
-
-## Joypad
-
-VGS-Zero は、カーソル（D-PAD）、Aボタン、Bボタン、SELECTボタン、STARTボタンの8ボタン式 USB ジョイパッドによる入力のみサポートしています。
-
-![joypad.png](joypad.png)
-
-RaspberryPi Zero 2W に接続する USB ジョイパッドのボタン割当（key config）は、[config.sys](#configsys) ファイルにより利用者が自由にカスタマイズできます。
-
-PC（[SDL2](./src/sdl2/) 版）のキー割当は次の通りです:
-
-- D-Pad: カーソルキー
-- A ボタン: `X` キー
-- B ボタン: `Z` キー
-- START ボタン: `SPACE` キー
-- SELECT ボタン: `ESC` キー
 
 ## config.sys
 
@@ -1081,6 +1072,27 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 ### Nintendo Switch
 
 将来的に対応したいと思っています（[参考](https://qiita.com/suzukiplan/items/8a740b593816ef9ef565#%E4%BB%BB%E5%A4%A9%E5%A0%82switch%E5%AF%BE%E5%BF%9C%E4%BA%88%E5%AE%9A)）
+
+## Examples
+
+| Directory | Language | Description |
+| :-------- | :------- | :---------- |
+| [example/01_hello-asm](./example/01_hello-asm/) | Z80 | `HELLO,WORLD!` を表示 |
+| [example/01_hello](./example/01_hello/) | C言語 | `HELLO,WORLD!` を表示 |
+| [example/02_global](./example/02_global/) | C言語 | グローバル変数の使用例 |
+| [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
+| [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の負荷を最大化する検査用プログラム |
+| [example/05_sprite256](./example/05_sprite256/) | C言語 | スプライトを256表示して動かす例 |
+| [example/06_save](./example/06_save/) | C言語 | [セーブ機能](#save-data)の例 |
+| [example/07_palette](./example/07_palette/) | C言語 | 16個の[パレット](#palette)を全て使った例 |
+| [example/08_map-scroll](./example/08_map-scroll/) | C言語 | Tiled Map Editor で作ったマップデータのスクロール |
+| [example/09_joypad](./example/09_joypad/) | C言語 | ジョイパッドの入力結果をプレビュー |
+| [example/10_chr720](./example/10_chr720/) | C言語 | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
+| [example/11_bigsprite](./example/11_bigsprite/) | C言語 | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の指定により巨大なスプライトを表示する例 |
+| [example/12_angle](./example/12_angle) | C言語 | [ハードウェア atan2 テーブル](#hardware-atan2-table) を用いて完全な自機狙いを実装する例 |
+| [example/13_perlin](./example/13_perlin) | C言語 | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
+| [example/14_1024ptn](./example/14_1024ptn) | C言語 | [1024 パターンモード](#1024-patterns-mode) の利用例 |
+| [example/15_nsf](./example/15_nsf/) | C言語 | [NSF](#nsf) の利用例 |
 
 ## License
 
