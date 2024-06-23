@@ -274,9 +274,9 @@ bgm.dat は 1 曲以上の楽曲データが含まれたデータセットで、
 楽曲データは次の 2 種類のデータ形式をサポートしています
 
 - [vgsmml コマンド](./tools/vgsmml) でコンパイルされた VGS; Video Game Sound 形式の BGM データ
-- [NSF 形式](#nsf) の BGM データ（ただし、VRC7 を除く）
+- [NSF 形式](#nsf) の BGM データ
 
-なお、プログラム（Z80）側では、再生する BGM が VGS 形式か NSF 形式かを区別しません。
+プログラム（Z80）で [再生を指示 (0xE0)](#play-bgm) した BGM データの種別は VGS-Zero 本体が自動的に識別します。
 
 #### (Compile MML)
 
