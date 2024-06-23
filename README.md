@@ -59,10 +59,10 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 
 ## Recommended Game Development Tools
 
-VGS-Zero のゲーム開発に適した開発ツールを紹介します。
+VGS-Zero のゲーム開発に必要な推奨開発ツールを紹介します。
 
-| Tool Name | Usage Type | Info |
-|:----------|:-----------|:------------|
+| Name | Type | Information |
+|:-----|:-----|:------------|
 | [Ubuntu Desktop](https://jp.ubuntu.com/download)| OS | この表で示すツールは全て Ubuntu でも動作可能 |
 | [Visual Studio Code](https://code.visualstudio.com/download) | コーディング | プログラムやMMLの記述 |
 | [SDCC](https://sdcc.sourceforge.net/) | C コンパイラ | C 言語でゲームを開発する場合に利用を推奨<br>（だたし動作できるのはバージョン 4.1.0 のみ）|
@@ -72,7 +72,9 @@ VGS-Zero のゲーム開発に適した開発ツールを紹介します。
 | [Jfxr](https://github.com/ttencate/jfxr) | 効果音エディタ | ブラウザ上でゲームの効果音を制作 |
 | [FamiStudio](https://famistudio.org/) | BGM エディタ | [NSF 形式](#nsf) の BGM を制作できる DAW |
 
-> 必ずしも上記のツールでなければ開発できない訳ではありません。
+上記のツールがあれば、ゲームに必要なプログラムとアセット（グラフィックス、効果音、音楽）の全てを開発することができ、全てのツールは無料で使うことができます。（一部有料のものもありますが自分でソースコードをダウンロードしてビルドすれば無料で使うことができます）
+
+> _必ずしも上記のツールでなければ開発できない訳ではありません。_
 
 ## How to Execute
 
