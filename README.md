@@ -392,7 +392,8 @@ VGS-Zero 向けに開発されるゲームは、ゲームの利用者が **可�
 
 ### How to Debug
 
-デバッグには、パソコン（Linux または macOS）上で動作するエミュレータ（[./src/sdl2](./src/sdl2)）を用いると便利です。
+- デバッグには、パソコン（Linux または macOS）上で動作する SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）を用いると便利です
+- SDL2 版エミュレータは NOP 命令を検出するとブレイクして、レジスタやメモリダンプを表示する[デバッグ機能](./src/sdl2#debug-mode)を備えています
 
 ### CPU Memory Map
 
