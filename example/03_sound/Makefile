@@ -50,8 +50,8 @@ program.bin: program.c ../../lib/sdcc/vgs0.lib ../../lib/sdcc/vgs0lib.h
 font.chr: font.bmp
 	${BMP2CHR} font.bmp font.chr
 
-bgm.dat: song1.bgm song2.bgm song3.bgm
-	${MAKEBGM} bgm.dat song1.bgm song2.bgm song3.bgm
+bgm.dat: song1.bgm song2.bgm song3.bgm song4.nsf
+	${MAKEBGM} bgm.dat song1.bgm song2.bgm song3.bgm song4.nsf
 
 song1.bgm: song1.mml
 	${VGSMML} $< $@

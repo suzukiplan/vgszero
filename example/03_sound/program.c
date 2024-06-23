@@ -15,9 +15,10 @@ void main(void)
     vgs0_bg_putstr(8, 7, 0x80, "PLAY: #1 PRELUDE");
     vgs0_bg_putstr(8, 9, 0x80, "PLAY: #2 GOLDBERG");
     vgs0_bg_putstr(8, 11, 0x80, "PLAY: #3 WTC1");
-    vgs0_bg_putstr(8, 13, 0x80, "PAUSE");
-    vgs0_bg_putstr(8, 15, 0x80, "RESUME");
-    vgs0_bg_putstr(8, 17, 0x80, "FADEOUT");
+    vgs0_bg_putstr(8, 13, 0x80, "PLAY: #4 NSF");
+    vgs0_bg_putstr(8, 15, 0x80, "PAUSE");
+    vgs0_bg_putstr(8, 17, 0x80, "RESUME");
+    vgs0_bg_putstr(8, 19, 0x80, "FADEOUT");
     vgs0_oam_set(0, 6 * 8, 7 * 8, 0x80, '>', 0, 0);
 
     // ボタン入力制御変数を準備
@@ -53,8 +54,8 @@ void main(void)
             vgs0_se_play(0);
             cursor += move;
             if (cursor < 7) {
-                cursor = 17;
-            } else if (17 < cursor) {
+                cursor = 19;
+            } else if (19 < cursor) {
                 cursor = 7;
             }
             VGS0_ADDR_OAM[0].y = cursor * 8;
@@ -82,9 +83,10 @@ void main(void)
                 case 7: vgs0_bgm_play(0); break;
                 case 9: vgs0_bgm_play(1); break;
                 case 11: vgs0_bgm_play(2); break;
-                case 13: vgs0_bgm_pause(); break;
-                case 15: vgs0_bgm_resume(); break;
-                case 17: vgs0_bgm_fadeout(); break;
+                case 13: vgs0_bgm_play(3); break;
+                case 15: vgs0_bgm_pause(); break;
+                case 17: vgs0_bgm_resume(); break;
+                case 19: vgs0_bgm_fadeout(); break;
             }
         }
     }
