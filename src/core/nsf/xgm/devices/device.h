@@ -2,7 +2,6 @@
 #define _DEVICE_H_
 #include <stdio.h>
 #include <stdint.h>
-#include <assert.h>
 
 namespace xgm
 {

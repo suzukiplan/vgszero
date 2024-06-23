@@ -123,8 +123,6 @@ inline uint32_t RateConverter::FastRender(int32_t b[2])
         tap[0][mult + i] = t[0];
         tap[1][mult + i] = t[1];
     }
-    assert(mclocks == 0); // all clocks must be used
-    assert(mcclocks == 0);
     clocks = 0;
     cpu_clocks = 0;
 

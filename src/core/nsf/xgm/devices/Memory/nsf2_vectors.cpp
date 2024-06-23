@@ -1,4 +1,3 @@
-#include <assert.h>
 #include "nsf2_vectors.h"
 #include "../CPU/nes_cpu.h"
 

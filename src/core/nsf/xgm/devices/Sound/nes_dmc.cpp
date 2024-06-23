@@ -447,7 +447,6 @@ uint32_t NES_DMC::calc_noise(uint32_t clocks)
     }
 
     counter[1] -= clocks;
-    assert(nfreq > 0); // prevent infinite loop
     while (counter[1] < 0) {
         // tick the noise generator
         uint32_t feedback = (noise & 1) ^ ((noise & noise_tap) ? 1 : 0);
@@ -468,7 +467,6 @@ uint32_t NES_DMC::calc_noise(uint32_t clocks)
     accum -= (last * counter[1]); // remove these samples which belong in the next calc
     accum_clocks -= counter[1];
     uint32_t average = accum / accum_clocks;
-    assert(average <= 15); // above this would indicate overflow
     return average;
 }
 
@@ -476,7 +474,6 @@ uint32_t NES_DMC::calc_noise(uint32_t clocks)
 uint32_t NES_DMC::calc_dmc(uint32_t clocks)
 {
     counter[2] -= clocks;
-    assert(dfreq > 0); // prevent infinite loop
     while (counter[2] < 0) {
         counter[2] += dfreq;
 

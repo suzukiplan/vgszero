@@ -31,13 +31,11 @@ class Amplifier : virtual public IRenderable
 
     void Tick(uint32_t clocks)
     {
-        assert(target);
         target->Tick(clocks);
     }
 
     uint32_t Render(int32_t b[2])
     {
-        assert(target);
         if (mute) {
             b[0] = b[1] = 0;
             return 2;

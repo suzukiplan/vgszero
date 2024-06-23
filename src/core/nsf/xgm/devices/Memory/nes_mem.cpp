@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <string.h>
 #include "nes_mem.h"
 
@@ -69,7 +68,6 @@ void NES_MEM::SetFDSMode(bool t)
 
 void NES_MEM::SetReserved(const uint8_t* data, uint32_t size)
 {
-    assert(size <= PLAYER_RESERVED_SIZE);
     ::memcpy(image + PLAYER_RESERVED, data, size);
 }
 

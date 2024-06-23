@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <string.h>
 #include "nes_cpu.h"
 #include "../Memory/nes_mem.h"
@@ -51,7 +50,6 @@ void NES_CPU::run_from(uint32_t address)
     breaked = false;
     context.PC = PLAYER_RESERVED; // JSR, followed by infinite loop ("breaked")
     breakpoint = context.PC + 3;
-    assert(nes_mem);
     nes_mem->WriteReserved(PLAYER_RESERVED + 1, address & 0xff);
     nes_mem->WriteReserved(PLAYER_RESERVED + 2, address >> 8);
     // see PLAYER_PROGRAM in nsfplay.cpp

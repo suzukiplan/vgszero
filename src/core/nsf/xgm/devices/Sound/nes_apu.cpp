@@ -1,7 +1,6 @@
 //
 // NES 2A03
 //
-#include <assert.h>
 #include "nes_apu.h"
 
 namespace xgm
