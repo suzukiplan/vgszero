@@ -10,7 +10,8 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 
 1. [VGS-Zero Feature](#vgs-zero-feature) ... スペック概要
 1. [Game Development Tools](#game-development-tools) ... 開発ツール（SDK）一覧
-1. [How to Execute](#how-to-execute) ... 実行方法 & 実行に必要なハード一覧
+1. [First Step Guide](#first-step-guide) ... 導入ガイド（PC）
+1. [How to Execute](#how-to-execute) ... RaspberryPi Zero 2W での実行方法
 1. [config.sys](#configsys) ... 動作設定ファイル
 1. [game.pkg](#gamepkg) ... ゲーム実行形式ファイル
 1. [Programming Guide](#programming-guide) ... プログラム開発ガイド
@@ -109,11 +110,37 @@ VGS-Zero のゲーム開発に必要なツールの情報を記します。
 | vgsplay | [./tools/vgsplay](./tools/vgsplay/) | CLI | [MML](#compile-mml) を再生 |
 | joypad | [./tools/joypad](./tools/joypad/) | RPi | USB ジョイパッドの入力テストツール |
 
+## First Step Guide
+
+何もインストールされていない Ubuntu で VGS-Zero の [Hello, World! (Z80)](./example/01_hello-asm/) を動かすまでの手順を案内します。
+
+```bash
+# ツールチェインのビルドに必要なミドルウェアをインストール
+sudo apt update
+sudo apt install build-essential libsdl2-dev libasound2 libasound2-dev snapd
+
+# z88dk をインストール
+sudo snap install z88dk --beta
+
+# VGS-Zeroのリポジトリをダウンロード
+git clone https://github.com/suzukiplan/vgszero
+
+# example/01_hello-asm のディレクトリへ移動
+cd vgszero/example/01_hello-asm
+
+# ビルド & 実行
+make
+```
+
+上記の手順を実行すれば VGS-Zero の SDL2 版エミュレータで `Hello, World!` が起動します。
+
+![preview](./example/01_hello-asm/preview.png)
+
 ## How to Execute
 
-### on RaspberryPi Zero 2W
+実機（RaspberryPi Zero 2W）でゲームを動かすための手順を記します。
 
-#### (Required Hardware)
+### Required Hardware
 
 以下のハードウェアが必要です。
 
@@ -196,7 +223,7 @@ _※ GND の接続も必要です_
 >
 > VGS-Zero 対応のジョイスティック・ジョイパッドは、企業（商業ハード）or 個人（同人ハード）に関係なく SUZUKIPLAN からのライセンス不要で自由に開発・販売していただくことが可能です。_（ライセンスは不要ですがサポートもしないスタイルなので、販売に伴う消費者へのサポート対応等は販売元の責任で行ってください）_
 
-#### (Launch Sequence)
+### Launch Sequence
 
 起動手順は次の通りです。
 
@@ -207,14 +234,6 @@ _※ GND の接続も必要です_
 5. RaspberryPi Zero 2W に USB ジョイパッドを接続
 6. RaspberryPi Zero 2W とテレビを HDMI ケーブルで接続
 7. RaspberryPi Zero 2W に電源を接続して ON
-
-### on PC for Debug (Linux or macOS)
-
-SDL2 版エミュレータ（[./src/sdl2](./src/sdl2)）をビルドして、コマンドラインオプションに起動対象の [game.pkg](#gamepkg) を指定して実行してください。
-
-### on Steam for Sale (Windows)
-
-[VGS-Zero SDK for Steam](https://github.com/suzukiplan/vgszero-steam) を用いることで、最小限の労力で [Steam で販売](#steam) できる [game.pkg](#gamepkg) のバイナリ（Windows, Linux, macOS）を作成することができます。
 
 ## config.sys
 
