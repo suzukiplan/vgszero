@@ -72,7 +72,11 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 
 ## First Step Guide
 
-何もインストールされていない Ubuntu で VGS-Zero の [Hello, World! (Z80)](./example/01_hello-asm/) を動かすまでの手順を案内します。
+VGS-Zero のゲーム開発環境の推奨 OS は [Ubuntu Desktop](https://jp.ubuntu.com/download) です。
+
+より正確には、ハードオフで購入した中古の [2013 年モデルの MacBook Air へ Ubuntu Desktop をインストールした環境](https://qiita.com/suzukiplan/items/87fd32fe8e94b5a9bde5) が __不自由なく快適にゲームの開発に専念できる環境のベースライン__ です。
+
+以下、何もインストールされていない Ubuntu Desktop で VGS-Zero の [Hello, World! (Z80)](./example/01_hello-asm/) を動かすまでの手順を案内します。
 
 ```bash
 # ツールチェインのビルドに必要なミドルウェアをインストール
