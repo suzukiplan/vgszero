@@ -9,7 +9,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 ## Table of Content
 
 1. [VGS-Zero Feature](#vgs-zero-feature) ... スペック概要
-1. [Recommended Game Development Tools](#recommended-game-development-tools) ... 推奨開発ツール一覧
+1. [Game Development Tools](#game-development-tools) ... 開発ツール（SDK）一覧
 1. [How to Execute](#how-to-execute) ... 実行方法 & 実行に必要なハード一覧
 1. [config.sys](#configsys) ... 動作設定ファイル
 1. [game.pkg](#gamepkg) ... ゲーム実行形式ファイル
@@ -69,9 +69,13 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - 8ボタン形式（カーソルキー、A/B、START/SELECT）のジョイパッドをサポート
   - [config.sys](#configsys) でボタン割当をカスタマイズ可能
 
-## Recommended Game Development Tools
+## Game Development Tools
 
-VGS-Zero のゲーム開発に必要な推奨開発ツールを紹介します。
+VGS-Zero のゲーム開発に必要なツールの情報を記します。
+
+### Recommended Game Development Tools
+
+推奨開発ツールを紹介します。
 
 | Name | Type | Information |
 |:-----|:-----|:------------|
@@ -79,7 +83,7 @@ VGS-Zero のゲーム開発に必要な推奨開発ツールを紹介します�
 | [Visual Studio Code](https://code.visualstudio.com/download) | コーディング | プログラムやMMLの記述 |
 | [SDCC](https://sdcc.sourceforge.net/) | C コンパイラ | C 言語でゲームを開発する場合に利用を推奨<br>（だたし動作できるのはバージョン 4.1.0 のみ）|
 | [Z88DK](https://z88dk.org/site/) の z80asm | アセンブラ | Z80 アセンブリ言語でゲームを開発する場合に利用を推奨 |
-| [aseprite](https://aseprite.org/) | 画像エディタ | 256 パレット方式に対応 |
+| [aseprite](https://aseprite.org/) | 画像エディタ | 256 色 Bitmap 形式に対応した画像エディタ |
 | [Tiled Map Editor](https://www.mapeditor.org) | マップエディタ | 利用例: [example/08_map-scroll](./example/08_map-scroll/) |
 | [Jfxr](https://github.com/ttencate/jfxr) | 効果音エディタ | ブラウザ上でゲームの効果音を制作 |
 | [FamiStudio](https://famistudio.org/) | BGM エディタ | [NSF 形式](#nsf) の BGM を制作できる DAW |
@@ -87,6 +91,23 @@ VGS-Zero のゲーム開発に必要な推奨開発ツールを紹介します�
 上記のツールがあれば、ゲームに必要なプログラムとアセット（グラフィックス、効果音、音楽）の全てを開発することができ、全てのツールは無料で使うことができます。（一部有料のものもありますが自分でソースコードをダウンロードしてビルドすれば無料で使うことができます）
 
 > _必ずしも上記のツールでなければ開発できない訳ではありません。_
+
+### Official Toolchain
+
+本リポジトリで提供しているツール群は次の通りです。
+
+| Name | Path | Type | Information |
+|:-----|:-----|:-----|:------------|
+| vgs0 | [./src/sdl2](./src/sdl2/) | Emulator | VGS-Zero PC エミュレータ & デバッガ (Linux, macOS) |
+| bmp2chr | [./tools/bmp2chr](./tools/bmp2chr/) | CLI | 256 色 Bitmap ファイルを [キャラクタパターン形式](#character-pattern-table) に変換 |
+| csv2bin | [./tools/csv2bin](./tools/csv2bin/) | CLI | [Tiled Map Editor](https://www.mapeditor.org) の csv をバイナリ形式に変換 |
+| makepkg | [./tools/makepkg](./tools/makepkg/) | CLI | [game.pkg](#gamepkg) を生成 |
+| makerom | [./tools/makerom](./tools/makerom/) | CLI | [game.rom](#gamerom) を生成 |
+| makese | [./tools/makese](./tools/makese/) | CLI | [se.dat](#sedat) を生成 |
+| makebgm | [./tools/makebgm](./tools/makebgm/) | CLI | [bgm.dat](#bgmdat) を生成 |
+| vgsmml | [./tools/vgsmml](./tools/vgsmml/) | CLI | [MML](#compile-mml) コンパイラ |
+| vgsplay | [./tools/vgsplay](./tools/vgsplay/) | CLI | [MML](#compile-mml) を再生 |
+| joypad | [./tools/joypad](./tools/joypad/) | RPi | USB ジョイパッドの入力テストツール |
 
 ## How to Execute
 
