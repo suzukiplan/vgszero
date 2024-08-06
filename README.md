@@ -66,9 +66,12 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要
   - 本体 ROM ([`game.rom`](#gamerom)) とは別アセット（[`se.dat`](#sedat)）
   - 最大 256 個
-- 入力機器: [USB ジョイパッド](#joypad)
-  - 8ボタン形式（カーソルキー、A/B、START/SELECT）のジョイパッドをサポート
-  - [config.sys](#configsys) でボタン割当をカスタマイズ可能
+- 入力機器:
+  - [USB ジョイパッド](#joypad)
+    - 8ボタン形式（カーソルキー、A/B、START/SELECT）のジョイパッドをサポート
+    - [config.sys](#configsys) でボタン割当をカスタマイズ可能
+  - [GPIO ジョイパッド](#gpio-joypad)
+    - RaspberryPi の GPIO に直接接続するジョイパッドをサポート
 
 ## First Step Guide
 
