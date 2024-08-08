@@ -77,7 +77,9 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
 
 VGS-Zero のゲーム開発環境の推奨 OS は [Ubuntu Desktop](https://jp.ubuntu.com/download) です。
 
-より正確には、ハードオフで購入した中古の [2013 年モデルの MacBook Air へ Ubuntu Desktop をインストールした環境](https://qiita.com/suzukiplan/items/87fd32fe8e94b5a9bde5) が __不自由なく快適にゲームの開発に専念できる環境のベースライン__ です。
+より正確には、[2013 年モデルの MacBook Air へ Ubuntu Desktop をインストールした環境](https://qiita.com/suzukiplan/items/87fd32fe8e94b5a9bde5) が __不自由なく快適にゲームの開発に専念できる環境のベースライン__ です。
+
+VGS-Zero ならゲームを開発するのに強い PC は必須ではありません。
 
 以下、何もインストールされていない Ubuntu Desktop で VGS-Zero の [Hello, World! (Z80)](./example/01_hello-asm/) を動かすまでの手順を案内します。
 
@@ -102,6 +104,8 @@ make
 上記の手順を実行すれば VGS-Zero の SDL2 版エミュレータで `Hello, World!` が起動します。
 
 ![preview](./preview.png)
+
+VGS-Zero で扱えるグラフィックスの描画、効果音の作成、音楽の作曲などに必要なツールセットについては [Game Development Tools](#game-development-tools) の章で詳しくリストアップしています。
 
 ## How to Execute
 
