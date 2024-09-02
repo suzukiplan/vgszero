@@ -1,5 +1,7 @@
 # Video Game System - Zero [![suzukiplan](https://circleci.com/gh/suzukiplan/vgszero.svg?style=svg)](https://app.circleci.com/pipelines/github/suzukiplan/vgszero)
 
+Language: __Japanese__, [English](./README-en.md)
+
 ![logo](logo.png)
 
 Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル環境で動作するゲーム機です。
@@ -250,7 +252,7 @@ key_name △ AXIS_{0-1} △ {<|>} △ {0-255}
 - `A` Aボタン
 - `B` Bボタン
 - `START` STARTボタン
-- `SELECT` Aボタン
+- `SELECT` SELECTボタン
 - `UP` 上カーソル
 - `DOWN` 下カーソル
 - `LEFT` 左カーソル
@@ -279,7 +281,7 @@ makepkg  -o /path/to/output.pkg
 
 ### game.rom
 
-game.rom は [ROMバンク](#cpu-memory-map)に読み込まれる 8KB 単位の ROM データセットで、ツールチェインの [makerom コマンド](./tools/makepkg/) で生成することができます。
+game.rom は [ROMバンク](#cpu-memory-map)に読み込まれる 8KB 単位の ROM データセットで、ツールチェインの [makerom コマンド](./tools/makerom/) で生成することができます。
 
 ```
 usage: makerom output input1 input2 ... input256
@@ -990,7 +992,7 @@ JNZ SAVE_FAILED # 失敗時は not 0
 ```z80
 LD BC, 0xC000   # ロード先のアドレスを指定 (RAM 領域のみ指定可能)
 LD HL, 0x2000   # ロードするデータサイズを指定 (最大 16 KB = 0x4000)
-IN A, (0xDA)    # セーブ (※書き込んだ値は無視されるので何でもOK)
+IN A, (0xDA)    # ロード (※書き込んだ値は無視されるので何でもOK)
 JZ LOAD_SUCCESS # ロード成功時は 0
 JNZ LOAD_FAILED # ロード失敗時は not 0 (※ロード先は 0x00 で埋められる)
 ```
@@ -1170,7 +1172,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 - VGS-Zero 本体には NEZplug (Free Software) が含まれます: [LICENSE-NEZplug.txt](./LICENSE-NEZplug.txt)
 - VGS-Zero 本体には NSFPlay (GPLv3) を改変したプログラムが含まれます: [LICENSE-NSFPlay-alter.txt](./LICENSE-NSFPlay-alter.txt)
 - VGS-Zero 本体には KM6502 (Free Software) が含まれます: [LICENSE-km6502.txt](./LICENSE-km6502.txt)
-- VGS-Zero Library for Z80 は MIT ライセンスの OSS です:[LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
+- VGS-Zero Library for Z80 は MIT ライセンスの OSS です: [LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
 
 > あなたが開発した[game.pkg](#gamepkg)の著作権はあなたに帰属し、商業利用を含む自由な利用が可能です。
 >
