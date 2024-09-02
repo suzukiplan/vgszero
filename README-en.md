@@ -1124,9 +1124,9 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 <<<Include Twitter (aka X) account, etc.>>>
 ```
 
-通販で販売する場合、ロット数が多い場合は同人ショップでの委託販売が良いかもしれませんが、小ロット（100本以下程度）であればメルカリあたりが手軽で良いかもしれません。
+For mail-order sales, consignment sales at doujin stores may be a good option if the lot size is large, but for small lots (100 or less), Mercari may be a good and easy option in Japan.
 
-販売により得られた収益の SUZUKIPLAN へのペイバック（ライセンス料）等は一切不要です。
+No payback (license fee) to SUZUKIPLAN is required for any proceeds from sales.
 
 ### Steam
 
