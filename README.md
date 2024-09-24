@@ -722,7 +722,7 @@ Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)�
 
 |   Port    |  I  |  O  | Description  |
 | :-------: | :-: | :-: | :----------- |
-|   0xA0    |  o  |  -  | [ジョイパッド](#joypad) |
+|   0xA0    |  o  |  -  | [ジョイパッド](#joypad-1) |
 |   0xB0    |  o  |  o  | [ROM Bank](#bank-switch) 0 (default: 0x00) |
 |   0xB1    |  o  |  o  | [ROM Bank](#bank-switch) 1 (default: 0x01) |
 |   0xB2    |  o  |  o  | [ROM Bank](#bank-switch) 2 (default: 0x02) |
@@ -761,6 +761,9 @@ IN A, (0xA0)
 | Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | `Up`  | `Down` | `Left` | `Right` | `Start` | `Select` | `A` | `B` |
+
+- 0: 入力がある状態
+- 1: 入力がない状態
 
 #### (Bank Switch)
 

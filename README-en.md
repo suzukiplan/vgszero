@@ -723,7 +723,7 @@ The memory area of the Character Pattern Table (0xA000 to 0xBFFF) can be made eq
 
 |   Port    |  I  |  O  | Description  |
 | :-------: | :-: | :-: | :----------- |
-|   0xA0    |  o  |  -  | [Joypad](#joypad) |
+|   0xA0    |  o  |  -  | [Joypad](#joypad-1) |
 |   0xB0    |  o  |  o  | [ROM Bank](#bank-switch) 0 (default: 0x00) |
 |   0xB1    |  o  |  o  | [ROM Bank](#bank-switch) 1 (default: 0x01) |
 |   0xB2    |  o  |  o  | [ROM Bank](#bank-switch) 2 (default: 0x02) |
@@ -762,6 +762,9 @@ IN A, (0xA0)
 | Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | `Up`  | `Down` | `Left` | `Right` | `Start` | `Select` | `A` | `B` |
+
+- 0: Entered
+- 1: Not entered
 
 #### (Bank Switch)
 
