@@ -503,8 +503,7 @@ static void trimstring(char* src)
 {
     int i, j;
     int len;
-    for (i = 0; ' ' == src[i]; i++)
-        ;
+    for (i = 0; ' ' == src[i]; i++);
     if (i) {
         for (j = 0; src[i] != '\0'; j++, i++) {
             src[j] = src[i];
