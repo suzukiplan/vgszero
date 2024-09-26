@@ -37,4 +37,8 @@ void main(void)
             n2 += 1;
         }
     }
+
+    while (1) {
+        ;
+    }
 }

@@ -563,11 +563,12 @@ VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへ�
 
 | Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `VI`  | `LR`  | `UD`  |   -   | `P3`  | `P2`  | `P1`  | `P0`  |
+| `VI`  | `LR`  | `UD`  | `PTN` | `P3`  | `P2`  | `P1`  | `P0`  |
 
 - `VI`: `0` = 非表示, `1` = 表示 _（※ BG に限り 0 でも表示されます）_
 - `LR`: `1` にすると左右反転で表示
 - `UD`: `1` にすると上下反転で表示
+- `PTN`: `1` にすると [Direct Pattern Mapping](#direct-pattern-mapping) が有効な時のバンク番号を `+1`
 - `P0~P3`: [パレット](#palette)番号 (0 ~ 15)
 
 #### (Palette)
@@ -1167,6 +1168,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | [example/13_perlin](./example/13_perlin) | C言語 | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
 | [example/14_1024ptn](./example/14_1024ptn) | C言語 | [1024 パターンモード](#1024-patterns-mode) の利用例 |
 | [example/15_nsf](./example/15_nsf/) | C言語 | [NSF](#nsf) の利用例 |
+| [example/16_ptn-plus1](./example/16_ptn-plus1/) | C言語 | [Attribute](#attribute) の `ptn` の使用例 |
 
 ## License
 

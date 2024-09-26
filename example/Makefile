@@ -16,6 +16,7 @@ build:
 	cd 13_perlin && make build
 	cd 14_1024ptn && make build
 	cd 15_nsf && make build
+	cd 16_ptn-plus1 && make build
 
 clean:
 	cd 01_hello && make clean
@@ -33,4 +34,4 @@ clean:
 	cd 13_perlin && make clean
 	cd 14_1024ptn && make clean
 	cd 15_nsf && make clean
-
+	cd 16_ptn-plus1 && make clean
