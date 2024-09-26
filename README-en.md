@@ -560,11 +560,12 @@ Attributes are character pattern display attributes common to BG, FG, and sprite
 
 | Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `VI`  | `LR`  | `UD`  |   -   | `P3`  | `P2`  | `P1`  | `P0`  |
+| `VI`  | `LR`  | `UD`  | `PTN` | `P3`  | `P2`  | `P1`  | `P0`  |
 
 - `VI`: `0` = hidden, `1` = shown _(*only for BG, 0 is also shown)_
 - `LR`: If `1`, left-right flip is shown.
 - `UD`: If `1`, it is displayed upside down.
+- `PTN`: If `1`, the bank number will +1 when [Direct Pattern Mapping](#direct-pattern-mapping) is enabled.
 - `P0~P3`: [palette](#palette) number (0 ~ 15).
 
 #### (Palette)
