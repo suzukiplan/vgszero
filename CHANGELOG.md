@@ -1,5 +1,16 @@
 # Change Log
 
+## [Version 1.12.0](https://github.com/suzukiplan/vgszero/releases/tag/1.12.0)
+
+Attribute の bit-4 を指定することで DPM のパターン番号を +1 する機能を追加
+  
+| Bit-7 | Bit-6 | Bit-5 | **Bit-4** | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `VI`  | `LR`  | `UD`  | **`PTN`** | `P3`  | `P2`  | `P1`  | `P0`  |
+
+- 本機能は BG, FG, スプライトの全てで使用可能
+- 本機能は DPM (Direct Pattern Mapping) を使用時に限り有効
+
 ## [Version 1.11.2](https://github.com/suzukiplan/vgszero/releases/tag/1.11.2)
 
 - 未サポートの音楽データ形式を再生しようとするとクラッシュする不具合を修正
