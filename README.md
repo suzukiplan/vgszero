@@ -1168,6 +1168,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | [example/13_perlin](./example/13_perlin) | C言語 | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
 | [example/14_1024ptn](./example/14_1024ptn) | C言語 | [1024 パターンモード](#1024-patterns-mode) の利用例 |
 | [example/15_nsf](./example/15_nsf/) | C言語 | [NSF](#nsf) の利用例 |
+| [example/16_ptn-plus1](./example/16_ptn-plus1/) | C言語 | [Attribute](#attribute) の `ptn` の使用例 |
 
 ## License
 

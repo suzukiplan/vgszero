@@ -1164,6 +1164,7 @@ _We hope to address this in the future._
 | [example/13_perlin](./example/13_perlin) | C | Example usage of [Perlin Noise](#hardware-perlin-noise) |
 | [example/14_1024ptn](./example/14_1024ptn) | C | [1024-patterns-mode] (#1024-patterns-mode) usage example |
 | [example/15_nsf](./example/15_nsf/) | C | Example usage of [NSF](#nsf) |
+| [example/16_ptn-plus1](./example/16_ptn-plus1/) | C | Example usage of `ptn` in [Attribute](#attribute) |
 
 ## License
 
