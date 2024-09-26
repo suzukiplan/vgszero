@@ -152,6 +152,8 @@ PC（[SDL2](./src/sdl2/) 版）のキー割当は次の通りです:
 - START ボタン: `SPACE` キー
 - SELECT ボタン: `ESC` キー
 
+プログラムからは [0xA0 ポートの入力](#joypad-1) により入力状態を取得できます。
+
 #### (Supported USB Joypad)
 
 VGS-Zero での USB ジョイパッドのサポートリストを示します。

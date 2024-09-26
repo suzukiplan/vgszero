@@ -144,6 +144,8 @@ The key assignments for the PC ([SDL2](./src/sdl2/) version) are as follows:
 - START button: `SPACE` key
 - SELECT button: `ESC` key
 
+The input status can be obtained from the program by [inputting the 0xA0 port](#joypad-1).
+
 #### (Supported USB Joypad)
 
 The following is a list of USB joypad support in VGS-Zero:
