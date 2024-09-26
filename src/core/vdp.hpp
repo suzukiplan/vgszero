@@ -211,7 +211,7 @@ class VDP
             ptntbl0 = this->getPatternTableAddr();
             ptntbl1 = ptntbl0;
         }
-        const char* ptntbl[2] = {ptntbl0, ptntbl1};
+        const unsigned char* ptntbl[2] = {ptntbl0, ptntbl1};
         for (int x = this->getRegisterBgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
             offset = (x >> 3) & 0x1F;
             unsigned char ptn = nametbl[offset];
@@ -252,7 +252,7 @@ class VDP
             ptntbl0 = this->getPatternTableAddr();
             ptntbl1 = ptntbl0;
         }
-        const char* ptntbl[2] = {ptntbl0, ptntbl1};
+        const unsigned char* ptntbl[2] = {ptntbl0, ptntbl1};
         for (int x = this->getRegisterFgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
             offset = (x >> 3) & 0x1F;
             unsigned char ptn = nametbl[offset];
