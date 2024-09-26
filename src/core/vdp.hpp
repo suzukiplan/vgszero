@@ -197,22 +197,26 @@ class VDP
         int offset = (((y + 8) / 8) & 0x1F) * 32;
         unsigned char* nametbl = this->getBgNameTableAddr() + offset;
         unsigned char* attrtbl = this->getBgAttrTableAddr() + offset;
-        const unsigned char* ptntbl;
+        const unsigned char* ptntbl0;
+        const unsigned char* ptntbl1;
         int dpm = this->getBgDPM();
         if (dpm) {
             if (this->isBG1024()) {
                 dpm += offset / 256 * 0x2000;
                 dpm %= this->romSize;
             }
-            ptntbl = &this->rom[dpm];
+            ptntbl0 = &this->rom[dpm];
+            ptntbl1 = &this->rom[(dpm + 0x2000) % this->romSize];
         } else {
-            ptntbl = this->getPatternTableAddr();
+            ptntbl0 = this->getPatternTableAddr();
+            ptntbl1 = ptntbl0;
         }
+        const char* ptntbl[2] = {ptntbl0, ptntbl1};
         for (int x = this->getRegisterBgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
             offset = (x >> 3) & 0x1F;
             unsigned char ptn = nametbl[offset];
             unsigned char attr = attrtbl[offset];
-            const unsigned char* chrtbl = ptntbl;
+            const unsigned char* chrtbl = ptntbl[(attr & 0b00010000) >> 4];
             chrtbl += ptn << 5;
             chrtbl += (this->isAttrFlipV(attr) ? 7 - (y & 7) : y & 7) << 2;
             int pal;
@@ -234,23 +238,27 @@ class VDP
         int offset = (((y + 8) / 8) & 0x1F) * 32;
         unsigned char* nametbl = this->getFgNameTableAddr() + offset;
         unsigned char* attrtbl = this->getFgAttrTableAddr() + offset;
-        const unsigned char* ptntbl;
+        const unsigned char* ptntbl0;
+        const unsigned char* ptntbl1;
         int dpm = this->getFgDPM();
         if (dpm) {
             if (this->isFG1024()) {
                 dpm += offset / 256 * 0x2000;
                 dpm %= this->romSize;
             }
-            ptntbl = &this->rom[dpm];
+            ptntbl0 = &this->rom[dpm];
+            ptntbl1 = &this->rom[(dpm + 0x2000) % this->romSize];
         } else {
-            ptntbl = this->getPatternTableAddr();
+            ptntbl0 = this->getPatternTableAddr();
+            ptntbl1 = ptntbl0;
         }
+        const char* ptntbl[2] = {ptntbl0, ptntbl1};
         for (int x = this->getRegisterFgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
             offset = (x >> 3) & 0x1F;
             unsigned char ptn = nametbl[offset];
             unsigned char attr = attrtbl[offset];
             if (!this->isAttrVisible(attr)) continue;
-            const unsigned char* chrtbl = ptntbl;
+            const unsigned char* chrtbl = ptntbl[(attr & 0b00010000) >> 4];
             chrtbl += ptn << 5;
             chrtbl += (this->isAttrFlipV(attr) ? 7 - (y & 7) : y & 7) << 2;
             int pal;
@@ -283,7 +291,11 @@ class VDP
             if (oam[6]) {
                 ptntbl = &this->rom[oam[6] * 0x2000 % this->romSize];
             } else if (dpm) {
-                ptntbl = &this->rom[dpm];
+                if (oam[3] & 0b00010000) {
+                    ptntbl = &this->rom[(dpm + 0x2000) % this->romSize];
+                } else {
+                    ptntbl = &this->rom[dpm];
+                }
             } else {
                 ptntbl = this->getPatternTableAddr();
             }
