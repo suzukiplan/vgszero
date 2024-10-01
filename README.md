@@ -648,6 +648,8 @@ OAM16 の x または y の値が非ゼロの場合に有効になります。
 |:-:|:-:|
 |![oam](./example/17_clip/preview2.png)|![oam16](./example/17_clip/preview1.png)|
 
+使用方法の詳細は [example/17_clip](./example/17_clip/) を確認してください。
+
 #### (Scanline Counter)
 
 - スキャンラインカウンタは、VDP のピクセルレンダリング位置を特定することができる読み取り専用の VDP レジスタです
