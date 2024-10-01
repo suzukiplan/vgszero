@@ -1,5 +1,14 @@
 # Change Log
 
+## [Version 1.13.0](https://github.com/suzukiplan/vgszero/releases/tag/1.13.0)
+
+- [OAM16](./README.md#oam16) 機能を追加
+- [example/17_clip](./example/17_clip/) を追加
+- VGS0LIB に次の API を追加
+  - `vgs0_oam_set16` ... OAM16 を用いたスプライト属性の一括設定マクロ
+  - `VGS0_ADDR_OAM16` ... OAM16 の先頭アドレス
+  - `OAM16` ... OAM16 構造体
+
 ## [Version 1.12.0](https://github.com/suzukiplan/vgszero/releases/tag/1.12.0)
 
 Attribute の bit-4 を指定することで DPM のパターン番号を +1 する機能を追加
