@@ -17,6 +17,7 @@ build:
 	cd 14_1024ptn && make build
 	cd 15_nsf && make build
 	cd 16_ptn-plus1 && make build
+	cd 17_clip && make build
 
 clean:
 	cd 01_hello && make clean
@@ -35,3 +36,4 @@ clean:
 	cd 14_1024ptn && make clean
 	cd 15_nsf && make clean
 	cd 16_ptn-plus1 && make clean
+	cd 17_clip && make clean
