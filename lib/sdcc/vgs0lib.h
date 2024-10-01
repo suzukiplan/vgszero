@@ -96,6 +96,12 @@
  * - OAM: https://github.com/suzukiplan/vgszero/blob/master/README.md#oam
  */
 #define VGS0_ADDR_OAM ((OAM*)0x9000)
+
+/** @def
+ * 16bit Object Attribute Memory of the Sprites
+ * - Sprite: https://github.com/suzukiplan/vgszero/blob/master/README.md#sprite
+ * - OAM16: https://github.com/suzukiplan/vgszero/blob/master/README.md#oam16
+ */
 #define VGS0_ADDR_OAM16 ((OAM16*)0x9A00)
 
 /**
@@ -112,6 +118,11 @@
     VGS0_ADDR_OAM[NUM].heightMinus1 = H;         \
     VGS0_ADDR_OAM[NUM].bank = 0
 
+/**
+ * Set an object attribute memory record macro for 16bit
+ * - Sprite: https://github.com/suzukiplan/vgszero/blob/master/README.md#sprite
+ * - OAM16: https://github.com/suzukiplan/vgszero/blob/master/README.md#oam16
+ */
 #define vgs0_oam_set16(NUM, X, Y, ATTR, PTN, W, H) \
     VGS0_ADDR_OAM16[NUM].x = X;                    \
     VGS0_ADDR_OAM16[NUM].y = Y;                    \
@@ -273,6 +284,10 @@ typedef struct {
     uint8_t reserved;
 } OAM;
 
+/**
+ * 16bit Object Attribute Memory
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#oam16
+ */
 typedef struct {
     uint16_t y;
     uint16_t x;
