@@ -43,6 +43,7 @@ This repository provides the VGS-Zero body code, distribution images, SDK, and a
   - [BG](#bg) and [FG](#fg) support [1024 patterns mode](#1024-patterns-mode).
   - Provides a hardware function ([OAM Pattern Size](#oam-pattern-size)) that allows multiple [character pattern](#character-pattern-table) to be displayed side by side on a [sprite](#sprite).
   - Provides a hardware function ([OAM Bank](#oam-bank)) to specify a different bank for each [OAM record](#oam) of [sprite](#sprite).
+  - Provides [OAM16](#oam16) which can make the coordinate system of [sprite](#sprite) 16bit.
 - DMA (Direct Memory Access)
   - [High-speed transfer of the contents of a specific ROM bank to the character pattern table](#rom-to-character-dma)
   - [Capable of transferring the contents of a specific ROM bank to any memory in any size](#rom-to-memory-dma)
@@ -503,6 +504,7 @@ If there is no need to expand character patterns into RAM (VRAM), the Extra RAM 
 | 0x8C00 ~ 0x8FFF | 0x0C00 ~ 0x0FFF | [FG](#fg) [Attribute](#attribute) Table (32 x 32) |
 | 0x9000 ~ 0x97FF | 0x1000 ~ 0x17FF | [OAM](#oam); Object Attribute Memory (8 x 256) |
 | 0x9800 ~ 0x99FF | 0x1800 ~ 0x19FF | [Palette](#palette) Table (2 x 16 x 16) |
+| 0x9A00 ~ 0x9DFF | 0x1A00 ~ 0x1DFF | [OAM16](#oam16) |
 | 0x9F00          | 0x1F00	        | Register #0: Vertical [Scanline Counter](#scanline-counter) (read only) |
 | 0x9F01          | 0x1F01          | Register #1: Horizontal [Scanline Counter](#scanline-counter) (read only) |
 | 0x9F02          | 0x1F02          | Register #2: [BG](#bg) [Scroll](#hardware-scroll) X |
@@ -627,6 +629,27 @@ Configuration priority:
 3. [Character Pattern](#character-pattern-table) on VRAM
 
 By using OAM Bank, a different bank character pattern can be used for each OAM.
+
+#### (OAM16)
+
+OAM16 is an area where the sprite coordinates can be 16-bit values.
+
+```c
+struct OAM16 {
+    unsigned short y;
+    unsigned short x;
+} oam16[256];
+```
+
+Valid for non-zero x or y values in OAM16.
+
+By using this function, sprites larger than 24px can be clipped.
+
+| OAM | OAM16 |
+|:-:|:-:|
+|![oam](./example/17_clip/preview2.png)|![oam16](./example/17_clip/preview1.png)|
+
+For details on how to use [example/17_clip](./example/17_clip/) for details.
 
 #### (Scanline Counter)
 
@@ -1165,6 +1188,7 @@ _We hope to address this in the future._
 | [example/14_1024ptn](./example/14_1024ptn) | C | [1024-patterns-mode] (#1024-patterns-mode) usage example |
 | [example/15_nsf](./example/15_nsf/) | C | Example usage of [NSF](#nsf) |
 | [example/16_ptn-plus1](./example/16_ptn-plus1/) | C | Example usage of `ptn` in [Attribute](#attribute) |
+| [example/17_clip](./example/17_clip/) | C| Example usage of [OAM16](#oam16) |
 
 ## License
 
