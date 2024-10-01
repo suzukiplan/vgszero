@@ -43,6 +43,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [BG](#bg), [FG](#fg) は最大 [1024 パターンを表示できるモード](#1024-patterns-mode) に対応
   - [スプライト](#sprite)に複数の[キャラクタパターン](#character-pattern-table)を並べて表示できるハードウェア機能（[OAM Pattern Size](#oam-pattern-size)）を提供
   - [スプライト](#sprite)の [OAM](#oam) 毎に異なるバンクを指定できるハードウェア機能（[OAM Bank](#oam-bank)）を提供
+  - [スプライト](#sprite)の座標系を 16bit にすることができる [OAM16](#oam16) を提供
 - DMA (Direct Memory Access)
   - [特定の ROM バンクの内容をキャラクタパターンテーブルに高速転送が可能](#rom-to-character-dma)
   - [特定の ROM バンクの内容を任意メモリに任意サイズだけ転送が可能](#rom-to-memory-dma)
@@ -506,6 +507,7 @@ VGS-Video では、[DPM; Direct Pattern Mapping](#direct-pattern-mapping) や [O
 | 0x8C00 ~ 0x8FFF | 0x0C00 ~ 0x0FFF | [FG](#fg) [Attribute](#attribute) Table (32 x 32) |
 | 0x9000 ~ 0x97FF | 0x1000 ~ 0x17FF | [OAM](#oam); Object Attribute Memory (8 x 256) |
 | 0x9800 ~ 0x99FF | 0x1800 ~ 0x19FF | [Palette](#palette) Table (2 x 16 x 16) |
+| 0x9A00 ~ 0x9DFF | 0x1A00 ~ 0x1DFF | [OAM16](#oam16) |
 | 0x9F00          | 0x1F00	        | Register #0: Vertical [Scanline Counter](#scanline-counter) (read only) |
 | 0x9F01          | 0x1F01          | Register #1: Horizontal [Scanline Counter](#scanline-counter) (read only) |
 | 0x9F02          | 0x1F02          | Register #2: [BG](#bg) [Scroll](#hardware-scroll) X |
@@ -626,6 +628,27 @@ VGS-Zero では最大 256 枚のスプライトを同時に表示でき、水平
 3. VRAM 上の[キャラクタパターン](#character-pattern-table) **(デフォルト)**
 
 OAM Bank を用いることで、OAM 毎に異なるキャラクタパターンを使用できます。
+
+#### (OAM16)
+
+OAM16 はスプライト座標を 16 bit の値にすることができる領域です。
+
+```c
+struct OAM16 {
+    unsigned short y;
+    unsigned short x;
+} oam16[256];
+```
+
+OAM16 の x または y の値が非ゼロの場合に有効になります。
+
+本機能を用いることで 24px 以上のサイズのスプライトがクリップ表示されるようになります。
+
+| OAM | OAM16 |
+|:-:|:-:|
+|![oam](./example/17_clip/preview2.png)|![oam16](./example/17_clip/preview1.png)|
+
+使用方法の詳細は [example/17_clip](./example/17_clip/) を確認してください。
 
 #### (Scanline Counter)
 
@@ -1169,6 +1192,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | [example/14_1024ptn](./example/14_1024ptn) | C言語 | [1024 パターンモード](#1024-patterns-mode) の利用例 |
 | [example/15_nsf](./example/15_nsf/) | C言語 | [NSF](#nsf) の利用例 |
 | [example/16_ptn-plus1](./example/16_ptn-plus1/) | C言語 | [Attribute](#attribute) の `ptn` の使用例 |
+| [example/17_clip](./example/17_clip/) | C言語 | [OAM16](#oam16) の使用例 |
 
 ## License
 
