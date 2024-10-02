@@ -897,6 +897,7 @@ struct rect {
 ```z80
 LD HL, 0xC000   # 構造体の先頭アドレス
 IN A, (0xC4)    # チェック実行
+AND A           # ゼロチェック
 JNZ DETECT_HIT  # 衝突を検出
 JZ NOT_HIT      # 非衝突
 ```

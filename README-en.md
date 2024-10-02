@@ -898,6 +898,7 @@ struct rect {
 ```z80
 LD HL, 0xC000   # First address of the structure
 IN A, (0xC4)    # Perform collision determination
+AND A           # Zero check
 JNZ DETECT_HIT  # Collision Detection
 JZ NOT_HIT      # Collision Not Detection
 ```
