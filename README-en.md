@@ -673,6 +673,10 @@ For details on how to use [example/17_clip](./example/17_clip/) for details.
 
 - BL: 1 = start vblank
 
+The BL flag is set at the timing when the drawing of the 192nd line of the visible area (the 200th line of the scan line) is completed.
+
+![bl_timing.png](./bl_timing.png)
+
 NOTE: Status register always reset after read.
 
 #### (Direct Pattern Mapping)

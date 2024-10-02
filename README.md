@@ -671,6 +671,10 @@ OAM16 の x または y の値が非ゼロの場合に有効になります。
 
 - BL: 1 = start vblank
 
+BL フラグは可視領域の 192 ライン目（スキャンラインの 200 ライン目）の描画が終わったタイミングでセットされます。
+
+![bl_timing.png](./bl_timing.png)
+
 NOTE: Status register always reset after read.
 
 #### (Direct Pattern Mapping)
