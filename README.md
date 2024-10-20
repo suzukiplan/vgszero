@@ -1178,26 +1178,25 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 
 ## Examples
 
-| Directory | Language | Description |
-| :-------- | :------- | :---------- |
-| [example/01_hello-asm](./example/01_hello-asm/) | Z80 | `HELLO,WORLD!` を表示 |
-| [example/01_hello](./example/01_hello/) | C言語 | `HELLO,WORLD!` を表示 |
-| [example/02_global](./example/02_global/) | C言語 | グローバル変数の使用例 |
-| [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
-| [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の負荷を最大化する検査用プログラム |
-| [example/05_sprite256](./example/05_sprite256/) | C言語 | スプライトを256表示して動かす例 |
-| [example/06_save](./example/06_save/) | C言語 | [セーブ機能](#save-data)の例 |
-| [example/07_palette](./example/07_palette/) | C言語 | 16個の[パレット](#palette)を全て使った例 |
-| [example/08_map-scroll](./example/08_map-scroll/) | C言語 | Tiled Map Editor で作ったマップデータのスクロール |
-| [example/09_joypad](./example/09_joypad/) | C言語 | ジョイパッドの入力結果をプレビュー |
-| [example/10_chr720](./example/10_chr720/) | C言語 | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
-| [example/11_bigsprite](./example/11_bigsprite/) | C言語 | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の指定により巨大なスプライトを表示する例 |
-| [example/12_angle](./example/12_angle) | C言語 | [ハードウェア atan2 テーブル](#hardware-atan2-table) を用いて完全な自機狙いを実装する例 |
-| [example/13_perlin](./example/13_perlin) | C言語 | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
-| [example/14_1024ptn](./example/14_1024ptn) | C言語 | [1024 パターンモード](#1024-patterns-mode) の利用例 |
-| [example/15_nsf](./example/15_nsf/) | C言語 | [NSF](#nsf) の利用例 |
-| [example/16_ptn-plus1](./example/16_ptn-plus1/) | C言語 | [Attribute](#attribute) の `ptn` の使用例 |
-| [example/17_clip](./example/17_clip/) | C言語 | [OAM16](#oam16) の使用例 |
+| Name | Language   | Description |
+| :--- | :--------: | :---------- |
+| `01_hello` | [Z80](./example/01_hello-asm/), [C](./example/01_hello/) | `HELLO,WORLD!` を表示 |
+| `02_global` | [C](./example/02_global/) | グローバル変数の使用例 |
+| `03_sound` | [C](./example/03_sound/) | BGM と効果音の使用例 |
+| `04_heavy` | [C](./example/04_heavy/) | エミュレータ側の負荷を最大化する検査用プログラム |
+| `05_sprite256` | [C](./example/05_sprite256/) | スプライトを256表示して動かす例 |
+| `06_save` | [C](./example/06_save/) | [セーブ機能](#save-data)の例 |
+| `07_palette` | [C](./example/07_palette/) | 16個の[パレット](#palette)を全て使った例 |
+| `08_map-scroll` | [C](./example/08_map-scroll/) | Tiled Map Editor で作ったマップデータのスクロール |
+| `09_joypad` | [C](./example/09_joypad/) | ジョイパッドの入力結果をプレビュー |
+| `10_chr720` | [C](./example/10_chr720/) | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
+| `11_bigsprite` | [C](./example/11_bigsprite/) | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の指定により巨大なスプライトを表示する例 |
+| `12_angle` | [C](./example/12_angle) | [ハードウェア atan2 テーブル](#hardware-atan2-table) を用いて完全な自機狙いを実装する例 |
+| `13_perlin` | [C](./example/13_perlin) | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
+| `14_1024ptn` | [C](./example/14_1024ptn) | [1024 パターンモード](#1024-patterns-mode) の利用例 |
+| `15_nsf` | [C](./example/15_nsf/) | [NSF](#nsf) の利用例 |
+| `16_ptn-plus1` | [C](./example/16_ptn-plus1/) | [Attribute](#attribute) の `ptn` の使用例 |
+| `17_clip` | [C](./example/17_clip/) | [OAM16](#oam16) の使用例 |
 
 ## License
 
