@@ -1092,7 +1092,7 @@ OUT (0xF1), A   # Execute
 
 ```z80
 LD A, 0x03      # Specify the number of the sound effect to be checked if it is playing.
-OUT (0xF1), A   # Execute (A=0: Stopped, A=1: Playing)
+OUT (0xF2), A   # Execute (A=0: Stopped, A=1: Playing)
 AND 0x01
 JNZ EFF03_IS_PILAYING
 JZ  EFF03_IS_NOT_PLAYING

@@ -1091,7 +1091,7 @@ OUT (0xF1), A   # 効果音を停止
 
 ```z80
 LD A, 0x03      # チェックする効果音の番号を指定
-OUT (0xF1), A   # 効果音をチェック (A=0: Stopped, A=1: Playing)
+OUT (0xF2), A   # 効果音をチェック (A=0: Stopped, A=1: Playing)
 AND 0x01
 JNZ EFF03_IS_PILAYING
 JZ  EFF03_IS_NOT_PLAYING
