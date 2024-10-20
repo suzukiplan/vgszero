@@ -89,10 +89,7 @@ Below is a step-by-step guide to running VGS-Zero's [Hello, World! (Z80)](./exam
 ```bash
 # Install middleware needed to build toolchain
 sudo apt update
-sudo apt install build-essential libsdl2-dev libasound2 libasound2-dev snapd
-
-# Install the z88dk
-sudo snap install z88dk --beta
+sudo apt install build-essential libsdl2-dev libasound2 libasound2-dev
 
 # Download the VGS-Zero repository
 git clone https://github.com/suzukiplan/vgszero
@@ -362,7 +359,6 @@ The table below lists recommended development tools:
 | [Ubuntu Desktop](https://jp.ubuntu.com/download)| OS | All tools listed in this table can also run on Ubuntu |
 | [Visual Studio Code](https://code.visualstudio.com/download) | Coding | Writing programs, MMLs, scripts, etc. |
 | [SDCC](https://sdcc.sourceforge.net/) | C compiler | Recommended for use when developing games in C<br>(but only version 4.1.0 can work) |
-| [Z88DK](https://z88dk.org/site/) z80asm | Assembler | Recommended for use when developing games in Z80 assembly language |
 | [aseprite](https://aseprite.org/) | Graphics Editor | Graphics editor supporting 256-color Bitmap format |
 | [Tiled Map Editor](https://www.mapeditor.org) | Map Editor | Examples of Use: [example/08_map-scroll](./example/08_map-scroll/) |
 | [Jfxr](https://github.com/ttencate/jfxr) | Sound Effects Editor | Creating game sound effects in the browser |
@@ -379,6 +375,7 @@ The tools provided in this repository are as follows:
 | Name | Path | Type | Information |
 |:-----|:-----|:-----|:------------|
 | vgs0 | [./src/sdl2](./src/sdl2/) | Emulator | VGS-Zero emulator & debugger for PC (Linux, macOS) |
+| vgsasm | [./tools/vgsasm](./tools/vgsasm/) | CLI | Z80 Assembler |
 | bmp2chr | [./tools/bmp2chr](./tools/bmp2chr/) | CLI | Convert 256-color Bitmap file to [character-pattern format](#character-pattern-table) |
 | csv2bin | [./tools/csv2bin](./tools/csv2bin/) | CLI | [Tiled Map Editor](https://www.mapeditor.org) csv to binary format |
 | makepkg | [./tools/makepkg](./tools/makepkg/) | CLI | Generate [game.pkg](#gamepkg) |
@@ -401,6 +398,9 @@ Please refer to the following repository for initial projects when developing a 
 - VGS-Zero games can be written in Z80 assembly language or C.
   - Z80: [./example/01_hello-asm](./example/01_hello-asm)
   - C: [./example/01_hello](./example/01_hello)
+- If written in Z80:
+  - Recommended assembler: [vgsasm](./tools/vgsasm/)
+  - Any Z80-compatible assembler can be used.
 - If written in C:
   - [SDCC (Small Device C Compiler)](https://sdcc.sourceforge.net/) can be used as a cross-compiler
   - VGS-Zero supports SDCC **version 4.1.0 only**.

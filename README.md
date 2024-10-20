@@ -89,10 +89,7 @@ VGS-Zero ならゲームを開発するのに強い PC は必須ではありま�
 ```bash
 # ツールチェインのビルドに必要なミドルウェアをインストール
 sudo apt update
-sudo apt install build-essential libsdl2-dev libasound2 libasound2-dev snapd
-
-# z88dk をインストール
-sudo snap install z88dk --beta
+sudo apt install build-essential libsdl2-dev libasound2 libasound2-dev
 
 # VGS-Zeroのリポジトリをダウンロード
 git clone https://github.com/suzukiplan/vgszero
@@ -366,7 +363,6 @@ VGS-Zero のゲーム開発に必要なツールの情報を記します。
 | [Ubuntu Desktop](https://jp.ubuntu.com/download)| OS | この表で示すツールは全て Ubuntu でも動作可能 |
 | [Visual Studio Code](https://code.visualstudio.com/download) | コーディング | プログラムやMMLの記述 |
 | [SDCC](https://sdcc.sourceforge.net/) | C コンパイラ | C 言語でゲームを開発する場合に利用を推奨<br>（だたし動作できるのはバージョン 4.1.0 のみ）|
-| [Z88DK](https://z88dk.org/site/) の z80asm | アセンブラ | Z80 アセンブリ言語でゲームを開発する場合に利用を推奨 |
 | [aseprite](https://aseprite.org/) | 画像エディタ | 256 色 Bitmap 形式に対応した画像エディタ |
 | [Tiled Map Editor](https://www.mapeditor.org) | マップエディタ | 利用例: [example/08_map-scroll](./example/08_map-scroll/) |
 | [Jfxr](https://github.com/ttencate/jfxr) | 効果音エディタ | ブラウザ上でゲームの効果音を制作 |
@@ -383,6 +379,7 @@ VGS-Zero のゲーム開発に必要なツールの情報を記します。
 | Name | Path | Type | Information |
 |:-----|:-----|:-----|:------------|
 | vgs0 | [./src/sdl2](./src/sdl2/) | Emulator | VGS-Zero PC エミュレータ & デバッガ (Linux, macOS) |
+| vgsasm | [./tools/vgsasm](./tools/vgsasm) | CLI | Z80 アセンブラ |
 | bmp2chr | [./tools/bmp2chr](./tools/bmp2chr/) | CLI | 256 色 Bitmap ファイルを [キャラクタパターン形式](#character-pattern-table) に変換 |
 | csv2bin | [./tools/csv2bin](./tools/csv2bin/) | CLI | [Tiled Map Editor](https://www.mapeditor.org) の csv をバイナリ形式に変換 |
 | makepkg | [./tools/makepkg](./tools/makepkg/) | CLI | [game.pkg](#gamepkg) を生成 |
@@ -404,6 +401,9 @@ VGS-Zero のゲーム開発に必要なツールの情報を記します。
 - VGS-Zero のゲームは Z80 アセンブリ言語 または C言語 で記述することができます
   - Z80 アセンブリ言語: [./example/01_hello-asm](./example/01_hello-asm)
   - C言語: [./example/01_hello](./example/01_hello)
+- アセンブリ言語で記述する場合:
+  - 推奨アセンブラ: ツールチェインの [vgsasm](./tools/vgsasm/)
+  - Z80 対応のアセンブラであれば何でも使用できます
 - C言語で記述する場合:
   - クロスコンパイラに [SDCC (Small Device C Compiler)](https://sdcc.sourceforge.net/) が使用できます
   - VGS-Zero が対応している SDCC は **バージョン 4.1.0 のみ** です
