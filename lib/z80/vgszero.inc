@@ -22,6 +22,17 @@
 #define IO.eff.stop     0xF1
 #define IO.eff.check    0xF2
 
+// IN A, (IO.joypad)
+// BIT {below}, A
+#define PAD.up          7
+#define PAD.down        6
+#define PAD.left        5
+#define PAD.right       4
+#define PAD.start       3
+#define PAD.select      2
+#define PAD.a           1
+#define PAD.b           0
+
 struct OAM $9000 {
     y           ds.b    1
     x           ds.b    1
