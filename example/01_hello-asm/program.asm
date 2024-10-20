@@ -33,28 +33,28 @@ org $0000
 @CheckLeft
     ; 左カーソルが押されているかチェック（押されている場合は左スクロール）
     ld hl, VRAM.bgSX
-    bit 5, a
+    bit PAD.left, a
     jr nz, @CheckRight
     inc (hl)
     jr @CheckUp 
 
 @CheckRight
     ; 右カーソルが押されているかチェック（押されている場合は右スクロール）
-    bit 4, a
+    bit PAD.right, a
     jr nz, @CheckUp
     dec (hl)
 
 @CheckUp
     ; 上カーソルが押されているかチェック（押されている場合は上スクロール）
     ld hl, VRAM.bgSY
-    bit 7, a
+    bit PAD.up, a
     jr nz, @CheckDown
     inc (hl)
     jr @CheckEnd
 
 @CheckDown
     ; 下カーソルが押されているかチェック（押されている場合は下スクロール）
-    bit 6, a
+    bit PAD.down, a
     jr nz, @CheckEnd
     dec (hl)
 
