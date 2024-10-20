@@ -32,40 +32,37 @@ org $0000
 
 @CheckLeft
     ; 左カーソルが押されているかチェック（押されている場合は左スクロール）
-    ld hl, VRAM.bgSX
     bit PAD.left, a
     jr nz, @CheckRight
-    inc (hl)
+    inc (VRAM.bgSX)
     jr @CheckUp 
 
 @CheckRight
     ; 右カーソルが押されているかチェック（押されている場合は右スクロール）
     bit PAD.right, a
     jr nz, @CheckUp
-    dec (hl)
+    dec (VRAM.bgSX)
 
 @CheckUp
     ; 上カーソルが押されているかチェック（押されている場合は上スクロール）
-    ld hl, VRAM.bgSY
     bit PAD.up, a
     jr nz, @CheckDown
-    inc (hl)
+    inc (VRAM.bgSY)
     jr @CheckEnd
 
 @CheckDown
     ; 下カーソルが押されているかチェック（押されている場合は下スクロール）
     bit PAD.down, a
     jr nz, @CheckEnd
-    dec (hl)
+    dec (VRAM.bgSY)
 
 @CheckEnd
     jr @Loop
 
 ; VBLANKになるまで待機
 .wait_vblank
-    ld hl, VRAM.status
 @Loop
-    ld a, (hl)
+    ld a, (VRAM.status)
     and $80
     jr z, @Loop
     ret
