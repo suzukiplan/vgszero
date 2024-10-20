@@ -1,5 +1,22 @@
 #include "common.h"
 
+std::string oct2dec(const char* oct)
+{
+    int result = 0;
+    int len = 0;
+    while (*oct) {
+        if (isdigit(*oct) && *oct < '8') {
+            result <<= 3;
+            result += (*oct) - '0';
+            len++;
+        } else {
+            return "";
+        }
+        oct++;
+    }
+    return 0 < len ? std::to_string(result) : "";
+}
+
 std::string hex2dec(const char* hex)
 {
     int result = 0;

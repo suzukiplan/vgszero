@@ -20,6 +20,7 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
         // 1行4096byte以上なのでエラー扱い
         this->error = true;
         this->errmsg = "One line is 4096 bytes or more.";
+        return;
     } else {
         // 整形テキストを作成
         this->error = false;
@@ -54,6 +55,7 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
                 if (!*ed) {
                     this->error = true;
                     this->errmsg = "String literals are not closed with double quotes.";
+                    return;
                 } else {
                     ed--;
                     char slet[4096];
@@ -65,6 +67,89 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
                         cp[ptr++] = 0x20;
                     }
                     ptr++;
+                }
+            }
+        }
+
+        // 文字リテラルを一時的に 0x02 に置換（※シングルクオートも含めて）
+        std::vector<uint8_t> schrs;
+        cp = formed;
+        ptr = 0;
+        for (; cp[ptr]; ptr++) {
+            if ('\'' == cp[ptr]) {
+                if ('\\' == cp[ptr + 1]) {
+                    if (isdigit(cp[ptr + 2])) {
+                        // 8進数
+                        char* ep = &cp[ptr + 3];
+                        while (0 != *ep && '\'' != *ep) { ep++; }
+                        if (*ep) {
+                            *ep = 0;
+                            auto str = oct2dec(&cp[ptr + 2]);
+                            if (!str.empty()) {
+                                schrs.push_back(atoi(str.c_str()) & 0xFF);
+                                while (&cp[ptr] != ep) {
+                                    cp[ptr] = 0x02;
+                                    ptr++;
+                                }
+                                *ep = 0x02;
+                                ptr++;
+                            } else {
+                                *ep = '\'';
+                            }
+                        }
+                    } else if ('x' == cp[ptr + 2] || 'X' == cp[ptr + 2]) {
+                        // 16進数
+                        char* ep = &cp[ptr + 3];
+                        while (0 != *ep && '\'' != *ep) { ep++; }
+                        if (*ep) {
+                            *ep = 0;
+                            auto str = hex2dec(&cp[ptr + 3]);
+                            if (!str.empty()) {
+                                schrs.push_back(atoi(str.c_str()) & 0xFF);
+                                while (cp + ptr != ep) {
+                                    cp[ptr] = 0x02;
+                                    ptr++;
+                                }
+                                *ep = 0x02;
+                                ptr++;
+                            } else {
+                                *ep = '\'';
+                            }
+                        }
+                    } else if (0 != cp[ptr + 2] && '\'' == cp[ptr + 3]) {
+                        cp[ptr++] = 0x02;
+                        cp[ptr++] = 0x02;
+                        auto esc = cp[ptr];
+                        cp[ptr++] = 0x02;
+                        cp[ptr++] = 0x02;
+                        switch (tolower(esc)) {
+                            case 'a': schrs.push_back('\a'); break;
+                            case 'b': schrs.push_back('\b'); break;
+                            case 'f': schrs.push_back('\f'); break;
+                            case 'n': schrs.push_back('\n'); break;
+                            case 'r': schrs.push_back('\r'); break;
+                            case 't': schrs.push_back('\t'); break;
+                            case 'v': schrs.push_back('\v'); break;
+                            case '\\': schrs.push_back('\\'); break;
+                            case '\?': schrs.push_back('\?'); break;
+                            case '\'': schrs.push_back('\''); break;
+                            case '\"': schrs.push_back('\"'); break;
+                            default:
+                                this->error = true;
+                                this->errmsg = "Invalid escape sequence: \\";
+                                this->errmsg += esc;
+                                return;
+                        }
+                    }
+                } else if (0 != cp[ptr + 1]) {
+                    if ('\'' == cp[ptr + 2]) {
+                        // アスキーコード
+                        schrs.push_back(cp[ptr + 1]);
+                        cp[ptr] = 0x02;
+                        cp[ptr + 1] = 0x02;
+                        cp[ptr + 2] = 0x02;
+                        ptr += 2;
+                    }
                 }
             }
         }
@@ -97,6 +182,7 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
         char* ed;
         bool parseEnd = false;
         int sletIndex = 0;
+        int schrsIndex = 0;
         while (!parseEnd && !this->error) {
             switch (*cp) {
                 case '\0':
@@ -192,6 +278,13 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
                     cp = strchr(cp + 1, '\"') + 1;
                     break;
                 }
+                case 0x02: {
+                    char num[32];
+                    sprintf(num, "%d", (int)schrs[schrsIndex++]);
+                    this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Numeric, num));
+                    while (0x02 == *cp) { cp++; }
+                    break;
+                }
                 default: {
                     ed = cp + 1;
                     while (*ed) {
@@ -203,6 +296,7 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
                             '{' == *ed ||
                             '}' == *ed ||
                             '\"' == *ed ||
+                            0x02 == *ed ||
                             '+' == *ed ||
                             '-' == *ed ||
                             '*' == *ed ||

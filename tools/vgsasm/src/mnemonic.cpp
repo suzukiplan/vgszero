@@ -319,6 +319,12 @@ static void mnemonic_syntax_check_exec(std::vector<LineData*>* lines)
             continue;
         }
         if (line->token[0].first != TokenType::Mnemonic) {
+            if (line->token[0].first != TokenType::Binary &&
+                line->token[0].first != TokenType::Label &&
+                line->token[0].first != TokenType::LabelAt) {
+                line->error = true;
+                line->errmsg = "Unexpected symbol: " + line->token[0].second;
+            }
             setpc(prev, line);
             prev = line;
             continue;

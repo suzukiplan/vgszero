@@ -57,6 +57,20 @@ vgsasm [-b size_of_binary] /path/to/source.asm
 
 Incorporates a binary file as code at the current program counter location.
 
+You can specify the offset at which to start reading by `, number` after the filename.
+
+```z80
+#binary "/path/to/binary.bin", 123
+#binary "/path/to/binary.bin", 0x2000
+```
+
+You can specify the size at which to start reading by `, number` after the offset.
+
+```z80
+#binary "/path/to/binary.bin", 0, 1024
+#binary "/path/to/binary.bin", 256, 0x2000 
+```
+
 ## `#define`
 
 ```

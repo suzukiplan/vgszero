@@ -15,6 +15,33 @@ void parse_binary(LineData* line)
             it->first = TokenType::Delete;
             auto path = it->second.c_str();
 
+            int offset = 0;
+            int size = 0;
+            if (it + 1 != line->token.end() && (it + 1)->first == TokenType::Split &&
+                it + 2 != line->token.end() && (it + 2)->first == TokenType::Numeric) {
+                offset = atoi((it + 2)->second.c_str());
+                if (offset < 0) {
+                    line->error = true;
+                    line->errmsg = "#binary invalid offset: " + std::to_string(offset);
+                    return;
+                }
+                (it + 1)->first = TokenType::Delete;
+                (it + 2)->first = TokenType::Delete;
+                it += 2;
+                if (it + 1 != line->token.end() && (it + 1)->first == TokenType::Split &&
+                    it + 2 != line->token.end() && (it + 2)->first == TokenType::Numeric) {
+                    size = atoi((it + 2)->second.c_str());
+                    if (size < 1) {
+                        line->error = true;
+                        line->errmsg = "#binary invalid size: " + std::to_string(size);
+                        return;
+                    }
+                    (it + 1)->first = TokenType::Delete;
+                    (it + 2)->first = TokenType::Delete;
+                    it += 2;
+                }
+            }
+
             char basePath[4096];
             if ('/' != path[0]) {
                 strcpy(basePath, line->path.c_str());
@@ -37,9 +64,17 @@ void parse_binary(LineData* line)
                 return;
             }
 
-            fseek(fp, 0, SEEK_END);
-            auto size = ftell(fp);
-            fseek(fp, 0, SEEK_SET);
+            if (0 == size) {
+                fseek(fp, 0, SEEK_END);
+                size = ftell(fp);
+            }
+
+            if (fseek(fp, offset, SEEK_SET) < 0) {
+                fclose(fp);
+                line->error = true;
+                line->errmsg = "#binary seek failed: " + std::to_string(offset);
+                return;
+            }
 
             if (size < 0) {
                 line->error = true;

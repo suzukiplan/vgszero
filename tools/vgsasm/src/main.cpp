@@ -146,7 +146,6 @@ static int assemble(std::vector<LineData*> lines)
             lines.insert(line + 1, newLine);
             line = lines.begin();
         }
-        parse_binary(*line);        // Other -> Binary
         parse_mneoimonic(*line);    // Other -> Mnemonic
         parse_operand(*line);       // Other -> Operand
         parse_struct(*line);        // Other -> Struct
@@ -156,6 +155,7 @@ static int assemble(std::vector<LineData*> lines)
         parse_numeric_plus(*line);  // Split, Plus, Numeric -> Split, Numeric
         parse_sizeof(*line);        // Other -> Sizeof
         parse_offset(*line);        // Other -> Offset
+        parse_binary(*line);        // Other -> Binary
         error = check_error(*line) ? true : error;
     }
     if (error) {
