@@ -1,6 +1,6 @@
 # Hello, World
 
-[01_hello](../01_hello/) をアセンブリ言語のみで実装したものです。
+[01_hello](../01_hello/) を  [アセンブリ言語](../../tools/vgsasm/) で実装したものです。
 
 ![preview](preview.png)
 
@@ -10,8 +10,6 @@
 
 - GNU make
 - clang (for building the depended tools)
-- [z88dk](https://z88dk.org/site/)
-  - require `z80asm` command in this example
 
 ### Build
 
