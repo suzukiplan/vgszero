@@ -1,3 +1,27 @@
+#define IO.joypad       0xA0
+#define IO.bank0        0xB0
+#define IO.bank1        0xB1
+#define IO.bank2        0xB2
+#define IO.bank3        0xB3
+#define IO.ram.bank     0xB4
+#define IO.ram.dup      0xB5
+#define IO.dma          0xC0
+#define IO.bank         0xC1
+#define IO.memset       0xC2
+#define IO.memcpy       0xC3
+#define IO.collision    0xC4
+#define IO.rand8        0xC9
+#define IO.rand16       0xCA
+#define IO.save         0xDA
+#define IO.bgm.play     0xE0
+#define IO.bgm.ctrl     0xE1
+#define BGM.pause       0x00
+#define BGM.resume      0x01
+#define BGM.fadeout     0x02
+#define IO.eff.play     0xF0
+#define IO.eff.stop     0xF1
+#define IO.eff.check    0xF2
+
 struct OAM $9000 {
     y           ds.b    1
     x           ds.b    1

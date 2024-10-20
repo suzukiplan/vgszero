@@ -86,7 +86,6 @@ void replace_define(LineData* line)
         for (auto it = line->token.begin(); it != line->token.end(); it++) {
             auto d = defineTable.find(it->second);
             if (d != defineTable.end()) {
-                addNameTable(it->second, line);
                 line->token.erase(it);
                 line->token.insert(it, d->second.begin(), d->second.end());
                 replace = true;
