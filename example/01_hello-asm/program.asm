@@ -3,6 +3,9 @@
 org $0000
 
 .main
+    ; スタックポインタを初期化
+    ld sp, 0
+
     ; VBLANKを待機
     call wait_vblank
 
