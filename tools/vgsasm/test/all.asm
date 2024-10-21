@@ -1022,6 +1022,9 @@ Transfer_Load_Store:
     LD ($1234), IX
     LD ($1234), IY
 
+@Store_immediate_to_addr
+    LD ($1234), $56
+
 @Load_immediate
     LD A, -128
     LD B, -1

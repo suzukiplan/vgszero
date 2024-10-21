@@ -940,646 +940,650 @@
                     ld        ($1234),sp                    ;[073e] ed 73 34 12
                     ld        ($1234),ix                    ;[0742] dd 22 34 12
                     ld        ($1234),iy                    ;[0746] fd 22 34 12
-                    ld        a,$80                         ;[074a] 3e 80
-                    ld        b,$ff                         ;[074c] 06 ff
-                    ld        c,$00                         ;[074e] 0e 00
-                    ld        d,$01                         ;[0750] 16 01
-                    ld        e,$7f                         ;[0752] 1e 7f
-                    ld        h,$80                         ;[0754] 26 80
-                    ld        l,$ff                         ;[0756] 2e ff
-                    ld        ixh,$11                       ;[0758] dd 26 11
-                    ld        ixl,$22                       ;[075b] dd 2e 22
-                    ld        iyh,$88                       ;[075e] fd 26 88
-                    ld        iyl,$99                       ;[0761] fd 2e 99
-                    ld        bc,$8000                      ;[0764] 01 00 80
-                    ld        de,$ffff                      ;[0767] 11 ff ff
-                    ld        hl,$1234                      ;[076a] 21 34 12
-                    ld        ix,$7fff                      ;[076d] dd 21 ff 7f
-                    ld        iy,$ffff                      ;[0771] fd 21 ff ff
-                    ld        bc,$0786                      ;[0775] 01 86 07
-                    ld        de,$05fa                      ;[0778] 11 fa 05
-                    ld        hl,$0009                      ;[077b] 21 09 00
-                    ld        ix,$074a                      ;[077e] dd 21 4a 07
-                    ld        iy,$0000                      ;[0782] fd 21 00 00
-                    nop                                     ;[0786] 00
-                    ld        a,($1234)                     ;[0787] 3a 34 12
-                    ld        bc,($5678)                    ;[078a] ed 4b 78 56
-                    ld        de,($9abc)                    ;[078e] ed 5b bc 9a
-                    ld        hl,($def0)                    ;[0792] 2a f0 de
-                    ld        sp,($2525)                    ;[0795] ed 7b 25 25
-                    ld        ix,($0831)                    ;[0799] dd 2a 31 08
-                    ld        iy,($8931)                    ;[079d] fd 2a 31 89
-                    ld        a,($008c)                     ;[07a1] 3a 8c 00
-                    ld        bc,($07a1)                    ;[07a4] ed 4b a1 07
-                    ld        de,($07bb)                    ;[07a8] ed 5b bb 07
-                    ld        hl,($0786)                    ;[07ac] 2a 86 07
-                    ld        sp,($0775)                    ;[07af] ed 7b 75 07
-                    ld        ix,($06f9)                    ;[07b3] dd 2a f9 06
-                    ld        iy,($06d9)                    ;[07b7] fd 2a d9 06
-                    nop                                     ;[07bb] 00
-                    ld        a,(bc)                        ;[07bc] 0a
-                    ld        a,(de)                        ;[07bd] 1a
-                    ld        (bc),a                        ;[07be] 02
-                    ld        (de),a                        ;[07bf] 12
-                    ld        a,(ix-$80)                    ;[07c0] dd 7e 80
-                    ld        b,(ix-$01)                    ;[07c3] dd 46 ff
-                    ld        c,(ix+$00)                    ;[07c6] dd 4e 00
-                    ld        d,(ix+$00)                    ;[07c9] dd 56 00
-                    ld        e,(ix+$01)                    ;[07cc] dd 5e 01
-                    ld        h,(ix+$7f)                    ;[07cf] dd 66 7f
-                    ld        l,(ix+$40)                    ;[07d2] dd 6e 40
-                    ld        a,(iy-$80)                    ;[07d5] fd 7e 80
-                    ld        b,(iy-$01)                    ;[07d8] fd 46 ff
-                    ld        c,(iy+$00)                    ;[07db] fd 4e 00
-                    ld        d,(iy+$00)                    ;[07de] fd 56 00
-                    ld        e,(iy+$01)                    ;[07e1] fd 5e 01
-                    ld        h,(iy+$7f)                    ;[07e4] fd 66 7f
-                    ld        l,(iy+$40)                    ;[07e7] fd 6e 40
-                    ld        (ix-$80),a                    ;[07ea] dd 77 80
-                    ld        (ix-$01),b                    ;[07ed] dd 70 ff
-                    ld        (ix+$00),c                    ;[07f0] dd 71 00
-                    ld        (ix+$00),d                    ;[07f3] dd 72 00
-                    ld        (ix+$01),e                    ;[07f6] dd 73 01
-                    ld        (ix+$7f),h                    ;[07f9] dd 74 7f
-                    ld        (ix+$40),l                    ;[07fc] dd 75 40
-                    ld        (iy-$80),a                    ;[07ff] fd 77 80
-                    ld        (iy-$01),b                    ;[0802] fd 70 ff
-                    ld        (iy+$00),c                    ;[0805] fd 71 00
-                    ld        (iy+$00),d                    ;[0808] fd 72 00
-                    ld        (iy+$01),e                    ;[080b] fd 73 01
-                    ld        (iy+$7f),h                    ;[080e] fd 74 7f
-                    ld        (iy+$40),l                    ;[0811] fd 75 40
-                    ld        (ix-$80),$80                  ;[0814] dd 36 80 80
-                    ld        (ix-$80),$ff                  ;[0818] dd 36 80 ff
-                    ld        (ix-$80),$00                  ;[081c] dd 36 80 00
-                    ld        (iy+$7f),$01                  ;[0820] fd 36 7f 01
-                    ld        (iy+$7f),$7f                  ;[0824] fd 36 7f 7f
-                    ld        (iy+$7f),$ff                  ;[0828] fd 36 7f ff
-                    ld        (ix+$00),$80                  ;[082c] dd 36 00 80
-                    ld        (ix+$00),$ff                  ;[0830] dd 36 00 ff
-                    ld        (ix+$00),$00                  ;[0834] dd 36 00 00
-                    ld        (iy+$00),$01                  ;[0838] fd 36 00 01
-                    ld        (iy+$00),$7f                  ;[083c] fd 36 00 7f
-                    ld        (iy+$00),$ff                  ;[0840] fd 36 00 ff
-                    jp        $0000                         ;[0844] c3 00 00
-                    jp        $1234                         ;[0847] c3 34 12
-                    jp        $ffff                         ;[084a] c3 ff ff
-                    jp        $0844                         ;[084d] c3 44 08
-                    jp        $084d                         ;[0850] c3 4d 08
-                    jp        $0009                         ;[0853] c3 09 00
-                    jr        $07d8                         ;[0856] 18 80
-                    jr        $08d9                         ;[0858] 18 7f
-                    jr        $089c                         ;[085a] 18 40
-                    jr        $0856                         ;[085c] 18 f8
-                    jr        $0844                         ;[085e] 18 e4
-                    jr        $07ea                         ;[0860] 18 88
-                    jp        z,$1234                       ;[0862] ca 34 12
-                    jp        nz,$1234                      ;[0865] c2 34 12
-                    jp        c,$1234                       ;[0868] da 34 12
-                    jp        nc,$1234                      ;[086b] d2 34 12
-                    jp        pe,$1234                      ;[086e] ea 34 12
-                    jp        po,$1234                      ;[0871] e2 34 12
-                    jp        p,$1234                       ;[0874] f2 34 12
-                    jp        m,$1234                       ;[0877] fa 34 12
-                    jp        z,$0862                       ;[087a] ca 62 08
-                    jp        nz,$0844                      ;[087d] c2 44 08
-                    jp        c,$0844                       ;[0880] da 44 08
-                    jp        nc,$0000                      ;[0883] d2 00 00
-                    jp        pe,$0009                      ;[0886] ea 09 00
-                    jp        po,$0844                      ;[0889] e2 44 08
-                    jp        p,$085c                       ;[088c] f2 5c 08
-                    jp        m,$0856                       ;[088f] fa 56 08
-                    jr        z,$0814                       ;[0892] 28 80
-                    jr        nz,$0895                      ;[0894] 20 ff
-                    jr        c,$0899                       ;[0896] 38 01
-                    jr        nc,$0919                      ;[0898] 30 7f
-                    jr        z,$0862                       ;[089a] 28 c6
-                    jr        nz,$0844                      ;[089c] 20 a6
-                    jr        c,$0844                       ;[089e] 38 a4
-                    jr        nc,$089a                      ;[08a0] 30 f8
-                    jp        z,$1234                       ;[08a2] ca 34 12
-                    jp        nz,$1234                      ;[08a5] c2 34 12
-                    jp        c,$1234                       ;[08a8] da 34 12
-                    jp        nc,$1234                      ;[08ab] d2 34 12
-                    jp        pe,$1234                      ;[08ae] ea 34 12
-                    jp        po,$1234                      ;[08b1] e2 34 12
-                    jp        p,$1234                       ;[08b4] f2 34 12
-                    jp        m,$1234                       ;[08b7] fa 34 12
-                    jp        m,$1234                       ;[08ba] fa 34 12
-                    djnz      $083f                         ;[08bd] 10 80
-                    djnz      $08c0                         ;[08bf] 10 ff
-                    djnz      $08c4                         ;[08c1] 10 01
-                    djnz      $0944                         ;[08c3] 10 7f
-                    djnz      $0856                         ;[08c5] 10 8f
-                    djnz      $08bd                         ;[08c7] 10 f4
-                    djnz      $08bd                         ;[08c9] 10 f2
-                    push      bc                            ;[08cb] c5
-                    ret                                     ;[08cc] c9
+                    push      af                            ;[074a] f5
+                    ld        a,$56                         ;[074b] 3e 56
+                    ld        ($1234),a                     ;[074d] 32 34 12
+                    pop       af                            ;[0750] f1
+                    ld        a,$80                         ;[0751] 3e 80
+                    ld        b,$ff                         ;[0753] 06 ff
+                    ld        c,$00                         ;[0755] 0e 00
+                    ld        d,$01                         ;[0757] 16 01
+                    ld        e,$7f                         ;[0759] 1e 7f
+                    ld        h,$80                         ;[075b] 26 80
+                    ld        l,$ff                         ;[075d] 2e ff
+                    ld        ixh,$11                       ;[075f] dd 26 11
+                    ld        ixl,$22                       ;[0762] dd 2e 22
+                    ld        iyh,$88                       ;[0765] fd 26 88
+                    ld        iyl,$99                       ;[0768] fd 2e 99
+                    ld        bc,$8000                      ;[076b] 01 00 80
+                    ld        de,$ffff                      ;[076e] 11 ff ff
+                    ld        hl,$1234                      ;[0771] 21 34 12
+                    ld        ix,$7fff                      ;[0774] dd 21 ff 7f
+                    ld        iy,$ffff                      ;[0778] fd 21 ff ff
+                    ld        bc,$078d                      ;[077c] 01 8d 07
+                    ld        de,$05fa                      ;[077f] 11 fa 05
+                    ld        hl,$0009                      ;[0782] 21 09 00
+                    ld        ix,$0751                      ;[0785] dd 21 51 07
+                    ld        iy,$0000                      ;[0789] fd 21 00 00
+                    nop                                     ;[078d] 00
+                    ld        a,($1234)                     ;[078e] 3a 34 12
+                    ld        bc,($5678)                    ;[0791] ed 4b 78 56
+                    ld        de,($9abc)                    ;[0795] ed 5b bc 9a
+                    ld        hl,($def0)                    ;[0799] 2a f0 de
+                    ld        sp,($2525)                    ;[079c] ed 7b 25 25
+                    ld        ix,($0831)                    ;[07a0] dd 2a 31 08
+                    ld        iy,($8931)                    ;[07a4] fd 2a 31 89
+                    ld        a,($008c)                     ;[07a8] 3a 8c 00
+                    ld        bc,($07a8)                    ;[07ab] ed 4b a8 07
+                    ld        de,($07c2)                    ;[07af] ed 5b c2 07
+                    ld        hl,($078d)                    ;[07b3] 2a 8d 07
+                    ld        sp,($077c)                    ;[07b6] ed 7b 7c 07
+                    ld        ix,($06f9)                    ;[07ba] dd 2a f9 06
+                    ld        iy,($06d9)                    ;[07be] fd 2a d9 06
+                    nop                                     ;[07c2] 00
+                    ld        a,(bc)                        ;[07c3] 0a
+                    ld        a,(de)                        ;[07c4] 1a
+                    ld        (bc),a                        ;[07c5] 02
+                    ld        (de),a                        ;[07c6] 12
+                    ld        a,(ix-$80)                    ;[07c7] dd 7e 80
+                    ld        b,(ix-$01)                    ;[07ca] dd 46 ff
+                    ld        c,(ix+$00)                    ;[07cd] dd 4e 00
+                    ld        d,(ix+$00)                    ;[07d0] dd 56 00
+                    ld        e,(ix+$01)                    ;[07d3] dd 5e 01
+                    ld        h,(ix+$7f)                    ;[07d6] dd 66 7f
+                    ld        l,(ix+$40)                    ;[07d9] dd 6e 40
+                    ld        a,(iy-$80)                    ;[07dc] fd 7e 80
+                    ld        b,(iy-$01)                    ;[07df] fd 46 ff
+                    ld        c,(iy+$00)                    ;[07e2] fd 4e 00
+                    ld        d,(iy+$00)                    ;[07e5] fd 56 00
+                    ld        e,(iy+$01)                    ;[07e8] fd 5e 01
+                    ld        h,(iy+$7f)                    ;[07eb] fd 66 7f
+                    ld        l,(iy+$40)                    ;[07ee] fd 6e 40
+                    ld        (ix-$80),a                    ;[07f1] dd 77 80
+                    ld        (ix-$01),b                    ;[07f4] dd 70 ff
+                    ld        (ix+$00),c                    ;[07f7] dd 71 00
+                    ld        (ix+$00),d                    ;[07fa] dd 72 00
+                    ld        (ix+$01),e                    ;[07fd] dd 73 01
+                    ld        (ix+$7f),h                    ;[0800] dd 74 7f
+                    ld        (ix+$40),l                    ;[0803] dd 75 40
+                    ld        (iy-$80),a                    ;[0806] fd 77 80
+                    ld        (iy-$01),b                    ;[0809] fd 70 ff
+                    ld        (iy+$00),c                    ;[080c] fd 71 00
+                    ld        (iy+$00),d                    ;[080f] fd 72 00
+                    ld        (iy+$01),e                    ;[0812] fd 73 01
+                    ld        (iy+$7f),h                    ;[0815] fd 74 7f
+                    ld        (iy+$40),l                    ;[0818] fd 75 40
+                    ld        (ix-$80),$80                  ;[081b] dd 36 80 80
+                    ld        (ix-$80),$ff                  ;[081f] dd 36 80 ff
+                    ld        (ix-$80),$00                  ;[0823] dd 36 80 00
+                    ld        (iy+$7f),$01                  ;[0827] fd 36 7f 01
+                    ld        (iy+$7f),$7f                  ;[082b] fd 36 7f 7f
+                    ld        (iy+$7f),$ff                  ;[082f] fd 36 7f ff
+                    ld        (ix+$00),$80                  ;[0833] dd 36 00 80
+                    ld        (ix+$00),$ff                  ;[0837] dd 36 00 ff
+                    ld        (ix+$00),$00                  ;[083b] dd 36 00 00
+                    ld        (iy+$00),$01                  ;[083f] fd 36 00 01
+                    ld        (iy+$00),$7f                  ;[0843] fd 36 00 7f
+                    ld        (iy+$00),$ff                  ;[0847] fd 36 00 ff
+                    jp        $0000                         ;[084b] c3 00 00
+                    jp        $1234                         ;[084e] c3 34 12
+                    jp        $ffff                         ;[0851] c3 ff ff
+                    jp        $084b                         ;[0854] c3 4b 08
+                    jp        $0854                         ;[0857] c3 54 08
+                    jp        $0009                         ;[085a] c3 09 00
+                    jr        $07df                         ;[085d] 18 80
+                    jr        $08e0                         ;[085f] 18 7f
+                    jr        $08a3                         ;[0861] 18 40
+                    jr        $085d                         ;[0863] 18 f8
+                    jr        $084b                         ;[0865] 18 e4
+                    jr        $07f1                         ;[0867] 18 88
+                    jp        z,$1234                       ;[0869] ca 34 12
+                    jp        nz,$1234                      ;[086c] c2 34 12
+                    jp        c,$1234                       ;[086f] da 34 12
+                    jp        nc,$1234                      ;[0872] d2 34 12
+                    jp        pe,$1234                      ;[0875] ea 34 12
+                    jp        po,$1234                      ;[0878] e2 34 12
+                    jp        p,$1234                       ;[087b] f2 34 12
+                    jp        m,$1234                       ;[087e] fa 34 12
+                    jp        z,$0869                       ;[0881] ca 69 08
+                    jp        nz,$084b                      ;[0884] c2 4b 08
+                    jp        c,$084b                       ;[0887] da 4b 08
+                    jp        nc,$0000                      ;[088a] d2 00 00
+                    jp        pe,$0009                      ;[088d] ea 09 00
+                    jp        po,$084b                      ;[0890] e2 4b 08
+                    jp        p,$0863                       ;[0893] f2 63 08
+                    jp        m,$085d                       ;[0896] fa 5d 08
+                    jr        z,$081b                       ;[0899] 28 80
+                    jr        nz,$089c                      ;[089b] 20 ff
+                    jr        c,$08a0                       ;[089d] 38 01
+                    jr        nc,$0920                      ;[089f] 30 7f
+                    jr        z,$0869                       ;[08a1] 28 c6
+                    jr        nz,$084b                      ;[08a3] 20 a6
+                    jr        c,$084b                       ;[08a5] 38 a4
+                    jr        nc,$08a1                      ;[08a7] 30 f8
+                    jp        z,$1234                       ;[08a9] ca 34 12
+                    jp        nz,$1234                      ;[08ac] c2 34 12
+                    jp        c,$1234                       ;[08af] da 34 12
+                    jp        nc,$1234                      ;[08b2] d2 34 12
+                    jp        pe,$1234                      ;[08b5] ea 34 12
+                    jp        po,$1234                      ;[08b8] e2 34 12
+                    jp        p,$1234                       ;[08bb] f2 34 12
+                    jp        m,$1234                       ;[08be] fa 34 12
+                    jp        m,$1234                       ;[08c1] fa 34 12
+                    djnz      $0846                         ;[08c4] 10 80
+                    djnz      $08c7                         ;[08c6] 10 ff
+                    djnz      $08cb                         ;[08c8] 10 01
+                    djnz      $094b                         ;[08ca] 10 7f
+                    djnz      $085d                         ;[08cc] 10 8f
+                    djnz      $08c4                         ;[08ce] 10 f4
+                    djnz      $08c4                         ;[08d0] 10 f2
+                    push      bc                            ;[08d2] c5
+                    ret                                     ;[08d3] c9
 
-                    push      de                            ;[08cd] d5
-                    ret                                     ;[08ce] c9
-
-                    jp        (hl)                          ;[08cf] e9
-                    jp        (ix)                          ;[08d0] dd e9
-                    jp        (iy)                          ;[08d2] fd e9
-                    push      bc                            ;[08d4] c5
+                    push      de                            ;[08d4] d5
                     ret                                     ;[08d5] c9
 
-                    push      de                            ;[08d6] d5
-                    ret                                     ;[08d7] c9
+                    jp        (hl)                          ;[08d6] e9
+                    jp        (ix)                          ;[08d7] dd e9
+                    jp        (iy)                          ;[08d9] fd e9
+                    push      bc                            ;[08db] c5
+                    ret                                     ;[08dc] c9
 
-                    jp        (hl)                          ;[08d8] e9
-                    jp        (ix)                          ;[08d9] dd e9
-                    jp        (iy)                          ;[08db] fd e9
-                    call      $0000                         ;[08dd] cd 00 00
-                    call      $1234                         ;[08e0] cd 34 12
-                    call      $ffff                         ;[08e3] cd ff ff
-                    call      $08dd                         ;[08e6] cd dd 08
-                    call      $0000                         ;[08e9] cd 00 00
-                    call      $0009                         ;[08ec] cd 09 00
-                    call      nz,$1234                      ;[08ef] c4 34 12
-                    call      z,$1234                       ;[08f2] cc 34 12
-                    call      nc,$1234                      ;[08f5] d4 34 12
-                    call      c,$1234                       ;[08f8] dc 34 12
-                    call      po,$1234                      ;[08fb] e4 34 12
-                    call      pe,$1234                      ;[08fe] ec 34 12
-                    call      p,$1234                       ;[0901] f4 34 12
-                    call      m,$1234                       ;[0904] fc 34 12
-                    call      nz,$0907                      ;[0907] c4 07 09
-                    call      z,$08ef                       ;[090a] cc ef 08
-                    call      nc,$08dd                      ;[090d] d4 dd 08
-                    call      c,$08dd                       ;[0910] dc dd 08
-                    call      po,$0009                      ;[0913] e4 09 00
-                    call      pe,$0000                      ;[0916] ec 00 00
-                    call      p,$0009                       ;[0919] f4 09 00
-                    call      m,$0000                       ;[091c] fc 00 00
-                    ret                                     ;[091f] c9
+                    push      de                            ;[08dd] d5
+                    ret                                     ;[08de] c9
 
-                    reti                                    ;[0920] ed 4d
+                    jp        (hl)                          ;[08df] e9
+                    jp        (ix)                          ;[08e0] dd e9
+                    jp        (iy)                          ;[08e2] fd e9
+                    call      $0000                         ;[08e4] cd 00 00
+                    call      $1234                         ;[08e7] cd 34 12
+                    call      $ffff                         ;[08ea] cd ff ff
+                    call      $08e4                         ;[08ed] cd e4 08
+                    call      $0000                         ;[08f0] cd 00 00
+                    call      $0009                         ;[08f3] cd 09 00
+                    call      nz,$1234                      ;[08f6] c4 34 12
+                    call      z,$1234                       ;[08f9] cc 34 12
+                    call      nc,$1234                      ;[08fc] d4 34 12
+                    call      c,$1234                       ;[08ff] dc 34 12
+                    call      po,$1234                      ;[0902] e4 34 12
+                    call      pe,$1234                      ;[0905] ec 34 12
+                    call      p,$1234                       ;[0908] f4 34 12
+                    call      m,$1234                       ;[090b] fc 34 12
+                    call      nz,$090e                      ;[090e] c4 0e 09
+                    call      z,$08f6                       ;[0911] cc f6 08
+                    call      nc,$08e4                      ;[0914] d4 e4 08
+                    call      c,$08e4                       ;[0917] dc e4 08
+                    call      po,$0009                      ;[091a] e4 09 00
+                    call      pe,$0000                      ;[091d] ec 00 00
+                    call      p,$0009                       ;[0920] f4 09 00
+                    call      m,$0000                       ;[0923] fc 00 00
+                    ret                                     ;[0926] c9
 
-                    retn                                    ;[0922] ed 45
+                    reti                                    ;[0927] ed 4d
 
-                    ret       nz                            ;[0924] c0
-                    ret       z                             ;[0925] c8
-                    ret       nc                            ;[0926] d0
-                    ret       c                             ;[0927] d8
-                    ret       po                            ;[0928] e0
-                    ret       pe                            ;[0929] e8
-                    ret       p                             ;[092a] f0
-                    ret       m                             ;[092b] f8
-                    rst       $00                           ;[092c] c7
-                    rst       $00                           ;[092d] c7
-                    rst       $00                           ;[092e] c7
-                    rst       $08                           ;[092f] cf
-                    rst       $08                           ;[0930] cf
-                    rst       $08                           ;[0931] cf
-                    rst       $10                           ;[0932] d7
-                    rst       $10                           ;[0933] d7
-                    rst       $10                           ;[0934] d7
-                    rst       $18                           ;[0935] df
-                    rst       $18                           ;[0936] df
-                    rst       $18                           ;[0937] df
-                    rst       $20                           ;[0938] e7
-                    rst       $20                           ;[0939] e7
-                    rst       $20                           ;[093a] e7
-                    rst       $28                           ;[093b] ef
-                    rst       $28                           ;[093c] ef
-                    rst       $28                           ;[093d] ef
-                    rst       $30                           ;[093e] f7
-                    rst       $30                           ;[093f] f7
-                    rst       $30                           ;[0940] f7
-                    rst       $38                           ;[0941] ff
-                    rst       $38                           ;[0942] ff
-                    rst       $38                           ;[0943] ff
-                    ld        c,b                           ;[0944] 48
-                    ld        h,l                           ;[0945] 65
-                    ld        l,h                           ;[0946] 6c
-                    ld        l,h                           ;[0947] 6c
-                    ld        l,a                           ;[0948] 6f
-                    inc       l                             ;[0949] 2c
-                    ld        d,a                           ;[094a] 57
-                    ld        l,a                           ;[094b] 6f
-                    ld        (hl),d                        ;[094c] 72
+                    retn                                    ;[0929] ed 45
+
+                    ret       nz                            ;[092b] c0
+                    ret       z                             ;[092c] c8
+                    ret       nc                            ;[092d] d0
+                    ret       c                             ;[092e] d8
+                    ret       po                            ;[092f] e0
+                    ret       pe                            ;[0930] e8
+                    ret       p                             ;[0931] f0
+                    ret       m                             ;[0932] f8
+                    rst       $00                           ;[0933] c7
+                    rst       $00                           ;[0934] c7
+                    rst       $00                           ;[0935] c7
+                    rst       $08                           ;[0936] cf
+                    rst       $08                           ;[0937] cf
+                    rst       $08                           ;[0938] cf
+                    rst       $10                           ;[0939] d7
+                    rst       $10                           ;[093a] d7
+                    rst       $10                           ;[093b] d7
+                    rst       $18                           ;[093c] df
+                    rst       $18                           ;[093d] df
+                    rst       $18                           ;[093e] df
+                    rst       $20                           ;[093f] e7
+                    rst       $20                           ;[0940] e7
+                    rst       $20                           ;[0941] e7
+                    rst       $28                           ;[0942] ef
+                    rst       $28                           ;[0943] ef
+                    rst       $28                           ;[0944] ef
+                    rst       $30                           ;[0945] f7
+                    rst       $30                           ;[0946] f7
+                    rst       $30                           ;[0947] f7
+                    rst       $38                           ;[0948] ff
+                    rst       $38                           ;[0949] ff
+                    rst       $38                           ;[094a] ff
+                    ld        c,b                           ;[094b] 48
+                    ld        h,l                           ;[094c] 65
                     ld        l,h                           ;[094d] 6c
-                    ld        h,h                           ;[094e] 64
-                    ld        hl,$8000                      ;[094f] 21 00 80
-                    rst       $38                           ;[0952] ff
-                    nop                                     ;[0953] 00
-                    ld        bc,$ff7f                      ;[0954] 01 7f ff
-                    nop                                     ;[0957] 00
-                    djnz      $097a                         ;[0958] 10 20
-                    jr        nc,$099c                      ;[095a] 30 40
-                    ld        d,b                           ;[095c] 50
-                    ld        h,b                           ;[095d] 60
-                    ld        (hl),b                        ;[095e] 70
-                    add       b                             ;[095f] 80
-                    sub       b                             ;[0960] 90
-                    and       b                             ;[0961] a0
-                    or        b                             ;[0962] b0
-                    ret       nz                            ;[0963] c0
-                    ret       nc                            ;[0964] d0
-                    ret       po                            ;[0965] e0
-                    ret       p                             ;[0966] f0
-                    ld        c,b                           ;[0967] 48
-                    nop                                     ;[0968] 00
-                    ld        h,l                           ;[0969] 65
-                    nop                                     ;[096a] 00
-                    ld        l,h                           ;[096b] 6c
-                    nop                                     ;[096c] 00
-                    ld        l,h                           ;[096d] 6c
-                    nop                                     ;[096e] 00
-                    ld        l,a                           ;[096f] 6f
-                    nop                                     ;[0970] 00
-                    inc       l                             ;[0971] 2c
-                    nop                                     ;[0972] 00
-                    ld        d,a                           ;[0973] 57
-                    nop                                     ;[0974] 00
-                    ld        l,a                           ;[0975] 6f
-                    nop                                     ;[0976] 00
-                    ld        (hl),d                        ;[0977] 72
-                    nop                                     ;[0978] 00
-                    ld        l,h                           ;[0979] 6c
-                    nop                                     ;[097a] 00
-                    ld        h,h                           ;[097b] 64
-                    nop                                     ;[097c] 00
-                    ld        hl,$0000                      ;[097d] 21 00 00
-                    nop                                     ;[0980] 00
+                    ld        l,h                           ;[094e] 6c
+                    ld        l,a                           ;[094f] 6f
+                    inc       l                             ;[0950] 2c
+                    ld        d,a                           ;[0951] 57
+                    ld        l,a                           ;[0952] 6f
+                    ld        (hl),d                        ;[0953] 72
+                    ld        l,h                           ;[0954] 6c
+                    ld        h,h                           ;[0955] 64
+                    ld        hl,$8000                      ;[0956] 21 00 80
+                    rst       $38                           ;[0959] ff
+                    nop                                     ;[095a] 00
+                    ld        bc,$ff7f                      ;[095b] 01 7f ff
+                    nop                                     ;[095e] 00
+                    djnz      $0981                         ;[095f] 10 20
+                    jr        nc,$09a3                      ;[0961] 30 40
+                    ld        d,b                           ;[0963] 50
+                    ld        h,b                           ;[0964] 60
+                    ld        (hl),b                        ;[0965] 70
+                    add       b                             ;[0966] 80
+                    sub       b                             ;[0967] 90
+                    and       b                             ;[0968] a0
+                    or        b                             ;[0969] b0
+                    ret       nz                            ;[096a] c0
+                    ret       nc                            ;[096b] d0
+                    ret       po                            ;[096c] e0
+                    ret       p                             ;[096d] f0
+                    ld        c,b                           ;[096e] 48
+                    nop                                     ;[096f] 00
+                    ld        h,l                           ;[0970] 65
+                    nop                                     ;[0971] 00
+                    ld        l,h                           ;[0972] 6c
+                    nop                                     ;[0973] 00
+                    ld        l,h                           ;[0974] 6c
+                    nop                                     ;[0975] 00
+                    ld        l,a                           ;[0976] 6f
+                    nop                                     ;[0977] 00
+                    inc       l                             ;[0978] 2c
+                    nop                                     ;[0979] 00
+                    ld        d,a                           ;[097a] 57
+                    nop                                     ;[097b] 00
+                    ld        l,a                           ;[097c] 6f
+                    nop                                     ;[097d] 00
+                    ld        (hl),d                        ;[097e] 72
+                    nop                                     ;[097f] 00
+                    ld        l,h                           ;[0980] 6c
                     nop                                     ;[0981] 00
-                    add       b                             ;[0982] 80
-                    rst       $38                           ;[0983] ff
-                    rst       $38                           ;[0984] ff
-                    nop                                     ;[0985] 00
-                    nop                                     ;[0986] 00
-                    ld        bc,$ff00                      ;[0987] 01 00 ff
-                    ld        a,a                           ;[098a] 7f
+                    ld        h,h                           ;[0982] 64
+                    nop                                     ;[0983] 00
+                    ld        hl,$0000                      ;[0984] 21 00 00
+                    nop                                     ;[0987] 00
+                    nop                                     ;[0988] 00
+                    add       b                             ;[0989] 80
+                    rst       $38                           ;[098a] ff
                     rst       $38                           ;[098b] ff
-                    rst       $38                           ;[098c] ff
-                    inc       hl                            ;[098d] 23
-                    ld        bc,$1234                      ;[098e] 01 34 12
-                    ld        b,l                           ;[0991] 45
-                    inc       hl                            ;[0992] 23
-                    ld        d,(hl)                        ;[0993] 56
-                    inc       (hl)                          ;[0994] 34
-                    ld        h,a                           ;[0995] 67
-                    ld        b,l                           ;[0996] 45
-                    ld        a,b                           ;[0997] 78
-                    ld        d,(hl)                        ;[0998] 56
-                    adc       c                             ;[0999] 89
-                    ld        h,a                           ;[099a] 67
-                    sbc       d                             ;[099b] 9a
-                    ld        a,b                           ;[099c] 78
-                    xor       e                             ;[099d] ab
-                    adc       c                             ;[099e] 89
-                    cp        h                             ;[099f] bc
-                    sbc       d                             ;[09a0] 9a
-                    call      $00ab                         ;[09a1] cd ab 00
-                    nop                                     ;[09a4] 00
-                    ld        b,h                           ;[09a5] 44
-                    add       hl,bc                         ;[09a6] 09
-                    add       hl,bc                         ;[09a7] 09
-                    nop                                     ;[09a8] 00
-                    ld        b,h                           ;[09a9] 44
-                    add       hl,bc                         ;[09aa] 09
-                    push      af                            ;[09ab] f5
-                    push      hl                            ;[09ac] e5
-                    ld        h,b                           ;[09ad] 60
-                    ld        l,c                           ;[09ae] 69
-                    ld        a,$00                         ;[09af] 3e 00
-                    out       ($c5),a                       ;[09b1] d3 c5
-                    ld        b,h                           ;[09b3] 44
-                    ld        c,l                           ;[09b4] 4d
-                    pop       hl                            ;[09b5] e1
-                    pop       af                            ;[09b6] f1
-                    push      af                            ;[09b7] f5
-                    push      hl                            ;[09b8] e5
-                    ld        h,d                           ;[09b9] 62
-                    ld        l,e                           ;[09ba] 6b
-                    ld        a,$00                         ;[09bb] 3e 00
-                    out       ($c5),a                       ;[09bd] d3 c5
-                    ld        d,h                           ;[09bf] 54
-                    ld        e,l                           ;[09c0] 5d
-                    pop       hl                            ;[09c1] e1
-                    pop       af                            ;[09c2] f1
-                    push      af                            ;[09c3] f5
-                    ld        a,$00                         ;[09c4] 3e 00
-                    out       ($c5),a                       ;[09c6] d3 c5
-                    pop       af                            ;[09c8] f1
-                    push      af                            ;[09c9] f5
-                    push      bc                            ;[09ca] c5
-                    ld        c,a                           ;[09cb] 4f
-                    ld        a,$80                         ;[09cc] 3e 80
-                    out       ($c5),a                       ;[09ce] d3 c5
-                    pop       bc                            ;[09d0] c1
-                    pop       af                            ;[09d1] f1
-                    push      af                            ;[09d2] f5
-                    push      bc                            ;[09d3] c5
-                    ld        c,b                           ;[09d4] 48
-                    ld        a,$80                         ;[09d5] 3e 80
-                    out       ($c5),a                       ;[09d7] d3 c5
-                    pop       bc                            ;[09d9] c1
-                    pop       af                            ;[09da] f1
-                    push      af                            ;[09db] f5
+                    nop                                     ;[098c] 00
+                    nop                                     ;[098d] 00
+                    ld        bc,$ff00                      ;[098e] 01 00 ff
+                    ld        a,a                           ;[0991] 7f
+                    rst       $38                           ;[0992] ff
+                    rst       $38                           ;[0993] ff
+                    inc       hl                            ;[0994] 23
+                    ld        bc,$1234                      ;[0995] 01 34 12
+                    ld        b,l                           ;[0998] 45
+                    inc       hl                            ;[0999] 23
+                    ld        d,(hl)                        ;[099a] 56
+                    inc       (hl)                          ;[099b] 34
+                    ld        h,a                           ;[099c] 67
+                    ld        b,l                           ;[099d] 45
+                    ld        a,b                           ;[099e] 78
+                    ld        d,(hl)                        ;[099f] 56
+                    adc       c                             ;[09a0] 89
+                    ld        h,a                           ;[09a1] 67
+                    sbc       d                             ;[09a2] 9a
+                    ld        a,b                           ;[09a3] 78
+                    xor       e                             ;[09a4] ab
+                    adc       c                             ;[09a5] 89
+                    cp        h                             ;[09a6] bc
+                    sbc       d                             ;[09a7] 9a
+                    call      $00ab                         ;[09a8] cd ab 00
+                    nop                                     ;[09ab] 00
+                    ld        c,e                           ;[09ac] 4b
+                    add       hl,bc                         ;[09ad] 09
+                    add       hl,bc                         ;[09ae] 09
+                    nop                                     ;[09af] 00
+                    ld        c,e                           ;[09b0] 4b
+                    add       hl,bc                         ;[09b1] 09
+                    push      af                            ;[09b2] f5
+                    push      hl                            ;[09b3] e5
+                    ld        h,b                           ;[09b4] 60
+                    ld        l,c                           ;[09b5] 69
+                    ld        a,$00                         ;[09b6] 3e 00
+                    out       ($c5),a                       ;[09b8] d3 c5
+                    ld        b,h                           ;[09ba] 44
+                    ld        c,l                           ;[09bb] 4d
+                    pop       hl                            ;[09bc] e1
+                    pop       af                            ;[09bd] f1
+                    push      af                            ;[09be] f5
+                    push      hl                            ;[09bf] e5
+                    ld        h,d                           ;[09c0] 62
+                    ld        l,e                           ;[09c1] 6b
+                    ld        a,$00                         ;[09c2] 3e 00
+                    out       ($c5),a                       ;[09c4] d3 c5
+                    ld        d,h                           ;[09c6] 54
+                    ld        e,l                           ;[09c7] 5d
+                    pop       hl                            ;[09c8] e1
+                    pop       af                            ;[09c9] f1
+                    push      af                            ;[09ca] f5
+                    ld        a,$00                         ;[09cb] 3e 00
+                    out       ($c5),a                       ;[09cd] d3 c5
+                    pop       af                            ;[09cf] f1
+                    push      af                            ;[09d0] f5
+                    push      bc                            ;[09d1] c5
+                    ld        c,a                           ;[09d2] 4f
+                    ld        a,$80                         ;[09d3] 3e 80
+                    out       ($c5),a                       ;[09d5] d3 c5
+                    pop       bc                            ;[09d7] c1
+                    pop       af                            ;[09d8] f1
+                    push      af                            ;[09d9] f5
+                    push      bc                            ;[09da] c5
+                    ld        c,b                           ;[09db] 48
                     ld        a,$80                         ;[09dc] 3e 80
                     out       ($c5),a                       ;[09de] d3 c5
-                    pop       af                            ;[09e0] f1
-                    push      af                            ;[09e1] f5
-                    push      bc                            ;[09e2] c5
-                    ld        c,d                           ;[09e3] 4a
-                    ld        a,$80                         ;[09e4] 3e 80
-                    out       ($c5),a                       ;[09e6] d3 c5
-                    pop       bc                            ;[09e8] c1
-                    pop       af                            ;[09e9] f1
-                    push      af                            ;[09ea] f5
-                    push      bc                            ;[09eb] c5
-                    ld        c,e                           ;[09ec] 4b
-                    ld        a,$80                         ;[09ed] 3e 80
-                    out       ($c5),a                       ;[09ef] d3 c5
-                    pop       bc                            ;[09f1] c1
-                    pop       af                            ;[09f2] f1
-                    push      af                            ;[09f3] f5
-                    push      hl                            ;[09f4] e5
-                    ld        h,b                           ;[09f5] 60
-                    ld        l,c                           ;[09f6] 69
-                    ld        a,$40                         ;[09f7] 3e 40
-                    out       ($c5),a                       ;[09f9] d3 c5
-                    ld        b,h                           ;[09fb] 44
-                    ld        c,l                           ;[09fc] 4d
-                    pop       hl                            ;[09fd] e1
-                    pop       af                            ;[09fe] f1
-                    push      af                            ;[09ff] f5
-                    push      hl                            ;[0a00] e5
-                    ld        h,d                           ;[0a01] 62
-                    ld        l,e                           ;[0a02] 6b
-                    ld        a,$40                         ;[0a03] 3e 40
-                    out       ($c5),a                       ;[0a05] d3 c5
-                    ld        d,h                           ;[0a07] 54
-                    ld        e,l                           ;[0a08] 5d
-                    pop       hl                            ;[0a09] e1
-                    pop       af                            ;[0a0a] f1
-                    push      af                            ;[0a0b] f5
-                    ld        a,$40                         ;[0a0c] 3e 40
-                    out       ($c5),a                       ;[0a0e] d3 c5
-                    pop       af                            ;[0a10] f1
-                    push      af                            ;[0a11] f5
-                    push      bc                            ;[0a12] c5
-                    ld        c,a                           ;[0a13] 4f
-                    ld        a,$c0                         ;[0a14] 3e c0
-                    out       ($c5),a                       ;[0a16] d3 c5
-                    pop       bc                            ;[0a18] c1
-                    pop       af                            ;[0a19] f1
-                    push      af                            ;[0a1a] f5
-                    push      bc                            ;[0a1b] c5
-                    ld        c,b                           ;[0a1c] 48
-                    ld        a,$c0                         ;[0a1d] 3e c0
-                    out       ($c5),a                       ;[0a1f] d3 c5
-                    pop       bc                            ;[0a21] c1
-                    pop       af                            ;[0a22] f1
-                    push      af                            ;[0a23] f5
+                    pop       bc                            ;[09e0] c1
+                    pop       af                            ;[09e1] f1
+                    push      af                            ;[09e2] f5
+                    ld        a,$80                         ;[09e3] 3e 80
+                    out       ($c5),a                       ;[09e5] d3 c5
+                    pop       af                            ;[09e7] f1
+                    push      af                            ;[09e8] f5
+                    push      bc                            ;[09e9] c5
+                    ld        c,d                           ;[09ea] 4a
+                    ld        a,$80                         ;[09eb] 3e 80
+                    out       ($c5),a                       ;[09ed] d3 c5
+                    pop       bc                            ;[09ef] c1
+                    pop       af                            ;[09f0] f1
+                    push      af                            ;[09f1] f5
+                    push      bc                            ;[09f2] c5
+                    ld        c,e                           ;[09f3] 4b
+                    ld        a,$80                         ;[09f4] 3e 80
+                    out       ($c5),a                       ;[09f6] d3 c5
+                    pop       bc                            ;[09f8] c1
+                    pop       af                            ;[09f9] f1
+                    push      af                            ;[09fa] f5
+                    push      hl                            ;[09fb] e5
+                    ld        h,b                           ;[09fc] 60
+                    ld        l,c                           ;[09fd] 69
+                    ld        a,$40                         ;[09fe] 3e 40
+                    out       ($c5),a                       ;[0a00] d3 c5
+                    ld        b,h                           ;[0a02] 44
+                    ld        c,l                           ;[0a03] 4d
+                    pop       hl                            ;[0a04] e1
+                    pop       af                            ;[0a05] f1
+                    push      af                            ;[0a06] f5
+                    push      hl                            ;[0a07] e5
+                    ld        h,d                           ;[0a08] 62
+                    ld        l,e                           ;[0a09] 6b
+                    ld        a,$40                         ;[0a0a] 3e 40
+                    out       ($c5),a                       ;[0a0c] d3 c5
+                    ld        d,h                           ;[0a0e] 54
+                    ld        e,l                           ;[0a0f] 5d
+                    pop       hl                            ;[0a10] e1
+                    pop       af                            ;[0a11] f1
+                    push      af                            ;[0a12] f5
+                    ld        a,$40                         ;[0a13] 3e 40
+                    out       ($c5),a                       ;[0a15] d3 c5
+                    pop       af                            ;[0a17] f1
+                    push      af                            ;[0a18] f5
+                    push      bc                            ;[0a19] c5
+                    ld        c,a                           ;[0a1a] 4f
+                    ld        a,$c0                         ;[0a1b] 3e c0
+                    out       ($c5),a                       ;[0a1d] d3 c5
+                    pop       bc                            ;[0a1f] c1
+                    pop       af                            ;[0a20] f1
+                    push      af                            ;[0a21] f5
+                    push      bc                            ;[0a22] c5
+                    ld        c,b                           ;[0a23] 48
                     ld        a,$c0                         ;[0a24] 3e c0
                     out       ($c5),a                       ;[0a26] d3 c5
-                    pop       af                            ;[0a28] f1
-                    push      af                            ;[0a29] f5
-                    push      bc                            ;[0a2a] c5
-                    ld        c,d                           ;[0a2b] 4a
-                    ld        a,$c0                         ;[0a2c] 3e c0
-                    out       ($c5),a                       ;[0a2e] d3 c5
-                    pop       bc                            ;[0a30] c1
-                    pop       af                            ;[0a31] f1
-                    push      af                            ;[0a32] f5
-                    push      bc                            ;[0a33] c5
-                    ld        c,e                           ;[0a34] 4b
-                    ld        a,$c0                         ;[0a35] 3e c0
-                    out       ($c5),a                       ;[0a37] d3 c5
-                    pop       bc                            ;[0a39] c1
-                    pop       af                            ;[0a3a] f1
-                    push      af                            ;[0a3b] f5
-                    push      hl                            ;[0a3c] e5
-                    ld        h,b                           ;[0a3d] 60
-                    ld        l,c                           ;[0a3e] 69
-                    ld        a,$01                         ;[0a3f] 3e 01
-                    out       ($c5),a                       ;[0a41] d3 c5
-                    ld        b,h                           ;[0a43] 44
-                    ld        c,l                           ;[0a44] 4d
-                    pop       hl                            ;[0a45] e1
-                    pop       af                            ;[0a46] f1
-                    push      af                            ;[0a47] f5
-                    push      hl                            ;[0a48] e5
-                    ld        h,d                           ;[0a49] 62
-                    ld        l,e                           ;[0a4a] 6b
-                    ld        a,$01                         ;[0a4b] 3e 01
-                    out       ($c5),a                       ;[0a4d] d3 c5
-                    ld        d,h                           ;[0a4f] 54
-                    ld        e,l                           ;[0a50] 5d
-                    pop       hl                            ;[0a51] e1
-                    pop       af                            ;[0a52] f1
-                    push      af                            ;[0a53] f5
-                    ld        a,$01                         ;[0a54] 3e 01
-                    out       ($c5),a                       ;[0a56] d3 c5
-                    pop       af                            ;[0a58] f1
-                    push      af                            ;[0a59] f5
-                    push      bc                            ;[0a5a] c5
-                    ld        c,a                           ;[0a5b] 4f
-                    ld        a,$81                         ;[0a5c] 3e 81
-                    out       ($c5),a                       ;[0a5e] d3 c5
-                    pop       bc                            ;[0a60] c1
-                    pop       af                            ;[0a61] f1
-                    push      af                            ;[0a62] f5
-                    push      bc                            ;[0a63] c5
-                    ld        c,b                           ;[0a64] 48
-                    ld        a,$81                         ;[0a65] 3e 81
-                    out       ($c5),a                       ;[0a67] d3 c5
-                    pop       bc                            ;[0a69] c1
-                    pop       af                            ;[0a6a] f1
-                    push      af                            ;[0a6b] f5
+                    pop       bc                            ;[0a28] c1
+                    pop       af                            ;[0a29] f1
+                    push      af                            ;[0a2a] f5
+                    ld        a,$c0                         ;[0a2b] 3e c0
+                    out       ($c5),a                       ;[0a2d] d3 c5
+                    pop       af                            ;[0a2f] f1
+                    push      af                            ;[0a30] f5
+                    push      bc                            ;[0a31] c5
+                    ld        c,d                           ;[0a32] 4a
+                    ld        a,$c0                         ;[0a33] 3e c0
+                    out       ($c5),a                       ;[0a35] d3 c5
+                    pop       bc                            ;[0a37] c1
+                    pop       af                            ;[0a38] f1
+                    push      af                            ;[0a39] f5
+                    push      bc                            ;[0a3a] c5
+                    ld        c,e                           ;[0a3b] 4b
+                    ld        a,$c0                         ;[0a3c] 3e c0
+                    out       ($c5),a                       ;[0a3e] d3 c5
+                    pop       bc                            ;[0a40] c1
+                    pop       af                            ;[0a41] f1
+                    push      af                            ;[0a42] f5
+                    push      hl                            ;[0a43] e5
+                    ld        h,b                           ;[0a44] 60
+                    ld        l,c                           ;[0a45] 69
+                    ld        a,$01                         ;[0a46] 3e 01
+                    out       ($c5),a                       ;[0a48] d3 c5
+                    ld        b,h                           ;[0a4a] 44
+                    ld        c,l                           ;[0a4b] 4d
+                    pop       hl                            ;[0a4c] e1
+                    pop       af                            ;[0a4d] f1
+                    push      af                            ;[0a4e] f5
+                    push      hl                            ;[0a4f] e5
+                    ld        h,d                           ;[0a50] 62
+                    ld        l,e                           ;[0a51] 6b
+                    ld        a,$01                         ;[0a52] 3e 01
+                    out       ($c5),a                       ;[0a54] d3 c5
+                    ld        d,h                           ;[0a56] 54
+                    ld        e,l                           ;[0a57] 5d
+                    pop       hl                            ;[0a58] e1
+                    pop       af                            ;[0a59] f1
+                    push      af                            ;[0a5a] f5
+                    ld        a,$01                         ;[0a5b] 3e 01
+                    out       ($c5),a                       ;[0a5d] d3 c5
+                    pop       af                            ;[0a5f] f1
+                    push      af                            ;[0a60] f5
+                    push      bc                            ;[0a61] c5
+                    ld        c,a                           ;[0a62] 4f
+                    ld        a,$81                         ;[0a63] 3e 81
+                    out       ($c5),a                       ;[0a65] d3 c5
+                    pop       bc                            ;[0a67] c1
+                    pop       af                            ;[0a68] f1
+                    push      af                            ;[0a69] f5
+                    push      bc                            ;[0a6a] c5
+                    ld        c,b                           ;[0a6b] 48
                     ld        a,$81                         ;[0a6c] 3e 81
                     out       ($c5),a                       ;[0a6e] d3 c5
-                    pop       af                            ;[0a70] f1
-                    push      af                            ;[0a71] f5
-                    push      bc                            ;[0a72] c5
-                    ld        c,d                           ;[0a73] 4a
-                    ld        a,$81                         ;[0a74] 3e 81
-                    out       ($c5),a                       ;[0a76] d3 c5
-                    pop       bc                            ;[0a78] c1
-                    pop       af                            ;[0a79] f1
-                    push      af                            ;[0a7a] f5
-                    push      bc                            ;[0a7b] c5
-                    ld        c,e                           ;[0a7c] 4b
-                    ld        a,$81                         ;[0a7d] 3e 81
-                    out       ($c5),a                       ;[0a7f] d3 c5
-                    pop       bc                            ;[0a81] c1
-                    pop       af                            ;[0a82] f1
-                    push      af                            ;[0a83] f5
-                    push      hl                            ;[0a84] e5
-                    ld        h,b                           ;[0a85] 60
-                    ld        l,c                           ;[0a86] 69
-                    ld        a,$41                         ;[0a87] 3e 41
-                    out       ($c5),a                       ;[0a89] d3 c5
-                    ld        b,h                           ;[0a8b] 44
-                    ld        c,l                           ;[0a8c] 4d
-                    pop       hl                            ;[0a8d] e1
-                    pop       af                            ;[0a8e] f1
-                    push      af                            ;[0a8f] f5
-                    push      hl                            ;[0a90] e5
-                    ld        h,d                           ;[0a91] 62
-                    ld        l,e                           ;[0a92] 6b
-                    ld        a,$41                         ;[0a93] 3e 41
-                    out       ($c5),a                       ;[0a95] d3 c5
-                    ld        d,h                           ;[0a97] 54
-                    ld        e,l                           ;[0a98] 5d
-                    pop       hl                            ;[0a99] e1
-                    pop       af                            ;[0a9a] f1
-                    push      af                            ;[0a9b] f5
-                    ld        a,$41                         ;[0a9c] 3e 41
-                    out       ($c5),a                       ;[0a9e] d3 c5
-                    pop       af                            ;[0aa0] f1
-                    push      af                            ;[0aa1] f5
-                    push      bc                            ;[0aa2] c5
-                    ld        c,a                           ;[0aa3] 4f
-                    ld        a,$c1                         ;[0aa4] 3e c1
-                    out       ($c5),a                       ;[0aa6] d3 c5
-                    pop       bc                            ;[0aa8] c1
-                    pop       af                            ;[0aa9] f1
-                    push      af                            ;[0aaa] f5
-                    push      bc                            ;[0aab] c5
-                    ld        c,b                           ;[0aac] 48
-                    ld        a,$c1                         ;[0aad] 3e c1
-                    out       ($c5),a                       ;[0aaf] d3 c5
-                    pop       bc                            ;[0ab1] c1
-                    pop       af                            ;[0ab2] f1
-                    push      af                            ;[0ab3] f5
+                    pop       bc                            ;[0a70] c1
+                    pop       af                            ;[0a71] f1
+                    push      af                            ;[0a72] f5
+                    ld        a,$81                         ;[0a73] 3e 81
+                    out       ($c5),a                       ;[0a75] d3 c5
+                    pop       af                            ;[0a77] f1
+                    push      af                            ;[0a78] f5
+                    push      bc                            ;[0a79] c5
+                    ld        c,d                           ;[0a7a] 4a
+                    ld        a,$81                         ;[0a7b] 3e 81
+                    out       ($c5),a                       ;[0a7d] d3 c5
+                    pop       bc                            ;[0a7f] c1
+                    pop       af                            ;[0a80] f1
+                    push      af                            ;[0a81] f5
+                    push      bc                            ;[0a82] c5
+                    ld        c,e                           ;[0a83] 4b
+                    ld        a,$81                         ;[0a84] 3e 81
+                    out       ($c5),a                       ;[0a86] d3 c5
+                    pop       bc                            ;[0a88] c1
+                    pop       af                            ;[0a89] f1
+                    push      af                            ;[0a8a] f5
+                    push      hl                            ;[0a8b] e5
+                    ld        h,b                           ;[0a8c] 60
+                    ld        l,c                           ;[0a8d] 69
+                    ld        a,$41                         ;[0a8e] 3e 41
+                    out       ($c5),a                       ;[0a90] d3 c5
+                    ld        b,h                           ;[0a92] 44
+                    ld        c,l                           ;[0a93] 4d
+                    pop       hl                            ;[0a94] e1
+                    pop       af                            ;[0a95] f1
+                    push      af                            ;[0a96] f5
+                    push      hl                            ;[0a97] e5
+                    ld        h,d                           ;[0a98] 62
+                    ld        l,e                           ;[0a99] 6b
+                    ld        a,$41                         ;[0a9a] 3e 41
+                    out       ($c5),a                       ;[0a9c] d3 c5
+                    ld        d,h                           ;[0a9e] 54
+                    ld        e,l                           ;[0a9f] 5d
+                    pop       hl                            ;[0aa0] e1
+                    pop       af                            ;[0aa1] f1
+                    push      af                            ;[0aa2] f5
+                    ld        a,$41                         ;[0aa3] 3e 41
+                    out       ($c5),a                       ;[0aa5] d3 c5
+                    pop       af                            ;[0aa7] f1
+                    push      af                            ;[0aa8] f5
+                    push      bc                            ;[0aa9] c5
+                    ld        c,a                           ;[0aaa] 4f
+                    ld        a,$c1                         ;[0aab] 3e c1
+                    out       ($c5),a                       ;[0aad] d3 c5
+                    pop       bc                            ;[0aaf] c1
+                    pop       af                            ;[0ab0] f1
+                    push      af                            ;[0ab1] f5
+                    push      bc                            ;[0ab2] c5
+                    ld        c,b                           ;[0ab3] 48
                     ld        a,$c1                         ;[0ab4] 3e c1
                     out       ($c5),a                       ;[0ab6] d3 c5
-                    pop       af                            ;[0ab8] f1
-                    push      af                            ;[0ab9] f5
-                    push      bc                            ;[0aba] c5
-                    ld        c,d                           ;[0abb] 4a
-                    ld        a,$c1                         ;[0abc] 3e c1
-                    out       ($c5),a                       ;[0abe] d3 c5
-                    pop       bc                            ;[0ac0] c1
-                    pop       af                            ;[0ac1] f1
-                    push      af                            ;[0ac2] f5
-                    push      bc                            ;[0ac3] c5
-                    ld        c,e                           ;[0ac4] 4b
-                    ld        a,$c1                         ;[0ac5] 3e c1
-                    out       ($c5),a                       ;[0ac7] d3 c5
-                    pop       bc                            ;[0ac9] c1
-                    pop       af                            ;[0aca] f1
-                    push      af                            ;[0acb] f5
-                    push      hl                            ;[0acc] e5
-                    ld        h,b                           ;[0acd] 60
-                    ld        l,c                           ;[0ace] 69
-                    ld        a,$02                         ;[0acf] 3e 02
-                    out       ($c5),a                       ;[0ad1] d3 c5
-                    ld        b,h                           ;[0ad3] 44
-                    ld        c,l                           ;[0ad4] 4d
-                    pop       hl                            ;[0ad5] e1
-                    pop       af                            ;[0ad6] f1
-                    push      af                            ;[0ad7] f5
-                    push      hl                            ;[0ad8] e5
-                    ld        h,d                           ;[0ad9] 62
-                    ld        l,e                           ;[0ada] 6b
-                    ld        a,$02                         ;[0adb] 3e 02
-                    out       ($c5),a                       ;[0add] d3 c5
-                    ld        d,h                           ;[0adf] 54
-                    ld        e,l                           ;[0ae0] 5d
-                    pop       hl                            ;[0ae1] e1
-                    pop       af                            ;[0ae2] f1
-                    push      af                            ;[0ae3] f5
-                    ld        a,$02                         ;[0ae4] 3e 02
-                    out       ($c5),a                       ;[0ae6] d3 c5
-                    pop       af                            ;[0ae8] f1
-                    push      af                            ;[0ae9] f5
-                    push      bc                            ;[0aea] c5
-                    ld        c,a                           ;[0aeb] 4f
-                    ld        a,$82                         ;[0aec] 3e 82
-                    out       ($c5),a                       ;[0aee] d3 c5
-                    pop       bc                            ;[0af0] c1
-                    pop       af                            ;[0af1] f1
-                    push      af                            ;[0af2] f5
-                    push      bc                            ;[0af3] c5
-                    ld        c,b                           ;[0af4] 48
-                    ld        a,$82                         ;[0af5] 3e 82
-                    out       ($c5),a                       ;[0af7] d3 c5
-                    pop       bc                            ;[0af9] c1
-                    pop       af                            ;[0afa] f1
-                    push      af                            ;[0afb] f5
+                    pop       bc                            ;[0ab8] c1
+                    pop       af                            ;[0ab9] f1
+                    push      af                            ;[0aba] f5
+                    ld        a,$c1                         ;[0abb] 3e c1
+                    out       ($c5),a                       ;[0abd] d3 c5
+                    pop       af                            ;[0abf] f1
+                    push      af                            ;[0ac0] f5
+                    push      bc                            ;[0ac1] c5
+                    ld        c,d                           ;[0ac2] 4a
+                    ld        a,$c1                         ;[0ac3] 3e c1
+                    out       ($c5),a                       ;[0ac5] d3 c5
+                    pop       bc                            ;[0ac7] c1
+                    pop       af                            ;[0ac8] f1
+                    push      af                            ;[0ac9] f5
+                    push      bc                            ;[0aca] c5
+                    ld        c,e                           ;[0acb] 4b
+                    ld        a,$c1                         ;[0acc] 3e c1
+                    out       ($c5),a                       ;[0ace] d3 c5
+                    pop       bc                            ;[0ad0] c1
+                    pop       af                            ;[0ad1] f1
+                    push      af                            ;[0ad2] f5
+                    push      hl                            ;[0ad3] e5
+                    ld        h,b                           ;[0ad4] 60
+                    ld        l,c                           ;[0ad5] 69
+                    ld        a,$02                         ;[0ad6] 3e 02
+                    out       ($c5),a                       ;[0ad8] d3 c5
+                    ld        b,h                           ;[0ada] 44
+                    ld        c,l                           ;[0adb] 4d
+                    pop       hl                            ;[0adc] e1
+                    pop       af                            ;[0add] f1
+                    push      af                            ;[0ade] f5
+                    push      hl                            ;[0adf] e5
+                    ld        h,d                           ;[0ae0] 62
+                    ld        l,e                           ;[0ae1] 6b
+                    ld        a,$02                         ;[0ae2] 3e 02
+                    out       ($c5),a                       ;[0ae4] d3 c5
+                    ld        d,h                           ;[0ae6] 54
+                    ld        e,l                           ;[0ae7] 5d
+                    pop       hl                            ;[0ae8] e1
+                    pop       af                            ;[0ae9] f1
+                    push      af                            ;[0aea] f5
+                    ld        a,$02                         ;[0aeb] 3e 02
+                    out       ($c5),a                       ;[0aed] d3 c5
+                    pop       af                            ;[0aef] f1
+                    push      af                            ;[0af0] f5
+                    push      bc                            ;[0af1] c5
+                    ld        c,a                           ;[0af2] 4f
+                    ld        a,$82                         ;[0af3] 3e 82
+                    out       ($c5),a                       ;[0af5] d3 c5
+                    pop       bc                            ;[0af7] c1
+                    pop       af                            ;[0af8] f1
+                    push      af                            ;[0af9] f5
+                    push      bc                            ;[0afa] c5
+                    ld        c,b                           ;[0afb] 48
                     ld        a,$82                         ;[0afc] 3e 82
                     out       ($c5),a                       ;[0afe] d3 c5
-                    pop       af                            ;[0b00] f1
-                    push      af                            ;[0b01] f5
-                    push      bc                            ;[0b02] c5
-                    ld        c,d                           ;[0b03] 4a
-                    ld        a,$82                         ;[0b04] 3e 82
-                    out       ($c5),a                       ;[0b06] d3 c5
-                    pop       bc                            ;[0b08] c1
-                    pop       af                            ;[0b09] f1
-                    push      af                            ;[0b0a] f5
-                    push      bc                            ;[0b0b] c5
-                    ld        c,e                           ;[0b0c] 4b
-                    ld        a,$82                         ;[0b0d] 3e 82
-                    out       ($c5),a                       ;[0b0f] d3 c5
-                    pop       bc                            ;[0b11] c1
-                    pop       af                            ;[0b12] f1
-                    push      hl                            ;[0b13] e5
-                    ld        h,b                           ;[0b14] 60
-                    ld        l,c                           ;[0b15] 69
-                    in        a,($c8)                       ;[0b16] db c8
-                    pop       hl                            ;[0b18] e1
-                    push      hl                            ;[0b19] e5
-                    ld        h,d                           ;[0b1a] 62
-                    ld        l,e                           ;[0b1b] 6b
-                    in        a,($c8)                       ;[0b1c] db c8
-                    pop       hl                            ;[0b1e] e1
-                    in        a,($c8)                       ;[0b1f] db c8
-                    out       ($c6),a                       ;[0b21] d3 c6
-                    ld        a,b                           ;[0b23] 78
-                    out       ($c6),a                       ;[0b24] d3 c6
-                    ld        a,c                           ;[0b26] 79
-                    out       ($c6),a                       ;[0b27] d3 c6
-                    ld        a,d                           ;[0b29] 7a
-                    out       ($c6),a                       ;[0b2a] d3 c6
-                    ld        a,e                           ;[0b2c] 7b
-                    out       ($c6),a                       ;[0b2d] d3 c6
-                    ld        a,h                           ;[0b2f] 7c
-                    out       ($c6),a                       ;[0b30] d3 c6
-                    ld        a,l                           ;[0b32] 7d
-                    out       ($c6),a                       ;[0b33] d3 c6
-                    out       ($c6),a                       ;[0b35] d3 c6
-                    ld        a,b                           ;[0b37] 78
-                    out       ($c6),a                       ;[0b38] d3 c6
-                    ld        a,c                           ;[0b3a] 79
-                    out       ($c6),a                       ;[0b3b] d3 c6
-                    ld        a,d                           ;[0b3d] 7a
-                    out       ($c6),a                       ;[0b3e] d3 c6
-                    ld        a,e                           ;[0b40] 7b
-                    out       ($c6),a                       ;[0b41] d3 c6
-                    ld        a,h                           ;[0b43] 7c
-                    out       ($c6),a                       ;[0b44] d3 c6
-                    ld        a,l                           ;[0b46] 7d
-                    out       ($c6),a                       ;[0b47] d3 c6
-                    out       ($c7),a                       ;[0b49] d3 c7
-                    ld        a,b                           ;[0b4b] 78
-                    out       ($c7),a                       ;[0b4c] d3 c7
-                    ld        a,c                           ;[0b4e] 79
-                    out       ($c7),a                       ;[0b4f] d3 c7
-                    ld        a,d                           ;[0b51] 7a
-                    out       ($c7),a                       ;[0b52] d3 c7
-                    ld        a,e                           ;[0b54] 7b
-                    out       ($c7),a                       ;[0b55] d3 c7
-                    ld        a,h                           ;[0b57] 7c
-                    out       ($c7),a                       ;[0b58] d3 c7
-                    ld        a,l                           ;[0b5a] 7d
-                    out       ($c7),a                       ;[0b5b] d3 c7
-                    out       ($c7),a                       ;[0b5d] d3 c7
-                    ld        a,b                           ;[0b5f] 78
-                    out       ($c7),a                       ;[0b60] d3 c7
-                    ld        a,c                           ;[0b62] 79
-                    out       ($c7),a                       ;[0b63] d3 c7
-                    ld        a,d                           ;[0b65] 7a
-                    out       ($c7),a                       ;[0b66] d3 c7
-                    ld        a,e                           ;[0b68] 7b
-                    out       ($c7),a                       ;[0b69] d3 c7
-                    ld        a,h                           ;[0b6b] 7c
-                    out       ($c7),a                       ;[0b6c] d3 c7
-                    ld        a,l                           ;[0b6e] 7d
-                    out       ($c7),a                       ;[0b6f] d3 c7
+                    pop       bc                            ;[0b00] c1
+                    pop       af                            ;[0b01] f1
+                    push      af                            ;[0b02] f5
+                    ld        a,$82                         ;[0b03] 3e 82
+                    out       ($c5),a                       ;[0b05] d3 c5
+                    pop       af                            ;[0b07] f1
+                    push      af                            ;[0b08] f5
+                    push      bc                            ;[0b09] c5
+                    ld        c,d                           ;[0b0a] 4a
+                    ld        a,$82                         ;[0b0b] 3e 82
+                    out       ($c5),a                       ;[0b0d] d3 c5
+                    pop       bc                            ;[0b0f] c1
+                    pop       af                            ;[0b10] f1
+                    push      af                            ;[0b11] f5
+                    push      bc                            ;[0b12] c5
+                    ld        c,e                           ;[0b13] 4b
+                    ld        a,$82                         ;[0b14] 3e 82
+                    out       ($c5),a                       ;[0b16] d3 c5
+                    pop       bc                            ;[0b18] c1
+                    pop       af                            ;[0b19] f1
+                    push      hl                            ;[0b1a] e5
+                    ld        h,b                           ;[0b1b] 60
+                    ld        l,c                           ;[0b1c] 69
+                    in        a,($c8)                       ;[0b1d] db c8
+                    pop       hl                            ;[0b1f] e1
+                    push      hl                            ;[0b20] e5
+                    ld        h,d                           ;[0b21] 62
+                    ld        l,e                           ;[0b22] 6b
+                    in        a,($c8)                       ;[0b23] db c8
+                    pop       hl                            ;[0b25] e1
+                    in        a,($c8)                       ;[0b26] db c8
+                    out       ($c6),a                       ;[0b28] d3 c6
+                    ld        a,b                           ;[0b2a] 78
+                    out       ($c6),a                       ;[0b2b] d3 c6
+                    ld        a,c                           ;[0b2d] 79
+                    out       ($c6),a                       ;[0b2e] d3 c6
+                    ld        a,d                           ;[0b30] 7a
+                    out       ($c6),a                       ;[0b31] d3 c6
+                    ld        a,e                           ;[0b33] 7b
+                    out       ($c6),a                       ;[0b34] d3 c6
+                    ld        a,h                           ;[0b36] 7c
+                    out       ($c6),a                       ;[0b37] d3 c6
+                    ld        a,l                           ;[0b39] 7d
+                    out       ($c6),a                       ;[0b3a] d3 c6
+                    out       ($c6),a                       ;[0b3c] d3 c6
+                    ld        a,b                           ;[0b3e] 78
+                    out       ($c6),a                       ;[0b3f] d3 c6
+                    ld        a,c                           ;[0b41] 79
+                    out       ($c6),a                       ;[0b42] d3 c6
+                    ld        a,d                           ;[0b44] 7a
+                    out       ($c6),a                       ;[0b45] d3 c6
+                    ld        a,e                           ;[0b47] 7b
+                    out       ($c6),a                       ;[0b48] d3 c6
+                    ld        a,h                           ;[0b4a] 7c
+                    out       ($c6),a                       ;[0b4b] d3 c6
+                    ld        a,l                           ;[0b4d] 7d
+                    out       ($c6),a                       ;[0b4e] d3 c6
+                    out       ($c7),a                       ;[0b50] d3 c7
+                    ld        a,b                           ;[0b52] 78
+                    out       ($c7),a                       ;[0b53] d3 c7
+                    ld        a,c                           ;[0b55] 79
+                    out       ($c7),a                       ;[0b56] d3 c7
+                    ld        a,d                           ;[0b58] 7a
+                    out       ($c7),a                       ;[0b59] d3 c7
+                    ld        a,e                           ;[0b5b] 7b
+                    out       ($c7),a                       ;[0b5c] d3 c7
+                    ld        a,h                           ;[0b5e] 7c
+                    out       ($c7),a                       ;[0b5f] d3 c7
+                    ld        a,l                           ;[0b61] 7d
+                    out       ($c7),a                       ;[0b62] d3 c7
+                    out       ($c7),a                       ;[0b64] d3 c7
+                    ld        a,b                           ;[0b66] 78
+                    out       ($c7),a                       ;[0b67] d3 c7
+                    ld        a,c                           ;[0b69] 79
+                    out       ($c7),a                       ;[0b6a] d3 c7
+                    ld        a,d                           ;[0b6c] 7a
+                    out       ($c7),a                       ;[0b6d] d3 c7
+                    ld        a,e                           ;[0b6f] 7b
+                    out       ($c7),a                       ;[0b70] d3 c7
+                    ld        a,h                           ;[0b72] 7c
+                    out       ($c7),a                       ;[0b73] d3 c7
+                    ld        a,l                           ;[0b75] 7d
+                    out       ($c7),a                       ;[0b76] d3 c7

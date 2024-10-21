@@ -433,6 +433,7 @@ In vgsasm, instructions that __do not exist in the Z80__ are complemented by exi
 | `LD (HL),{IXH｜IXL｜IYH｜IYL}` | `PUSH AF`, `LD A,{IXH｜IXL｜IYH｜IYL}`, `LD (HL),A`, `POP AF` |
 | `LD {BC｜DE},(HL)` | `LD rL,(HL)`, `INC HL`, `LD rH,(HL)`, `DEC HL` |
 | `LD {IX｜IY},(HL)` | `PUSH AF`, `LD A,(HL)`, `LD I{X｜Y}L,A`, `INC HL`,<br> `LD A,(HL)`, `LD I{X｜Y}H,A`, `DEC HL`, `POP AF` |
+| `LD (nn), n` | `PUSH AF`, `LD A, n`, `LD (nn), A`, `POP AF` |
 | `ADD HL,nn` | `PUSH DE`, `LD DE,nn`, `ADD HL,DE`, `POP DE`|
 | `ADD IX,nn` | `PUSH DE`, `LD DE,nn`, `ADD IX,DE`, `POP DE`|
 | `ADD IY,nn` | `PUSH DE`, `LD DE,nn`, `ADD IY,DE`, `POP DE`|

@@ -360,6 +360,17 @@ void mnemonic_LD(LineData* line)
                 case Operand::IY: ML_LD_NN_IY(addr); return;
             }
         }
+    } else if (mnemonic_format_test(line, 6, TokenType::AddressBegin, TokenType::Numeric, TokenType::AddressEnd, TokenType::Split, TokenType::Numeric)) {
+        // LD (nn),n
+        auto addr = atoi(line->token[2].second.c_str());
+        auto n = atoi(line->token[5].second.c_str());
+        if (mnemonic_range(line, addr, 0x0000, 0xFFFF) && mnemonic_range(line, n, -128, 255)) {
+            ML_PUSH_AF;
+            ML_LD_A_n(n);
+            ML_LD_NN_A(addr);
+            ML_POP_AF;
+            return;
+        }
     } else if (mnemonic_format_test(line, 8, TokenType::Operand, TokenType::Split, TokenType::AddressBegin, TokenType::Operand, TokenType::PlusOrMinus, TokenType::Numeric, TokenType::AddressEnd)) {
         // LD r, ({IX|IY}{+|-}d)
         auto op1 = operandTable[line->token[1].second];
