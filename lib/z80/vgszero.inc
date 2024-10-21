@@ -15,9 +15,6 @@
 #define IO.save         0xDA
 #define IO.bgm.play     0xE0
 #define IO.bgm.ctrl     0xE1
-#define BGM.pause       0x00
-#define BGM.resume      0x01
-#define BGM.fadeout     0x02
 #define IO.eff.play     0xF0
 #define IO.eff.stop     0xF1
 #define IO.eff.check    0xF2
@@ -97,5 +94,53 @@ struct VRAM $8000 {
     OUT (IO.memcpy), A
     POP HL
     POP BC
+    POP AF
+}
+
+#macro bgm_play(bgm_number)
+{
+    PUSH AF
+    LD A, bgm_number
+    OUT (IO.bgm.play), A
+    POP AF
+}
+
+#macro bgm_pause()
+{
+    PUSH AF
+    LD A, $00
+    OUT (IO.bgm.ctrl), A
+    POP AF
+}
+
+#macro bgm_resume()
+{
+    PUSH AF
+    LD A, $01
+    OUT (IO.bgm.ctrl), A
+    POP AF
+}
+
+#macro bgm_fadeout()
+{
+    PUSH AF
+    LD A, $02
+    OUT (IO.bgm.ctrl), A
+    POP AF
+}
+
+#macro eff_play(eff_number)
+{
+    PUSH AF
+    LD A, eff_number
+    OUT (IO.eff.play), A
+    POP AF
+}
+
+#macro eff_stop(eff_number)
+{
+    PUSH AF
+    LD A, eff_number
+    OUT (IO.eff.stop), A
     POP AF
 }

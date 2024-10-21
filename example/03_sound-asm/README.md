@@ -9,7 +9,7 @@
 ```zsh
 sudo apt install build-essential
 git clone https://github.com/suzukiplan/vgszero
-cd vgszero/example/02_global-asm
+cd vgszero/example/03_sound-asm
 make
 ```
 

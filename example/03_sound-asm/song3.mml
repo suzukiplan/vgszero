@@ -1,0 +1,580 @@
+$Brass \s600 \e22050 @2 %50
+
+#-----------------------------------------------------------------------------
+# Initialize
+#-----------------------------------------------------------------------------
+Ch0 v12t143 m8 @2
+Ch1 v12 (Brass) o4l8
+Ch2 v12 (Brass) o4l8
+Ch3 v12 (Brass) o4l8
+Ch4 v12 (Brass) o4l8
+Ch5 v12 (Brass) o4l8
+
+#-----------------------------------------------------------------------------
+#1-10
+Ch1 r1r1r1r1r1 r1r1r1r1r1
+Ch2 r1r1r1r1r1 r1r1r1r1r1
+
+Ch3 r1r1r1r1r1 r1
+Ch3 r2c+2
+Ch3 <b+2>e2
+Ch3 d+1
+Ch3 c+2f+2^4
+
+Ch4 r1
+Ch4 r1
+Ch4 r1
+Ch4 <g+1
+Ch4 f++2b2
+Ch4 a+1
+Ch4 g+2a2^4
+Ch4 g+f+g+r>c+r
+Ch4 <f+4g+ab2^4
+Ch4 arg+rf+r
+
+Ch5 <c+1
+Ch5 <b+2>e2
+Ch5 d+1
+Ch5 c+rd+re2^4
+Ch5 d+c+d+4g+r
+Ch5 c+4d+ef+2^4
+Ch5 erd+rc+r 
+Ch5 d+2c+2^4
+Ch5 <brarg+r
+Ch5 a2a+2
+
+#-----------------------------------------------------------------------------
+#11-20
+Ch1 r1r1r1
+Ch1 r2>c+2
+Ch1 <b+2>e2
+Ch1 d+1
+Ch1 c+2.d+4
+Ch1 erd+rc+2
+Ch1 <b2>c+2
+Ch1 d+2r2
+
+Ch2 r1
+Ch2 r2g+2
+Ch2 e+2a2
+Ch2 g+2f+2^2
+Ch2 >c+2^2
+Ch2 <b2^2
+Ch2 a2
+Ch2 g+2a2^4
+Ch2 g+rf+rer
+Ch2 a+2g+2^2
+
+Ch3 erd+rc+r
+Ch3 c+2<b2
+Ch3 >c+2f+2^4
+Ch3 erd+rc+r
+Ch3 d+2g+2
+Ch3 r4arg+rf+r
+Ch3 e+rc+rf+2
+Ch3 e1^2
+Ch3 g+2
+Ch3 d+2r2
+
+Ch4 g+2f+rer
+Ch4 d+2.d4
+Ch4 c+1r1
+Ch4 r1
+Ch4 r1
+Ch4 r1
+Ch4 r1
+Ch4 r2g+2
+Ch4 f++2b2
+
+Ch5 b+2>c+2
+Ch5 <g+rarb2^4
+Ch5 arg+rf+r
+Ch5 >c+2<a2^4
+Ch5 g+rf+rer
+Ch5 f+2g+2
+Ch5 a4g+rarbr
+Ch5 >c+r<br>c+rd+r
+Ch5 e2c+2^4
+Ch5 <bra+rg+r
+
+#-----------------------------------------------------------------------------
+#21-30
+Ch1 r4 er d+r c+r
+Ch1 <br>d+rg+2^4
+Ch1 f+r g+r ar
+Ch1 b1^4
+Ch1 ar g+r f+r
+Ch1 g+f+ed+ c+2^2
+Ch1 <b2^4
+Ch1 >c+r<brar
+Ch1 g+2a+rb+r
+Ch1 >c+2<b2^2
+
+Ch2 f++2
+Ch2 g+2<b2
+Ch2 >c+2.c+4
+Ch2 d+rc+rd+re+r
+Ch2 f+2a2
+Ch2 g+2rbag+
+Ch2 f+4arg+rf+r
+Ch2 e+2f+2^4
+Ch2 e2.^2
+Ch2 d+2
+
+Ch3 r1r1r1r1
+Ch3 r2c+2
+Ch3 <b+2>e2
+Ch3 d+1
+Ch3 c+1^1
+Ch3 <f+rg+ra+rbr
+
+Ch4 a+1
+Ch4 g+rarg+rf+r
+Ch4 e+2a2
+Ch4 g+1
+Ch4 f+1^4
+Ch4 g+f+e4f+g+
+Ch4 a4f+rg+2
+Ch4 c+1^1^2
+Ch4 f+2
+
+Ch5 >c+2d+2
+Ch5 <g+2r2
+Ch5 r1r1r1r1r1 r1
+Ch5 r2b2
+Ch5 a+2>d+2
+
+#-----------------------------------------------------------------------------
+#31-40
+Ch1 a+2
+Ch1 b1^4
+Ch1 >c+rd+re4^2
+Ch1 d+2
+Ch1 erd+4e4f+4
+Ch1 g+f+g+a g+f+eg+
+Ch1 f+ef+g+ f+ed+f+
+Ch1 ed+ef+ ed+c+e
+Ch1 d+c+d+e d+c+<b>d+
+Ch1 c+<b>c+d+ c+<ba+>c+
+
+Ch2 e1^4
+Ch2 d+rr4f+g+
+Ch2 f+2b2^4
+Ch2 >c+r<brar
+Ch2 g+2r2
+Ch2 r1r1r1r1r1
+
+Ch3 >c+1
+Ch3 r2e2
+Ch3 d+2g+2
+Ch3 f+1
+Ch3 e2r2
+Ch3 r1r1
+Ch3 r2g+2
+Ch3 f++2b4r4
+Ch3 a+2.r4r4
+
+Ch4 e4d+rerf+r
+Ch4 g+4f+rg+rar
+Ch4 b1
+Ch4 b1^2
+Ch4 >c+2
+Ch4 <b+2>e2
+Ch4 d+1
+Ch4 c+1^4
+Ch4 <bra+rg+4^4
+Ch4 f++e+f++2
+
+Ch5 c+1
+Ch5 <b1^4
+Ch5 >g+rf+rer
+Ch5 r2<b2
+Ch5 >e2a2
+Ch5 g+2>c+2^2
+Ch5 <b+2
+Ch5 r1r1r1
+
+#-----------------------------------------------------------------------------
+#41-50
+Ch1 <b2^8>c+d+<b
+Ch1 >c+2.er
+Ch1 d+2.f+r
+Ch1 e1^4
+Ch1 d+2c+4^4
+Ch1 <b+a+b+4>r4
+Ch1 g+f+g+ag+f+eg+
+Ch1 f+ef+g+f+ed+f+
+Ch1 e+2a2
+Ch1 g+1^4
+
+Ch2 r1
+Ch2 r1
+Ch2 r1
+Ch2 r2>c+2
+Ch2 <b+2>e2
+Ch2 d+2.d+4^2
+Ch2 c+2^2
+Ch2 <b+rb4^8
+Ch2 b>c+d c+<ba>c+
+Ch2 <bab>c+<bag+b
+
+Ch3 d+rg+2^4
+Ch3 f+ef+2^4
+Ch3 ef+g+2^1^1
+Ch3 r1r1r1
+Ch3 r4c+4f+rf+r
+Ch3 f+4e+d+e+2
+
+Ch4 g+a+g+f++ g+a+bg+
+Ch4 abag+ a+b>c+<a+
+Ch4 b>c+<ba+ b+>c+d+<b+
+Ch4 >c+1 r1r1r1 r1r1r1
+
+Ch5 r1r1r1
+Ch5 r4c+d+e4f+4
+Ch5 g+f+g+a g+f+eg+
+Ch5 f+ef+g+ f+ed+f+
+Ch5 ed+ef+ eag+a
+Ch5 d+c+d+e d+g+f+g+
+Ch5 c+2r2
+Ch5 r1
+
+#-----------------------------------------------------------------------------
+#51-60
+Ch1 f+ed2
+Ch1 r4c+4f+rf+r
+Ch1 f+4ede2^4
+Ch1 dc+d2^2
+Ch1 c+2
+Ch1 f+2e2^4.
+Ch1 f+ edc+e
+Ch1 dc+de dc+<b>d
+Ch1 c+1
+Ch1 <b+2>e2
+
+Ch2 a2^8>c+<ba
+Ch2 g+2r2
+Ch2 r1
+Ch2 r2a2
+Ch2 g+2r2
+Ch2 b1^4
+Ch2 e4arar
+Ch2 a4g+f+g+2^4
+Ch2 c+d+e4f+4
+Ch2 g+f+g+ag+f+eg+
+
+Ch3 f+r<f+g+a4b4
+Ch3 >c+<b>c+d c+<ba>c+
+Ch3 <bab>c+<bag+b
+Ch3 ag+ab ab>c+d
+Ch3 edef+edc+e
+Ch3 dc+de dc+<b>d
+Ch3 c+<b>c+d c+<ba>c+
+Ch3 <b1
+Ch3 ag+f+e d+c+<b+>c+
+Ch3 d+2r2
+
+Ch4 r2<f+2
+Ch4 e+2a4r4
+Ch4 g+2.r4
+Ch4 f+1
+Ch4 r1r1r1r1r1
+Ch4 r4g+4>c+rc+r
+
+Ch5 r1r1r1r1
+Ch5 r4e4arar
+Ch5 a4g+f+g+2
+Ch5 a2d+2
+Ch5 <b2>e2
+Ch5 <a1
+Ch5 g+2r2
+
+#-----------------------------------------------------------------------------
+#61-70
+Ch1 d+1^4
+Ch1 <g+4>c+rc+r
+Ch1 c+4<bab2^2
+Ch1 a2
+Ch1 g+2r2
+Ch1 >d+1
+Ch1 c++2f+2
+Ch1 e+2e2
+Ch1 d+c+d+e d+c+<b>d+
+Ch1 c+<b>c+d+ c+ed+c+
+
+Ch2 f+ef+g+f+ed+f+
+Ch2 ed+ef+ed+c+e
+Ch2 d+c+d+edc+<b>d+
+Ch2 c+<b>c+dc+ed+c+
+Ch2 <b+2>c+2
+Ch2 d+rd+rg+a+b4^4
+Ch2 a+4>d+rd+r
+Ch2 d+4c+<b+>c+2^8r4.
+Ch2 <b4r4
+Ch2 a+2a2^4
+
+Ch3 r1r1r1
+Ch3 r4c+4f+rf+r
+Ch3 f+4ed+e2
+Ch3 d+1
+Ch3 r1r1
+Ch3 r4d+4g+rg+r
+Ch3 g+4f+ef+2^8
+
+Ch4 c+4<b+a+b+2
+Ch4 >c+2<a2
+Ch4 f+2g+2
+Ch4 e+2r2
+Ch4 g+1
+Ch4 f++2g+2
+Ch4 e+4r4r2
+Ch4 r1
+Ch4 r1
+Ch4 r1
+
+Ch5 r1
+Ch5 r1
+Ch5 r1
+Ch5 r1
+Ch5 r4g+4>c+rc+r
+Ch5 c+4<ba+ba+g+b
+Ch5 a+g+a+ba+g+f+a+
+Ch5 g+f+g+a+g+ba+g+
+Ch5 f++2g+2
+Ch5 a+2>d+2
+
+#-----------------------------------------------------------------------------
+#71-80
+Ch1 <b+2b2
+Ch1 a+2a2
+Ch1 g+2r2
+Ch1 r1
+Ch1 r1
+Ch1 >c+1
+Ch1 <b+2>e2
+Ch1 d+2.d+4^2
+Ch1 c+2^2
+Ch1 <b+2
+
+Ch2 d+4g+rg+4^4
+Ch2 f+e+f+2^2
+Ch2 e4r4
+Ch2 d+2c+2
+Ch2 d+2.r4
+Ch2 r1
+Ch2 r4g+4>c+rc+r
+Ch2 c+4<b+a+ b+>c+r<b+
+Ch2 g+f+g+a g+f+eg+
+Ch2 f+ef+g+f+ed+f+
+
+Ch3 ag+f+ e+d+e+c+
+Ch3 f+e+f+g+ ag+ab
+Ch3 >c+<b+>c+d+ rd+ef+
+Ch3 g+f+g+ag+f+eg+
+Ch3 f+ef+g+f+ed+f+
+Ch3 ed+ef+ ed+c+e
+Ch3 d+2r2
+Ch3 r1r1r1
+
+Ch4 r1
+Ch4 r1
+Ch4 r1
+Ch4 r4<g+4>c+rc+r
+Ch4 c+4<b+a+b+2
+Ch4 >c+2r2
+Ch4 r1
+Ch4 r1
+Ch4 r1
+Ch4 r1
+
+Ch5 <g+2r2
+Ch5 r1
+Ch5 c+1
+Ch5 <b+2>e2
+Ch5 d+1
+Ch5 c+4c+d+e+4f+4
+Ch5 g+f+g+ag+f+eg+
+Ch5 f+ef+g+f+ed+f+
+Ch5 e4>e4arar
+Ch5 a4g+f+g+r<g+4
+
+#-----------------------------------------------------------------------------
+#81-90
+Ch1 r4>c+d+e4f+4
+Ch1 g+f+g+a g+f+eg+
+Ch1 f+ef+g+ f+ed+f+
+Ch1 ed+ef+ edc+e
+Ch1 dc+de dc+rd+
+Ch1 c+<b>c+d c+<ba>c+
+Ch1 <bab>c+<bag+b
+Ch1 a2r2
+Ch1 >c+1
+Ch1 <b+2>e2
+
+Ch2 eg+ab >c+d<b+>c+
+Ch2 d+4r2.
+Ch2 r1
+Ch2 r1
+Ch2 r4<f+4brbr
+Ch2 brag+a4r4
+Ch2 g+2.r4r8
+Ch2 g+f+e+ f+2
+Ch2 g+2^8 g+f+e
+Ch2 d+ag+f+ eg+>c+<b
+
+Ch3 r1
+Ch3 r4<g+4>c+rc+r
+Ch3 c+4<b+a+b+2
+Ch3 >c+1
+Ch3 <b2.>f+4
+Ch3 e+2f+2
+Ch3 <b2>c+2^2^8
+Ch3 c+<ba
+Ch3 g+1
+Ch3 r1
+
+Ch4 r4<b4a2
+Ch4 b+2>e2
+Ch4 d+1
+Ch4 c+4e4arar
+Ch4 a4g+f+g+2^2
+Ch4 r2
+Ch4 g+1
+Ch4 a2f+2^8
+Ch4 f+ed+e4c+4
+Ch4 g+1
+
+Ch5 >c+1
+Ch5 <g+4r4r2
+Ch5 r1
+Ch5 r1
+Ch5 r1
+Ch5 r4>c+4f+rf+r
+Ch5 f+4e+d+e+2
+Ch5 f+2r2
+Ch5 r1
+Ch5 <r4g+4>c+rc+r
+
+#-----------------------------------------------------------------------------
+#91-100
+Ch1 d+1^4
+Ch1 c+4g+rg+r
+Ch1 g+4f+ef+2
+Ch1 e1
+Ch1 d+2g2
+Ch1 f+2d2
+Ch1 c+1
+Ch1 r1
+Ch1 r4<b+4>f+rf+r
+Ch1 f+4ed+e4d+c+
+
+Ch2 ag+af+ g+2^4
+Ch2 rb+>c+2^4
+Ch2 <a+4>d+rd+r
+Ch2 d+4c+<b>c+2
+Ch2 <b2b2
+Ch2 a+2f+2
+Ch2 e+2a2
+Ch2 r4g+4>c+rc+r
+Ch2 c+4r<a+ b+>c+d+4^4
+Ch2 c+<b+>c+4.r
+
+Ch3 r1r1r1r1
+Ch3 r4b4>erer
+Ch3 e4dc+r4r4
+Ch3 r4c+4f+rf+r
+Ch3 f+4ed+e2
+Ch3 f+2.^8g+
+Ch3 a4g+f+g+4f+e
+
+Ch4 f+2d+4r4
+Ch4 ed+ef+ed+c+e
+Ch4 d+c+d+ed+c+<b+>d+
+Ch4 c+4e4arar
+Ch4 a4gf+e2
+Ch4 r4f+4brbr
+Ch4 b4ag+ ag+f+e
+Ch4 d+2r4g+4
+Ch4 >d+rd+rd+4c+<b+
+Ch4 >c+1
+
+Ch5 c+4<b+a b+>c+d+<b+
+Ch5 e2r4a4
+Ch5 d+2r4g+4
+Ch5 c+4r4r2
+Ch5 r1
+Ch5 r1
+Ch5 r2>c+2
+Ch5 <b+2>e2
+Ch5 d+1
+Ch5 c+4e4arar
+
+#-----------------------------------------------------------------------------
+#101-115
+Ch1 d+4<b+4>c+2^1
+Ch1 <b+2b2
+Ch1 a+2a2
+Ch1 g+1
+Ch1 a+2b+2
+Ch1 >c+1
+Ch1 <b+2>e2^2
+Ch1 d+4c+4
+Ch1 <b+2>c+2^2
+Ch1 <b+2
+Ch1 %80 >c+1^1^1^1^1
+
+Ch2 <f+2g+2^2
+Ch2 f+2^4
+Ch2 e+f+g+rg+r
+Ch2 g+4f+ed+4c+4
+Ch2 <b+2>e2^4
+Ch2 f+g+a4g+4^4
+Ch2 e4arar
+Ch2 a4g+f+g+4a+b+
+Ch2 >c+2<a+2
+Ch2 g+2g+2^1^2
+Ch2 f+2
+Ch2 e+2a2
+Ch2 g+1^1^1
+
+Ch3 d+2e2^2
+Ch3 d+rc+r
+Ch3 d+4r4r2
+Ch3 r4c+4f+rf+r
+Ch3 f+4ed+c+2^2
+Ch3 d+2
+Ch3 c+rc+rf+rf+r
+Ch3 f+4ed+e4f+g+
+Ch3 a+2d+2^2
+Ch3 e2
+Ch3 d+2.ef+
+Ch3 e+4c+2.^4
+Ch3 c+4f+rf+r
+Ch3 f+2e+4d+4
+Ch3 e+1^1
+
+Ch4 <b+2r2
+Ch4 r4c+4f+rf+r
+Ch4 f+4e+d+c+2^2
+Ch4 d+2^4
+Ch4 d+4g+rg+r
+Ch4 g+4f+ef+rf+4
+Ch4 f+4ed+e4d+c+
+Ch4 d+4<g+4>c+rc+r
+Ch4 c+4<ba+>d+2^8
+Ch4 ef+4^8ed+c+
+Ch4 g+1
+Ch4 a2.g+a
+Ch4 b4a4g+4f+4
+Ch4 >c+4<bag+4f+4
+Ch4 g+1^1
+
+Ch5 a4g+f+ed+c+<b
+Ch5 a+2a2^4
+Ch5 g+f+e+2
+Ch5 f+1
+Ch5 g+1^1^1^4r2.
+Ch5 f++1
+Ch5 g+1^1
+Ch5 %80 >c+1^1^1^1^1
+
