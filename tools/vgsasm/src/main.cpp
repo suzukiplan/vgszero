@@ -47,22 +47,26 @@ std::vector<std::string> split_token(std::string str, char del)
     return elems;
 }
 
-void addNameTable(std::string name, LineData* line)
+bool checkNameTable(std::string name)
 {
     if (mnemonicTable.find(name) != mnemonicTable.end() ||
         operandTable.find(name) != operandTable.end() ||
         name == "SIZEOF" ||
-        name == "OFFSET") {
+        name == "OFFSET" ||
+        nameTable.find(name) != nameTable.end()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void addNameTable(std::string name, LineData* line)
+{
+    if (checkNameTable(name)) {
         line->error = true;
         line->errmsg = "Reserved symbol name " + name + " was specified.";
     } else {
-        auto n = nameTable.find(name);
-        if (n == nameTable.end()) {
-            nameTable[name] = line;
-        } else {
-            line->error = true;
-            line->errmsg = "Duplicate symbol name " + name + " was specified.";
-        }
+        nameTable[name] = line;
     }
 }
 
@@ -70,7 +74,7 @@ static int check_error(LineData* line)
 {
     if (line->error) {
         printf("Error: %s (%d) %s\n", line->path.c_str(), line->lineNumber, line->errmsg.c_str());
-        line->printDebug();
+        // line->printDebug();
         return -1;
     }
     return 0;

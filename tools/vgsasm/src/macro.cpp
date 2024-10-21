@@ -1,6 +1,21 @@
 #include "common.h"
 
 std::map<std::string, Macro*> macroTable;
+static std::map<std::string, bool> dupTable;
+
+static bool check_caller_dup(Macro* macro)
+{
+    if (dupTable.end() != dupTable.find(macro->name)) {
+        return true;
+    }
+    dupTable[macro->name] = true;
+    for (auto caller : macro->caller) {
+        if (check_caller_dup(caller)) {
+            return true;
+        }
+    }
+    return false;
+}
 
 void parse_macro(LineData* line)
 {
@@ -35,7 +50,7 @@ void parse_macro(LineData* line)
     }
 
     // テーブル登録
-    auto macro = new Macro(name);
+    auto macro = new Macro(name, line);
     macroTable[name] = macro;
 
     // マクロ名の次がカッコになっているかチェック
@@ -92,6 +107,15 @@ void parse_macro(LineData* line)
 
 void macro_syntax_check(std::vector<LineData*>* lines)
 {
+    for (auto it = macroTable.begin(); it != macroTable.end(); it++) {
+        for (auto arg : it->second->args) {
+            if (checkNameTable(arg)) {
+                it->second->refer->error = true;
+                it->second->refer->errmsg = "A macro argument name conflict with the name used for structs, defines, etc.: " + arg;
+            }
+        }
+    }
+
     bool searchScopeBegin = false;
     bool storeTokenToMacro = false;
     Macro* macro = nullptr;
@@ -144,6 +168,43 @@ void macro_syntax_check(std::vector<LineData*>* lines)
         }
     }
 
+    // Other -> MacroCaller
+    for (auto it = lines->begin(); it != lines->end(); it++) {
+        auto line = *it;
+        for (auto token = line->token.begin(); token != line->token.end(); token++) {
+            if (token->first == TokenType::Other) {
+                if (macroTable.find(token->second) != macroTable.end()) {
+                    token->first = TokenType::MacroCaller;
+                }
+            }
+        }
+    }
+
+    // Other -> MacroCaller in Macro
+    for (auto m = macroTable.begin(); m != macroTable.end(); m++) {
+        for (auto it = m->second->lines.begin(); it != m->second->lines.end(); it++) {
+            auto line = *it;
+            for (auto token = line->token.begin(); token != line->token.end(); token++) {
+                if (token->first == TokenType::Other) {
+                    auto caller = macroTable.find(token->second);
+                    if (caller != macroTable.end()) {
+                        token->first = TokenType::MacroCaller;
+                        m->second->caller.push_back(caller->second);
+                    }
+                }
+            }
+        }
+    }
+
+    // 循環チェック
+    for (auto m = macroTable.begin(); m != macroTable.end(); m++) {
+        dupTable.clear();
+        if (check_caller_dup(m->second)) {
+            m->second->refer->error = true;
+            m->second->refer->errmsg = "Macro calls are circulating: " + m->first;
+        }
+    }
+
     // 取得したマクロを全表示
 #if 0
     for (auto m : macroTable) {
@@ -170,7 +231,7 @@ void extract_macro_call(std::vector<LineData*>* lines)
     for (auto it = lines->begin(); it != lines->end(); it++) {
         // マクロ呼び出し行かチェック
         auto line = *it;
-        if (line->token.empty() || line->token[0].first != TokenType::Other) {
+        if (line->token.empty() || line->token[0].first != TokenType::MacroCaller) {
             continue;
         }
         auto mit = macroTable.find(line->token[0].second);
