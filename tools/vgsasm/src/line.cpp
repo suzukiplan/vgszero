@@ -355,6 +355,19 @@ LineData::LineData(LineData* line)
     }
 }
 
+LineData::LineData()
+{
+    this->error = false;
+    this->errmsg = "";
+    this->path = "";
+    this->lineNumber = 0;
+    this->programCounter = 0;
+    this->programCounterInit = false;
+    this->text = "";
+    this->token.clear();
+    this->machine.clear();
+}
+
 void LineData::printDebug()
 {
     for (auto token : this->token) {
@@ -364,6 +377,8 @@ void LineData::printDebug()
             } else {
                 printf(" $\?\?\?\? <%s>", token.second.c_str());
             }
+        } else if (token.first == TokenType::Mnemonic) {
+            printf(" {%s}", token.second.c_str());
         } else if (token.first == TokenType::Operand) {
             printf(" <%s>", token.second.c_str());
         } else if (token.first == TokenType::AddressBegin) {

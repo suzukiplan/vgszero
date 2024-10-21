@@ -2,14 +2,16 @@ CPP = g++
 CPPFLAGS = -std=c++17 -g
 HEADERS = src/common.h
 OBJECTS = \
-	increment.o \
+	macro.o \
 	binary.o \
 	bracket.o \
 	define.o \
 	file.o \
 	formulas.o \
+	increment.o \
 	label.o \
 	line.o \
+	literal.o \
 	mnemonic.o \
 	mnemonic_data.o \
 	mnemonic_call.o \
@@ -47,6 +49,12 @@ clean:
 
 vgsasm: ${OBJECTS}
 	${CPP} ${CPPFLAGS} -o vgsasm ${OBJECTS}
+
+macro.o: src/macro.cpp ${HEADERS} src/mnemonic.h
+	${CPP} ${CPPFLAGS} -c $< -o $@
+
+literal.o: src/literal.cpp ${HEADERS} src/mnemonic.h
+	${CPP} ${CPPFLAGS} -c $< -o $@
 
 increment.o: src/increment.cpp ${HEADERS}
 	${CPP} ${CPPFLAGS} -c $< -o $@

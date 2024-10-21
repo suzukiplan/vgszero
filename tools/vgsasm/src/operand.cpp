@@ -30,8 +30,6 @@ std::map<std::string, Operand> operandTable = {
     {"M", Operand::M},
 };
 
-static bool parseOperandSkipScope = false;
-
 bool operand_is_condition(Operand op)
 {
     switch (op) {
@@ -59,20 +57,6 @@ bool operand_is_condition(std::string str)
 void parse_operand(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
-        // スコープ内では解析をスキップ
-        if (parseOperandSkipScope) {
-            if (it->first == TokenType::ScopeEnd) {
-                parseOperandSkipScope = false;
-            }
-            continue;
-        }
-
-        // スコープ開始を検出したらスキップ
-        if (it->first == TokenType::ScopeBegin) {
-            parseOperandSkipScope = true;
-            continue;
-        }
-
         // Other ならチェック
         if (it->first == TokenType::Other) {
             auto op = operandTable.find(it->second);

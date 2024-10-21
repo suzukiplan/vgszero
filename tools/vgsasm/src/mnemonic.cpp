@@ -123,25 +123,9 @@ std::map<std::string, Mnemonic> mnemonicTable = {
     {"COS", Mnemonic::COS},
 };
 
-static bool parseMneimonicSkipScope = false;
-
 void parse_mneoimonic(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
-        // スコープ内ではニーモニック解析をスキップ
-        if (parseMneimonicSkipScope) {
-            if (it->first == TokenType::ScopeEnd) {
-                parseMneimonicSkipScope = false;
-            }
-            continue;
-        }
-
-        // スコープ開始を検出したらスキップ
-        if (it->first == TokenType::ScopeBegin) {
-            parseMneimonicSkipScope = true;
-            continue;
-        }
-
         // Other ならチェック
         if (it->first == TokenType::Other) {
             auto m = mnemonicTable.find(it->second);

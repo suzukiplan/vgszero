@@ -41,7 +41,7 @@ org $4010
 
     ; NameTable に Hello, World! を書き込む
     dec c
-    ld hl, Hello@Data
+    ld hl, "Hello, World!"
     ld b, 13
 @Loop
     push af
@@ -69,12 +69,3 @@ org $4010
     dec d
     jr nz, @Loop
     ret
-
-.Data
-
-@Hello
-    DB "Hello, World!"
-
-org $7FFF
-    RST $38
-

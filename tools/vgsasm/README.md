@@ -79,6 +79,36 @@ You can specify the size at which to start reading by `, number` after the offse
 
 The `DEFINITION_NAME` in the source code is expanded to an `Expanded expression`.
 
+## `#macro`
+
+```z80
+#macro foo(arg1, arg2, arg3) {
+    LD BC, arg1
+    LD DE, arg2
+    LD HL, arg3
+}
+
+org $0000
+    foo(1, 2 + 3, 3 * 4 + 3)
+    HALT
+```
+
+The above code is internally expanded as follows:
+
+```z80
+org $0000
+    LD BC, 1
+    LD DE, 2 + 3
+    LD HL, 3 * 4 + 3
+    HALT
+```
+
+- A multifunctional version of [`#define`](#define) that can have arguments and multi-line expansion.
+- The number of arguments must match the definition and the caller.
+- Only numbers can be specified as arguments in the macro caller (including labels, formulas, and [String Literal](#string-literal)).
+- Labels cannot be used within a macro definition.
+- If you want to perform complex processing involving branching, call a subroutine from within the macro. (This is also necessary to optimize code size.)
+
 ## `org`
 
 Specifies the starting address for binary output.
@@ -145,6 +175,31 @@ JP FOO@LABEL2   ; Jump to FOO@LABEL2
 - Inner labels are written in `@LABEL` format.
 - Labels and inner labels are not case sensitive.
 - The label and inner label are symbols that uniquely identify all source files with `#include`.
+- Labels beginning with `$` cannot be specified.
+
+## String Literal
+
+For example, when implemented as follows,
+
+```
+LD BE, "HELLO,WORLD!"
+LD DE, "HOGE"
+LD HL, "HELLO,WORLD!"
+  :
+```
+
+It should automatically expand as follows:
+
+```
+LD BE, $0
+LD DE, $1
+LD HL, $0
+  :
+$0: DB "HELLO,WORLD!", 0
+$1: DB "HOGE", 0
+```
+
+> Labels beginning with `$` cannot be specified by the user program.
 
 ## `struct`
 

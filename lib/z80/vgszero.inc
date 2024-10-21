@@ -71,3 +71,31 @@ struct VRAM $8000 {
     spDPM       ds.b    1           ; R10: Sprite Direct Pattern Maaping
     mode1024    ds.b    1           ; R11: 1024 pattern mode
 }
+
+#macro memcpy(destination, source, size)
+{
+    PUSH BC
+    PUSH DE
+    PUSH HL
+    LD BC, destination
+    LD DE, source
+    LD HL, size
+    OUT (IO.memcpy), A
+    POP HL
+    POP DE
+    POP BC
+}
+
+#macro memset(destination, value, size)
+{
+    PUSH AF
+    PUSH BC
+    PUSH HL
+    LD BC, destination
+    LD A, value
+    LD HL, size
+    OUT (IO.memcpy), A
+    POP HL
+    POP BC
+    POP AF
+}

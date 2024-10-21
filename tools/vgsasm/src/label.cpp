@@ -38,6 +38,15 @@ LineData* parse_label(LineData* line)
         line->errmsg = "Duplicate label: " + label;
         return nullptr;
     }
+
+    // ラベルの禁則チェック
+    auto cp = label.c_str();
+    if (*cp == '$') {
+        line->error = true;
+        line->errmsg = "Label names beginning with `$` are not allowed.";
+        return nullptr;
+    }
+
     addNameTable(label, line);
     token->second = label;
     labelTable[label] = line;
