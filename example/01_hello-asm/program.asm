@@ -10,20 +10,14 @@ org $0000
     call wait_vblank
 
     ; パレットを初期化
-    ld bc, VRAM.palette
-    ld de, palette0_data
-    ld hl, 8
-    out (IO.memcpy), a
+    memcpy(VRAM.palette, palette0_data, 8)
 
     ; Bank 1 を Character Pattern Table ($A000) に転送 (DMA)
     ld a, $01
     out (IO.dma), a
 
     ; 画面中央付近 (10,12) に "HELLO,WORLD!" を描画
-    ld bc, 12 * 32 + 10 + VRAM.bg_name
-    ld de, hello_text
-    ld hl, 12
-    out (IO.memcpy), a
+    memcpy(12 * 32 + 10 + VRAM.bg_name, "HELLO,WORLD!", 12)
 
     ; メインループ
 @Loop
@@ -71,4 +65,3 @@ org $0000
     ret
 
 palette0_data: DW %0000000000000000, %0001110011100111, %0110001100011000, %0111111111111111
-hello_text: DB "HELLO,WORLD!"
