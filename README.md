@@ -1181,7 +1181,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | Name | Language   | Description |
 | :--- | :--------: | :---------- |
 | `01_hello` | [Z80](./example/01_hello-asm/), [C](./example/01_hello/) | `HELLO,WORLD!` を表示 |
-| `02_global` | [C](./example/02_global/) | グローバル変数の使用例 |
+| `02_global` | [Z80](./example/02_global-asm/), [C](./example/02_global/) | グローバル変数の使用例 |
 | `03_sound` | [C](./example/03_sound/) | BGM と効果音の使用例 |
 | `04_heavy` | [C](./example/04_heavy/) | エミュレータ側の負荷を最大化する検査用プログラム |
 | `05_sprite256` | [C](./example/05_sprite256/) | スプライトを256表示して動かす例 |
@@ -1190,8 +1190,8 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | `08_map-scroll` | [C](./example/08_map-scroll/) | Tiled Map Editor で作ったマップデータのスクロール |
 | `09_joypad` | [C](./example/09_joypad/) | ジョイパッドの入力結果をプレビュー |
 | `10_chr720` | [C](./example/10_chr720/) | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
-| `11_bigsprite` | [C](./example/11_bigsprite/) | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の指定により巨大なスプライトを表示する例 |
-| `12_angle` | [C](./example/12_angle) | [ハードウェア atan2 テーブル](#hardware-atan2-table) を用いて完全な自機狙いを実装する例 |
+| `11_bigsprite` | [C](./example/11_bigsprite/) | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の使用例 |
+| `12_angle` | [C](./example/12_angle) | [atan2](#hardware-atan2-table) を用いた自機狙いの実装例 |
 | `13_perlin` | [C](./example/13_perlin) | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
 | `14_1024ptn` | [C](./example/14_1024ptn) | [1024 パターンモード](#1024-patterns-mode) の利用例 |
 | `15_nsf` | [C](./example/15_nsf/) | [NSF](#nsf) の利用例 |
