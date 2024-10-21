@@ -1,0 +1,8 @@
+.vscode
+vgsasm
+*.o
+*.bin
+*.rom
+test/all_disassemble.asm
+
+

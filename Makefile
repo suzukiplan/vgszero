@@ -50,6 +50,36 @@ format:
 	make execute-format FILENAME=./example/16_ptn-plus1/program.c
 	make execute-format FILENAME=./example/17_clip/program.c
 	make execute-format FILENAME=./lib/sdcc/vgs0lib.h
+	make execute-format FILENAME=./tools/vgsasm/src/offset.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/label.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_io.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_shift.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_load.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_jump.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_calc.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_call.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_data.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic.h
+	make execute-format FILENAME=./tools/vgsasm/src/numeric.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/line.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/operand.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/increment.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/common.h
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_vgs.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/binary.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/define.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_incdec.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_ex.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_stack.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/bracket.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/file.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/org.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/struct.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/main.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/formulas.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_bit.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/sizeof.cpp
 
 execute-format:
 	clang-format -style=file < ${FILENAME} > ${FILENAME}.bak
