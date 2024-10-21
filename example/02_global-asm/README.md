@@ -1,6 +1,6 @@
 # Global Variables
 
-- グローバル変数の利用例です
+グローバル変数の利用例です
 
 ![preview](preview.png)
 

@@ -6,14 +6,8 @@
 
 ## How to build
 
-### Pre-request
-
-- GNU make
-- clang (for building the depended tools)
-
-### Build
-
 ```zsh
+sudo apt install build-essential
 git clone https://github.com/suzukiplan/vgszero
 cd vgszero/example/01_hello-asm
 make
