@@ -10,8 +10,8 @@ struct VARS $C000 {
 
 #macro print_text(posX, posY, string)
 {
-    ld l, posX
-    ld h, posY
+    ld h, posX
+    ld l, posY
     ld de, string
     call print_text_sub
 }
@@ -43,32 +43,10 @@ org $0000
     ; "COUNT:" を FG(4,4) に表示
     print_text(4, 4, "COUNT:    ")
 
-    ; メインループ
 @Loop
-    ; VBLANKを待機
     call wait_vblank
     call count_up
-
-    ; 1000の位を表示
-    ld a, (VARS.c1000)
-    add '0'
-    ld (VRAM.fg_name + 32 * 4 + 10), a
-
-    ; 100の位を表示
-    ld a, (VARS.c100)
-    add '0'
-    ld (VRAM.fg_name + 32 * 4 + 11), a
-
-    ; 10の位を表示
-    ld a, (VARS.c10)
-    add '0'
-    ld (VRAM.fg_name + 32 * 4 + 12), a
-
-    ; 1の位を表示
-    ld a, (VARS.c1)
-    add '0'
-    ld (VRAM.fg_name + 32 * 4 + 13), a
-
+    call count_print
     jr @Loop
 
 ;------------------------------------------------------------
@@ -176,6 +154,31 @@ org $0000
     ld (VARS.c10), a
     ld (VARS.c100), a
     ld (VARS.c1000), a
+    ret
+
+;------------------------------------------------------------
+; カウント表示
+;------------------------------------------------------------
+.count_print
+    ; 1000の位を表示
+    ld a, (VARS.c1000)
+    add '0'
+    ld (VRAM.fg_name + 32 * 4 + 10), a
+
+    ; 100の位を表示
+    ld a, (VARS.c100)
+    add '0'
+    ld (VRAM.fg_name + 32 * 4 + 11), a
+
+    ; 10の位を表示
+    ld a, (VARS.c10)
+    add '0'
+    ld (VRAM.fg_name + 32 * 4 + 12), a
+
+    ; 1の位を表示
+    ld a, (VARS.c1)
+    add '0'
+    ld (VRAM.fg_name + 32 * 4 + 13), a
     ret
 
 ;------------------------------------------------------------
