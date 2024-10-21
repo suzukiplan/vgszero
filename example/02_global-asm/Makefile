@@ -23,7 +23,7 @@ game.pkg: program.rom
 	${MAKEPKG} -o game.pkg -r program.rom
 
 program.rom: font.chr program.bin
-	${MAKEROM} program.rom program.bin palette.bin font.chr
+	${MAKEROM} program.rom program.bin font.chr
 
 font.chr: font.bmp
 	${BMP2CHR} font.bmp font.chr palette.bin

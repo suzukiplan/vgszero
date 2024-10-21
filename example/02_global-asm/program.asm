@@ -19,12 +19,12 @@ org $0000
 
     ; パレットを初期化
     ld bc, VRAM.palette
-    ld de, $2000 ; PRG1
+    ld de, palette_data
     ld hl, 16 * 16 * 2 ; 16 palettes x 16 colors x sizeof(word)
     out (IO.memcpy), a
 
-    ; Bank 2 を Character Pattern Table に転送 (DMA)
-    ld a, $02
+    ; Bank 1 を Character Pattern Table に転送 (DMA)
+    ld a, $01
     out (IO.dma), a
 
     ; グローバル変数を初期化
@@ -48,22 +48,22 @@ org $0000
 
     ; 1000の位を表示
     ld a, (VARS.c1000)
-    add $30     ; TODO: add '0' と書きたい
+    add '0'
     ld (VRAM.fg_name + 32 * 4 + 10), a
 
     ; 100の位を表示
     ld a, (VARS.c100)
-    add $30     ; TODO: add '0' と書きたい
+    add '0'
     ld (VRAM.fg_name + 32 * 4 + 11), a
 
     ; 10の位を表示
     ld a, (VARS.c10)
-    add $30     ; TODO: add '0' と書きたい
+    add '0'
     ld (VRAM.fg_name + 32 * 4 + 12), a
 
     ; 1の位を表示
     ld a, (VARS.c1)
-    add $30     ; TODO: add '0' と書きたい
+    add '0'
     ld (VRAM.fg_name + 32 * 4 + 13), a
 
     jr @Loop
@@ -179,3 +179,4 @@ org $0000
 ; 定数定義
 ;------------------------------------------------------------
 str_count: DB "COUNT:****", 0
+palette_data: #binary "palette.bin", 0, 512
