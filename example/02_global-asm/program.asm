@@ -8,6 +8,14 @@ struct VARS $C000 {
     stop    ds.b 1
 }
 
+#macro print_text(posX, posY, string)
+{
+    ld l, posX
+    ld h, posY
+    ld de, string
+    call print_text_sub
+}
+
 org $0000
 
 .main
@@ -18,10 +26,7 @@ org $0000
     call wait_vblank
 
     ; パレットを初期化
-    ld bc, VRAM.palette
-    ld de, palette_data
-    ld hl, 16 * 16 * 2 ; 16 palettes x 16 colors x sizeof(word)
-    out (IO.memcpy), a
+    memcpy(VRAM.palette, palette_data, 512);
 
     ; Bank 1 を Character Pattern Table に転送 (DMA)
     ld a, $01
@@ -36,9 +41,7 @@ org $0000
     ld (VARS.c1), a++
 
     ; "COUNT:" を FG(4,4) に表示
-    ld de, str_count
-    ld hl, $0404
-    call print_text
+    print_text(4, 4, "COUNT:    ")
 
     ; メインループ
 @Loop
@@ -84,7 +87,7 @@ org $0000
 ; l = Y座標
 ; de = 文字列ポインタ
 ;------------------------------------------------------------
-.print_text
+.print_text_sub
     push af
     push bc
     push de
@@ -178,5 +181,4 @@ org $0000
 ;------------------------------------------------------------
 ; 定数定義
 ;------------------------------------------------------------
-str_count: DB "COUNT:****", 0
 palette_data: #binary "palette.bin", 0, 512
