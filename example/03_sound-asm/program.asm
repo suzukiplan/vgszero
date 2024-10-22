@@ -1,4 +1,4 @@
-#include "../../lib/z80/vgszero.inc"
+#include "../../lib/z80/stdio.asm"
 
 struct VARS $C000 {
     cur ds.b 1          ; メニューカーソル
@@ -29,11 +29,7 @@ struct BankB 0 {
 ;------------------------------------------------------------
 ; メインルーチン
 ;------------------------------------------------------------
-org $0000
 .main
-    ; スタックポインタを初期化
-    ld sp, 0
-
     ; VBLANKを待機
     wait_vblank()
 
@@ -49,13 +45,13 @@ org $0000
     ld (VARS.cur), 7
 
     ; メニューを表示
-    print_text(6, 7, "> PLAY: #1 PRELUDE")
-    print_text(6, 9, "  PLAY: #2 GOLDBERG")
-    print_text(6, 11, "  PLAY: #3 WTC1")
-    print_text(6, 13, "  PLAY: #4 NSF")
-    print_text(6, 15, "  PAUSE")
-    print_text(6, 17, "  RESUME")
-    print_text(6, 19, "  FADEOUT")
+    print_text_fg(6, 7, $80, "> PLAY: #1 PRELUDE")
+    print_text_fg(6, 9, $80, "  PLAY: #2 GOLDBERG")
+    print_text_fg(6, 11, $80, "  PLAY: #3 WTC1")
+    print_text_fg(6, 13, $80, "  PLAY: #4 NSF")
+    print_text_fg(6, 15, $80, "  PAUSE")
+    print_text_fg(6, 17, $80, "  RESUME")
+    print_text_fg(6, 19, $80, "  FADEOUT")
 
 ; メインループ
 .main_loop
@@ -94,7 +90,7 @@ org $0000
 ; BGM を選択
 ;------------------------------------------------------------
 .select_bgm
-    push_all()
+    push_all_without_i()
     ld a, (VARS.cur)
     sub 7
     sr a
@@ -116,7 +112,7 @@ org $0000
 @Play
     out (IO.bgm.play), a
 @End
-    pop_all()
+    pop_all_without_i()
     eff_play(BankS.enter)
     ret
 
@@ -124,7 +120,7 @@ org $0000
 ; カーソルを上へ移動
 ;------------------------------------------------------------
 .move_cur_up
-    push_all()
+    push_all_without_i()
     call clear_cur
     ld a, (VARS.cur)
     cp 7
@@ -136,14 +132,14 @@ org $0000
 @move
     ld (VARS.cur), a
     call draw_cur
-    pop_all()
+    pop_all_without_i()
     ret
 
 ;------------------------------------------------------------
 ; カーソルを下へ移動
 ;------------------------------------------------------------
 .move_cur_down
-    push_all()
+    push_all_without_i()
     call clear_cur
     ld a, (VARS.cur)
     cp 19
@@ -155,7 +151,7 @@ org $0000
 @move
     ld (VARS.cur), a
     call draw_cur
-    pop_all()
+    pop_all_without_i()
     ret
 
 ;------------------------------------------------------------
@@ -189,66 +185,6 @@ org $0000
     add hl, 6
     add hl, VRAM.fg_name
     ret
-
-;------------------------------------------------------------
-; スタック
-;------------------------------------------------------------
-#macro push_all()
-{
-    push af
-    push bc
-    push de
-    push hl
-}
-
-#macro pop_all()
-{
-    pop hl
-    pop de
-    pop bc
-    pop af
-}
-
-;------------------------------------------------------------
-; FG へ $00 終端の文字列を表示
-;------------------------------------------------------------
-#macro print_text(posX, posY, string)
-{
-    push_all()
-    ld h, posX
-    ld l, posY
-    ld de, string
-    call print_text_sub
-    pop_all()
-}
-
-.print_text_sub
-    ; 座標をネームテーブルアドレスへ変換
-    ; HL = L * 32 + H + VRAM.fg_name
-    ld a, h
-    ld h, 0
-    ld c, 32
-    mul hl, c
-    add hl, a
-    add hl, VRAM.fg_name
-
-@Loop
-    ; 文字コード取得
-    ld a, (de)
-    and a
-    ret z
-
-    ; 文字コード書き込み
-    ld (hl), a
-
-    ; 属性更新
-    add hl, $0400
-    ld a, $80
-    ld (hl), a
-    add hl, -$03FF
-
-    inc de
-    jr @Loop
 
 ;------------------------------------------------------------
 ; データ
