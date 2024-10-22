@@ -67,6 +67,7 @@ struct BankB 0 {
     bit PAD.up, a
     jr nz, @CheckDown
     call move_cur_up
+    jr @CheckA
 
 @CheckDown
     bit PAD.down, (hl)
@@ -77,8 +78,16 @@ struct BankB 0 {
 
 @CheckA
     bit PAD.a, (hl)
-    jr z, @End
+    jr z, @CheckB
     bit PAD.a, a
+    jr nz, @CheckB
+    call select_bgm
+    jr @End
+
+@CheckB
+    bit PAD.b, (hl)
+    jr z, @End
+    bit PAD.b, a
     jr nz, @End
     call select_bgm
 
