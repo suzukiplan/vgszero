@@ -24,16 +24,16 @@ struct VARS $C000 {
     memcpy(VRAM.palette, palette_data, 512);
 
     ; Bank 1 を Character Pattern Table に転送 (DMA)
-    ld a, $01
+    a = 1
     out (IO.dma), a
 
     ; グローバル変数を初期化
-    xor a
-    ld (VARS.stop), a++
-    ld (VARS.c1000), a++
-    ld (VARS.c100), a++
-    ld (VARS.c10), a++
-    ld (VARS.c1), a++
+    a ^= a
+    VARS.stop = a++
+    VARS.c1000 = a++
+    VARS.c100 = a++
+    VARS.c10 = a++
+    VARS.c1 = a
 
     ; "COUNT:" を FG(4,4) に表示
     print_text_fg(4, 4, 0x80, "COUNT:    ")
@@ -48,51 +48,43 @@ struct VARS $C000 {
 ; カウントアップ
 ;------------------------------------------------------------
 .count_up
-    ld a, (VARS.stop)
-    and $FF
+    a = (VARS.stop)
+    a &= a
     ret nz
 
 @Up1
-    ld a, (VARS.c1)
-    inc a
-    ld (VARS.c1), a
+    a = (VARS.c1)
+    VARS.c1 = ++a
     cp 10
     ret c
 
 @Up10
-    xor a
-    ld (VARS.c1), a
-    ld a, (VARS.c10)
-    inc a
-    ld (VARS.c10), a
+    VARS.c1 = 0
+    a = (VARS.c10)
+    VARS.c10 = ++a
     cp 10
     ret c
 
 @Up100
-    xor a
-    ld (VARS.c10), a
-    ld a, (VARS.c100)
-    inc a
-    ld (VARS.c100), a
+    VARS.c10 = 0
+    a = (VARS.c100)
+    VARS.c100 = ++a
     cp 10
     ret c
 
 @Up1000
-    xor a
-    ld (VARS.c100), a
-    ld a, (VARS.c1000)
-    inc a
-    ld (VARS.c1000), a
+    VARS.c100 = 0
+    a = (VARS.c1000)
+    VARS.c1000 = ++a
     cp 10
     ret c
 
 @CountStop
-    inc (VARS.stop)
-    ld a, 9
-    ld (VARS.c1), a
-    ld (VARS.c10), a
-    ld (VARS.c100), a
-    ld (VARS.c1000), a
+    VARS.stop = 1
+    VARS.c1 = 9
+    VARS.c10 = 9
+    VARS.c100 = 9
+    VARS.c1000 = 9
     ret
 
 ;------------------------------------------------------------
@@ -100,24 +92,24 @@ struct VARS $C000 {
 ;------------------------------------------------------------
 .count_print
     ; 1000の位を表示
-    ld a, (VARS.c1000)
-    add '0'
-    ld (VRAM.fg_name + 32 * 4 + 10), a
+    a = (VARS.c1000)
+    a += '0'
+    VRAM.fg_name + 32 * 4 + 10 = a
 
     ; 100の位を表示
-    ld a, (VARS.c100)
-    add '0'
-    ld (VRAM.fg_name + 32 * 4 + 11), a
+    a = (VARS.c100)
+    a += '0'
+    VRAM.fg_name + 32 * 4 + 11 = a
 
     ; 10の位を表示
-    ld a, (VARS.c10)
-    add '0'
-    ld (VRAM.fg_name + 32 * 4 + 12), a
+    a = (VARS.c10)
+    a += '0'
+    VRAM.fg_name + 32 * 4 + 12 = a
 
     ; 1の位を表示
-    ld a, (VARS.c1)
-    add '0'
-    ld (VRAM.fg_name + 32 * 4 + 13), a
+    a = (VARS.c1)
+    a += '0'
+    VRAM.fg_name + 32 * 4 + 13 = a
     ret
 
 ;------------------------------------------------------------
