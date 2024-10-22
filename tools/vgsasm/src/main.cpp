@@ -150,6 +150,7 @@ static int assemble(std::vector<LineData*> lines)
             lines.insert(line + 1, newLine);
             line = lines.begin();
         }
+        replace_assignment(*line);  // X Equal* Y = {LD|ADD|SUB|AND|OR|XOR} X, Y
         parse_mneoimonic(*line);    // Other -> Mnemonic
         parse_operand(*line);       // Other -> Operand
         parse_struct(*line);        // Other -> Struct

@@ -2,6 +2,7 @@ CPP = g++
 CPPFLAGS = -std=c++17 -g
 HEADERS = src/common.h
 OBJECTS = \
+	assign.o \
 	macro.o \
 	binary.o \
 	bracket.o \
@@ -49,6 +50,9 @@ clean:
 
 vgsasm: ${OBJECTS}
 	${CPP} ${CPPFLAGS} -o vgsasm ${OBJECTS}
+
+assign.o: src/assign.cpp ${HEADERS}
+	${CPP} ${CPPFLAGS} -c $< -o $@
 
 macro.o: src/macro.cpp ${HEADERS} src/mnemonic.h
 	${CPP} ${CPPFLAGS} -c $< -o $@

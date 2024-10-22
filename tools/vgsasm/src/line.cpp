@@ -13,6 +13,7 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
     this->text = text;
     this->programCounter = 0;
     this->programCounterInit = false;
+    this->isAssignmnt = false;
     char formed[4096];
     memset(formed, 0, sizeof(formed));
 
@@ -195,10 +196,17 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
                     cp++;
                     this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Split, ","));
                     break;
+                case '=':
+                    cp++;
+                    this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Equal, "="));
+                    break;
                 case '+':
                     if ('+' == *(cp + 1)) {
                         cp += 2;
                         this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Inc, "++"));
+                    } else if ('=' == *(cp + 1)) {
+                        cp += 2;
+                        this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::EqualPlus, "+="));
                     } else {
                         cp++;
                         this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Plus, "+"));
@@ -208,6 +216,9 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
                     if ('-' == *(cp + 1)) {
                         cp += 2;
                         this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Dec, "--"));
+                    } else if ('=' == *(cp + 1)) {
+                        cp += 2;
+                        this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::EqualMinus, "-="));
                     } else {
                         cp++;
                         this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Minus, "-"));
@@ -222,8 +233,31 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
                     this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Mul, "*"));
                     break;
                 case '&':
-                    cp++;
-                    this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::And, "&"));
+                    if ('=' == *(cp + 1)) {
+                        cp += 2;
+                        this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::EqualAnd, "&="));
+                    } else {
+                        cp++;
+                        this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::And, "&"));
+                    }
+                    break;
+                case '|':
+                    if ('=' == *(cp + 1)) {
+                        cp += 2;
+                        this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::EqualOr, "|="));
+                    } else {
+                        cp++;
+                        this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Or, "|"));
+                    }
+                    break;
+                case '^':
+                    if ('=' == *(cp + 1)) {
+                        cp += 2;
+                        this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::EqualXor, "^="));
+                    } else {
+                        cp++;
+                        this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Caret, "^"));
+                    }
                     break;
                 case '[':
                     cp++;
@@ -302,6 +336,9 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
                             '*' == *ed ||
                             '/' == *ed ||
                             '&' == *ed ||
+                            '=' == *ed ||
+                            '|' == *ed ||
+                            '^' == *ed ||
                             ',' == *ed) {
                             break;
                         }
@@ -347,6 +384,7 @@ LineData::LineData(LineData* line)
     this->programCounter = line->programCounter;
     this->programCounterInit = line->programCounterInit;
     this->text = line->text;
+    this->isAssignmnt = line->isAssignmnt;
     for (auto t : line->token) {
         this->token.push_back(std::make_pair(t.first, t.second));
     }
@@ -363,6 +401,7 @@ LineData::LineData()
     this->lineNumber = 0;
     this->programCounter = 0;
     this->programCounterInit = false;
+    this->isAssignmnt = false;
     this->text = "";
     this->token.clear();
     this->machine.clear();

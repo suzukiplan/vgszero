@@ -44,11 +44,19 @@ enum class TokenType {
     ScopeBegin,       // { スコープ起点
     ScopeEnd,         // } スコープ終点
     And,              // & アンパーサンド
+    Or,               // |
+    Caret,            // ^
     Inc,              // インクリメント
     Dec,              // デクリメント
     Binary,           // #binary
     Macro,            // #macro
     MacroCaller,      // マクロ呼び出し
+    Equal,            // = 代入
+    EqualPlus,        // += 加算代入
+    EqualMinus,       // -= 減算代入
+    EqualAnd,         // &= 論理積代入
+    EqualOr,          // |= 論理和代入
+    EqualXor,         // ^= 排他的論理和代入
     Other             // その他 (構文解析の仮定で最終的にはなくなる)
 };
 
@@ -63,6 +71,7 @@ class LineData
     int lineNumber;
     int programCounter;
     bool programCounterInit;
+    bool isAssignmnt;
     std::string text;
     std::vector<std::pair<TokenType, std::string>> token;
     std::vector<uint8_t> machine;
@@ -218,3 +227,4 @@ void extract_string_literal(std::vector<LineData*>* lines);                     
 void parse_macro(LineData* line);                                                     // macro.cpp
 void macro_syntax_check(std::vector<LineData*>* lines);                               // macro.cpp
 void extract_macro_call(std::vector<LineData*>* lines);                               // macro.cpp
+void replace_assignment(LineData* line);                                              // assign.cpp

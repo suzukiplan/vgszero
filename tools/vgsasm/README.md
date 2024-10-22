@@ -109,6 +109,60 @@ org $0000
 - Labels cannot be used within a macro definition.
 - If you want to perform complex processing involving branching, call a subroutine from within the macro. (This is also necessary to optimize code size.)
 
+In the `#macro`, perform processing equivalent to C language function call conventions (stack frame construction), and major processing is implemented by subroutine calls, allowing highly code-readable function call processing to be implemented only in full assembly language.
+
+Example:
+
+```z80
+;------------------------------------------------------------------
+; Caller implementation (This is not BASIC!)
+;------------------------------------------------------------------
+.main
+    print_text(3, 5, $80, "HELLO,WORLD!")
+    print_text(3, 7, $80, "THIS IS TEST")
+    print_text(3, 9, $80, "HOGE")
+    HALT
+
+;------------------------------------------------------------------
+; Macro & Subroutine
+;------------------------------------------------------------------
+; Only call conventions are implemented in the macro.
+#macro print_text(posX, posY, attr, string)
+{
+    push_all()
+    ld h, posX
+    ld l, posY
+    ld b, attr
+    ld de, string
+    call print_text_sub ; main processing of the print_text function
+    pop_all()
+}
+
+; Subroutines describe complex processes including loops
+.print_text_sub
+    ; HL = L * 32 + H + VRAM.bg_name
+    ld a, h
+    ld h, 0
+    ld c, 32
+    mul hl, c
+    add hl, a
+    add hl, VRAM.bg_name
+@Loop
+    ld a, (de)
+    and a
+    ret z
+    ld (hl), a
+    push de
+    ld de, $0400
+    add hl, de
+    ld (hl), b
+    ld de, -$03FF
+    add hl, de
+    pop de
+    inc de
+    jr @Loop
+```
+
 ## `org`
 
 Specifies the starting address for binary output.
@@ -289,6 +343,35 @@ Increments and decrements can be automatically inserted before and after a regis
 |`LD (++HL), A` |  `INC HL` <br> `LD (HL), A` | Pre Increment |
 |`LD (HL--), A` | `LD (HL), A` <br> `DEC HL` | Post Decrement |
 |`LD (--HL), A` |  `DEC HL` <br> `LD (HL), A` | Pre Decrement |
+
+## Assignment
+
+`LD(=)`, `ADD(+=)`, `SUB(-=)`, `AND(&=)`, `OR(|=)`, `XOR(^=)` can also be written in the form of assignment expressions.
+
+```
+A = B         ; expand to -> LD A, B
+(HL) = A      ; expand to -> LD (HL), A
+$C000 = A     ; expand to -> LD ($C000), A    *Can omit addressing (bracketing) at load time
+($C000) = A   ; expand to -> LD ($C000), A    *same as `$C000 = A`
+A = (HL)      ; expand to -> LD A, (HL)
+A = $FF       ; expand to -> LD A, $FF
+A = $C000     ; expand to -> LD A, $C000      *Error (out of range)
+A = ($C000)   ; expand to -> LD A, ($C000)    *Addressing at store requires bracketing
+BC = $C000    ; expand to -> LD BC, $C000
+BC = ($C000)  ; expand to -> LD BC, ($C000)
+A += B        ; expand to -> ADD A, B
+HL += DE      ; expand to -> ADD HL, DE
+A -= B        ; expand to -> SUB A, B
+A &= B        ; expand to -> AND A, B
+A |= B        ; expand to -> OR A, B
+A ^= B        ; expand to -> XOR A, B
+```
+
+Only for LD assignment expressions, if the left side is numeric, it is automatically assumed to be an address. This makes the description of structure variable initialization in an intuitive and easy-to-understand format:
+
+```
+VARS.posX = 123
+```
 
 ## Support Instructions
 

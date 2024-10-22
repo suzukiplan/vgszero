@@ -50,6 +50,12 @@ static uint8_t getBitReg8(Operand op)
 
 void mnemonic_LD(LineData* line)
 {
+    if (line->isAssignmnt && mnemonic_format_begin(line, 3, TokenType::Numeric, TokenType::Split)) {
+        // 代入式のLDでは左辺が数値の場合アドレスに自動変換する
+        line->token.insert(line->token.begin() + 1, std::make_pair(TokenType::AddressBegin, "("));
+        line->token.insert(line->token.begin() + 3, std::make_pair(TokenType::AddressEnd, ")"));
+    }
+
     if (mnemonic_format_test(line, 4, TokenType::Operand, TokenType::Split, TokenType::Operand)) {
         // LD r, r'
         auto op1 = operandTable[line->token[1].second];
