@@ -60,8 +60,7 @@
     push de
     ld de, $0400
     add hl, de
-    ld a, b
-    ld (hl), a
+    ld (hl), b
     ld de, -$03FF
     add hl, de
     pop de
