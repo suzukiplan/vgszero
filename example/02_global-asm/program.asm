@@ -1,4 +1,4 @@
-#include "../../lib/z80/vgszero.inc"
+#include "../../lib/z80/stdio.asm"
 
 struct VARS $C000 {
     c1      ds.b 1
@@ -16,12 +16,7 @@ struct VARS $C000 {
     call print_text_sub
 }
 
-org $0000
-
 .main
-    ; スタックポインタを初期化
-    ld sp, 0
-
     ; VBLANKを待機
     wait_vblank()
 
@@ -41,59 +36,13 @@ org $0000
     ld (VARS.c1), a++
 
     ; "COUNT:" を FG(4,4) に表示
-    print_text(4, 4, "COUNT:    ")
+    print_text_fg(4, 4, 0x80, "COUNT:    ")
 
 @Loop
     wait_vblank()
     call count_up
     call count_print
     jr @Loop
-
-;------------------------------------------------------------
-; FG へ $00 終端の文字列を表示
-; h = X座標
-; l = Y座標
-; de = 文字列ポインタ
-;------------------------------------------------------------
-.print_text_sub
-    push af
-    push bc
-    push de
-    push hl
-
-    ; 座標をネームテーブルアドレスへ変換
-    ; HL = L * 32 + H + VRAM.fg_name
-    ld a, h
-    ld h, 0
-    ld c, 32
-    mul hl, c
-    add hl, a
-    add hl, VRAM.fg_name
-
-@Loop
-    ; 文字コード取得
-    ld a, (de)
-    and a
-    jz @End
-
-    ; 文字コード書き込み
-    ld (hl), a
-
-    ; 属性更新
-    add hl, $0400
-    ld a, $80
-    ld (hl), a
-    add hl, -$03FF
-
-    inc de
-    jr @Loop
-
-@End
-    pop hl
-    pop de
-    pop bc
-    pop af
-    ret
 
 ;------------------------------------------------------------
 ; カウントアップ
