@@ -69,6 +69,15 @@ struct VRAM $8000 {
     mode1024    ds.b    1           ; R11: 1024 pattern mode
 }
 
+#macro wait_vblank()
+{
+    PUSH AF
+    LD A, (VRAM.status)
+    BIT 7, A
+    JR Z, -7
+    POP AF
+}
+
 #macro memcpy(destination, source, size)
 {
     PUSH BC

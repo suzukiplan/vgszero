@@ -7,7 +7,7 @@ org $0000
     ld sp, 0
 
     ; VBLANKを待機
-    call wait_vblank
+    wait_vblank()
 
     ; パレットを初期化
     memcpy(VRAM.palette, palette0_data, 8)
@@ -22,7 +22,7 @@ org $0000
     ; メインループ
 @Loop
     ; VBLANKを待機
-    call wait_vblank
+    wait_vblank()
 
     ; ジョイパッド(1P)の入力を読み取る
     in a, (IO.joypad)
@@ -55,13 +55,5 @@ org $0000
 
 @CheckEnd
     jr @Loop
-
-; VBLANKになるまで待機
-.wait_vblank
-@Loop
-    ld a, (VRAM.status)
-    and $80
-    jr z, @Loop
-    ret
 
 palette0_data: DW %0000000000000000, %0001110011100111, %0110001100011000, %0111111111111111

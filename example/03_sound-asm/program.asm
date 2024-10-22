@@ -35,7 +35,7 @@ org $0000
     ld sp, 0
 
     ; VBLANKを待機
-    call wait_vblank
+    wait_vblank()
 
     ; パレットを初期化
     memcpy(VRAM.palette, palette_data, 512)
@@ -59,7 +59,7 @@ org $0000
 
 ; メインループ
 .main_loop
-    call wait_vblank
+    wait_vblank()
 
 @Check
     in a, (IO.joypad)
@@ -208,16 +208,6 @@ org $0000
     pop bc
     pop af
 }
-
-;------------------------------------------------------------
-; VBLANKになるまで待機
-;------------------------------------------------------------
-.wait_vblank
-@Loop
-    ld a, (VRAM.status)
-    and $80
-    jr z, @Loop
-    ret
 
 ;------------------------------------------------------------
 ; FG へ $00 終端の文字列を表示

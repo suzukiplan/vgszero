@@ -23,7 +23,7 @@ org $0000
     ld sp, 0
 
     ; VBLANKを待機
-    call wait_vblank
+    wait_vblank()
 
     ; パレットを初期化
     memcpy(VRAM.palette, palette_data, 512);
@@ -44,20 +44,10 @@ org $0000
     print_text(4, 4, "COUNT:    ")
 
 @Loop
-    call wait_vblank
+    wait_vblank()
     call count_up
     call count_print
     jr @Loop
-
-;------------------------------------------------------------
-; VBLANKになるまで待機
-;------------------------------------------------------------
-.wait_vblank
-@Loop
-    ld a, (VRAM.status)
-    and $80
-    jr z, @Loop
-    ret
 
 ;------------------------------------------------------------
 ; FG へ $00 終端の文字列を表示
