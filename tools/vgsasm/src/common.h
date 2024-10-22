@@ -199,6 +199,7 @@ void evaluate_formulas(LineData* line);                                         
 void evaluate_formulas_array(LineData* line);                                         // formulas.cpp
 LineData* parse_label(LineData* line);                                                // label.cpp
 void parse_label_jump(LineData* line);                                                // label.cpp
+void extract_anonymous_label(std::vector<LineData*>* lines);                          // label.cpp
 void parse_mneoimonic(LineData* line);                                                // mnemonic.cpp
 void mnemonic_syntax_check(std::vector<LineData*>* lines);                            // mnemonic.cpp
 std::string oct2dec(const char* hex);                                                 // numeric.cpp

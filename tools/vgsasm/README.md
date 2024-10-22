@@ -1,26 +1,40 @@
-# WIP: Z80 Assembler for VGS-Zero
+# Z80 Assembler for VGS-Zero
 
 Z80 Assembler for VGS-Zero is a Z80 assembler that supports the entire Z80 instruction set, including hidden instructions, and enables highly readable full assembly language programming using [“structures”](#struct).
 
 Although it was developed for use in game development on the VGS-Zero, it is versatile enough to be used for game development for a wide range of game consoles and PCs, including SMS, GameGear, MSX, and PC-88. _(However, the design guideline is to specialize in VGS-Zero, but not in other console or PC-specific enhancements.)_
 
-## WIP Status
+# Runtime Specification
 
-- It is still under development.
-- We plan to add version `1.0.0` tags when all functions are completed.
-- See the [issues](https://github.com/suzukiplan/vgsasm/issues?q=is%3Aopen+is%3Aissue+label%3AWIP).
+- [Support OS](#support-os)
+- [How to Install](#how-to-install)
+- [Usage](#usage)
 
 ## Support OS
 
 - **Linux** (confirmed Ubuntu Desktop)
 - macOS (not confirmed)
 
+## How to Install
+
+```
+sudo apt install build-essential
+git clone https://github.com/suzukiplan/vgsasm
+cd vgsasm
+make
+sudo ln -s `pwd`/vgsasm /usr/local/bin/vgsasm
+```
+
 ## Usage
 
 ```
-vgsasm [-b size_of_binary] /path/to/source.asm
+vgsasm [-o /path/to/output.bin]
+       [-b size_of_binary]
+       /path/to/source.asm
 ```
-
+- `-o /path/to/output.bin`
+  - Specify the path of the output binary.
+  - If omitted, the input source file name is output to the current directory with the file name extension `.bin`.
 - `-b size_of_binary`
   - Specify the size of the output binary.
   - The `size_of_binary` can be specified in decimal or hexadecimal (ex: `0xABCD`)
@@ -28,6 +42,24 @@ vgsasm [-b size_of_binary] /path/to/source.asm
   - The upper limit of `size_of_binary` is `65536` (`0x10000`)
   - Assembly will fail if the specified size is exceeded.
   - Boundary areas that do not meet the specified size are filled with `0xFF`.
+
+# Language Specification
+
+- [Basic Syntax](#basic-syntax)
+- [`#include`](#include)
+- [`#binary`](#binary)
+- [`#define`](#define)
+- [`#macro`](#macro)
+- [`struct`](#struct)
+- [`org`](#org)
+- [Labels](#labels)
+- [String Literal](#string-literal)
+- [Literal Data Definition](#literal-data-definition)
+- [Increment and Decrement](#increment-and-decrement)
+- [Assignment](#assignment)
+- [Support Instructions](#support-instructions)
+- [Instructions Specialized for VGS-Zero](#instructions-specialized-for-vgs-zero)
+- [Auto Expand Instructions](#auto-expand-instructions)
 
 ## Basic Syntax
 
@@ -163,98 +195,6 @@ Example:
     jr @Loop
 ```
 
-## `org`
-
-Specifies the starting address for binary output.
-
-```z80
-org $0000
-```
-
-In vgsasm, multiple `ORG`s can be specified, for example, if the code for IM1 interrupt is to be generated from 0x0038, it can be written as follows:
-
-```z80
-org $0000
-.Reset
-    ld sp, 0
-    im 1
-    ei
-    jp Main
-
-org $0038
-.Interrupt
-    // Interrupt procedure
-    reti
-
-org $0100
-.Main
-    // Main procedure
-```
-
-The following points should be noted:
-
-- `ORG` must be defined in ascending order from the beginning of the source code.
-- The free space from `ORG` to the next `ORG` is filled with 0xFF.
-
-## Labels
-
-```z80
-// Normal label
-FOO:
-
-// Normal label
-LABEL1:
-
-// Inner label at LABEL1: FOO@LABEL1
-@FOO
-
-JP FOO          ; Jump to FOO:
-JP @FOO         ; Jump to FOO@LABEL1
-JP FOO@LABEL1   ; Jump to FOO@LABEL1
-JP FOO@LABEL2   ; Jump to FOO@LABEL2
-
-// Normal label (same as LABEL:)
-.LABEL2
-
-// Inner label at LABEL2: FOO@LABEL2
-@FOO
-
-JP FOO          ; Jump to FOO:
-JP @FOO         ; Jump to FOO@LABEL2
-JP FOO@LABEL1   ; Jump to FOO@LABEL1
-JP FOO@LABEL2   ; Jump to FOO@LABEL2
-```
-
-- Labels are written in the format `LABEL:` or `.LABEL`.
-- Inner labels are written in `@LABEL` format.
-- Labels and inner labels are not case sensitive.
-- The label and inner label are symbols that uniquely identify all source files with `#include`.
-- Labels beginning with `$` cannot be specified.
-
-## String Literal
-
-For example, when implemented as follows,
-
-```
-LD BE, "HELLO,WORLD!"
-LD DE, "HOGE"
-LD HL, "HELLO,WORLD!"
-  :
-```
-
-It should automatically expand as follows:
-
-```
-LD BE, $0
-LD DE, $1
-LD HL, $0
-  :
-$0: DB "HELLO,WORLD!", 0
-$1: DB "HOGE", 0
-```
-
-> Labels beginning with `$` cannot be specified by the user program.
-
 ## `struct`
 
 ```z80
@@ -310,6 +250,121 @@ org $0000
     add ix, sizeof(OAM)                 ; ix += 8
     djnz @Loop                          ; loop
 ```
+
+## `org`
+
+Specifies the starting address for binary output.
+
+```z80
+org $0000
+```
+
+In vgsasm, multiple `ORG`s can be specified, for example, if the code for IM1 interrupt is to be generated from 0x0038, it can be written as follows:
+
+```z80
+org $0000
+.Reset
+    ld sp, 0
+    im 1
+    ei
+    jp Main
+
+org $0038
+.Interrupt
+    // Interrupt procedure
+    reti
+
+org $0100
+.Main
+    // Main procedure
+```
+
+The following points should be noted:
+
+- `ORG` must be defined in ascending order from the beginning of the source code.
+- The free space from `ORG` to the next `ORG` is filled with 0xFF.
+
+## Labels
+
+- [Named Labels](#named-labels)
+- [Anonymous Labels](#anonymous-labels)
+
+### Named Labels
+
+```z80
+// Normal label
+FOO:
+
+// Normal label
+LABEL1:
+
+// Inner label at LABEL1: FOO@LABEL1
+@FOO
+
+JP FOO          ; Jump to FOO:
+JP @FOO         ; Jump to FOO@LABEL1
+JP FOO@LABEL1   ; Jump to FOO@LABEL1
+JP FOO@LABEL2   ; Jump to FOO@LABEL2
+
+// Normal label (same as LABEL:)
+.LABEL2
+
+// Inner label at LABEL2: FOO@LABEL2
+@FOO
+
+JP FOO          ; Jump to FOO:
+JP @FOO         ; Jump to FOO@LABEL2
+JP FOO@LABEL1   ; Jump to FOO@LABEL1
+JP FOO@LABEL2   ; Jump to FOO@LABEL2
+```
+
+- Labels are written in the format `LABEL:` or `.LABEL`.
+- Inner labels are written in `@LABEL` format.
+- Labels and inner labels are not case sensitive.
+- The label and inner label are symbols that uniquely identify all source files with `#include`.
+- Labels beginning with `$` cannot be specified.
+
+### Anonymous Labels
+
+`vgsasm` provides an anonymous label function that allows you to jump to a position relative to the current line number by @+number or @-number.
+
+```z80
+AND A           ; @-3
+LD A, ($FFFF)   ; @-2
+XOR A           ; @-1
+JR @+4          ; @+0 <--- use anonymous label
+LD A, B         ; @+1
+LD A, ($1234)   ; @+2
+LD (IX+4), A    ; @+3
+MUL HL, C       ; @+4 <--- Jump here
+HALT            ; @+5
+```
+
+The insertion position of an anonymous label cannot cross another label (including another anonymous label), preprocessor, or scope.
+
+## String Literal
+
+For example, when implemented as follows,
+
+```
+LD BE, "HELLO,WORLD!"
+LD DE, "HOGE"
+LD HL, "HELLO,WORLD!"
+  :
+```
+
+It should automatically expand as follows:
+
+```
+LD BE, $0
+LD DE, $1
+LD HL, $0
+  :
+$0: DB "HELLO,WORLD!", 0
+$1: DB "HOGE", 0
+```
+
+> Labels beginning with `$` cannot be specified by the user program.
 
 ## Literal Data Definition
 
@@ -379,7 +434,14 @@ VARS.posX = 123
 - Some undocumented instructions are in a slightly special format.
 - All instructions are described in [./test/all.asm](./test/all.asm).
 
-## Instructions Specialized for VSS-Zero
+## Instructions Specialized for VGS-Zero
+
+- [MUL - Multiplication](#mul---multiplication)
+- [DIV - Division](#div---division)
+- [MOD - Modulo](#mod---modulo)
+- [ATN2 - atan2](#atn2---atan2)
+- [SIN](#sin)
+- [COS](#cos)
 
 ### MUL - Multiplication
 

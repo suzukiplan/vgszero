@@ -1,8 +1,10 @@
 #include "common.h"
+#include "sha1.hpp"
 
 std::vector<LineData*> readFile(const char* filePath)
 {
     try {
+        includeFiles.push_back(SHA1::from_file(filePath));
         int lineNumber = 0;
         std::ifstream ifs(filePath, std::ios::binary);
         ifs.seekg(0, std::ios::end);
@@ -19,29 +21,30 @@ std::vector<LineData*> readFile(const char* filePath)
             auto line = new LineData(filePath, ++lineNumber, subStr);
 
             // #include は他のプリプロセッサよりも優先して先に展開
-            if (2 == line->token.size() && line->token[0].second == "#INCLUDE" && TokenType::String == line->token[1].first) {
+            if (2 <= line->token.size() && line->token[0].second == "#INCLUDE" && TokenType::String == line->token[1].first) {
                 auto path = line->token[1].second.c_str();
+                char basePath[4096];
+                if ('/' != path[0]) {
+                    strcpy(basePath, line->path.c_str());
+                    char* cp = strrchr(basePath, '/');
+                    if (cp) {
+                        cp++;
+                        *cp = 0;
+                        strcat(basePath, path);
+                    } else {
+                        strcpy(basePath, path);
+                    }
+                    path = basePath;
+                }
+                auto sha1 = SHA1::from_file(path);
                 bool alreadyIncluded = false;
-                for (auto includeFile : includeFiles) {
-                    if (0 == strcmp(includeFile.c_str(), path)) {
+                for (auto i : includeFiles) {
+                    if (i == sha1) {
                         alreadyIncluded = true;
+                        break;
                     }
                 }
                 if (!alreadyIncluded) {
-                    includeFiles.push_back(path);
-                    char basePath[4096];
-                    if ('/' != path[0]) {
-                        strcpy(basePath, line->path.c_str());
-                        char* cp = strrchr(basePath, '/');
-                        if (cp) {
-                            cp++;
-                            *cp = 0;
-                            strcat(basePath, path);
-                        } else {
-                            strcpy(basePath, path);
-                        }
-                        path = basePath;
-                    }
                     auto iLines = readFile(path);
                     if (iLines.empty()) {
                         line->error = true;
