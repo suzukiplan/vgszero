@@ -401,7 +401,7 @@ Increments and decrements can be automatically inserted before and after a regis
 
 ## Assignment
 
-`LD(=)`, `ADD(+=)`, `SUB(-=)`, `AND(&=)`, `OR(|=)`, `XOR(^=)` can also be written in the form of assignment expressions.
+`LD(=)`, `ADD(+=)`, `SUB(-=)`, `AND(&=)`, `OR(|=)`, `XOR(^=)`, `SLA(<<=)`, `SRL(>>=)` can also be written in the form of assignment expressions.
 
 ```
 A = B         ; expand to -> LD A, B
@@ -420,6 +420,8 @@ A -= B        ; expand to -> SUB A, B
 A &= B        ; expand to -> AND A, B
 A |= B        ; expand to -> OR A, B
 A ^= B        ; expand to -> XOR A, B
+A <<= 3       ; expand to -> SLA A, 3
+A >>= 3       ; expand to -> SRL A, 3
 ```
 
 Only for LD assignment expressions, if the left side is numeric, it is automatically assumed to be an address. This makes the description of structure variable initialization in an intuitive and easy-to-understand format:
@@ -599,6 +601,10 @@ In vgsasm, instructions that __do not exist in the Z80__ are complemented by exi
 | `SBC (nn)` | `PUSH HL`, `LD L,nL`, `LD H,nH`, `SBC (HL)`, `POP HL` |
 | `INC (nn)` | `PUSH HL`, `LD HL,nn`, `INC (HL)` `POP HL`|
 | `DEC (nn)` | `PUSH HL`, `LD HL,nn`, `DEC (HL)` `POP HL`|
+| `SHIFT r, n` | `SHIFT r` x n times (n bits) |
+| `SHIFT (HL), n` | `SHIFT (HL)` x n times (n bits) |
+| `SHIFT (IX+d), n` | `SHIFT (IX+d)` x n times (n bits) |
+| `SHIFT (IY+d), n` | `SHIFT (IY+d)` x n times (n bits) |
 | `JP (BC)` | `PUSH BC`, `RET` |
 | `JP (DE)` | `PUSH DE`, `RET` |
 

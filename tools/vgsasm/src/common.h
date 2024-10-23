@@ -57,6 +57,8 @@ enum class TokenType {
     EqualAnd,         // &= 論理積代入
     EqualOr,          // |= 論理和代入
     EqualXor,         // ^= 排他的論理和代入
+    EqualShiftLeft,   // <<= 左論理シフト回数
+    EqualShiftRight,  // >>= 右論理シフト回数
     Other             // その他 (構文解析の仮定で最終的にはなくなる)
 };
 

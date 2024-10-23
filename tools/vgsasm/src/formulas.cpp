@@ -195,7 +195,9 @@ void replace_assignment(LineData* line)
             it->first == TokenType::EqualMinus ||
             it->first == TokenType::EqualOr ||
             it->first == TokenType::EqualPlus ||
-            it->first == TokenType::EqualXor) {
+            it->first == TokenType::EqualXor ||
+            it->first == TokenType::EqualShiftLeft ||
+            it->first == TokenType::EqualShiftRight) {
             if (assignment != TokenType::None) {
                 line->error = true;
                 line->errmsg = "Multiple assignments are described.";
@@ -239,6 +241,12 @@ void replace_assignment(LineData* line)
             break;
         case TokenType::EqualXor:
             mne = std::make_pair(TokenType::Other, "XOR");
+            break;
+        case TokenType::EqualShiftLeft:
+            mne = std::make_pair(TokenType::Other, "SL");
+            break;
+        case TokenType::EqualShiftRight:
+            mne = std::make_pair(TokenType::Other, "SR");
             break;
         default:
             puts("logic error");
