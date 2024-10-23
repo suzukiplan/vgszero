@@ -36,7 +36,7 @@ struct BankB 0 {
     a = Bank.font
     out (IO.dma), a
 
-    ; グローバル変数をゼロクリア
+    ; グローバル変数を初期化
     memset(VARS, 0, sizeof(VARS))
     VARS.cur = 7
 
