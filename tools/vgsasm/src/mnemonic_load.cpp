@@ -448,16 +448,38 @@ void mnemonic_LD(LineData* line)
             }
         }
     } else if (mnemonic_format_test(line, 6, TokenType::AddressBegin, TokenType::Operand, TokenType::AddressEnd, TokenType::Split, TokenType::Numeric)) {
-        // LD ({IX|IY}), n
+        // LD ({BC|DE|IX|IY}), n
         auto op = operandTable[line->token[2].second];
         auto n = atoi(line->token[5].second.c_str());
-        if (op == Operand::IX || op == Operand::IY) {
-            if (mnemonic_range(line, n, -128, 255)) {
-                line->machine.push_back(isIX(op) ? 0xDD : 0xFD);
-                line->machine.push_back(0x36);
-                line->machine.push_back(0x00);
-                line->machine.push_back(n & 0xFF);
-                return;
+        if (mnemonic_range(line, n, -128, 255)) {
+            switch (op) {
+                case Operand::IX:
+                case Operand::IY:
+                    line->machine.push_back(isIX(op) ? 0xDD : 0xFD);
+                    line->machine.push_back(0x36);
+                    line->machine.push_back(0x00);
+                    line->machine.push_back(n & 0xFF);
+                    return;
+                case Operand::HL:
+                    line->machine.push_back(0x36);
+                    line->machine.push_back(n);
+                    return;
+                case Operand::BC:
+                    ML_PUSH_HL;
+                    ML_LD_H_B;
+                    ML_LD_L_C;
+                    line->machine.push_back(0x36);
+                    line->machine.push_back(n);
+                    ML_POP_HL;
+                    return;
+                case Operand::DE:
+                    ML_PUSH_HL;
+                    ML_LD_H_D;
+                    ML_LD_L_E;
+                    line->machine.push_back(0x36);
+                    line->machine.push_back(n);
+                    ML_POP_HL;
+                    return;
             }
         }
     }

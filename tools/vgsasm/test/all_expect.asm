@@ -1587,3 +1587,14 @@
                     out       ($c7),a                       ;[0b73] d3 c7
                     ld        a,l                           ;[0b75] 7d
                     out       ($c7),a                       ;[0b76] d3 c7
+                    ld        (hl),$01                      ;[0b78] 36 01
+                    push      hl                            ;[0b7a] e5
+                    ld        h,b                           ;[0b7b] 60
+                    ld        l,c                           ;[0b7c] 69
+                    ld        (hl),$02                      ;[0b7d] 36 02
+                    pop       hl                            ;[0b7f] e1
+                    push      hl                            ;[0b80] e5
+                    ld        h,d                           ;[0b81] 62
+                    ld        l,e                           ;[0b82] 6b
+                    ld        (hl),$03                      ;[0b83] 36 03
+                    pop       hl                            ;[0b85] e1
