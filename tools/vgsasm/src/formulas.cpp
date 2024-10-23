@@ -182,3 +182,278 @@ void evaluate_formulas_array(LineData* line)
         }
     }
 }
+
+void replace_assignment(LineData* line)
+{
+    std::vector<std::pair<TokenType, std::string>> left;
+    std::vector<std::pair<TokenType, std::string>> right;
+    bool isLeft = true;
+    TokenType assignment = TokenType::None;
+    for (auto it = line->token.begin(); it != line->token.end(); it++) {
+        if (it->first == TokenType::Equal ||
+            it->first == TokenType::EqualAnd ||
+            it->first == TokenType::EqualMinus ||
+            it->first == TokenType::EqualOr ||
+            it->first == TokenType::EqualPlus ||
+            it->first == TokenType::EqualXor) {
+            if (assignment != TokenType::None) {
+                line->error = true;
+                line->errmsg = "Multiple assignments are described.";
+                return;
+            }
+            assignment = it->first;
+            isLeft = false;
+            continue;
+        }
+        if (isLeft) {
+            left.push_back(std::make_pair(it->first, it->second));
+        } else {
+            right.push_back(std::make_pair(it->first, it->second));
+        }
+    }
+    if (assignment == TokenType::None) {
+        return;
+    }
+    if (left.empty() || right.empty()) {
+        line->error = true;
+        line->errmsg = "Illegal assignment expression without left or right side.";
+        return;
+    }
+    line->token.clear();
+    std::pair<TokenType, std::string> mne;
+    switch (assignment) {
+        case TokenType::Equal:
+            mne = std::make_pair(TokenType::Other, "LD");
+            break;
+        case TokenType::EqualAnd:
+            mne = std::make_pair(TokenType::Other, "AND");
+            break;
+        case TokenType::EqualMinus:
+            mne = std::make_pair(TokenType::Other, "SUB");
+            break;
+        case TokenType::EqualOr:
+            mne = std::make_pair(TokenType::Other, "OR");
+            break;
+        case TokenType::EqualPlus:
+            mne = std::make_pair(TokenType::Other, "ADD");
+            break;
+        case TokenType::EqualXor:
+            mne = std::make_pair(TokenType::Other, "XOR");
+            break;
+        default:
+            puts("logic error");
+            exit(-1);
+    }
+    line->token.insert(line->token.begin(), mne);
+    line->token.insert(line->token.end(), left.begin(), left.end());
+    line->token.insert(line->token.end(), std::make_pair<TokenType, std::string>(TokenType::Split, ","));
+    line->token.insert(line->token.end(), right.begin(), right.end());
+    line->isAssignmnt = true;
+}
+
+std::string oct2dec(const char* oct)
+{
+    int result = 0;
+    int len = 0;
+    while (*oct) {
+        if (isdigit(*oct) && *oct < '8') {
+            result <<= 3;
+            result += (*oct) - '0';
+            len++;
+        } else {
+            return "";
+        }
+        oct++;
+    }
+    return 0 < len ? std::to_string(result) : "";
+}
+
+std::string hex2dec(const char* hex)
+{
+    int result = 0;
+    int len = 0;
+    while (*hex) {
+        if (isdigit(*hex)) {
+            result <<= 4;
+            result += (*hex) - '0';
+            len++;
+        } else if ('A' <= *hex && *hex <= 'F') {
+            result <<= 4;
+            result += (*hex) - 'A' + 10;
+            len++;
+        } else {
+            return "";
+        }
+        hex++;
+    }
+    return 0 < len ? std::to_string(result) : "";
+}
+
+std::string bin2dec(const char* bin)
+{
+    int result = 0;
+    int len = 0;
+    while (*bin) {
+        if ('0' == *bin || '1' == *bin) {
+            result <<= 1;
+            result += (*bin) - '0';
+            len++;
+        } else {
+            return "";
+        }
+        bin++;
+    }
+    return 0 < len ? std::to_string(result) : "";
+}
+
+void parse_numeric(LineData* line)
+{
+    for (auto it = line->token.begin(); it != line->token.end(); it++) {
+        if (it->first != TokenType::Other) {
+            continue;
+        }
+        auto str = it->second.c_str();
+        bool minus = false;
+        if ('-' == *str) {
+            minus = true;
+            str++;
+        }
+        if ('$' == *str || 0 == strncmp("0X", str, 2)) {
+            auto dec = hex2dec(str + ('$' == *str ? 1 : 2));
+            if (!dec.empty()) {
+                it->first = TokenType::Numeric;
+                it->second = minus ? "-" + dec : dec;
+            } else {
+                line->error = true;
+                line->errmsg = "Invalid hexadecimal number";
+                return;
+            }
+        } else if ('%' == *str || 0 == strncmp("0B", str, 2)) {
+            auto dec = bin2dec(str + ('%' == *str ? 1 : 2));
+            if (!dec.empty()) {
+                it->first = TokenType::Numeric;
+                it->second = minus ? "-" + dec : dec;
+            } else {
+                line->error = true;
+                line->errmsg = "Invalid binary number";
+                return;
+            }
+        } else {
+            bool isNumeric = true;
+            while (*str) {
+                if (!isdigit(*str)) {
+                    isNumeric = false;
+                    break;
+                }
+                str++;
+            }
+            if (isNumeric) {
+                it->first = TokenType::Numeric;
+            }
+        }
+    }
+}
+
+// , - n を , -n にする
+void parse_numeric_minus(LineData* line)
+{
+    for (auto it = line->token.begin(); it != line->token.end(); it++) {
+        if (it->first == TokenType::Split || it->first == TokenType::Mnemonic) {
+            if (it + 1 != line->token.end() && it + 2 != line->token.end()) {
+                if ((it + 1)->first == TokenType::Minus && (it + 2)->first == TokenType::Numeric) {
+                    (it + 1)->first = TokenType::Delete;
+                    (it + 2)->second = "-" + (it + 2)->second;
+                    it += 2;
+                }
+            }
+        }
+    }
+}
+
+// , + n を , n にする
+void parse_numeric_plus(LineData* line)
+{
+    for (auto it = line->token.begin(); it != line->token.end(); it++) {
+        if (it->first == TokenType::Split || it->first == TokenType::Mnemonic) {
+            if (it + 1 != line->token.end() && it + 2 != line->token.end()) {
+                if ((it + 1)->first == TokenType::Plus && (it + 2)->first == TokenType::Numeric) {
+                    (it + 1)->first = TokenType::Delete;
+                    it += 2;
+                }
+            }
+        }
+    }
+}
+
+static bool isIncrementableRegister(LineData* line, std::vector<std::pair<TokenType, std::string>>::iterator it)
+{
+    if (it == line->token.end()) {
+        return false;
+    }
+    if (it->first != TokenType::Operand) {
+        return false;
+    }
+    switch (operandTable[it->second]) {
+        case Operand::A: return true;
+        case Operand::B: return true;
+        case Operand::C: return true;
+        case Operand::D: return true;
+        case Operand::E: return true;
+        case Operand::H: return true;
+        case Operand::L: return true;
+        case Operand::IXH: return true;
+        case Operand::IXL: return true;
+        case Operand::BC: return true;
+        case Operand::DE: return true;
+        case Operand::HL: return true;
+        case Operand::IX: return true;
+        case Operand::IY: return true;
+    }
+    return false;
+}
+
+void split_increment(std::vector<LineData*>* lines)
+{
+    for (auto it = lines->begin(); it != lines->end(); it++) {
+        auto line = *it;
+        auto prevToken = line->token.end();
+        auto nextToken = line->token.end();
+        for (auto token = line->token.begin(); token != line->token.end(); token++) {
+            nextToken = token + 1;
+            if (token->first == TokenType::Inc || token->first == TokenType::Dec) {
+                auto inc = token->first == TokenType::Inc;
+                auto pre = isIncrementableRegister(line, prevToken);
+                auto post = isIncrementableRegister(line, nextToken);
+                // 前後にレジスタが指定されてなければエラー
+                if (!pre && !post) {
+                    line->error = true;
+                    line->errmsg = "The `++` or `--` can only be specified before or after the register.";
+                    return;
+                }
+                // 前後両方がレジスタでもエラー
+                if (pre && post) {
+                    line->error = true;
+                    line->errmsg = "Illegal `++` or `--` sequence.";
+                    return;
+                }
+                // トークンを後で削除するようにマーク
+                token->first = TokenType::Delete;
+                // 命令行を作成
+                auto newLine = new LineData(line);
+                newLine->token.clear();
+                newLine->token.push_back(std::make_pair(TokenType::Mnemonic, inc ? "INC" : "DEC"));
+                newLine->token.push_back(std::make_pair(TokenType::Operand, pre ? prevToken->second : nextToken->second));
+                // 命令行を挿入
+                if (pre) {
+                    lines->insert(it + 1, newLine);
+                } else {
+                    lines->insert(it, newLine);
+                }
+                // 最初から探索し直す
+                it = lines->begin();
+                break;
+            }
+            prevToken = token;
+        }
+    }
+}

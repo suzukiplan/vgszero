@@ -1,27 +1,27 @@
 #include "common.h"
 #include "mnemonic.h"
 
-void mnemonic_bit_op(LineData* line, Mnemonic mne);                  // mnemonic_bit.cpp
+void mnemonic_JP(LineData* line);                                    // mnemonic_branch.cpp
+void mnemonic_JR(LineData* line);                                    // mnemonic_branch.cpp
+void mnemonic_DJNZ(LineData* line);                                  // mnemonic_branch.cpp
+void mnemonic_CALL(LineData* line);                                  // mnemonic_branch.cpp
+void mnemonic_RET(LineData* line);                                   // mnemonic_branch.cpp
+void mnemonic_RST(LineData* line);                                   // mnemonic_branch.cpp
 void mnemonic_calc8(LineData* line, uint8_t code);                   // mnemonic_calc.cpp
 void mnemonic_calc16(LineData* line, uint8_t code);                  // mnemonic_calc.cpp
 void mnemonic_calcOH(LineData* line, uint8_t code8, uint8_t code16); // mnemonic_calc.cpp
-void mnemonic_CALL(LineData* line);                                  // mnemonic_call.cpp
-void mnemonic_RET(LineData* line);                                   // mnemonic_call.cpp
-void mnemonic_RST(LineData* line);                                   // mnemonic_call.cpp
-void mnemonic_EX(LineData* line);                                    // mnemonic_ex.cpp
-void mnemonic_INC(LineData* line);                                   // mnemonic_incdec.cpp
-void mnemonic_DEC(LineData* line);                                   // mnemonic_incdec.cpp
-void mnemonic_IN(LineData* line);                                    // mnemonic_io.cpp
-void mnemonic_OUT(LineData* line);                                   // mnemonic_io.cpp
-void mnemonic_JP(LineData* line);                                    // mnemonic_jump.cpp
-void mnemonic_JR(LineData* line);                                    // mnemonic_jump.cpp
-void mnemonic_DJNZ(LineData* line);                                  // mnemonic_jump.cpp
+void mnemonic_shift(LineData* line, uint8_t code);                   // mnemonic_calc.cpp
+void mnemonic_INC(LineData* line);                                   // mnemonic_calc.cpp
+void mnemonic_DEC(LineData* line);                                   // mnemonic_calc.cpp
+void mnemonic_bit_op(LineData* line, Mnemonic mne);                  // mnemonic_calc.cpp
 void mnemonic_LD(LineData* line);                                    // mnemonic_load.cpp
-void mnemonic_shift(LineData* line, uint8_t code);                   // mnemonic_shift.cpp
-void mnemonic_PUSH(LineData* line);                                  // mnemonic_stack.cpp
-void mnemonic_POP(LineData* line);                                   // mnemonic_stack.cpp
-void mnemonic_DB(LineData* line);                                    // mnemonic_data.cpp
-void mnemonic_DW(LineData* line);                                    // mnemonic_data.cpp
+void mnemonic_PUSH(LineData* line);                                  // mnemonic_other.cpp
+void mnemonic_POP(LineData* line);                                   // mnemonic_other.cpp
+void mnemonic_DB(LineData* line);                                    // mnemonic_other.cpp
+void mnemonic_DW(LineData* line);                                    // mnemonic_other.cpp
+void mnemonic_EX(LineData* line);                                    // mnemonic_other.cpp
+void mnemonic_IN(LineData* line);                                    // mnemonic_other.cpp
+void mnemonic_OUT(LineData* line);                                   // mnemonic_other.cpp
 void mnemonic_MUL(LineData* line);                                   // mnemonic_vgs.cpp
 void mnemonic_MULS(LineData* line);                                  // mnemonic_vgs.cpp
 void mnemonic_DIV(LineData* line);                                   // mnemonic_vgs.cpp
@@ -122,6 +122,73 @@ std::map<std::string, Mnemonic> mnemonicTable = {
     {"SIN", Mnemonic::SIN},
     {"COS", Mnemonic::COS},
 };
+
+std::map<std::string, Operand> operandTable = {
+    {"A", Operand::A},
+    {"B", Operand::B},
+    {"C", Operand::C},
+    {"D", Operand::D},
+    {"E", Operand::E},
+    {"F", Operand::F},
+    {"H", Operand::H},
+    {"L", Operand::L},
+    {"IXH", Operand::IXH},
+    {"IXL", Operand::IXL},
+    {"IYH", Operand::IYH},
+    {"IYL", Operand::IYL},
+    {"AF", Operand::AF},
+    {"AF'", Operand::AF_dash},
+    {"BC", Operand::BC},
+    {"DE", Operand::DE},
+    {"HL", Operand::HL},
+    {"IX", Operand::IX},
+    {"IY", Operand::IY},
+    {"SP", Operand::SP},
+    {"NZ", Operand::NZ},
+    {"Z", Operand::Z},
+    {"NC", Operand::NC},
+    {"PO", Operand::PO},
+    {"PE", Operand::PE},
+    {"P", Operand::P},
+    {"M", Operand::M},
+};
+
+bool operand_is_condition(Operand op)
+{
+    switch (op) {
+        case Operand::NZ: return true;
+        case Operand::Z: return true;
+        case Operand::NC: return true;
+        case Operand::C: return true;
+        case Operand::PO: return true;
+        case Operand::PE: return true;
+        case Operand::P: return true;
+        case Operand::M: return true;
+    }
+    return false;
+}
+
+bool operand_is_condition(std::string str)
+{
+    auto op = operandTable.find(str);
+    if (op != operandTable.end()) {
+        return operand_is_condition(op->second);
+    }
+    return false;
+}
+
+void parse_operand(LineData* line)
+{
+    for (auto it = line->token.begin(); it != line->token.end(); it++) {
+        // Other ならチェック
+        if (it->first == TokenType::Other) {
+            auto op = operandTable.find(it->second);
+            if (op != operandTable.end()) {
+                it->first = TokenType::Operand;
+            }
+        }
+    }
+}
 
 void parse_mneoimonic(LineData* line)
 {

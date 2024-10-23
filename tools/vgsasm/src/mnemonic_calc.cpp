@@ -251,3 +251,387 @@ void mnemonic_calcOH(LineData* line, uint8_t code8, uint8_t code16)
         line->errmsg = "Illegal arithmetic instruction.";
     }
 }
+
+void mnemonic_shift(LineData* line, uint8_t code)
+{
+    if (mnemonic_format_test(line, 2, TokenType::Operand)) {
+        line->machine.push_back(0xCB);
+        switch (operandTable[line->token[1].second]) {
+            case Operand::A: line->machine.push_back(code | 0x07); return;
+            case Operand::B: line->machine.push_back(code | 0x00); return;
+            case Operand::C: line->machine.push_back(code | 0x01); return;
+            case Operand::D: line->machine.push_back(code | 0x02); return;
+            case Operand::E: line->machine.push_back(code | 0x03); return;
+            case Operand::H: line->machine.push_back(code | 0x04); return;
+            case Operand::L: line->machine.push_back(code | 0x05); return;
+        }
+    } else if (mnemonic_format_test(line, 4, TokenType::AddressBegin, TokenType::Operand, TokenType::AddressEnd)) {
+        switch (operandTable[line->token[2].second]) {
+            case Operand::HL:;
+                line->machine.push_back(0xCB);
+                line->machine.push_back(code | 0x06);
+                return;
+            case Operand::IX:;
+                line->machine.push_back(0xDD);
+                line->machine.push_back(0xCB);
+                line->machine.push_back(0x00);
+                line->machine.push_back(code | 0x06);
+                return;
+            case Operand::IY:;
+                line->machine.push_back(0xFD);
+                line->machine.push_back(0xCB);
+                line->machine.push_back(0x00);
+                line->machine.push_back(code | 0x06);
+                return;
+        }
+    } else if (mnemonic_format_test(line, 6, TokenType::AddressBegin, TokenType::Operand, TokenType::PlusOrMinus, TokenType::Numeric, TokenType::AddressEnd)) {
+        int n = atoi(line->token[4].second.c_str());
+        if (line->token[3].first == TokenType::Plus) {
+            if (!mnemonic_range(line, n, 0, 127)) {
+                return;
+            }
+        } else {
+            if (!mnemonic_range(line, n, 0, 128)) {
+                return;
+            }
+            n = 0 - n;
+        }
+        switch (operandTable[line->token[2].second]) {
+            case Operand::IX:
+                line->machine.push_back(0xDD);
+                line->machine.push_back(0xCB);
+                line->machine.push_back(n);
+                line->machine.push_back(code | 0x06);
+                return;
+            case Operand::IY:
+                line->machine.push_back(0xFD);
+                line->machine.push_back(0xCB);
+                line->machine.push_back(n);
+                line->machine.push_back(code | 0x06);
+                return;
+        }
+    } else if (mnemonic_format_test(line, 8, TokenType::AddressBegin, TokenType::Operand, TokenType::PlusOrMinus, TokenType::Numeric, TokenType::AddressEnd, TokenType::And, TokenType::Operand)) {
+        int n = atoi(line->token[4].second.c_str());
+        if (line->token[3].first == TokenType::Plus) {
+            if (!mnemonic_range(line, n, 0, 127)) {
+                return;
+            }
+        } else {
+            if (!mnemonic_range(line, n, 0, 128)) {
+                return;
+            }
+            n = 0 - n;
+        }
+        auto op1 = operandTable[line->token[2].second];
+        auto op2 = operandTable[line->token[7].second];
+        if (code == 0x00 && op1 == Operand::IX) {
+            line->machine.push_back(0xDD);
+            line->machine.push_back(0xCB);
+            line->machine.push_back(n);
+            switch (op2) {
+                case Operand::B: line->machine.push_back(0x00); return;
+                case Operand::C: line->machine.push_back(0x01); return;
+                case Operand::D: line->machine.push_back(0x02); return;
+                case Operand::E: line->machine.push_back(0x03); return;
+                case Operand::H: line->machine.push_back(0x04); return;
+                case Operand::L: line->machine.push_back(0x05); return;
+                case Operand::F: line->machine.push_back(0x06); return;
+                case Operand::A: line->machine.push_back(0x07); return;
+            }
+        } else if (op1 == Operand::IX && op2 == Operand::B) {
+            line->machine.push_back(0xDD);
+            line->machine.push_back(0xCB);
+            line->machine.push_back(n);
+            switch (mnemonicTable[line->token[0].second]) {
+                case Mnemonic::RRC: line->machine.push_back(0x08); return;
+                case Mnemonic::RL: line->machine.push_back(0x10); return;
+                case Mnemonic::RR: line->machine.push_back(0x18); return;
+                case Mnemonic::SLA: line->machine.push_back(0x20); return;
+                case Mnemonic::SRA: line->machine.push_back(0x28); return;
+                case Mnemonic::SLL: line->machine.push_back(0x30); return;
+                case Mnemonic::SRL: line->machine.push_back(0x38); return;
+            }
+        }
+    }
+    if (!line->error) {
+        line->error = true;
+        line->errmsg = "Illegal shift/rotate instruction.";
+    }
+}
+
+void mnemonic_INC(LineData* line)
+{
+    if (mnemonic_format_test(line, 2, TokenType::Operand)) {
+        switch (operandTable[line->token[1].second]) {
+            case Operand::A: ML_INC_A; return;
+            case Operand::B: ML_INC_B; return;
+            case Operand::C: ML_INC_C; return;
+            case Operand::D: ML_INC_D; return;
+            case Operand::E: ML_INC_E; return;
+            case Operand::H: ML_INC_H; return;
+            case Operand::L: ML_INC_L; return;
+            case Operand::IXH: ML_INC_IXH; return;
+            case Operand::IXL: ML_INC_IXL; return;
+            case Operand::IYH: ML_INC_IYH; return;
+            case Operand::IYL: ML_INC_IYL; return;
+            case Operand::BC: ML_INC_BC; return;
+            case Operand::DE: ML_INC_DE; return;
+            case Operand::HL: ML_INC_HL; return;
+            case Operand::SP: ML_INC_SP; return;
+            case Operand::IX: ML_INC_IX; return;
+            case Operand::IY: ML_INC_IY; return;
+        }
+    } else if (mnemonic_format_test(line, 4, TokenType::AddressBegin, TokenType::Operand, TokenType::AddressEnd)) {
+        switch (operandTable[line->token[2].second]) {
+            case Operand::HL: ML_INC_ADDR_HL; return;
+            case Operand::IX: ML_INC_ADDR_IX(0); return;
+            case Operand::IY: ML_INC_ADDR_IY(0); return;
+        }
+    } else if (mnemonic_format_test(line, 4, TokenType::AddressBegin, TokenType::Numeric, TokenType::AddressEnd)) {
+        int addr = atoi(line->token[2].second.c_str());
+        if (mnemonic_range(line, addr, 0x0000, 0xFFFF)) {
+            ML_PUSH_HL;
+            ML_LD_L_n(addr & 0x00FF);
+            ML_LD_H_n((addr & 0xFF00) >> 8);
+            ML_INC_ADDR_HL;
+            ML_POP_HL;
+            return;
+        }
+    } else if (mnemonic_format_test(line, 6, TokenType::AddressBegin, TokenType::Operand, TokenType::PlusOrMinus, TokenType::Numeric, TokenType::AddressEnd)) {
+        int n = atoi(line->token[4].second.c_str());
+        if (line->token[3].first == TokenType::Plus) {
+            if (!mnemonic_range(line, n, 0, 127)) {
+                return;
+            }
+        } else {
+            if (!mnemonic_range(line, n, 0, 128)) {
+                return;
+            }
+            n = 0 - n;
+        }
+        switch (operandTable[line->token[2].second]) {
+            case Operand::IX: ML_INC_ADDR_IX(n); return;
+            case Operand::IY: ML_INC_ADDR_IY(n); return;
+        }
+    }
+    if (!line->error) {
+        line->error = true;
+        line->errmsg = "Illegal INC instruction.";
+    }
+}
+
+void mnemonic_DEC(LineData* line)
+{
+    if (mnemonic_format_test(line, 2, TokenType::Operand)) {
+        switch (operandTable[line->token[1].second]) {
+            case Operand::A: ML_DEC_A; return;
+            case Operand::B: ML_DEC_B; return;
+            case Operand::C: ML_DEC_C; return;
+            case Operand::D: ML_DEC_D; return;
+            case Operand::E: ML_DEC_E; return;
+            case Operand::H: ML_DEC_H; return;
+            case Operand::L: ML_DEC_L; return;
+            case Operand::IXH: ML_DEC_IXH; return;
+            case Operand::IXL: ML_DEC_IXL; return;
+            case Operand::IYH: ML_DEC_IYH; return;
+            case Operand::IYL: ML_DEC_IYL; return;
+            case Operand::BC: ML_DEC_BC; return;
+            case Operand::DE: ML_DEC_DE; return;
+            case Operand::HL: ML_DEC_HL; return;
+            case Operand::SP: ML_DEC_SP; return;
+            case Operand::IX: ML_DEC_IX; return;
+            case Operand::IY: ML_DEC_IY; return;
+        }
+    } else if (mnemonic_format_test(line, 4, TokenType::AddressBegin, TokenType::Operand, TokenType::AddressEnd)) {
+        switch (operandTable[line->token[2].second]) {
+            case Operand::HL: ML_DEC_ADDR_HL; return;
+            case Operand::IX: ML_DEC_ADDR_IX(0); return;
+            case Operand::IY: ML_DEC_ADDR_IY(0); return;
+        }
+    } else if (mnemonic_format_test(line, 4, TokenType::AddressBegin, TokenType::Numeric, TokenType::AddressEnd)) {
+        int addr = atoi(line->token[2].second.c_str());
+        if (mnemonic_range(line, addr, 0x0000, 0xFFFF)) {
+            ML_PUSH_HL;
+            ML_LD_L_n(addr & 0x00FF);
+            ML_LD_H_n((addr & 0xFF00) >> 8);
+            ML_DEC_ADDR_HL;
+            ML_POP_HL;
+            return;
+        }
+    } else if (mnemonic_format_test(line, 6, TokenType::AddressBegin, TokenType::Operand, TokenType::PlusOrMinus, TokenType::Numeric, TokenType::AddressEnd)) {
+        int n = atoi(line->token[4].second.c_str());
+        if (line->token[3].first == TokenType::Plus) {
+            if (!mnemonic_range(line, n, 0, 127)) {
+                return;
+            }
+        } else {
+            if (!mnemonic_range(line, n, 0, 128)) {
+                return;
+            }
+            n = 0 - n;
+        }
+        switch (operandTable[line->token[2].second]) {
+            case Operand::IX: ML_DEC_ADDR_IX(n); return;
+            case Operand::IY: ML_DEC_ADDR_IY(n); return;
+        }
+    }
+    if (!line->error) {
+        line->error = true;
+        line->errmsg = "Illegal DEC instruction.";
+    }
+}
+
+void mnemonic_bit_op(LineData* line, Mnemonic mne)
+{
+    if (mnemonic_format_test(line, 4, TokenType::Numeric, TokenType::Split, TokenType::Operand)) {
+        int b = atoi(line->token[1].second.c_str());
+        if (!mnemonic_range(line, b, 0, 7)) {
+            return;
+        }
+        b <<= 3;
+        uint8_t r;
+        switch (operandTable[line->token[3].second]) {
+            case Operand::A: r = 0b111; break;
+            case Operand::B: r = 0b000; break;
+            case Operand::C: r = 0b001; break;
+            case Operand::D: r = 0b010; break;
+            case Operand::E: r = 0b011; break;
+            case Operand::H: r = 0b100; break;
+            case Operand::L: r = 0b101; break;
+            default:
+                line->error = true;
+                line->errmsg = "Illegal BIT/SET/RES instruction.";
+                return;
+        }
+        uint8_t c;
+        switch (mne) {
+            case Mnemonic::BIT: c = 0b01000000; break;
+            case Mnemonic::SET: c = 0b11000000; break;
+            case Mnemonic::RES: c = 0b10000000; break;
+            default:
+                line->error = true;
+                line->errmsg = "Illegal BIT/SET/RES instruction.";
+                return;
+        }
+        line->machine.push_back(0xCB);
+        line->machine.push_back(c | b | r);
+        return;
+    } else if (mnemonic_format_test(line, 6, TokenType::Numeric, TokenType::Split, TokenType::AddressBegin, TokenType::Operand, TokenType::AddressEnd)) {
+        bool setZero = true;
+        switch (operandTable[line->token[4].second]) {
+            case Operand::HL: setZero = false; break;
+            case Operand::IX: line->machine.push_back(0xDD); break;
+            case Operand::IY: line->machine.push_back(0xFD); break;
+            default:
+                line->error = true;
+                line->errmsg = "Illegal BIT/SET/RES instruction.";
+                return;
+        }
+        int b = atoi(line->token[1].second.c_str());
+        if (!mnemonic_range(line, b, 0, 7)) {
+            return;
+        }
+        b <<= 3;
+        uint8_t c;
+        switch (mne) {
+            case Mnemonic::BIT: c = 0b01000110; break;
+            case Mnemonic::SET: c = 0b11000110; break;
+            case Mnemonic::RES: c = 0b10000110; break;
+            default:
+                line->error = true;
+                line->errmsg = "Illegal BIT/SET/RES instruction.";
+                return;
+        }
+        line->machine.push_back(0xCB);
+        if (setZero) {
+            line->machine.push_back(0x00);
+        }
+        line->machine.push_back(c | b);
+        return;
+    } else if (mnemonic_format_test(line, 8,
+                                    TokenType::Numeric,
+                                    TokenType::Split,
+                                    TokenType::AddressBegin,
+                                    TokenType::Operand,
+                                    TokenType::PlusOrMinus,
+                                    TokenType::Numeric,
+                                    TokenType::AddressEnd)) {
+        switch (operandTable[line->token[4].second]) {
+            case Operand::IX: line->machine.push_back(0xDD); break;
+            case Operand::IY: line->machine.push_back(0xFD); break;
+            default:
+                line->error = true;
+                line->errmsg = "Illegal BIT/SET/RES instruction.";
+                return;
+        }
+        int b = atoi(line->token[1].second.c_str());
+        if (!mnemonic_range(line, b, 0, 7)) {
+            return;
+        }
+        b <<= 3;
+        int n = atoi(line->token[6].second.c_str());
+        if (line->token[5].first == TokenType::Plus) {
+            if (!mnemonic_range(line, n, 0, 127)) {
+                return;
+            }
+        } else {
+            if (!mnemonic_range(line, n, 0, 128)) {
+                return;
+            }
+            n = 0 - n;
+        }
+        uint8_t c;
+        switch (mne) {
+            case Mnemonic::BIT: c = 0b01000110; break;
+            case Mnemonic::SET: c = 0b11000110; break;
+            case Mnemonic::RES: c = 0b10000110; break;
+            default:
+                line->error = true;
+                line->errmsg = "Illegal BIT/SET/RES instruction.";
+                return;
+        }
+        line->machine.push_back(0xCB);
+        line->machine.push_back(n & 0xFF);
+        line->machine.push_back(c | b);
+        return;
+    } else if ((mne == Mnemonic::SET || mne == Mnemonic::RES) &&
+               mnemonic_format_test(line, 10,
+                                    TokenType::Numeric,
+                                    TokenType::Split,
+                                    TokenType::AddressBegin,
+                                    TokenType::Operand,
+                                    TokenType::PlusOrMinus,
+                                    TokenType::Numeric,
+                                    TokenType::AddressEnd,
+                                    TokenType::And,
+                                    TokenType::Operand) &&
+               operandTable[line->token[4].second] == Operand::IX &&
+               operandTable[line->token[9].second] == Operand::B) {
+        int b = atoi(line->token[1].second.c_str());
+        if (!mnemonic_range(line, b, 0, 7)) {
+            return;
+        }
+        b <<= 3;
+        int n = atoi(line->token[6].second.c_str());
+        if (line->token[5].first == TokenType::Plus) {
+            if (!mnemonic_range(line, n, 0, 127)) {
+                return;
+            }
+        } else {
+            if (!mnemonic_range(line, n, 0, 128)) {
+                return;
+            }
+            n = 0 - n;
+        }
+        uint8_t c = mne == Mnemonic::SET ? 0xC0 : 0x80;
+        line->machine.push_back(0xDD);
+        line->machine.push_back(0xCB);
+        line->machine.push_back(n & 0xFF);
+        line->machine.push_back(c | b);
+        return;
+    }
+    if (!line->error) {
+        line->error = true;
+        line->errmsg = "Illegal BIT/SET/RES instruction.";
+    }
+}
