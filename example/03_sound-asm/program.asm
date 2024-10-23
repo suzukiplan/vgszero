@@ -3,10 +3,6 @@
 struct VARS $C000 {
     cur ds.b 1          ; メニューカーソル
     joy_prev ds.b 1     ; ジョイパッド（前フレーム）
-    push_up ds.b 1      ; 上ボタン押下
-    push_down ds.b 1    ; 下ボタン押下
-    push_a ds.b 1       ; Aボタン押下
-    push_b ds.b 1       ; Bボタン押下
 }
 
 struct Bank 0 {
@@ -37,12 +33,12 @@ struct BankB 0 {
     memcpy(VRAM.palette, palette_data, 512)
 
     ; font を Character Pattern Table に転送 (DMA)
-    ld a, Bank.font
+    a = Bank.font
     out (IO.dma), a
 
     ; グローバル変数をゼロクリア
     memset(VARS, 0, sizeof(VARS))
-    ld (VARS.cur), 7
+    VARS.cur = 7
 
     ; メニューを表示
     print_text_fg(6, 7, $80, "> PLAY: #1 PRELUDE")
@@ -59,7 +55,7 @@ struct BankB 0 {
 
 @Check
     in a, (IO.joypad)
-    ld hl, VARS.joy_prev
+    hl = VARS.joy_prev
 
 @CheckUp
     bit PAD.up, (hl)
@@ -92,7 +88,7 @@ struct BankB 0 {
     call select_bgm
 
 @End
-    ld (hl), a
+    (hl) = a
     jr main_loop
 
 ;------------------------------------------------------------
@@ -100,9 +96,9 @@ struct BankB 0 {
 ;------------------------------------------------------------
 .select_bgm
     push_all_without_i()
-    ld a, (VARS.cur)
-    sub 7
-    sr a
+    a = (VARS.cur)
+    a -= 7
+    sr a ; a /= 2
     cp 4
     jr c, @Play
     jr z, @Pause
@@ -131,15 +127,15 @@ struct BankB 0 {
 .move_cur_up
     push_all_without_i()
     call clear_cur
-    ld a, (VARS.cur)
+    a = (VARS.cur)
     cp 7
     jr z, @over
-    sub 2
+    a -= 2
     jr @move
 @over
-    ld a, 19
+    a = 19
 @move
-    ld (VARS.cur), a
+    VARS.cur = a
     call draw_cur
     pop_all_without_i()
     ret
@@ -150,15 +146,15 @@ struct BankB 0 {
 .move_cur_down
     push_all_without_i()
     call clear_cur
-    ld a, (VARS.cur)
+    a = (VARS.cur)
     cp 19
     jr z, @over
-    add 2
+    a += 2
     jr @move
 @over
-    ld a, 7
+    a = 7
 @move
-    ld (VARS.cur), a
+    VARS.cur = a
     call draw_cur
     pop_all_without_i()
     ret
@@ -168,8 +164,7 @@ struct BankB 0 {
 ;------------------------------------------------------------
 .draw_cur
     call get_cur_pos
-    ld a, '>'
-    ld (hl), a
+    (hl) = '>'
     eff_play(BankS.move)
     ret
 
@@ -178,21 +173,20 @@ struct BankB 0 {
 ;------------------------------------------------------------
 .clear_cur
     call get_cur_pos
-    ld a, ' '
-    ld (hl), a
+    (hl) = ' '
     ret
 
 ;------------------------------------------------------------
 ; カーソルの位置取得
 ;------------------------------------------------------------
 .get_cur_pos
-    ld a, (VARS.cur)
-    ld l, a
-    ld h, 0
-    ld c, 32
+    a = (VARS.cur)
+    l = a
+    h = 0
+    c = 32
     mul hl, c
-    add hl, 6
-    add hl, VRAM.fg_name
+    hl += 6
+    hl += VRAM.fg_name
     ret
 
 ;------------------------------------------------------------
