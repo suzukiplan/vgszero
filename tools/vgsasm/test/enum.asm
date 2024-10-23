@@ -9,6 +9,13 @@ enum Color {
     White
 }
 
+enum Bank
+{
+    program
+    font
+}
+
+
 LD A, Color.Black
 LD A, Color.Blue
 LD A, Color.Red

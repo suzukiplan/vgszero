@@ -323,16 +323,21 @@ void extract_enum(std::vector<LineData*>* lines)
 {
     for (auto it = lines->begin(); it != lines->end(); it++) {
         auto line = *it;
-        if (line->token.empty() || line->token[0].second != "ENUM") {
+        if (line->token.empty() || line->token[0].first != TokenType::Other || line->token[0].second != "ENUM") {
             continue;
         }
         line->token[0].first = TokenType::Delete;
 
         // enum 名を取得して名前空間に登録
         auto name = line->token.begin() + 1;
-        if (name == line->token.end() || name->first != TokenType::Other) {
+        if (name == line->token.end()) {
             line->error = true;
             line->errmsg = "No enum name specified.";
+            continue;
+        }
+        if (name->first != TokenType::Other) {
+            line->error = true;
+            line->errmsg = "Invalid enum name: " + name->second;
             continue;
         }
         addNameTable(name->second, line);
