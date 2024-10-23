@@ -578,6 +578,12 @@ In vgsasm, instructions that __do not exist in the Z80__ are complemented by exi
 | `LD (HL),{IXH｜IXL｜IYH｜IYL}` | `PUSH AF`, `LD A,{IXH｜IXL｜IYH｜IYL}`, `LD (HL),A`, `POP AF` |
 | `LD {BC｜DE},(HL)` | `LD rL,(HL)`, `INC HL`, `LD rH,(HL)`, `DEC HL` |
 | `LD {IX｜IY},(HL)` | `PUSH AF`, `LD A,(HL)`, `LD I{X｜Y}L,A`, `INC HL`,<br> `LD A,(HL)`, `LD I{X｜Y}H,A`, `DEC HL`, `POP AF` |
+| `LD (HL),{BC｜DE}` | `LD (HL),rL`, `INC HL`, `LD (HL),rH`, `DEC HL` |
+| `LD (HL),{IX｜IY}` | `PUSH AF`, `LD A,I{X｜Y}L`, `LD (HL),A`, `INC HL`,<br> `LD A,I{X｜Y}H`, `LD (HL),A`, `DEC HL`, `POP AF` |
+| `LD {BC｜DE｜HL},(IX+d)` | `LD rL,(IX+d)`, `LD rH,(IX+d+1)` |
+| `LD {BC｜DE｜HL},(IY+d)` | `LD rL,(IY+d)`, `LD rH,(IY+d+1)` |
+| `LD (IX+d),{BC｜DE｜HL}` | `LD (IX+d),rL`, `LD (IX+d+1),rH` |
+| `LD (IY+d),{BC｜DE｜HL}` | `LD (IY+d),rL`, `LD (IY+d+1),rH` |
 | `LD (BC), n` | `PUSH HL`, `LD H,B`, `LD L,C`, `LD (HL),n` `POP HL` |
 | `LD (DE), n` | `PUSH HL`, `LD H,D`, `LD L,E`, `LD (HL),n` `POP HL` |
 | `LD (nn), n` | `PUSH AF`, `LD A, n`, `LD (nn), A`, `POP AF` |
