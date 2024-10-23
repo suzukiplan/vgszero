@@ -1,5 +1,11 @@
 #include "../../lib/z80/vgszero.inc"
 
+enum bank
+{
+    program
+    font
+}
+
 org $0000
 
 .main
@@ -12,8 +18,8 @@ org $0000
     ; パレットを初期化
     memcpy(VRAM.palette, palette0_data, 8)
 
-    ; Bank 1 を Character Pattern Table ($A000) に転送 (DMA)
-    dma2chr($01)
+    ; font を Character Pattern Table ($A000) に転送 (DMA)
+    dma2chr(BANK.font)
 
     ; 画面中央付近 (10,12) に "HELLO,WORLD!" を描画
     memcpy(12 * 32 + 10 + VRAM.bg_name, "HELLO,WORLD!", 12)
