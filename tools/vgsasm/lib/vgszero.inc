@@ -78,6 +78,14 @@ struct VRAM $8000 {
     POP AF
 }
 
+#macro dma2chr(bank_number)
+{
+    PUSH AF
+    LD A, bank_number
+    OUT (IO.dma), A
+    POP AF
+}
+
 #macro memcpy(destination, source, size)
 {
     PUSH BC
