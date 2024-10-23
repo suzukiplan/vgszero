@@ -18,31 +18,18 @@ struct Bank 0 {
 ; メインルーチン
 ;------------------------------------------------------------
 .main
-    ; VBLANKを待機
-    wait_vblank()
-
-    ; パレットを初期化
-    memcpy(VRAM.palette, palette_data, 512)
-
-    ; font を Character Pattern Table に転送 (DMA)
-    a = Bank.font
-    out (IO.dma), a
-
-    ; グローバル変数を初期化
-    memset(OBJ, 0, sizeof(OBJ) * SPRITE_NUM)
-    call init_obj
- 
-    ; テキストを表示
-    print_text_fg(2, 2, $80, "SPRITE TEST")
-
-    ; BG全画面にひし形を描画
-    call draw_bg
-
-.mainloop
-    wait_vblank()
-    inc (VRAM.bgSY)
-    call move_obj
-    jr mainloop
+    wait_vblank()                               ; VBLANKを待機
+    memcpy(VRAM.palette, palette_data, 512)     ; パレットを初期化
+    dma2chr(Bank.font)                          ; font を Character Pattern Table に転送 (DMA)
+    memset(OBJ, 0, sizeof(OBJ) * SPRITE_NUM)    ; グローバル変数をゼロクリア
+    call init_obj                               ; グローバル変数を初期化
+    print_text_fg(2, 2, $80, "SPRITE TEST")     ; テキストを表示
+    call draw_bg                                ; BG全画面にひし形を描画
+@Loop                                           ; メインループ起点
+    wait_vblank()                               ; VBLANKを待機
+    inc (VRAM.bgSY)                             ; BGを縦スクロール
+    call move_obj                               ; 256個のスプライトを動かす
+    jr @Loop                                    ; ループ
 
 ;------------------------------------------------------------
 ; 乱数を用いてオブジェクトの座標を更新
@@ -111,22 +98,23 @@ struct Bank 0 {
 @Loop
     ; X 座標を計算して OAM を更新
     hl = (ix + offset(OBJ.x))   ; X 座標（固定少数点数）を HL へ
-    de = (ix + offset(OBJ.vx))  ; X 座標の移動速度（固定少数点数）を DE へ
-    hl += de                    ; X += VX
+    hl += (ix + offset(OBJ.vx)) ; X 座標へ移動速度（固定少数点数）を加算
     (ix + offset(OBJ.x)) = hl   ; X 座標を更新
     (iy + offset(OAM.x)) = h    ; X 座標の整数部を OAM の X 座標へ設定
+
     ; Y 座標を計算して OAM を更新
     hl = (ix + offset(OBJ.y))   ; Y 座標（固定少数点数）を HL へ
-    de = (ix + offset(OBJ.vy))  ; Y 座標の移動速度（固定少数点数）を DE へ
-    hl += de                    ; Y += VY
+    hl += (ix + offset(OBJ.vy)) ; Y 座標へ移動速度（固定少数点数）を加算
     (ix + offset(OBJ.y)) = hl   ; Y 座標を更新
     (iy + offset(OAM.y)) = h    ; Y 座標の整数部を OAM の Y 座標へ設定
+
     ; アニメーション
     a++ = (ix + offset(OBJ.an)) ; アニメーション変数を取得してインクリメント
     (ix + offset(OBJ.an)) = a   ; インクリメント結果のアニメーション変数を保持
     a &= %00011100              ; アニメーション変数からパターン番号（1〜8）を計算 Ph.1
     a++ >>= 2                   ; アニメーション変数からパターン番号（1〜8）を計算 Ph.2
     (iy + offset(OAM.ptn)) = a  ; OAM にアニメーション変数から求めたパターン番号を設定
+
     ; 次要素へインデックスを移動
     ix += sizeof(OBJ)           ; 次のオブジェクトへインデックスを移動
     iy += sizeof(OAM)           ; 次のOAMへインデックスを移動

@@ -13,8 +13,7 @@ org $0000
     memcpy(VRAM.palette, palette0_data, 8)
 
     ; Bank 1 を Character Pattern Table ($A000) に転送 (DMA)
-    ld a, $01
-    out (IO.dma), a
+    dma2chr($01)
 
     ; 画面中央付近 (10,12) に "HELLO,WORLD!" を描画
     memcpy(12 * 32 + 10 + VRAM.bg_name, "HELLO,WORLD!", 12)

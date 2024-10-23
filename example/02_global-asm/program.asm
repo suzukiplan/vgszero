@@ -24,8 +24,7 @@ struct VARS $C000 {
     memcpy(VRAM.palette, palette_data, 512);
 
     ; Bank 1 を Character Pattern Table に転送 (DMA)
-    a = 1
-    out (IO.dma), a
+    dma2chr(1)
 
     ; グローバル変数を初期化
     a ^= a

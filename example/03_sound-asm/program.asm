@@ -33,8 +33,7 @@ struct BankB 0 {
     memcpy(VRAM.palette, palette_data, 512)
 
     ; font を Character Pattern Table に転送 (DMA)
-    a = Bank.font
-    out (IO.dma), a
+    dma2chr(Bank.font)
 
     ; グローバル変数を初期化
     memset(VARS, 0, sizeof(VARS))
