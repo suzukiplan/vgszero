@@ -1694,3 +1694,32 @@
                     ld        (iy+$03),d                    ;[0c45] fd 72 03
                     ld        (iy+$03),l                    ;[0c48] fd 75 03
                     ld        (iy+$04),h                    ;[0c4b] fd 74 04
+                    sla       a                             ;[0c4e] cb 27
+                    sla       a                             ;[0c50] cb 27
+                    sla       a                             ;[0c52] cb 27
+                    srl       (hl)                          ;[0c54] cb 3e
+                    srl       (hl)                          ;[0c56] cb 3e
+                    srl       (hl)                          ;[0c58] cb 3e
+                    sra       (ix+$03)                      ;[0c5a] dd cb 03 2e
+                    sra       (ix+$03)                      ;[0c5e] dd cb 03 2e
+                    sra       (ix+$03)                      ;[0c62] dd cb 03 2e
+                    push      de                            ;[0c66] d5
+                    ld        e,(ix+$00)                    ;[0c67] dd 5e 00
+                    ld        d,(ix+$01)                    ;[0c6a] dd 56 01
+                    add       hl,de                         ;[0c6d] 19
+                    pop       de                            ;[0c6e] d1
+                    push      de                            ;[0c6f] d5
+                    ld        e,(ix+$08)                    ;[0c70] dd 5e 08
+                    ld        d,(ix+$09)                    ;[0c73] dd 56 09
+                    add       hl,de                         ;[0c76] 19
+                    pop       de                            ;[0c77] d1
+                    push      de                            ;[0c78] d5
+                    ld        e,(iy+$00)                    ;[0c79] fd 5e 00
+                    ld        d,(iy+$01)                    ;[0c7c] fd 56 01
+                    add       hl,de                         ;[0c7f] 19
+                    pop       de                            ;[0c80] d1
+                    push      de                            ;[0c81] d5
+                    ld        e,(iy+$7e)                    ;[0c82] fd 5e 7e
+                    ld        d,(iy+$7f)                    ;[0c85] fd 56 7f
+                    add       hl,de                         ;[0c88] 19
+                    pop       de                            ;[0c89] d1

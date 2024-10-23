@@ -1464,3 +1464,9 @@ VGSZero:
     SLA A, 3
     SRL (HL), 3
     SRA (IX+3), 3
+
+
+    ADD HL, (IX)
+    ADD HL, (IX+8)
+    ADD HL, (IY)
+    ADD HL, (IY+126)

@@ -595,6 +595,8 @@ In vgsasm, instructions that __do not exist in the Z80__ are complemented by exi
 | `ADD BC,A` | `ADD C`, `LD C,A`, `JR NC, +1`, `INC B` |
 | `ADD DE,A` | `ADD E`, `LD E,A`, `JR NC, +1`, `INC D` |
 | `ADD HL,A` | `ADD L`, `LD L,A`, `JR NC, +1`, `INC H` |
+| `ADD HL,(IX+d)` |`PUSH DE`, `LD E,(IX+d)`, `LD D,(IX+d+1)`, `ADD HL,DE`, `POP DE` |
+| `ADD HL,(IY+d)` |`PUSH DE`, `LD E,(IY+d)`, `LD D,(IY+d+1)`, `ADD HL,DE`, `POP DE` |
 | `ADD (nn)` | `PUSH HL`, `LD L,nL`, `LD H,nH`, `ADD (HL)`, `POP HL` |
 | `ADC (nn)` | `PUSH HL`, `LD L,nL`, `LD H,nH`, `ADC (HL)`, `POP HL` |
 | `SUB (nn)` | `PUSH HL`, `LD L,nL`, `LD H,nH`, `SUB (HL)`, `POP HL` |

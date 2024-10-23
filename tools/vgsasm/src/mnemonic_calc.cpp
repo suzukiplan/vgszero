@@ -95,7 +95,8 @@ void mnemonic_calc16(LineData* line, uint8_t code)
 {
     bool supportImmediate = true;
     bool supportIXY = true;
-    switch (mnemonicTable[line->token[0].second]) {
+    auto mne = mnemonicTable[line->token[0].second];
+    switch (mne) {
         case Mnemonic::ADC:
         case Mnemonic::SBC:
             line->machine.push_back(0xED);
@@ -178,6 +179,48 @@ void mnemonic_calc16(LineData* line, uint8_t code)
             }
             line->machine.push_back(code | 0x10);
             ML_POP_DE;
+        }
+    } else if (mne == Mnemonic::ADD && mnemonic_format_test(line, 6, TokenType::Operand, TokenType::Split, TokenType::AddressBegin, TokenType::Operand, TokenType::AddressEnd)) {
+        auto op1 = operandTable[line->token[1].second];
+        auto op2 = operandTable[line->token[4].second];
+        if (op1 == Operand::HL && op2 == Operand::IX) {
+            ML_PUSH_DE;
+            ML_LD_E_IX(0);
+            ML_LD_D_IX(1);
+            ML_ADD_HL_DE;
+            ML_POP_DE;
+        } else if (op1 == Operand::HL && op2 == Operand::IY) {
+            ML_PUSH_DE;
+            ML_LD_E_IY(0);
+            ML_LD_D_IY(1);
+            ML_ADD_HL_DE;
+            ML_POP_DE;
+        } else {
+            line->error = true;
+            line->errmsg = "Illegal 16-bit arithmetic instruction.";
+        }
+    } else if (mne == Mnemonic::ADD && mnemonic_format_test(line, 8, TokenType::Operand, TokenType::Split, TokenType::AddressBegin, TokenType::Operand, TokenType::PlusOrMinus, TokenType::Numeric, TokenType::AddressEnd)) {
+        auto op1 = operandTable[line->token[1].second];
+        auto op2 = operandTable[line->token[4].second];
+        auto d = atoi(line->token[6].second.c_str());
+        if (line->token[5].first == TokenType::Minus) { d = -d; }
+        if (mnemonic_range(line, d, -128, 126)) {
+            if (op1 == Operand::HL && op2 == Operand::IX) {
+                ML_PUSH_DE;
+                ML_LD_E_IX(d);
+                ML_LD_D_IX(d + 1);
+                ML_ADD_HL_DE;
+                ML_POP_DE;
+            } else if (op1 == Operand::HL && op2 == Operand::IY) {
+                ML_PUSH_DE;
+                ML_LD_E_IY(d);
+                ML_LD_D_IY(d + 1);
+                ML_ADD_HL_DE;
+                ML_POP_DE;
+            } else {
+                line->error = true;
+                line->errmsg = "Illegal 16-bit arithmetic instruction.";
+            }
         }
     } else {
         line->error = true;
