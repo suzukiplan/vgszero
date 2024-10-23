@@ -1598,3 +1598,99 @@
                     ld        l,e                           ;[0b82] 6b
                     ld        (hl),$03                      ;[0b83] 36 03
                     pop       hl                            ;[0b85] e1
+                    ld        c,(hl)                        ;[0b86] 4e
+                    inc       hl                            ;[0b87] 23
+                    ld        b,(hl)                        ;[0b88] 46
+                    dec       hl                            ;[0b89] 2b
+                    ld        e,(hl)                        ;[0b8a] 5e
+                    inc       hl                            ;[0b8b] 23
+                    ld        d,(hl)                        ;[0b8c] 56
+                    dec       hl                            ;[0b8d] 2b
+                    push      af                            ;[0b8e] f5
+                    ld        a,(hl)                        ;[0b8f] 7e
+                    ld        ixl,a                         ;[0b90] dd 6f
+                    inc       hl                            ;[0b92] 23
+                    ld        a,(hl)                        ;[0b93] 7e
+                    ld        ixh,a                         ;[0b94] dd 67
+                    dec       hl                            ;[0b96] 2b
+                    pop       af                            ;[0b97] f1
+                    push      af                            ;[0b98] f5
+                    ld        a,(hl)                        ;[0b99] 7e
+                    ld        iyl,a                         ;[0b9a] fd 6f
+                    inc       hl                            ;[0b9c] 23
+                    ld        a,(hl)                        ;[0b9d] 7e
+                    ld        iyh,a                         ;[0b9e] fd 67
+                    dec       hl                            ;[0ba0] 2b
+                    pop       af                            ;[0ba1] f1
+                    ld        (hl),c                        ;[0ba2] 71
+                    inc       hl                            ;[0ba3] 23
+                    ld        (hl),b                        ;[0ba4] 70
+                    dec       hl                            ;[0ba5] 2b
+                    ld        (hl),e                        ;[0ba6] 73
+                    inc       hl                            ;[0ba7] 23
+                    ld        (hl),d                        ;[0ba8] 72
+                    dec       hl                            ;[0ba9] 2b
+                    push      af                            ;[0baa] f5
+                    ld        a,ixl                         ;[0bab] dd 7d
+                    ld        (hl),a                        ;[0bad] 77
+                    inc       hl                            ;[0bae] 23
+                    ld        a,ixh                         ;[0baf] dd 7c
+                    ld        (hl),a                        ;[0bb1] 77
+                    dec       hl                            ;[0bb2] 2b
+                    pop       af                            ;[0bb3] f1
+                    push      af                            ;[0bb4] f5
+                    ld        a,iyl                         ;[0bb5] fd 7d
+                    ld        (hl),a                        ;[0bb7] 77
+                    inc       hl                            ;[0bb8] 23
+                    ld        a,iyh                         ;[0bb9] fd 7c
+                    ld        (hl),a                        ;[0bbb] 77
+                    dec       hl                            ;[0bbc] 2b
+                    pop       af                            ;[0bbd] f1
+                    ld        c,(ix+$00)                    ;[0bbe] dd 4e 00
+                    ld        b,(ix+$01)                    ;[0bc1] dd 46 01
+                    ld        e,(ix+$00)                    ;[0bc4] dd 5e 00
+                    ld        d,(ix+$01)                    ;[0bc7] dd 56 01
+                    ld        l,(ix+$00)                    ;[0bca] dd 6e 00
+                    ld        h,(ix+$01)                    ;[0bcd] dd 66 01
+                    ld        c,(ix+$01)                    ;[0bd0] dd 4e 01
+                    ld        b,(ix+$02)                    ;[0bd3] dd 46 02
+                    ld        e,(ix+$02)                    ;[0bd6] dd 5e 02
+                    ld        d,(ix+$03)                    ;[0bd9] dd 56 03
+                    ld        l,(ix+$03)                    ;[0bdc] dd 6e 03
+                    ld        h,(ix+$04)                    ;[0bdf] dd 66 04
+                    ld        (ix+$00),c                    ;[0be2] dd 71 00
+                    ld        (ix+$01),b                    ;[0be5] dd 70 01
+                    ld        (ix+$00),e                    ;[0be8] dd 73 00
+                    ld        (ix+$01),d                    ;[0beb] dd 72 01
+                    ld        (ix+$00),l                    ;[0bee] dd 75 00
+                    ld        (ix+$01),h                    ;[0bf1] dd 74 01
+                    ld        (ix+$01),c                    ;[0bf4] dd 71 01
+                    ld        (ix+$02),b                    ;[0bf7] dd 70 02
+                    ld        (ix+$02),e                    ;[0bfa] dd 73 02
+                    ld        (ix+$03),d                    ;[0bfd] dd 72 03
+                    ld        (ix+$03),l                    ;[0c00] dd 75 03
+                    ld        (ix+$04),h                    ;[0c03] dd 74 04
+                    ld        c,(iy+$00)                    ;[0c06] fd 4e 00
+                    ld        b,(iy+$01)                    ;[0c09] fd 46 01
+                    ld        e,(iy+$00)                    ;[0c0c] fd 5e 00
+                    ld        d,(iy+$01)                    ;[0c0f] fd 56 01
+                    ld        l,(iy+$00)                    ;[0c12] fd 6e 00
+                    ld        h,(iy+$01)                    ;[0c15] fd 66 01
+                    ld        c,(iy+$01)                    ;[0c18] fd 4e 01
+                    ld        b,(iy+$02)                    ;[0c1b] fd 46 02
+                    ld        e,(iy+$02)                    ;[0c1e] fd 5e 02
+                    ld        d,(iy+$03)                    ;[0c21] fd 56 03
+                    ld        l,(iy+$03)                    ;[0c24] fd 6e 03
+                    ld        h,(iy+$04)                    ;[0c27] fd 66 04
+                    ld        (iy+$00),c                    ;[0c2a] fd 71 00
+                    ld        (iy+$01),b                    ;[0c2d] fd 70 01
+                    ld        (iy+$00),e                    ;[0c30] fd 73 00
+                    ld        (iy+$01),d                    ;[0c33] fd 72 01
+                    ld        (iy+$00),l                    ;[0c36] fd 75 00
+                    ld        (iy+$01),h                    ;[0c39] fd 74 01
+                    ld        (iy+$01),c                    ;[0c3c] fd 71 01
+                    ld        (iy+$02),b                    ;[0c3f] fd 70 02
+                    ld        (iy+$02),e                    ;[0c42] fd 73 02
+                    ld        (iy+$03),d                    ;[0c45] fd 72 03
+                    ld        (iy+$03),l                    ;[0c48] fd 75 03
+                    ld        (iy+$04),h                    ;[0c4b] fd 74 04

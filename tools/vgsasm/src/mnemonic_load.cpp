@@ -229,6 +229,39 @@ void mnemonic_LD(LineData* line)
             case Operand::IXL: ML_LD_HL_IXL; return;
             case Operand::IYH: ML_LD_HL_IYH; return;
             case Operand::IYL: ML_LD_HL_IYL; return;
+            // register pair support
+            case Operand::BC:
+                ML_LD_HL_C;
+                ML_INC_HL;
+                ML_LD_HL_B;
+                ML_DEC_HL;
+                return;
+            case Operand::DE:
+                ML_LD_HL_E;
+                ML_INC_HL;
+                ML_LD_HL_D;
+                ML_DEC_HL;
+                return;
+            case Operand::IX:
+                ML_PUSH_AF;
+                ML_LD_A_IXL;
+                ML_LD_HL_A;
+                ML_INC_HL;
+                ML_LD_A_IXH;
+                ML_LD_HL_A;
+                ML_DEC_HL;
+                ML_POP_AF;
+                return;
+            case Operand::IY:
+                ML_PUSH_AF;
+                ML_LD_A_IYL;
+                ML_LD_HL_A;
+                ML_INC_HL;
+                ML_LD_A_IYH;
+                ML_LD_HL_A;
+                ML_DEC_HL;
+                ML_POP_AF;
+                return;
         }
     } else if (mnemonic_format_test(line, 6, TokenType::Operand, TokenType::Split, TokenType::AddressBegin, TokenType::Operand, TokenType::AddressEnd) &&
                operandTable[line->token[1].second] == Operand::A &&
@@ -390,6 +423,38 @@ void mnemonic_LD(LineData* line)
                 line->machine.push_back(0x46 | (getBitReg8(op1) << 3));
                 line->machine.push_back(d);
                 return;
+            } else {
+                if (op2 == Operand::IX) {
+                    switch (op1) {
+                        case Operand::BC:
+                            ML_LD_C_IX(d);
+                            ML_LD_B_IX(d + 1);
+                            return;
+                        case Operand::DE:
+                            ML_LD_E_IX(d);
+                            ML_LD_D_IX(d + 1);
+                            return;
+                        case Operand::HL:
+                            ML_LD_L_IX(d);
+                            ML_LD_H_IX(d + 1);
+                            return;
+                    }
+                } else {
+                    switch (op1) {
+                        case Operand::BC:
+                            ML_LD_C_IY(d);
+                            ML_LD_B_IY(d + 1);
+                            return;
+                        case Operand::DE:
+                            ML_LD_E_IY(d);
+                            ML_LD_D_IY(d + 1);
+                            return;
+                        case Operand::HL:
+                            ML_LD_L_IY(d);
+                            ML_LD_H_IY(d + 1);
+                            return;
+                    }
+                }
             }
         }
     } else if (mnemonic_format_test(line, 6, TokenType::Operand, TokenType::Split, TokenType::AddressBegin, TokenType::Operand, TokenType::AddressEnd)) {
@@ -402,6 +467,38 @@ void mnemonic_LD(LineData* line)
                 line->machine.push_back(0x46 | (getBitReg8(op1) << 3));
                 line->machine.push_back(0x00);
                 return;
+            } else {
+                if (op2 == Operand::IX) {
+                    switch (op1) {
+                        case Operand::BC:
+                            ML_LD_C_IX(0);
+                            ML_LD_B_IX(1);
+                            return;
+                        case Operand::DE:
+                            ML_LD_E_IX(0);
+                            ML_LD_D_IX(1);
+                            return;
+                        case Operand::HL:
+                            ML_LD_L_IX(0);
+                            ML_LD_H_IX(1);
+                            return;
+                    }
+                } else {
+                    switch (op1) {
+                        case Operand::BC:
+                            ML_LD_C_IY(0);
+                            ML_LD_B_IY(1);
+                            return;
+                        case Operand::DE:
+                            ML_LD_E_IY(0);
+                            ML_LD_D_IY(1);
+                            return;
+                        case Operand::HL:
+                            ML_LD_L_IY(0);
+                            ML_LD_H_IY(1);
+                            return;
+                    }
+                }
             }
         }
     } else if (mnemonic_format_test(line, 8, TokenType::AddressBegin, TokenType::Operand, TokenType::PlusOrMinus, TokenType::Numeric, TokenType::AddressEnd, TokenType::Split, TokenType::Operand)) {
@@ -417,6 +514,38 @@ void mnemonic_LD(LineData* line)
                 line->machine.push_back(0x70 | getBitReg8(op1));
                 line->machine.push_back(d);
                 return;
+            } else {
+                if (op2 == Operand::IX) {
+                    switch (op1) {
+                        case Operand::BC:
+                            ML_LD_IX_C(d);
+                            ML_LD_IX_B(d + 1);
+                            return;
+                        case Operand::DE:
+                            ML_LD_IX_E(d);
+                            ML_LD_IX_D(d + 1);
+                            return;
+                        case Operand::HL:
+                            ML_LD_IX_L(d);
+                            ML_LD_IX_H(d + 1);
+                            return;
+                    }
+                } else {
+                    switch (op1) {
+                        case Operand::BC:
+                            ML_LD_IY_C(d);
+                            ML_LD_IY_B(d + 1);
+                            return;
+                        case Operand::DE:
+                            ML_LD_IY_E(d);
+                            ML_LD_IY_D(d + 1);
+                            return;
+                        case Operand::HL:
+                            ML_LD_IY_L(d);
+                            ML_LD_IY_H(d + 1);
+                            return;
+                    }
+                }
             }
         }
     } else if (mnemonic_format_test(line, 6, TokenType::AddressBegin, TokenType::Operand, TokenType::AddressEnd, TokenType::Split, TokenType::Operand)) {
@@ -429,6 +558,38 @@ void mnemonic_LD(LineData* line)
                 line->machine.push_back(0x70 | getBitReg8(op1));
                 line->machine.push_back(0x00);
                 return;
+            } else {
+                if (op2 == Operand::IX) {
+                    switch (op1) {
+                        case Operand::BC:
+                            ML_LD_IX_C(0);
+                            ML_LD_IX_B(1);
+                            return;
+                        case Operand::DE:
+                            ML_LD_IX_E(0);
+                            ML_LD_IX_D(1);
+                            return;
+                        case Operand::HL:
+                            ML_LD_IX_L(0);
+                            ML_LD_IX_H(1);
+                            return;
+                    }
+                } else {
+                    switch (op1) {
+                        case Operand::BC:
+                            ML_LD_IY_C(0);
+                            ML_LD_IY_B(1);
+                            return;
+                        case Operand::DE:
+                            ML_LD_IY_E(0);
+                            ML_LD_IY_D(1);
+                            return;
+                        case Operand::HL:
+                            ML_LD_IY_L(0);
+                            ML_LD_IY_H(1);
+                            return;
+                    }
+                }
             }
         }
     } else if (mnemonic_format_test(line, 8, TokenType::AddressBegin, TokenType::Operand, TokenType::PlusOrMinus, TokenType::Numeric, TokenType::AddressEnd, TokenType::Split, TokenType::Numeric)) {

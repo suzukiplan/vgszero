@@ -611,6 +611,122 @@ enum class Mnemonic {
     ML_LD_HL_A;      \
     ML_POP_AF
 
+#define ML_LD_IX_A(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x77); \
+    line->machine.push_back(D)
+#define ML_LD_IX_B(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x70); \
+    line->machine.push_back(D)
+#define ML_LD_IX_C(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x71); \
+    line->machine.push_back(D)
+#define ML_LD_IX_D(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x72); \
+    line->machine.push_back(D)
+#define ML_LD_IX_E(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x73); \
+    line->machine.push_back(D)
+#define ML_LD_IX_H(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x74); \
+    line->machine.push_back(D)
+#define ML_LD_IX_L(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x75); \
+    line->machine.push_back(D)
+
+#define ML_LD_A_IX(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x7E); \
+    line->machine.push_back(D)
+#define ML_LD_B_IX(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x46); \
+    line->machine.push_back(D)
+#define ML_LD_C_IX(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x4E); \
+    line->machine.push_back(D)
+#define ML_LD_D_IX(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x56); \
+    line->machine.push_back(D)
+#define ML_LD_E_IX(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x5E); \
+    line->machine.push_back(D)
+#define ML_LD_H_IX(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x66); \
+    line->machine.push_back(D)
+#define ML_LD_L_IX(D)              \
+    line->machine.push_back(0xDD); \
+    line->machine.push_back(0x6E); \
+    line->machine.push_back(D)
+
+#define ML_LD_IY_A(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x77); \
+    line->machine.push_back(D)
+#define ML_LD_IY_B(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x70); \
+    line->machine.push_back(D)
+#define ML_LD_IY_C(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x71); \
+    line->machine.push_back(D)
+#define ML_LD_IY_D(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x72); \
+    line->machine.push_back(D)
+#define ML_LD_IY_E(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x73); \
+    line->machine.push_back(D)
+#define ML_LD_IY_H(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x74); \
+    line->machine.push_back(D)
+#define ML_LD_IY_L(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x75); \
+    line->machine.push_back(D)
+
+#define ML_LD_A_IY(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x7E); \
+    line->machine.push_back(D)
+#define ML_LD_B_IY(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x46); \
+    line->machine.push_back(D)
+#define ML_LD_C_IY(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x4E); \
+    line->machine.push_back(D)
+#define ML_LD_D_IY(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x56); \
+    line->machine.push_back(D)
+#define ML_LD_E_IY(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x5E); \
+    line->machine.push_back(D)
+#define ML_LD_H_IY(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x66); \
+    line->machine.push_back(D)
+#define ML_LD_L_IY(D)              \
+    line->machine.push_back(0xFD); \
+    line->machine.push_back(0x6E); \
+    line->machine.push_back(D)
+
 #define ML_RET line->machine.push_back(0xC9)
 #define ML_RET_NZ line->machine.push_back(0xC0)
 #define ML_RET_Z line->machine.push_back(0xC8)
