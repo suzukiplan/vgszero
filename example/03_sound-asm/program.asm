@@ -5,21 +5,22 @@ struct VARS $C000 {
     joy_prev ds.b 1     ; ジョイパッド（前フレーム）
 }
 
-struct Bank 0 {
-    program ds.b 1
-    font ds.b 1
+
+enum BANK {
+    program
+    font
 }
 
-struct BankS 0 {
-    move ds.b 1
-    enter ds.b 1
+enum BGM {
+    song1
+    song2
+    song3
+    song4
 }
 
-struct BankB 0 {
-    song1 ds.b 1
-    song2 ds.b 1
-    song3 ds.b 1
-    song4 ds.b 1
+enum SFX {
+    move
+    enter
 }
 
 ;------------------------------------------------------------
@@ -33,7 +34,7 @@ struct BankB 0 {
     memcpy(VRAM.palette, palette_data, 512)
 
     ; font を Character Pattern Table に転送 (DMA)
-    dma2chr(Bank.font)
+    dma2chr(BANK.font)
 
     ; グローバル変数を初期化
     memset(VARS, 0, sizeof(VARS))
@@ -117,7 +118,7 @@ struct BankB 0 {
     out (IO.bgm.play), a
 @End
     pop_all_without_i()
-    eff_play(BankS.enter)
+    eff_play(SFX.enter)
     ret
 
 ;------------------------------------------------------------
@@ -164,7 +165,7 @@ struct BankB 0 {
 .draw_cur
     call get_cur_pos
     (hl) = '>'
-    eff_play(BankS.move)
+    eff_play(SFX.move)
     ret
 
 ;------------------------------------------------------------
