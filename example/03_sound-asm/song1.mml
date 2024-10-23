@@ -1,0 +1,52 @@
+$Tempo  t120
+$Master m15
+$EA     \s100 \e40000
+$EB     \s1000 \e4410
+$EC     \s10 \e10000
+$ED     \s6000 \e22050
+$Init   (EA) (Tempo) (Master)
+
+#-----------------------------------------------------------------------------
+$M01    r1r2.cd |
+$M02    e-2.de- d2.<b-4> c1 ^2r4cd
+$M03    e-2.de- d2.<b-4> g1 ^2r4gb-
+$M04    a-2ra-gf d2b-4a-4 g2rgfe- c2r4cd
+$M05    e-2.de- d2.<b-4> %90 c1^2.cd
+$Melody (M01)(M02)(M03)(M04)(M05)
+
+#-----------------------------------------------------------------------------
+$C01    r1r1
+$C02    g2f4e-4 d2<b-2 g1^2r2 >
+$C03    g2f4e-4 f2b-2 g1^ 2r4 l8 b->d c2rc<b-a- g2d2 b-2rb->cd e-2.e-f
+$C04    g4.c4.g4 f4e-4<b-4>d4 %90 c1^1
+$Sub    (C01)(C02)(C03)(C04)
+
+#-----------------------------------------------------------------------------
+$B01    r1r1 c2.c4<b-2g2c2.c4c1>
+$B02    c2.c4<b-2>g4.<b-g2.g4g4.g8g4g4 l8
+$B03    f4.fff>f<f gg>g<gg4d4 cc>c<ccc>c<ccc>c<cc4e-4
+$B04    c2.c4<g2>d2
+$B05    %90 c1^2.c8c8
+$Bass   (B01)(B02)(B03)(B04)(B05)
+
+#-----------------------------------------------------------------------------
+$S01    e-g>ce-< v+ e-g>ce-< v+ e-g>ce-< v+ e-g>ce-< v+ 
+$S02    g>ce-g< g>ce-g< gb->dg< gb->dg< g>ce-g e-c<ge- ce-g>c e-g>ce-<<
+$S03    g>ce-g< g>ce-g< gb->dg< gb->dg< b->dgb-< b->dgb-< b->dgb-< b->dgb-
+$S04    c>c<a->c< f>c<a->c<<
+$S05    b->b-gb- db-gb-<
+$S06    b->b-gb- db-gb-<
+$S07    g>ge-gcge-g<
+$S08    g>ge-gcge-g<
+$S09    g>gdg<b->gdg<
+$S10    e-g>ce-< v- e-g>ce-< v- e-g>ce-< v- e-g>c
+$Side   (S01)(S02)(S03)(S04)(S05)(S06)(S07)(S08)(S09)(S10)
+
+#-----------------------------------------------------------------------------
+Ch0     (Init) @1 v13 o5 %80 l8     (Melody)
+Ch1     (EA)   @0 v10 o4 %80 l8     (Melody)
+Ch2     (ED)   @2 v7  o4 %90 l8     (Sub)
+Ch3     (EB)   @2 v2  o4 %45 l8     (Side) e-< v+++
+Ch4     (EB)   @0 v1  o4 %45 l8 r16 (Side) e-16< v+++
+Ch5     (EC)   @0 v16 o3 %50 l8     (Bass)
+

@@ -8,3 +8,5 @@ all:
 	cd vgsplay && make
 	cd makepkg && make
 	cd chkdif && make
+	cd vgsasm && make
+
