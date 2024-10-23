@@ -5,7 +5,6 @@ struct VARS $C000 {
     joy_prev ds.b 1     ; ジョイパッド（前フレーム）
 }
 
-
 enum BANK {
     program
     font

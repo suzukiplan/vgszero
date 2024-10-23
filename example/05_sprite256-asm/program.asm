@@ -9,9 +9,9 @@ struct OBJ $C000 {
     an ds.b 1
 }
 
-struct Bank 0 {
-    program ds.b 1
-    font ds.b 1
+enum BANK {
+    program
+    font
 }
 
 ;------------------------------------------------------------
