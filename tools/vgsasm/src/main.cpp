@@ -133,6 +133,12 @@ static int assemble(std::vector<LineData*> lines)
         return -1;
     }
 
+    // enum の展開
+    extract_enum(&lines);
+    if (check_error(lines)) {
+        return -1;
+    }
+
     // #define の展開
     for (auto it = lines.begin(); it != lines.end(); it++) {
         replace_define(*it);

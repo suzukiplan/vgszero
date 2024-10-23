@@ -51,6 +51,7 @@ vgsasm [-o /path/to/output.bin]
 - [`#define`](#define)
 - [`#macro`](#macro)
 - [`struct`](#struct)
+- [`enum`](#enum)
 - [`org`](#org)
 - [Labels](#labels)
 - [String Literal](#string-literal)
@@ -250,6 +251,39 @@ org $0000
     add ix, sizeof(OAM)                 ; ix += 8
     djnz @Loop                          ; loop
 ```
+
+## `enum`
+
+```
+enum Color {
+    Black           ; 0
+    Blue            ; 1
+    Red             ; 2
+    Purple          ; 3
+    Green           ; 4
+    Cyan            ; 5
+    Yellow          ; 6
+    White           ; 7
+}
+
+LD A, Color.Cyan ; A = 5
+```
+
+You can use `enum` to define items that you want to manage with sequential numbers, such as bank numbers.
+
+You can set the initial value by writing `name = number`.
+
+```
+enum Color {
+    Black = 0x10    ; 0x10
+    Blue            ; 0x11
+    Red             ; 0x12
+    Purple          ; 0x13
+    Green = 0x20    ; 0x20
+    Cyan            ; 0x21
+    Yellow          ; 0x22
+    White           ; 0x23
+}
 
 ## `org`
 

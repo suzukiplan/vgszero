@@ -197,6 +197,7 @@ void parse_org(LineData* line);                                                 
 void setpc_org(std::vector<LineData*>* lines);                                        // prep.cpp
 void bracket_to_address(LineData* line);                                              // prep.cpp
 bool bracket_eliminate(LineData* line);                                               // prep.cpp
+void extract_enum(std::vector<LineData*>* lines);                                     // prerp.cpp
 std::vector<LineData*> readFile(const char* filePath);                                // file.cpp
 std::string evaluate_formulas(std::vector<std::pair<TokenType, std::string>>* token); // formulas.cpp
 void evaluate_formulas(LineData* line);                                               // formulas.cpp
