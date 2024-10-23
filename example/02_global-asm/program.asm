@@ -1,19 +1,16 @@
 #include "../../lib/z80/stdio.asm"
 
+enum bank {
+    program
+    font
+}
+
 struct VARS $C000 {
     c1      ds.b 1
     c10     ds.b 1
     c100    ds.b 1
     c1000   ds.b 1
     stop    ds.b 1
-}
-
-#macro print_text(posX, posY, string)
-{
-    ld h, posX
-    ld l, posY
-    ld de, string
-    call print_text_sub
 }
 
 .main
@@ -24,7 +21,7 @@ struct VARS $C000 {
     memcpy(VRAM.palette, palette_data, 512);
 
     ; Bank 1 を Character Pattern Table に転送 (DMA)
-    dma2chr(1)
+    dma2chr(bank.font)
 
     ; グローバル変数を初期化
     a ^= a
