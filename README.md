@@ -1184,7 +1184,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | `02_global` | [Z80](./example/02_global-asm/), [C](./example/02_global/) | グローバル変数の使用例 |
 | `03_sound` | [Z80](./example/03_sound-asm/), [C](./example/03_sound/) | BGM と効果音の使用例 |
 | `04_heavy` | [C](./example/04_heavy/) | エミュレータ側の負荷を最大化する検査用プログラム |
-| `05_sprite256` | [C](./example/05_sprite256/) | スプライトを256表示して動かす例 |
+| `05_sprite256` | [Z80](./example/05_sprite256-asm/), [C](./example/05_sprite256/) | スプライトを256表示して動かす例 |
 | `06_save` | [C](./example/06_save/) | [セーブ機能](#save-data)の例 |
 | `07_palette` | [C](./example/07_palette/) | 16個の[パレット](#palette)を全て使った例 |
 | `08_map-scroll` | [C](./example/08_map-scroll/) | Tiled Map Editor で作ったマップデータのスクロール |

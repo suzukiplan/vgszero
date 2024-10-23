@@ -1,6 +1,8 @@
-# Global Variables
+# Sound
 
-グローバル変数の利用例です
+- BGM を再生・ポーズ・再開・フェードアウト
+- 効果音を再生
+- ジョイパッドで操作します
 
 ![preview](preview.png)
 
@@ -15,9 +17,19 @@ make
 
 ## ROM structure
 
-```
-8KB x 2 banks = 16KB ROM
-```
+### Program
 
 - Bank 0: program
 - Bank 1: font.chr
+
+### BGM
+
+- BGM 0: [./song1.mml](./song1.mml)
+- BGM 1: [./song2.mml](./song2.mml)
+- BGM 2: [./song3.mml](./song3.mml)
+- BGM 4: [./song4.nsf](./song4.nsf)
+
+### Sound Effect structure
+
+- SE 0: [./se_move.wav](./se_move.wav)
+- SE 1: [./se_enter.wav](./se_enter.wav)
