@@ -46,8 +46,7 @@ enum BANK {
 
     ; Y 座標
     in a, (IO.rand8)
-    l = 192
-    a %= l
+    a %= 192
     (iy + offset(OAM.y)) = a
     (ix + offset(OBJ.y) + 1) = a
 
