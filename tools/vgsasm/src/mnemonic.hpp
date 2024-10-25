@@ -1,157 +1,26 @@
+/**
+ * Z80 Assembler for VGS-Zero
+ * Copyright (c) 2024, Yoji Suzuki.
+ * License under GPLv3: https://github.com/suzukiplan/vgsasm/blob/master/LICENSE.txt
+ */
 #include "common.h"
 #include "mnemonic.h"
-
-void mnemonic_JP(LineData* line);                                    // mnemonic_branch.cpp
-void mnemonic_JR(LineData* line);                                    // mnemonic_branch.cpp
-void mnemonic_DJNZ(LineData* line);                                  // mnemonic_branch.cpp
-void mnemonic_CALL(LineData* line);                                  // mnemonic_branch.cpp
-void mnemonic_RET(LineData* line);                                   // mnemonic_branch.cpp
-void mnemonic_RST(LineData* line);                                   // mnemonic_branch.cpp
-void mnemonic_calc8(LineData* line, uint8_t code);                   // mnemonic_calc.cpp
-void mnemonic_calc16(LineData* line, uint8_t code);                  // mnemonic_calc.cpp
-void mnemonic_calcOH(LineData* line, uint8_t code8, uint8_t code16); // mnemonic_calc.cpp
-void mnemonic_shift(LineData* line, uint8_t code);                   // mnemonic_calc.cpp
-void mnemonic_INC(LineData* line);                                   // mnemonic_calc.cpp
-void mnemonic_DEC(LineData* line);                                   // mnemonic_calc.cpp
-void mnemonic_bit_op(LineData* line, Mnemonic mne);                  // mnemonic_calc.cpp
-void mnemonic_LD(LineData* line);                                    // mnemonic_load.cpp
-void mnemonic_PUSH(LineData* line);                                  // mnemonic_other.cpp
-void mnemonic_POP(LineData* line);                                   // mnemonic_other.cpp
-void mnemonic_DB(LineData* line);                                    // mnemonic_other.cpp
-void mnemonic_DW(LineData* line);                                    // mnemonic_other.cpp
-void mnemonic_EX(LineData* line);                                    // mnemonic_other.cpp
-void mnemonic_IN(LineData* line);                                    // mnemonic_other.cpp
-void mnemonic_OUT(LineData* line);                                   // mnemonic_other.cpp
-void mnemonic_MUL(LineData* line);                                   // mnemonic_vgs.cpp
-void mnemonic_MULS(LineData* line);                                  // mnemonic_vgs.cpp
-void mnemonic_DIV(LineData* line);                                   // mnemonic_vgs.cpp
-void mnemonic_DIVS(LineData* line);                                  // mnemonic_vgs.cpp
-void mnemonic_MOD(LineData* line);                                   // mnemonic_vgs.cpp
-void mnemonic_ATN2(LineData* line);                                  // mnemonic_vgs.cpp
-void mnemonic_SIN(LineData* line);                                   // mnemonic_vgs.cpp
-void mnemonic_COS(LineData* line);                                   // mnemonic_vgs.cpp
+#include "mnemonic_ml.hpp"
+#include "mnemonic_bit.hpp"
+#include "mnemonic_branch.hpp"
+#include "mnemonic_calc.hpp"
+#include "mnemonic_data.hpp"
+#include "mnemonic_ex.hpp"
+#include "mnemonic_im.hpp"
+#include "mnemonic_increment.hpp"
+#include "mnemonic_io.hpp"
+#include "mnemonic_load.hpp"
+#include "mnemonic_shift.hpp"
+#include "mnemonic_stack.hpp"
+#include "mnemonic_table.hpp"
+#include "mnemonic_vgs.hpp"
 
 std::vector<TempAddr*> tempAddrs;
-
-std::map<std::string, Mnemonic> mnemonicTable = {
-    {"LD", Mnemonic::LD},
-    {"LDI", Mnemonic::LDI},
-    {"LDIR", Mnemonic::LDIR},
-    {"LDD", Mnemonic::LDD},
-    {"LDDR", Mnemonic::LDDR},
-    {"PUSH", Mnemonic::PUSH},
-    {"POP", Mnemonic::POP},
-    {"EX", Mnemonic::EX},
-    {"EXX", Mnemonic::EXX},
-    {"CP", Mnemonic::CP},
-    {"CPI", Mnemonic::CPI},
-    {"CPIR", Mnemonic::CPIR},
-    {"CPD", Mnemonic::CPD},
-    {"CPDR", Mnemonic::CPDR},
-    {"ADD", Mnemonic::ADD},
-    {"ADC", Mnemonic::ADC},
-    {"SUB", Mnemonic::SUB},
-    {"SBC", Mnemonic::SBC},
-    {"AND", Mnemonic::AND},
-    {"OR", Mnemonic::OR},
-    {"XOR", Mnemonic::XOR},
-    {"EOR", Mnemonic::XOR},
-    {"INC", Mnemonic::INC},
-    {"DEC", Mnemonic::DEC},
-    {"DAA", Mnemonic::DAA},
-    {"CPL", Mnemonic::CPL},
-    {"NEG", Mnemonic::NEG},
-    {"CCF", Mnemonic::CCF},
-    {"SCF", Mnemonic::SCF},
-    {"NOP", Mnemonic::NOP},
-    {"HALT", Mnemonic::HALT},
-    {"RL", Mnemonic::RL},
-    {"RLA", Mnemonic::RLA},
-    {"RLC", Mnemonic::RLC},
-    {"RLCA", Mnemonic::RLCA},
-    {"RR", Mnemonic::RR},
-    {"RRA", Mnemonic::RRA},
-    {"RRC", Mnemonic::RRC},
-    {"RRCA", Mnemonic::RRCA},
-    {"SLA", Mnemonic::SLA},
-    {"SL", Mnemonic::SLA},
-    {"SLL", Mnemonic::SLL},
-    {"SRA", Mnemonic::SRA},
-    {"SRL", Mnemonic::SRL},
-    {"SR", Mnemonic::SRL},
-    {"RLD", Mnemonic::RLD},
-    {"RRD", Mnemonic::RRD},
-    {"BIT", Mnemonic::BIT},
-    {"SET", Mnemonic::SET},
-    {"RES", Mnemonic::RES},
-    {"JP", Mnemonic::JP},
-    {"JR", Mnemonic::JR},
-    {"DJNZ", Mnemonic::DJNZ},
-    {"CALL", Mnemonic::CALL},
-    {"RST", Mnemonic::RST},
-    {"RET", Mnemonic::RET},
-    {"RETI", Mnemonic::RETI},
-    {"RETN", Mnemonic::RETN},
-    {"OUT", Mnemonic::OUT},
-    {"OUTI", Mnemonic::OUTI},
-    {"OUTIR", Mnemonic::OTIR},
-    {"OTIR", Mnemonic::OTIR},
-    {"OUTD", Mnemonic::OUTD},
-    {"OUTDR", Mnemonic::OTDR},
-    {"OTDR", Mnemonic::OTDR},
-    {"IN", Mnemonic::IN},
-    {"INI", Mnemonic::INI},
-    {"INIR", Mnemonic::INIR},
-    {"IND", Mnemonic::IND},
-    {"INDR", Mnemonic::INDR},
-    {"DI", Mnemonic::DI},
-    {"EI", Mnemonic::EI},
-    {"IM", Mnemonic::IM},
-    {"DB", Mnemonic::DB},
-    {"DEFB", Mnemonic::DB},
-    {"DW", Mnemonic::DW},
-    {"DEFW", Mnemonic::DW},
-    {"BYTE", Mnemonic::DB},
-    {"WORD", Mnemonic::DW},
-    {"MUL", Mnemonic::MUL},
-    {"MULS", Mnemonic::MULS},
-    {"DIV", Mnemonic::DIV},
-    {"DIVS", Mnemonic::DIVS},
-    {"MOD", Mnemonic::MOD},
-    {"ATN2", Mnemonic::ATN2},
-    {"SIN", Mnemonic::SIN},
-    {"COS", Mnemonic::COS},
-};
-
-std::map<std::string, Operand> operandTable = {
-    {"A", Operand::A},
-    {"B", Operand::B},
-    {"C", Operand::C},
-    {"D", Operand::D},
-    {"E", Operand::E},
-    {"F", Operand::F},
-    {"H", Operand::H},
-    {"L", Operand::L},
-    {"IXH", Operand::IXH},
-    {"IXL", Operand::IXL},
-    {"IYH", Operand::IYH},
-    {"IYL", Operand::IYL},
-    {"AF", Operand::AF},
-    {"AF'", Operand::AF_dash},
-    {"BC", Operand::BC},
-    {"DE", Operand::DE},
-    {"HL", Operand::HL},
-    {"IX", Operand::IX},
-    {"IY", Operand::IY},
-    {"SP", Operand::SP},
-    {"NZ", Operand::NZ},
-    {"Z", Operand::Z},
-    {"NC", Operand::NC},
-    {"PO", Operand::PO},
-    {"PE", Operand::PE},
-    {"P", Operand::P},
-    {"M", Operand::M},
-};
 
 bool operand_is_condition(Operand op)
 {
@@ -202,6 +71,23 @@ void parse_mneoimonic(LineData* line)
                 } else {
                     line->error = true;
                     line->errmsg = "A mnemonic specified position was incorrect.";
+                    return;
+                }
+            } else if (it == line->token.begin() &&
+                       (it + 1) != line->token.end() &&
+                       (it + 2) != line->token.end() &&
+                       (it + 3) == line->token.end() &&
+                       (it + 1)->first == TokenType::BracketBegin &&
+                       (it + 2)->first == TokenType::BracketEnd) {
+                auto label = labelTable.find(it->second);
+                if (label == labelTable.end()) {
+                    return;
+                } else {
+                    (it + 1)->first = TokenType::LabelJump;
+                    (it + 1)->second = it->second;
+                    it->first = TokenType::Mnemonic;
+                    it->second = "CALL";
+                    (it + 2)->first = TokenType::Delete;
                     return;
                 }
             }
@@ -327,21 +213,6 @@ void mnemonic_single_ED(LineData* line, uint8_t code)
     if (mnemonic_format_check(line, 1)) {
         line->machine.push_back(0xED);
         line->machine.push_back(code);
-    }
-}
-
-void mnemonic_IM(LineData* line)
-{
-    if (mnemonic_format_check(line, 2, TokenType::Numeric)) {
-        line->machine.push_back(0xED);
-        switch (atoi(line->token[1].second.c_str())) {
-            case 0: line->machine.push_back(0x46); break;
-            case 1: line->machine.push_back(0x56); break;
-            case 2: line->machine.push_back(0x5E); break;
-            default:
-                line->error = true;
-                line->errmsg = "Unsupported interrupt mode: " + line->token[1].second;
-        }
     }
 }
 

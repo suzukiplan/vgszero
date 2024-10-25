@@ -1,3 +1,9 @@
+/**
+ * Z80 Assembler for VGS-Zero
+ * Copyright (c) 2024, Yoji Suzuki.
+ * License under GPLv3: https://github.com/suzukiplan/vgsasm/blob/master/LICENSE.txt
+ */
+#pragma once
 #include "common.h"
 #include "mnemonic.h"
 
@@ -357,12 +363,76 @@ void mnemonic_LD(LineData* line)
             case Operand::IY: code = 0xFD2A; break;
         }
         auto addr = atoi(line->token[4].second.c_str());
-        if (code && mnemonic_range(line, addr, 0x0000, 0xFFFF)) {
-            if (0x100 <= code) { line->machine.push_back((code & 0xFF00) >> 8); }
-            line->machine.push_back(code & 0xFF);
-            line->machine.push_back(addr & 0x00FF);
-            line->machine.push_back((addr & 0xFF00) >> 8);
-            return;
+        if (mnemonic_range(line, addr, 0x0000, 0xFFFF)) {
+            switch (op) {
+                case Operand::B:
+                    ML_PUSH_AF;
+                    ML_LD_A_NN(addr);
+                    ML_LD_B_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::C:
+                    ML_PUSH_AF;
+                    ML_LD_A_NN(addr);
+                    ML_LD_C_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::D:
+                    ML_PUSH_AF;
+                    ML_LD_A_NN(addr);
+                    ML_LD_D_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::E:
+                    ML_PUSH_AF;
+                    ML_LD_A_NN(addr);
+                    ML_LD_E_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::H:
+                    ML_PUSH_AF;
+                    ML_LD_A_NN(addr);
+                    ML_LD_H_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::L:
+                    ML_PUSH_AF;
+                    ML_LD_A_NN(addr);
+                    ML_LD_L_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::IXH:
+                    ML_PUSH_AF;
+                    ML_LD_A_NN(addr);
+                    ML_LD_IXH_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::IXL:
+                    ML_PUSH_AF;
+                    ML_LD_A_NN(addr);
+                    ML_LD_IXL_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::IYH:
+                    ML_PUSH_AF;
+                    ML_LD_A_NN(addr);
+                    ML_LD_IYH_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::IYL:
+                    ML_PUSH_AF;
+                    ML_LD_A_NN(addr);
+                    ML_LD_IYL_A;
+                    ML_POP_AF;
+                    return;
+            }
+            if (code) {
+                if (0x100 <= code) { line->machine.push_back((code & 0xFF00) >> 8); }
+                line->machine.push_back(code & 0xFF);
+                line->machine.push_back(addr & 0x00FF);
+                line->machine.push_back((addr & 0xFF00) >> 8);
+                return;
+            }
         }
     } else if (mnemonic_format_test(line, 6, TokenType::Operand, TokenType::Split, TokenType::AddressBegin, TokenType::LabelJump, TokenType::AddressEnd)) {
         // LD r, (nn)
@@ -397,6 +467,66 @@ void mnemonic_LD(LineData* line)
                 case Operand::SP: ML_LD_NN_SP(addr); return;
                 case Operand::IX: ML_LD_NN_IX(addr); return;
                 case Operand::IY: ML_LD_NN_IY(addr); return;
+                case Operand::B:
+                    ML_PUSH_AF;
+                    ML_LD_A_B;
+                    ML_LD_NN_A(addr);
+                    ML_POP_AF;
+                    return;
+                case Operand::C:
+                    ML_PUSH_AF;
+                    ML_LD_A_C;
+                    ML_LD_NN_A(addr);
+                    ML_POP_AF;
+                    return;
+                case Operand::D:
+                    ML_PUSH_AF;
+                    ML_LD_A_D;
+                    ML_LD_NN_A(addr);
+                    ML_POP_AF;
+                    return;
+                case Operand::E:
+                    ML_PUSH_AF;
+                    ML_LD_A_E;
+                    ML_LD_NN_A(addr);
+                    ML_POP_AF;
+                    return;
+                case Operand::H:
+                    ML_PUSH_AF;
+                    ML_LD_A_H;
+                    ML_LD_NN_A(addr);
+                    ML_POP_AF;
+                    return;
+                case Operand::L:
+                    ML_PUSH_AF;
+                    ML_LD_A_L;
+                    ML_LD_NN_A(addr);
+                    ML_POP_AF;
+                    return;
+                case Operand::IXH:
+                    ML_PUSH_AF;
+                    ML_LD_A_IXH;
+                    ML_LD_NN_A(addr);
+                    ML_POP_AF;
+                    return;
+                case Operand::IXL:
+                    ML_PUSH_AF;
+                    ML_LD_A_IXL;
+                    ML_LD_NN_A(addr);
+                    ML_POP_AF;
+                    return;
+                case Operand::IYH:
+                    ML_PUSH_AF;
+                    ML_LD_A_IYH;
+                    ML_LD_NN_A(addr);
+                    ML_POP_AF;
+                    return;
+                case Operand::IYL:
+                    ML_PUSH_AF;
+                    ML_LD_A_IYL;
+                    ML_LD_NN_A(addr);
+                    ML_POP_AF;
+                    return;
             }
         }
     } else if (mnemonic_format_test(line, 6, TokenType::AddressBegin, TokenType::Numeric, TokenType::AddressEnd, TokenType::Split, TokenType::Numeric)) {

@@ -1,44 +1,19 @@
+/**
+ * Z80 Assembler for VGS-Zero
+ * Copyright (c) 2024, Yoji Suzuki.
+ * License under GPLv3: https://github.com/suzukiplan/vgsasm/blob/master/LICENSE.txt
+ */
+#pragma once
 #include "common.h"
 #include "mnemonic.h"
 
 static void HAGe_calc(LineData* line, uint8_t port, uint8_t out)
 {
-    if (mnemonic_format_test(line, 2, TokenType::Operand)) {
-        switch (operandTable[line->token[1].second]) {
-            case Operand::BC:
-                ML_PUSH_AF;
-                ML_PUSH_HL;
-                ML_LD_H_B;
-                ML_LD_L_C;
-                ML_LD_A_n(out);
-                ML_OUT_A(port);
-                ML_LD_B_H;
-                ML_LD_C_L;
-                ML_POP_HL;
-                ML_POP_AF;
-                return;
-            case Operand::DE:
-                ML_PUSH_AF;
-                ML_PUSH_HL;
-                ML_LD_H_D;
-                ML_LD_L_E;
-                ML_LD_A_n(out);
-                ML_OUT_A(port);
-                ML_LD_D_H;
-                ML_LD_E_L;
-                ML_POP_HL;
-                ML_POP_AF;
-                return;
-            case Operand::HL:
-                ML_PUSH_AF;
-                ML_LD_A_n(out);
-                ML_OUT_A(port);
-                ML_POP_AF;
-                return;
-        }
-    } else if (mnemonic_format_test(line, 4, TokenType::Operand, TokenType::Split, TokenType::Operand)) {
-        if (operandTable[line->token[1].second] == Operand::HL) {
-            switch (operandTable[line->token[3].second]) {
+    if (mnemonic_format_test(line, 4, TokenType::Operand, TokenType::Split, TokenType::Operand)) {
+        auto op1 = operandTable[line->token[1].second];
+        auto op2 = operandTable[line->token[3].second];
+        if (op1 == Operand::HL) {
+            switch (op2) {
                 case Operand::A:
                     ML_PUSH_AF;
                     ML_PUSH_BC;
@@ -82,6 +57,85 @@ static void HAGe_calc(LineData* line, uint8_t port, uint8_t out)
                     ML_POP_AF;
                     return;
             }
+        }
+        switch (op1) {
+            case Operand::A:
+                switch (op2) {
+                    case Operand::A: ML_HAG_A_A(port, out); return;
+                    case Operand::B: ML_HAG_A_B(port, out); return;
+                    case Operand::C: ML_HAG_A_C(port, out); return;
+                    case Operand::D: ML_HAG_A_D(port, out); return;
+                    case Operand::E: ML_HAG_A_E(port, out); return;
+                    case Operand::H: ML_HAG_A_H(port, out); return;
+                    case Operand::L: ML_HAG_A_L(port, out); return;
+                }
+                break;
+            case Operand::B:
+                switch (op2) {
+                    case Operand::A: ML_HAG_B_A(port, out); return;
+                    case Operand::B: ML_HAG_B_B(port, out); return;
+                    case Operand::C: ML_HAG_B_C(port, out); return;
+                    case Operand::D: ML_HAG_B_D(port, out); return;
+                    case Operand::E: ML_HAG_B_E(port, out); return;
+                    case Operand::H: ML_HAG_B_H(port, out); return;
+                    case Operand::L: ML_HAG_B_L(port, out); return;
+                }
+                break;
+            case Operand::C:
+                switch (op2) {
+                    case Operand::A: ML_HAG_C_A(port, out); return;
+                    case Operand::B: ML_HAG_C_B(port, out); return;
+                    case Operand::C: ML_HAG_C_C(port, out); return;
+                    case Operand::D: ML_HAG_C_D(port, out); return;
+                    case Operand::E: ML_HAG_C_E(port, out); return;
+                    case Operand::H: ML_HAG_C_H(port, out); return;
+                    case Operand::L: ML_HAG_C_L(port, out); return;
+                }
+                break;
+            case Operand::D:
+                switch (op2) {
+                    case Operand::A: ML_HAG_D_A(port, out); return;
+                    case Operand::B: ML_HAG_D_B(port, out); return;
+                    case Operand::C: ML_HAG_D_C(port, out); return;
+                    case Operand::D: ML_HAG_D_D(port, out); return;
+                    case Operand::E: ML_HAG_D_E(port, out); return;
+                    case Operand::H: ML_HAG_D_H(port, out); return;
+                    case Operand::L: ML_HAG_D_L(port, out); return;
+                }
+                break;
+            case Operand::E:
+                switch (op2) {
+                    case Operand::A: ML_HAG_E_A(port, out); return;
+                    case Operand::B: ML_HAG_E_B(port, out); return;
+                    case Operand::C: ML_HAG_E_C(port, out); return;
+                    case Operand::D: ML_HAG_E_D(port, out); return;
+                    case Operand::E: ML_HAG_E_E(port, out); return;
+                    case Operand::H: ML_HAG_E_H(port, out); return;
+                    case Operand::L: ML_HAG_E_L(port, out); return;
+                }
+                break;
+            case Operand::H:
+                switch (op2) {
+                    case Operand::A: ML_HAG_H_A(port, out); return;
+                    case Operand::B: ML_HAG_H_B(port, out); return;
+                    case Operand::C: ML_HAG_H_C(port, out); return;
+                    case Operand::D: ML_HAG_H_D(port, out); return;
+                    case Operand::E: ML_HAG_H_E(port, out); return;
+                    case Operand::H: ML_HAG_H_H(port, out); return;
+                    case Operand::L: ML_HAG_H_L(port, out); return;
+                }
+                break;
+            case Operand::L:
+                switch (op2) {
+                    case Operand::A: ML_HAG_L_A(port, out); return;
+                    case Operand::B: ML_HAG_L_B(port, out); return;
+                    case Operand::C: ML_HAG_L_C(port, out); return;
+                    case Operand::D: ML_HAG_L_D(port, out); return;
+                    case Operand::E: ML_HAG_L_E(port, out); return;
+                    case Operand::H: ML_HAG_L_H(port, out); return;
+                    case Operand::L: ML_HAG_L_L(port, out); return;
+                }
+                break;
         }
     }
     if (!line->error) {

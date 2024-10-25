@@ -1,3 +1,9 @@
+/**
+ * Z80 Assembler for VGS-Zero
+ * Copyright (c) 2024, Yoji Suzuki.
+ * License under GPLv3: https://github.com/suzukiplan/vgsasm/blob/master/LICENSE.txt
+ */
+#pragma once
 #include "common.h"
 
 void parse_struct(LineData* line)
@@ -51,9 +57,56 @@ bool struct_syntax_check(std::vector<LineData*>* lines)
                 }
             } else {
                 if (it2->first != expect) {
-                    line->error = true;
-                    line->errmsg = "Incorrect syntax for struct: " + it2->second;
-                    return false;
+                    if (it2->first == TokenType::ArrowLeft && expect == TokenType::Numeric) {
+                        it2->first = TokenType::Delete;
+                        it2++;
+                        if (it2 == line->token.end() || newStruct->name == it2->second || it2->first != TokenType::Other) {
+                            line->error = true;
+                            line->errmsg = "Incorrect syntax for struct arrow.";
+                            return false;
+                        }
+                        newStruct->start = -1;
+                        newStruct->after = it2->second;
+                        it2->first = TokenType::Delete;
+                        expect = TokenType::ScopeBegin;
+                        if (it2 + 1 == line->token.end()) {
+                            continue;
+                        }
+                        if ((it2 + 1)->first == TokenType::ArrayBegin) {
+                            it2++;
+                            it2->first = TokenType::Delete;
+                            it2++;
+                            if (it2->first != TokenType::Numeric) {
+                                line->error = true;
+                                line->errmsg = "Unexpected token: " + it2->second;
+                                return false;
+                            }
+                            it2->first = TokenType::Delete;
+                            newStruct->afterArray = atoi(it2->second.c_str());
+                            it2++;
+                            if (it2 == line->token.end()) {
+                                line->error = true;
+                                line->errmsg = "Incorrect syntax for struct array.";
+                                return false;
+                            } else if (it2->first != TokenType::ArrayEnd) {
+                                line->error = true;
+                                line->errmsg = "Unexpected symbol: " + it2->second;
+                                return false;
+                            } else if (newStruct->afterArray < 1) {
+                                line->error = true;
+                                line->errmsg = "struct array must have a value of 1 or more: " + std::to_string(newStruct->afterArray);
+                                return false;
+                            }
+                            it2->first = TokenType::Delete;
+                            continue;
+                        } else {
+                            continue;
+                        }
+                    } else {
+                        line->error = true;
+                        line->errmsg = "Incorrect syntax for struct: " + it2->second;
+                        return false;
+                    }
                 }
                 switch (expect) {
                     case TokenType::Other:
@@ -87,6 +140,18 @@ bool struct_check_size()
 {
     bool needRetry = false;
     for (auto s = structTable.begin(); s != structTable.end(); s++) {
+        if (!s->second->after.empty()) {
+            auto after = structTable.find(s->second->after);
+            if (0 == after->second->size) {
+                s->second->line->error = true;
+                s->second->line->errmsg = "It must be defined on the line after the definition of struct specified by the arrow operator.";
+            }
+            if (0 < s->second->afterArray) {
+                s->second->start = after->second->start + after->second->size * s->second->afterArray;
+            } else {
+                s->second->start = after->second->start + after->second->size;
+            }
+        }
         int sizeOfStruct = 0;
         int startAddress = s->second->start;
         bool skip = false;
@@ -262,123 +327,6 @@ void replace_struct(LineData* line)
                     }
                 }
             }
-        }
-    }
-}
-
-void parse_offset(LineData* line)
-{
-    for (auto it = line->token.begin(); it != line->token.end(); it++) {
-        if (it->first == TokenType::Other) {
-            if (it->second == "OFFSET") {
-                it->first = TokenType::Delete;
-                it++;
-                if (it == line->token.end() || it->first != TokenType::BracketBegin) {
-                    line->error = true;
-                    line->errmsg = "No `(` in offset syntax.";
-                    return;
-                }
-                it->first = TokenType::Delete;
-                it++;
-                if (it == line->token.end() || it->first != TokenType::Other) {
-                    line->error = true;
-                    line->errmsg = "No structure field name specified in offset syntax.";
-                    return;
-                }
-                it->first = TokenType::Offset;
-                it++;
-                if (it == line->token.end() || it->first != TokenType::BracketEnd) {
-                    line->error = true;
-                    line->errmsg = "No `)` in offset syntax.";
-                    return;
-                }
-                it->first = TokenType::Delete;
-            }
-        }
-    }
-}
-
-void replace_offset(LineData* line)
-{
-    for (auto it = line->token.begin(); it != line->token.end(); it++) {
-        if (it->first == TokenType::Offset) {
-            auto tokens = split_token(it->second, '.');
-            if (2 != tokens.size()) {
-                line->error = true;
-                line->errmsg = "No structure field name specified in `offset`: " + it->second;
-                return;
-            }
-            auto s = structTable.find(tokens[0]);
-            if (s == structTable.end()) {
-                line->error = true;
-                line->errmsg = "Undefined structure " + it->second + " is specified in offset.";
-                return;
-            }
-            int offset = 0;
-            bool found = false;
-            for (auto f : s->second->fields) {
-                if (f->name == tokens[1]) {
-                    it->first = TokenType::Numeric;
-                    it->second = std::to_string(offset);
-                    found = true;
-                    break;
-                } else {
-                    offset += f->size;
-                }
-            }
-            if (!found) {
-                line->error = true;
-                line->errmsg = "Field name `" + tokens[1] + "` is not defined in structure `" + tokens[0] + "`.";
-                return;
-            }
-        }
-    }
-}
-
-void parse_sizeof(LineData* line)
-{
-    for (auto it = line->token.begin(); it != line->token.end(); it++) {
-        if (it->first == TokenType::Other) {
-            if (it->second == "SIZEOF") {
-                it->first = TokenType::Delete;
-                it++;
-                if (it == line->token.end() || it->first != TokenType::BracketBegin) {
-                    line->error = true;
-                    line->errmsg = "No `(` in sizeof syntax.";
-                    return;
-                }
-                it->first = TokenType::Delete;
-                it++;
-                if (it == line->token.end() || it->first != TokenType::Other) {
-                    line->error = true;
-                    line->errmsg = "No name specified in sizeof syntax.";
-                    return;
-                }
-                it->first = TokenType::SizeOf;
-                it++;
-                if (it == line->token.end() || it->first != TokenType::BracketEnd) {
-                    line->error = true;
-                    line->errmsg = "No `)` in sizeof syntax.";
-                    return;
-                }
-                it->first = TokenType::Delete;
-            }
-        }
-    }
-}
-
-void replace_sizeof(LineData* line)
-{
-    for (auto it = line->token.begin(); it != line->token.end(); it++) {
-        if (it->first == TokenType::SizeOf) {
-            auto s = structTable.find(it->second);
-            if (s == structTable.end()) {
-                line->error = true;
-                line->errmsg = "Undefined structure " + it->second + " is specified in sizeof.";
-                return;
-            }
-            it->first = TokenType::Numeric;
-            it->second = std::to_string(s->second->size);
         }
     }
 }

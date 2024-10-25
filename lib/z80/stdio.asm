@@ -68,3 +68,33 @@
     inc de
     jr @Loop
     ret
+
+;------------------------------------------------------------
+; セーブデータの保存
+;------------------------------------------------------------
+#macro data_save(addr, size)
+{
+    push bc
+    push hl
+    ld bc, addr
+    ld hl, size
+    out (IO.save), a
+    pop hl
+    pop bc
+    and a
+}
+
+;------------------------------------------------------------
+; セーブデータの読み込み
+;------------------------------------------------------------
+#macro data_load(addr, size)
+{
+    push bc
+    push hl
+    ld bc, addr
+    ld hl, size
+    in a, (IO.save)
+    pop hl
+    pop bc
+    and a
+}

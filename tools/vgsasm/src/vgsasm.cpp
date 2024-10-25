@@ -1,4 +1,27 @@
+/**
+ * Z80 Assembler for VGS-Zero
+ * Copyright (c) 2024, Yoji Suzuki.
+ * License under GPLv3: https://github.com/suzukiplan/vgsasm/blob/master/LICENSE.txt
+ */
 #include "common.h"
+
+#include "assignment.hpp"
+#include "binary.hpp"
+#include "bracket.hpp"
+#include "decimal.hpp"
+#include "define.hpp"
+#include "enum.hpp"
+#include "file.hpp"
+#include "formulas.hpp"
+#include "increment.hpp"
+#include "label.hpp"
+#include "macro.hpp"
+#include "mnemonic.hpp"
+#include "numeric.hpp"
+#include "offset.hpp"
+#include "org.hpp"
+#include "sizeof.hpp"
+#include "struct.hpp"
 
 std::map<std::string, LineData*> nameTable;
 std::vector<std::string> includeFiles;
@@ -6,6 +29,7 @@ std::map<std::string, std::vector<std::pair<TokenType, std::string>>> defineTabl
 std::map<std::string, LineData*> labelTable;
 std::map<std::string, Struct*> structTable;
 int errorCount = 0;
+bool showLineDebug = false;
 
 uint8_t bin[0x10000];
 size_t binStart;
@@ -74,7 +98,7 @@ static int check_error(LineData* line)
 {
     if (line->error) {
         printf("Error: %s (%d) %s\n", line->path.c_str(), line->lineNumber, line->errmsg.c_str());
-        // line->printDebug();
+        if (showLineDebug) { line->printDebug(); }
         return -1;
     }
     return 0;
@@ -327,12 +351,12 @@ static int assemble(std::vector<LineData*> lines)
 #endif
 
     // 解析結果を出力（デバッグ）
-#if 0
-    for (auto line : lines) {
-        printf("%16s:%04d", line->path.c_str(), line->lineNumber);
-        line->printDebug();
+    if (showLineDebug) {
+        for (auto line : lines) {
+            printf("%16s:%04d", line->path.c_str(), line->lineNumber);
+            line->printDebug();
+        }
     }
-#endif
 
     // バイナリ出力
     binSize = 0;
@@ -412,6 +436,9 @@ int main(int argc, char* argv[])
                         binarySize = atoi(argv[i]);
                     }
                     break;
+                case 'v':
+                    showLineDebug = true;
+                    break;
                 default:
                     error = true;
                     break;
@@ -429,7 +456,8 @@ int main(int argc, char* argv[])
     if (error || !in[0]) {
         puts("usage: vgsasm [-o /path/to/output.bin]");
         puts("              [-b binary_size]");
-        puts("               /path/to/input.asm");
+        puts("              [-v]");
+        puts("              /path/to/input.asm");
         return 1;
     }
 

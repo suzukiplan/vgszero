@@ -1,5 +1,19 @@
 #include "../lib/vgszero.inc"
 
+struct Foo $C000 {
+    var1 ds.b 1
+    var2 ds.b 1
+    var3 ds.b 1
+}
+
+struct Hoge <- Foo {
+    var1 ds.b 1
+}
+
+struct Hige <- Foo[3] {
+    var1 ds.b 1
+}
+
 .Main
     ld bc, VRAM.oam             ; BC = $9000
     ld hl, sizeof(OAM) * 256    ; HL = OAM size (8) x 256 = 2048
@@ -11,3 +25,6 @@
     ld (OAM[3].x), a 
     ld (OAM[1+2*3].x), a 
     ld (OAM[1+2*3].x + 3), a 
+
+    ld hl, hoge.var1
+    ld hl, hige.var1

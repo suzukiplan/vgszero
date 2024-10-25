@@ -15,3 +15,7 @@ org $0000
 .Multiple
     NOP
     LD (HL++), --A
+
+.Only
+    A++
+    --A++

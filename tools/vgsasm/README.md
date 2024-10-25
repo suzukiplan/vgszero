@@ -30,6 +30,7 @@ sudo ln -s `pwd`/vgsasm /usr/local/bin/vgsasm
 ```
 vgsasm [-o /path/to/output.bin]
        [-b size_of_binary]
+       [-v]
        /path/to/source.asm
 ```
 - `-o /path/to/output.bin`
@@ -42,6 +43,9 @@ vgsasm [-o /path/to/output.bin]
   - The upper limit of `size_of_binary` is `65536` (`0x10000`)
   - Assembly will fail if the specified size is exceeded.
   - Boundary areas that do not meet the specified size are filled with `0xFF`.
+- `-v`
+  - Show line debug information.
+  - When encounters an inappropriate error, it may be possible to resolve it by cutting the issue pasting the output with this option.
 
 # Language Specification
 
@@ -139,6 +143,7 @@ org $0000
 - A multifunctional version of [`#define`](#define) that can have arguments and multi-line expansion.
 - The number of arguments must match the definition and the caller.
 - Only numbers can be specified as arguments in the macro caller (including labels, formulas, and [String Literal](#string-literal)).
+- A macro caller with no arguments will automatically be read as `CALL NAME` if the macro name is not defined.
 - Labels cannot be used within a macro definition.
 - If you want to perform complex processing involving branching, call a subroutine from within the macro. (This is also necessary to optimize code size.)
 
@@ -206,13 +211,29 @@ struct name $C000 {
     var4 ds.w 4     ; name.var4 = $C007 ... offset(name.var4) = 7
 }                   ; sizeof(name) = 15
 
+struct name2 <- name {
+    var1 ds.b 1     ; name2.var1 = $C00F
+}
+
+struct name3 <- name[3] {
+    var1 ds.b 1     ; name3.var1 = $C02D ($C000 + 15 * 3)
+}
+
 // Array access
 // name[0].var1 = $C000
 // name[1].var1 = $C00F
 // name[2].var1 = $C01E
 ```
 
-- You can define a structure with `struct name start_address`.
+- You can define a structure with:
+  - `struct name start_address`
+    - Define structure to address.
+  - `struct name <- previous`
+    - After a specific structure.
+    - `previous` must be defined on the line before this declaration.
+  - `struct name <- previous[count]`
+    - After a specific structure array
+    - `count` must be greater than or equal to 1
 - A struct is a grouping of single or multiple attributes in a common namespace.
 - Attributes are specified in the form `attribute_name {ds.b|ds.w|name} count`.
   - `ds.b` ... 1 byte
@@ -237,6 +258,7 @@ struct OAM $9000 {
     bank        ds.b    1
     reserved    ds.b    1
 }
+```
 
 org $0000
 
@@ -451,6 +473,9 @@ BC = ($C000)  ; expand to -> LD BC, ($C000)
 A += B        ; expand to -> ADD A, B
 HL += DE      ; expand to -> ADD HL, DE
 A -= B        ; expand to -> SUB A, B
+A *= B        ; expand to -> MUL A, B
+A /= B        ; expand to -> DIV A, B
+A %= B        ; expand to -> MOD A, B
 A &= B        ; expand to -> AND A, B
 A |= B        ; expand to -> OR A, B
 A ^= B        ; expand to -> XOR A, B
@@ -482,12 +507,10 @@ VARS.posX = 123
 ### MUL - Multiplication
 
 ```z80
-    MUL BC      ; BC = B * C
-    MUL DE      ; DE = D * C
-    MUL HL      ; HL = H * L <faster than BC,DE>
+    MUL r1, r2  ; r1 *= r2 (r: A|B|C|D|E|H|L)
     MUL HL, A   ; HL *= A
     MUL HL, B   ; HL *= B
-    MUL HL, C   ; HL *= C <faster than A,B,D,E>
+    MUL HL, C   ; HL *= C <fastest>
     MUL HL, D   ; HL *= D
     MUL HL, E   ; HL *= E
 ```
@@ -495,12 +518,10 @@ VARS.posX = 123
 Using `MULS` makes it a signed operation.
 
 ```z80
-    MULS BC     ; BC = B * C
-    MULS DE     ; DE = D * C
-    MULS HL     ; HL = H * L <faster than BC,DE>
+    MULS r1, r2 ; r1 *= r2 (r: A|B|C|D|E|H|L)
     MULS HL, A  ; HL *= A
     MULS HL, B  ; HL *= B
-    MULS HL, C  ; HL *= C <faster than A,B,D,E>
+    MULS HL, C  ; HL *= C <fastest>
     MULS HL, D  ; HL *= D
     MULS HL, E  ; HL *= E
 ```
@@ -512,12 +533,10 @@ Using `MULS` makes it a signed operation.
 ### DIV - Division
 
 ```z80
-    DIV BC      ; BC = B / C
-    DIV DE      ; DE = D / C
-    DIV HL      ; HL = H / L <faster than BC,DE>
+    DIV r1, r2  ; r1 *= r2 (r: A|B|C|D|E|H|L)
     DIV HL, A   ; HL /= A
     DIV HL, B   ; HL /= B
-    DIV HL, C   ; HL /= C <faster than A,B,D,E>
+    DIV HL, C   ; HL /= C <fastest>
     DIV HL, D   ; HL /= D
     DIV HL, E   ; HL /= E
 ```
@@ -525,6 +544,7 @@ Using `MULS` makes it a signed operation.
 Using `DIVS` makes it a signed operation.
 
 ```z80
+    DIVS r1, r2 ; r1 *= r2 (r: A|B|C|D|E|H|L)
     DIVS BC     ; BC = B / C
     DIVS DE     ; DE = D / C
     DIVS HL     ; HL = H / L <faster than BC,DE>
@@ -542,9 +562,7 @@ Using `DIVS` makes it a signed operation.
 ### MOD - Modulo
 
 ```z80
-    MOD BC      ; BC = B % C
-    MOD DE      ; DE = D % C
-    MOD HL      ; HL = H % L <faster than BC,DE>
+    MOD r1, r2  ; r1 %= r2 (r: A|B|C|D|E|H|L)
     MOD HL, A   ; HL %= A
     MOD HL, B   ; HL %= B
     MOD HL, C   ; HL %= C <faster than A,B,D,E>
@@ -623,6 +641,8 @@ In vgsasm, instructions that __do not exist in the Z80__ are complemented by exi
 | `LD (BC), n` | `PUSH HL`, `LD H,B`, `LD L,C`, `LD (HL),n` `POP HL` |
 | `LD (DE), n` | `PUSH HL`, `LD H,D`, `LD L,E`, `LD (HL),n` `POP HL` |
 | `LD (nn), n` | `PUSH AF`, `LD A, n`, `LD (nn), A`, `POP AF` |
+| `LD r, (nn)` <br>`r`: 8bit reg exclude `A` | `PUSH AF`, `LD A, (nn)`, `LD r, A`, `POP AF` |
+| `LD (nn), r` <br>`r`: 8bit reg exclude `A` | `PUSH AF`, `LD A, r`, `LD (nn),A`, `POP AF` |
 | `ADD HL,nn` | `PUSH DE`, `LD DE,nn`, `ADD HL,DE`, `POP DE`|
 | `ADD IX,nn` | `PUSH DE`, `LD DE,nn`, `ADD IX,DE`, `POP DE`|
 | `ADD IY,nn` | `PUSH DE`, `LD DE,nn`, `ADD IY,DE`, `POP DE`|
