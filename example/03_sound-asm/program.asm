@@ -183,7 +183,7 @@ enum SFX {
     l = a
     h = 0
     c = 32
-    mul hl, c
+    hl *= c
     hl += 6
     hl += VRAM.fg_name
     ret
