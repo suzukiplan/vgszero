@@ -274,7 +274,6 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
                     } else if (isdigit(*(cp + 1))) {
                         for (ed = cp + 2; isdigit(*ed); ed++) {}
                         std::string str = cp;
-                        puts((str.substr(0, ed - cp)).c_str());
                         this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Other, str.substr(0, ed - cp)));
                         cp = ed;
                     } else {
