@@ -1,5 +1,10 @@
 # Change log
 
+## Version 0.5 (beta-5)
+
+- Support mul, div, mod with immediate #34
+- bugfix `#binary`
+
 ## Version 0.4 (beta-4)
 
 - Simplified notation of subroutine calls #27

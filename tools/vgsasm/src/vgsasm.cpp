@@ -17,82 +17,21 @@
 #include "label.hpp"
 #include "macro.hpp"
 #include "mnemonic.hpp"
+#include "nametable.hpp"
 #include "numeric.hpp"
 #include "offset.hpp"
 #include "org.hpp"
 #include "sizeof.hpp"
+#include "string.hpp"
 #include "struct.hpp"
+#include "tables.hpp"
 
-std::map<std::string, LineData*> nameTable;
-std::vector<std::string> includeFiles;
-std::map<std::string, std::vector<std::pair<TokenType, std::string>>> defineTable;
-std::map<std::string, LineData*> labelTable;
-std::map<std::string, Struct*> structTable;
 int errorCount = 0;
 bool showLineDebug = false;
 
 uint8_t bin[0x10000];
 size_t binStart;
 size_t binSize;
-
-void trim_string(char* src)
-{
-    int i, j;
-    int len;
-    for (i = 0; ' ' == src[i]; i++);
-    if (i) {
-        for (j = 0; src[i] != '\0'; j++, i++) {
-            src[j] = src[i];
-        }
-        src[j] = '\0';
-    }
-    for (len = (int)strlen(src) - 1; 0 <= len && ' ' == src[len]; len--) {
-        src[len] = '\0';
-    }
-}
-
-std::vector<std::string> split_token(std::string str, char del)
-{
-    std::vector<std::string> elems;
-    std::string item;
-    for (char ch : str) {
-        if (ch == del) {
-            if (!item.empty()) {
-                elems.push_back(item);
-            }
-            item.clear();
-        } else {
-            item += ch;
-        }
-    }
-    if (!item.empty()) {
-        elems.push_back(item);
-    }
-    return elems;
-}
-
-bool checkNameTable(std::string name)
-{
-    if (mnemonicTable.find(name) != mnemonicTable.end() ||
-        operandTable.find(name) != operandTable.end() ||
-        name == "SIZEOF" ||
-        name == "OFFSET" ||
-        nameTable.find(name) != nameTable.end()) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-void addNameTable(std::string name, LineData* line)
-{
-    if (checkNameTable(name)) {
-        line->error = true;
-        line->errmsg = "Reserved symbol name " + name + " was specified.";
-    } else {
-        nameTable[name] = line;
-    }
-}
 
 static int check_error(LineData* line)
 {

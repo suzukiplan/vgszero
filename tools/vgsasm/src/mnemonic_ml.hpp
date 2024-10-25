@@ -1241,3 +1241,130 @@
     ML_POP_HL;                \
     ML_LD_L_A;                \
     ML_POP_AF
+
+#define ML_HAG_HL_A(port, out) \
+    ML_PUSH_AF;                \
+    ML_PUSH_BC;                \
+    ML_LD_C_A;                 \
+    ML_LD_A_n(out | 0x80);     \
+    ML_OUT_A(port);            \
+    ML_POP_BC;                 \
+    ML_POP_AF
+
+#define ML_HAG_HL_B(port, out) \
+    ML_PUSH_AF;                \
+    ML_PUSH_BC;                \
+    ML_LD_C_B;                 \
+    ML_LD_A_n(out | 0x80);     \
+    ML_OUT_A(port);            \
+    ML_POP_BC;                 \
+    ML_POP_AF
+
+#define ML_HAG_HL_C(port, out) \
+    ML_PUSH_AF;                \
+    ML_LD_A_n(out | 0x80);     \
+    ML_OUT_A(port);            \
+    ML_POP_AF
+
+#define ML_HAG_HL_D(port, out) \
+    ML_PUSH_AF;                \
+    ML_PUSH_BC;                \
+    ML_LD_C_D;                 \
+    ML_LD_A_n(out | 0x80);     \
+    ML_OUT_A(port);            \
+    ML_POP_BC;                 \
+    ML_POP_AF
+
+#define ML_HAG_HL_E(port, out) \
+    ML_PUSH_AF;                \
+    ML_PUSH_BC;                \
+    ML_LD_C_E;                 \
+    ML_LD_A_n(out | 0x80);     \
+    ML_OUT_A(port);            \
+    ML_POP_BC;                 \
+    ML_POP_AF
+
+#define ML_HAG_A_N(port, out, n) \
+    ML_PUSH_HL;                  \
+    ML_LD_H_A;                   \
+    ML_LD_L_n(n);                \
+    ML_LD_A_n(out);              \
+    ML_OUT_A(port);              \
+    ML_LD_A_L;                   \
+    ML_POP_HL
+
+#define ML_HAG_B_N(port, out, n) \
+    ML_PUSH_AF;                  \
+    ML_PUSH_HL;                  \
+    ML_LD_H_B;                   \
+    ML_LD_L_n(n);                \
+    ML_LD_A_n(out);              \
+    ML_OUT_A(port);              \
+    ML_LD_B_L;                   \
+    ML_POP_HL;                   \
+    ML_POP_AF
+
+#define ML_HAG_C_N(port, out, n) \
+    ML_PUSH_AF;                  \
+    ML_PUSH_HL;                  \
+    ML_LD_H_C;                   \
+    ML_LD_L_n(n);                \
+    ML_LD_A_n(out);              \
+    ML_OUT_A(port);              \
+    ML_LD_C_L;                   \
+    ML_POP_HL;                   \
+    ML_POP_AF
+
+#define ML_HAG_D_N(port, out, n) \
+    ML_PUSH_AF;                  \
+    ML_PUSH_HL;                  \
+    ML_LD_H_D;                   \
+    ML_LD_L_n(n);                \
+    ML_LD_A_n(out);              \
+    ML_OUT_A(port);              \
+    ML_LD_D_L;                   \
+    ML_POP_HL;                   \
+    ML_POP_AF
+
+#define ML_HAG_E_N(port, out, n) \
+    ML_PUSH_AF;                  \
+    ML_PUSH_HL;                  \
+    ML_LD_H_E;                   \
+    ML_LD_L_n(n);                \
+    ML_LD_A_n(out);              \
+    ML_OUT_A(port);              \
+    ML_LD_E_L;                   \
+    ML_POP_HL;                   \
+    ML_POP_AF
+
+#define ML_HAG_H_N(port, out, n) \
+    ML_PUSH_AF;                  \
+    ML_PUSH_HL;                  \
+    ML_LD_L_n(n);                \
+    ML_LD_A_n(out);              \
+    ML_OUT_A(port);              \
+    ML_LD_A_L;                   \
+    ML_POP_HL;                   \
+    ML_LD_H_A;                   \
+    ML_POP_AF
+
+#define ML_HAG_L_N(port, out, n) \
+    ML_PUSH_AF;                  \
+    ML_PUSH_HL;                  \
+    ML_LD_H_L;                   \
+    ML_LD_L_n(n);                \
+    ML_LD_A_n(out);              \
+    ML_OUT_A(port);              \
+    ML_LD_A_L;                   \
+    ML_POP_HL;                   \
+    ML_LD_L_A;                   \
+    ML_POP_AF
+
+#define ML_HAG_HL_N(port, out, n) \
+    ML_PUSH_AF;                   \
+    ML_PUSH_BC;                   \
+    ML_LD_C_n(n);                 \
+    ML_LD_A_n(out);               \
+    ML_OUT_A(port);               \
+    ML_POP_BC;                    \
+    ML_POP_AF

@@ -14,48 +14,11 @@ static void HAGe_calc(LineData* line, uint8_t port, uint8_t out)
         auto op2 = operandTable[line->token[3].second];
         if (op1 == Operand::HL) {
             switch (op2) {
-                case Operand::A:
-                    ML_PUSH_AF;
-                    ML_PUSH_BC;
-                    ML_LD_C_A;
-                    ML_LD_A_n(out | 0x80);
-                    ML_OUT_A(port);
-                    ML_POP_BC;
-                    ML_POP_AF;
-                    return;
-                case Operand::B:
-                    ML_PUSH_AF;
-                    ML_PUSH_BC;
-                    ML_LD_C_B;
-                    ML_LD_A_n(out | 0x80);
-                    ML_OUT_A(port);
-                    ML_POP_BC;
-                    ML_POP_AF;
-                    return;
-                case Operand::C:
-                    ML_PUSH_AF;
-                    ML_LD_A_n(out | 0x80);
-                    ML_OUT_A(port);
-                    ML_POP_AF;
-                    return;
-                case Operand::D:
-                    ML_PUSH_AF;
-                    ML_PUSH_BC;
-                    ML_LD_C_D;
-                    ML_LD_A_n(out | 0x80);
-                    ML_OUT_A(port);
-                    ML_POP_BC;
-                    ML_POP_AF;
-                    return;
-                case Operand::E:
-                    ML_PUSH_AF;
-                    ML_PUSH_BC;
-                    ML_LD_C_E;
-                    ML_LD_A_n(out | 0x80);
-                    ML_OUT_A(port);
-                    ML_POP_BC;
-                    ML_POP_AF;
-                    return;
+                case Operand::A: ML_HAG_HL_A(port, out); return;
+                case Operand::B: ML_HAG_HL_B(port, out); return;
+                case Operand::C: ML_HAG_HL_C(port, out); return;
+                case Operand::D: ML_HAG_HL_D(port, out); return;
+                case Operand::E: ML_HAG_HL_E(port, out); return;
             }
         }
         switch (op1) {
@@ -136,6 +99,27 @@ static void HAGe_calc(LineData* line, uint8_t port, uint8_t out)
                     case Operand::L: ML_HAG_L_L(port, out); return;
                 }
                 break;
+        }
+    } else if (mnemonic_format_test(line, 4, TokenType::Operand, TokenType::Split, TokenType::Numeric)) {
+        auto op = operandTable[line->token[1].second];
+        auto n = atoi(line->token[3].second.c_str());
+        if (mnemonic_range(line, n, -127, 255)) {
+            out |= n < 0 ? 0x40 : 0x00;
+            if (out != 0x42) {
+                line->error = true;
+                line->errmsg = "MOD cannot operate on negative numbers.";
+            } else {
+                switch (op) {
+                    case Operand::A: ML_HAG_A_N(port, out, n); break;
+                    case Operand::B: ML_HAG_B_N(port, out, n); break;
+                    case Operand::C: ML_HAG_C_N(port, out, n); break;
+                    case Operand::D: ML_HAG_D_N(port, out, n); break;
+                    case Operand::E: ML_HAG_E_N(port, out, n); break;
+                    case Operand::H: ML_HAG_H_N(port, out, n); break;
+                    case Operand::L: ML_HAG_L_N(port, out, n); break;
+                    case Operand::HL: ML_HAG_HL_N(port, out, n); break;
+                }
+            }
         }
     }
     if (!line->error) {

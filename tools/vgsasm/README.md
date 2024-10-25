@@ -508,22 +508,26 @@ VARS.posX = 123
 
 ```z80
     MUL r1, r2  ; r1 *= r2 (r: A|B|C|D|E|H|L)
+    MUL r, n    ; r *= n (r: A|B|C|D|E|H|L)
     MUL HL, A   ; HL *= A
     MUL HL, B   ; HL *= B
     MUL HL, C   ; HL *= C <fastest>
     MUL HL, D   ; HL *= D
     MUL HL, E   ; HL *= E
+    MUL HL, n   ; HL *= n (h: 0 ~ 255)
 ```
 
 Using `MULS` makes it a signed operation.
 
 ```z80
     MULS r1, r2 ; r1 *= r2 (r: A|B|C|D|E|H|L)
+    MULS r, n   ; r *= n (r: A|B|C|D|E|H|L)
     MULS HL, A  ; HL *= A
     MULS HL, B  ; HL *= B
     MULS HL, C  ; HL *= C <fastest>
     MULS HL, D  ; HL *= D
     MULS HL, E  ; HL *= E
+    MULS HL, n  ; HL *= n (h: -128 ~ 127)
 ```
 
 - The above instructions internally use the [Hardware Calculation](https://github.com/suzukiplan/vgszero/blob/master/README-en.md#hardware-calculation) of VGS-Zero.
@@ -534,17 +538,20 @@ Using `MULS` makes it a signed operation.
 
 ```z80
     DIV r1, r2  ; r1 *= r2 (r: A|B|C|D|E|H|L)
+    DIV r, n    ; r *= n (r: A|B|C|D|E|H|L)
     DIV HL, A   ; HL /= A
     DIV HL, B   ; HL /= B
     DIV HL, C   ; HL /= C <fastest>
     DIV HL, D   ; HL /= D
     DIV HL, E   ; HL /= E
+    DIV HL, n   ; HL /= n (h: 1 ~ 255)
 ```
 
 Using `DIVS` makes it a signed operation.
 
 ```z80
     DIVS r1, r2 ; r1 *= r2 (r: A|B|C|D|E|H|L)
+    DIVS r, n   ; r *= n (r: A|B|C|D|E|H|L)
     DIVS BC     ; BC = B / C
     DIVS DE     ; DE = D / C
     DIVS HL     ; HL = H / L <faster than BC,DE>
@@ -553,6 +560,7 @@ Using `DIVS` makes it a signed operation.
     DIVS HL, C  ; HL /= C <faster than A,B,D,E>
     DIVS HL, D  ; HL /= D
     DIVS HL, E  ; HL /= E
+    DIVS HL, n  ; HL /= n (h: -128 ~ 127)
 ```
 
 - The above instructions internally use the [Hardware Calculation](https://github.com/suzukiplan/vgszero/blob/master/README-en.md#hardware-calculation) of VGS-Zero.
@@ -563,11 +571,13 @@ Using `DIVS` makes it a signed operation.
 
 ```z80
     MOD r1, r2  ; r1 %= r2 (r: A|B|C|D|E|H|L)
+    MOD r, n    ; r %= n (r: A|B|C|D|E|H|L)
     MOD HL, A   ; HL %= A
     MOD HL, B   ; HL %= B
     MOD HL, C   ; HL %= C <faster than A,B,D,E>
     MOD HL, D   ; HL %= D
     MOD HL, E   ; HL %= E
+    MOD HL, n   ; HL /= n (h: 1 ~ 255)
 ```
 
 - The above instructions internally use the [Hardware Calculation](https://github.com/suzukiplan/vgszero/blob/master/README-en.md#hardware-calculation) of VGS-Zero.

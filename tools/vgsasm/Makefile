@@ -1,5 +1,9 @@
 all: vgsasm
 
+install: vgsasm
+	sudo rm -f /usr/local/bin/vgsasm
+	sudo ln -s `pwd`/vgsasm /usr/local/bin/vgsasm
+
 check: vgsasm
 	./vgsasm -o all.bin test/all.asm
 	z88dk.z88dk-dis all.bin >test/all_disassemble.asm
