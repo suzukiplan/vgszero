@@ -11,3 +11,4 @@ std::vector<std::string> includeFiles;
 std::map<std::string, std::vector<std::pair<TokenType, std::string>>> defineTable;
 std::map<std::string, LineData*> labelTable;
 std::map<std::string, Struct*> structTable;
+std::vector<std::string> structNameList;

@@ -14,6 +14,21 @@ struct Hige <- Foo[3] {
     var1 ds.b 1
 }
 
+struct VARS $C000 {
+    msg ds.w 1
+    mcnt ds.b 1
+}
+
+struct SRAM <- VARS {
+    x ds.b 1
+    y ds.b 1
+}
+
+enum BANK {
+    program
+    font
+}
+
 .Main
     ld bc, VRAM.oam             ; BC = $9000
     ld hl, sizeof(OAM) * 256    ; HL = OAM size (8) x 256 = 2048

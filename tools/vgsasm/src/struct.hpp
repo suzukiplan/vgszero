@@ -118,6 +118,7 @@ bool struct_syntax_check(std::vector<LineData*>* lines)
                         addNameTable(it2->second, line);
                         newStruct = new Struct(line, it2->second);
                         structTable[it2->second] = newStruct;
+                        structNameList.push_back(newStruct->name);
                         expect = TokenType::Numeric;
                         break;
                     case TokenType::Numeric:
@@ -139,7 +140,8 @@ bool struct_syntax_check(std::vector<LineData*>* lines)
 bool struct_check_size()
 {
     bool needRetry = false;
-    for (auto s = structTable.begin(); s != structTable.end(); s++) {
+    for (auto name : structNameList) {
+        auto s = structTable.find(name);
         if (!s->second->after.empty()) {
             auto after = structTable.find(s->second->after);
             if (0 == after->second->size) {
