@@ -7,7 +7,7 @@
 ## How to build
 
 ```zsh
-sudo apt install build-essential
+sudo apt install build-essential libsdl2-dev libasound2 libasound2-dev
 git clone https://github.com/suzukiplan/vgszero
 cd vgszero/example/02_global-asm
 make
