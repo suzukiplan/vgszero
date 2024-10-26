@@ -76,14 +76,14 @@ static int assemble(std::vector<LineData*> lines)
     bool error = false;
 
     // #define にプリセット定義を展開
-    init_define();
+    define_init();
 
     // #define のテーブル作成
     bool searchDefine = true;
     while (searchDefine && !error) {
         searchDefine = false;
         for (auto it = lines.begin(); it != lines.end(); it++) {
-            if (parse_define(*it)) {
+            if (define_parse(*it)) {
                 searchDefine = true;
                 lines.erase(it);
                 break;
@@ -104,7 +104,7 @@ static int assemble(std::vector<LineData*> lines)
 
     // #define の展開
     for (auto it = lines.begin(); it != lines.end(); it++) {
-        replace_define(*it);
+        define_replace(*it);
         error = check_error(*it) ? true : error;
     }
     if (error) {

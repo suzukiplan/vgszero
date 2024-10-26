@@ -6,7 +6,7 @@
 #pragma once
 #include "common.h"
 
-void init_define()
+void define_init()
 {
     defineTable["JNZ"] = {
         std::make_pair<TokenType, std::string>(TokenType::Mnemonic, "JP"),
@@ -46,28 +46,58 @@ void init_define()
         std::make_pair<TokenType, std::string>(TokenType::Split, ",")};
 }
 
-bool parse_define(LineData* line)
+bool define_parse(LineData* line)
 {
+    int cnt = 0;
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->second == "#DEFINE") {
+            cnt++;
+        }
+    }
+    if (0 == cnt) {
+        return false;
+    }
+    if (1 < cnt) {
+        line->error = true;
+        line->errmsg = "Multiple #defines cannot be defined on a single line.";
+        return false;
+    }
+    for (auto it = line->token.begin(); it != line->token.end(); it++) {
+        if (it->second == "#DEFINE") {
+            if (it != line->token.begin()) {
+                line->error = true;
+                line->errmsg = "#define must appear at the beginning of the line.";
+                return false;
+            }
+            it->first = TokenType::Delete;
             it++;
             if (it == line->token.end() || it->first != TokenType::Other) {
                 line->error = true;
                 line->errmsg = "No definition name specified in #define.";
                 return false;
             }
+            it->first = TokenType::Delete;
             auto name = it->second;
             auto d = defineTable.find(name);
             if (d != defineTable.end()) {
                 line->error = true;
-                line->errmsg = "Duplicate definition name " + name + " in #define";
+                line->errmsg = "Duplicate definition name " + name + " in #define.";
                 return false;
             }
-            defineTable[name].push_back(std::make_pair(TokenType::Delete, ""));
             it++;
-            while (it != line->token.end()) {
-                defineTable[name].push_back(std::make_pair(it->first, it->second));
-                it++;
+            if (it == line->token.end()) {
+                defineTable[name].push_back(std::make_pair(TokenType::Delete, ""));
+            } else {
+                while (it != line->token.end()) {
+                    if (name == it->second) {
+                        line->error = true;
+                        line->errmsg = name + " is included in #define " + name + ".";
+                        return false;
+                    }
+                    defineTable[name].push_back(std::make_pair(it->first, it->second));
+                    it->first = TokenType::Delete;
+                    it++;
+                }
             }
             return true;
         }
@@ -75,7 +105,7 @@ bool parse_define(LineData* line)
     return false;
 }
 
-void replace_define(LineData* line)
+void define_replace(LineData* line)
 {
     bool result = false;
     bool replace = true;
