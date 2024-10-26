@@ -476,6 +476,10 @@ void LineData::printDebug()
             printf(" _(");
         } else if (token.first == TokenType::AddressEnd) {
             printf(" )_");
+        } else if (token.first == TokenType::ArgumentBegin) {
+            printf(" __(");
+        } else if (token.first == TokenType::ArgumentEnd) {
+            printf(" )__");
         } else if (token.first == TokenType::SizeOf) {
             printf(" sizeof(%s)", token.second.c_str());
         } else if (token.first == TokenType::Numeric) {

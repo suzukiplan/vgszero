@@ -111,6 +111,65 @@ void parse_macro(LineData* line)
     return;
 }
 
+// Other -> MacroCaller
+void parse_macro_caller(std::vector<LineData*>* lines)
+{
+    for (auto it = lines->begin(); it != lines->end(); it++) {
+        auto line = *it;
+        for (auto token = line->token.begin(); token != line->token.end(); token++) {
+            if (token->first == TokenType::Other) {
+                if (macroTable.find(token->second) != macroTable.end()) {
+                    token->first = TokenType::MacroCaller;
+                    token++;
+                    if (token == line->token.end()) {
+                        line->error = true;
+                        line->errmsg = "Unspecified bracket for macro call.";
+                        break;
+                    }
+                    if (token->first != TokenType::BracketBegin) {
+                        line->error = true;
+                        line->errmsg = "Unexpected symbol: " + token->second;
+                        break;
+                    }
+                    token->first = TokenType::ArgumentBegin;
+                    int nest = 1;
+                    auto prev = line->token.end();
+                    auto addressBegin = prev;
+                    for (++token; token != line->token.end(); token++) {
+                        if (token->first == TokenType::BracketBegin) {
+                            nest++;
+                            if (prev == line->token.end() || prev->first == TokenType::Split) {
+                                addressBegin = token;
+                            }
+                        } else if (token->first == TokenType::BracketEnd) {
+                            nest--;
+                            if (0 == nest) {
+                                break;
+                            } else if (1 == nest && addressBegin != line->token.end()) {
+                                if ((token + 1)->first == TokenType::BracketEnd || (token + 1)->first == TokenType::Split) {
+                                    addressBegin->first = TokenType::AddressBegin;
+                                    token->first = TokenType::AddressEnd;
+                                }
+                            }
+                        }
+                    }
+                    if (token == line->token.end()) {
+                        line->error = true;
+                        line->errmsg = "Unspecified bracket for macro call.";
+                        break;
+                    }
+                    token->first = TokenType::ArgumentEnd;
+                    if (token + 1 != line->token.end()) {
+                        line->error = true;
+                        line->errmsg = "Unexpected symbol: " + (token + 1)->second;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 void macro_syntax_check(std::vector<LineData*>* lines)
 {
     for (auto it = macroTable.begin(); it != macroTable.end(); it++) {
@@ -174,29 +233,13 @@ void macro_syntax_check(std::vector<LineData*>* lines)
         }
     }
 
-    // Other -> MacroCaller
-    for (auto it = lines->begin(); it != lines->end(); it++) {
-        auto line = *it;
-        for (auto token = line->token.begin(); token != line->token.end(); token++) {
-            if (token->first == TokenType::Other) {
-                if (macroTable.find(token->second) != macroTable.end()) {
-                    token->first = TokenType::MacroCaller;
-                }
-            }
-        }
-    }
-
-    // Other -> MacroCaller in Macro
+    // Check MacroCaller in Macro
     for (auto m = macroTable.begin(); m != macroTable.end(); m++) {
         for (auto it = m->second->lines.begin(); it != m->second->lines.end(); it++) {
             auto line = *it;
             for (auto token = line->token.begin(); token != line->token.end(); token++) {
-                if (token->first == TokenType::Other) {
-                    auto caller = macroTable.find(token->second);
-                    if (caller != macroTable.end()) {
-                        token->first = TokenType::MacroCaller;
-                        m->second->caller.push_back(caller->second);
-                    }
+                if (token->first == TokenType::MacroCaller) {
+                    m->second->caller.push_back(macroTable[token->second]);
                 }
             }
         }
@@ -246,13 +289,13 @@ void extract_macro_call(std::vector<LineData*>* lines)
         }
         // マクロを検出
         auto macro = mit->second;
-        auto token = line->token.begin() + 1;
+        auto token = line->token.begin() + 2;
 
         // 引数リストを作成
         std::vector<std::pair<TokenType, std::string>> args;
         bool first = true;
         for (; token != line->token.end(); token++) {
-            if (token->first == TokenType::BracketEnd) {
+            if (token->first == TokenType::ArgumentEnd) {
                 break;
             }
             if (!first) {

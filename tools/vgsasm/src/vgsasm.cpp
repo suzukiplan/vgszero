@@ -151,6 +151,12 @@ static int assemble(std::vector<LineData*> lines)
         return -1;
     }
 
+    // マクロ呼び出し箇所をパース
+    parse_macro_caller(&lines);
+    if (check_error(lines)) {
+        return -1;
+    }
+
     // インクリメント、デクリメント演算子を展開
     split_increment(&lines);
     if (check_error(lines)) {

@@ -63,6 +63,7 @@ bool bracket_eliminate(LineData* line)
     std::vector<std::pair<TokenType, std::string>>::iterator next;
 
     // 条件に該当する Numeric を探索
+    bool result = false;
     prev = line->token.end();
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->first == TokenType::Numeric) {
@@ -71,11 +72,13 @@ bool bracket_eliminate(LineData* line)
                 if (prev->first == TokenType::BracketBegin && next->first == TokenType::BracketEnd) {
                     line->token.erase(next);
                     line->token.erase(prev);
-                    return true;
+                    result = true;
+                    it = line->token.begin();
+                    prev = line->token.end();
                 }
             }
         }
         prev = it;
     }
-    return false;
+    return result;
 }
