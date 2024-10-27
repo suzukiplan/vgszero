@@ -6,7 +6,7 @@
 #pragma once
 #include "common.h"
 
-void parse_struct(LineData* line)
+void struct_parse(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->second == "STRUCT") {
@@ -200,7 +200,7 @@ bool struct_check_size()
     return needRetry;
 }
 
-void parse_struct_name(LineData* line)
+void struct_parse_name(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->first == TokenType::Other) {
@@ -242,7 +242,7 @@ void parse_struct_name(LineData* line)
     }
 }
 
-void parse_struct_array(LineData* line)
+void struct_parse_array(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->first == TokenType::StructName) {
@@ -295,7 +295,7 @@ void parse_struct_array(LineData* line)
     }
 }
 
-void replace_struct(LineData* line)
+void struct_replace(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->first == TokenType::StructName) {

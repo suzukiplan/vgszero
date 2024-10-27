@@ -8,11 +8,28 @@
 #include "numeric.hpp"
 
 // enum を解析して defineTable へ展開する
-void extract_enum(std::vector<LineData*>* lines)
+void enum_extract(std::vector<LineData*>* lines)
 {
     for (auto it = lines->begin(); it != lines->end(); it++) {
         auto line = *it;
-        if (line->token.empty() || line->token[0].first != TokenType::Other || line->token[0].second != "ENUM") {
+        bool found = false;
+        bool isBegin = true;
+        for (auto t : line->token) {
+            if (t.first == TokenType::Other && t.second == "ENUM") {
+                if (found) {
+                    line->error = true;
+                    line->errmsg = "Multiple enums defined on a single line.";
+                    break;
+                } else if (!isBegin) {
+                    line->error = true;
+                    line->errmsg = "`enum` must be defined at the beginning of the line.";
+                    break;
+                }
+                found = true;
+            }
+            isBegin = false;
+        }
+        if (!found || line->error) {
             continue;
         }
         line->token[0].first = TokenType::Delete;
@@ -29,8 +46,9 @@ void extract_enum(std::vector<LineData*>* lines)
             line->errmsg = "Invalid enum name: " + name->second;
             continue;
         }
-        addNameTable(name->second, line);
-        defineTable[name->second + "."].push_back(std::make_pair(TokenType::None, ""));
+        auto enumName = name->second;
+        addNameTable(enumName, line);
+        defineTable[enumName].push_back(std::make_pair(TokenType::None, ""));
         name->first = TokenType::Delete;
         if (line->error) {
             continue;
@@ -46,6 +64,12 @@ void extract_enum(std::vector<LineData*>* lines)
                 }
                 begin = line->token.begin();
                 break;
+            }
+            if (it == lines->end()) {
+                line = nameTable[enumName];
+                line->error = true;
+                line->errmsg = "Scope is not defined: " + enumName;
+                return;
             }
         }
         if (begin->first != TokenType::ScopeBegin) {
@@ -74,7 +98,8 @@ void extract_enum(std::vector<LineData*>* lines)
             if (line->token[0].first == TokenType::ScopeEnd) {
                 if (1 < line->token.size()) {
                     line->error = true;
-                    line->errmsg = "Illegal enum definition format.";
+                    line->errmsg = "Unexpected symbol: " + line->token[1].second;
+                    return;
                 } else {
                     closed = true;
                     line->token[0].first = TokenType::Delete;
@@ -85,7 +110,7 @@ void extract_enum(std::vector<LineData*>* lines)
             // フィールド or フィールド = 数値以外はNG
             if (line->token.size() != 1 && line->token.size() != 3) {
                 line->error = true;
-                line->errmsg = "Illegal enum definition format.";
+                line->errmsg = "Illegal enum symbol number: " + std::to_string(line->token.size());
                 continue;
             }
 
@@ -93,16 +118,16 @@ void extract_enum(std::vector<LineData*>* lines)
             if (line->token.size() == 3) {
                 if (line->token[1].first != TokenType::Equal) {
                     line->error = true;
-                    line->errmsg = "Illegal enum definition format.";
+                    line->errmsg = "Unexpected symbol: " + line->token[1].second;
                     continue;
                 }
-                parse_numeric(line);
+                numeric_parse(line);
                 if (line->error) {
                     continue;
                 }
                 if (line->token[2].first != TokenType::Numeric) {
                     line->error = true;
-                    line->errmsg = "Illegal enum definition format.";
+                    line->errmsg = "Unexpected symbol: " + line->token[2].second;
                     continue;
                 }
                 number = atoi(line->token[2].second.c_str());
@@ -116,9 +141,11 @@ void extract_enum(std::vector<LineData*>* lines)
             addNameTable(field, line);
             defineTable[field].push_back(std::make_pair(TokenType::Numeric, std::to_string(number++)));
         }
-
-        if (closed) {
-            it = lines->begin();
+        if (!closed) {
+            line->error = true;
+            line->errmsg = "Scope was not closed.";
+            return;
         }
+        it = lines->begin();
     }
 }

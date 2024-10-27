@@ -98,6 +98,17 @@ bool define_parse(LineData* line)
                     it->first = TokenType::Delete;
                     it++;
                 }
+                // nametable に定義名を追加
+                addNameTable(name, line);
+                // ドット付きの場合は左辺が未登録なら登録
+                auto dot = name.find('.');
+                if (-1 != dot) {
+                    auto left = name.substr(0, dot);
+                    if (nameTable.find(left) == nameTable.end()) {
+                        addNameTable(left, line);
+                        addNameTable(left + ".", line);
+                    }
+                }
             }
             return true;
         }
@@ -107,7 +118,6 @@ bool define_parse(LineData* line)
 
 void define_replace(LineData* line)
 {
-    bool result = false;
     bool replace = true;
     int tryCount = 0;
     int maxTryCount = (int)line->token.size() + 1;
@@ -125,7 +135,6 @@ void define_replace(LineData* line)
                 line->token.erase(it);
                 line->token.insert(it, d->second.begin(), d->second.end());
                 replace = true;
-                result = true;
                 break;
             } else {
                 auto dot = it->second.find(".");
@@ -135,6 +144,17 @@ void define_replace(LineData* line)
                     if (defineTable.find(left + ".") != defineTable.end()) {
                         line->error = true;
                         line->errmsg = "`" + right + "` was not defined at `" + left + "`";
+                    } else {
+                        for (auto d : defineTable) {
+                            dot = d.first.find(".");
+                            if (-1 != dot) {
+                                if (d.first.substr(0, dot) == left) {
+                                    line->error = true;
+                                    line->errmsg = "`" + right + "` was not defined at `" + left + "`";
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }

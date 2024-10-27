@@ -33,7 +33,7 @@ static bool isIncrementableRegister(LineData* line, std::vector<std::pair<TokenT
     return false;
 }
 
-void split_increment(std::vector<LineData*>* lines)
+void increment_split(std::vector<LineData*>* lines)
 {
     for (auto it = lines->begin(); it != lines->end(); it++) {
         auto line = *it;

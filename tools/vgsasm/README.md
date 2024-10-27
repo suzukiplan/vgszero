@@ -1,4 +1,4 @@
-# Z80 Assembler for VGS-Zero
+# Z80 Assembler for VGS-Zero [![CircleCI](https://dl.circleci.com/status-badge/img/gh/suzukiplan/vgsasm/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/suzukiplan/vgsasm/tree/master)
 
 Z80 Assembler for VGS-Zero is a Z80 assembler that supports the entire Z80 instruction set, including hidden instructions, and enables highly readable full assembly language programming using [“structures”](#struct).
 

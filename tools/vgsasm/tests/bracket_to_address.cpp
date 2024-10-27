@@ -10,7 +10,7 @@
 void test_normal(const char* text, int n, ...)
 {
     auto line = new LineData("", -1, text);
-    parse_mneoimonic(line);
+    mnemonic_parse(line);
     bracket_to_address(line);
     printf("N: %-12s ---> ", text);
     line->printDebug();

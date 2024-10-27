@@ -5,4 +5,7 @@ bracket_to_address
 bracket_eliminate
 decimal
 define_parse
+define_replace
+enum
+formulas_evaluate
 

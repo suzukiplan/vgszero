@@ -9,7 +9,7 @@
 std::map<std::string, Macro*> macroTable;
 static std::map<std::string, bool> dupTable;
 
-static bool check_caller_dup(Macro* macro)
+bool check_caller_dup(Macro* macro)
 {
     if (dupTable.end() != dupTable.find(macro->name)) {
         return true;
@@ -23,7 +23,7 @@ static bool check_caller_dup(Macro* macro)
     return false;
 }
 
-void parse_macro(LineData* line)
+void macro_parse(LineData* line)
 {
     if (line->token.empty()) {
         return;
@@ -112,7 +112,7 @@ void parse_macro(LineData* line)
 }
 
 // Other -> MacroCaller
-void parse_macro_caller(std::vector<LineData*>* lines)
+void macro_parse_caller(std::vector<LineData*>* lines)
 {
     for (auto it = lines->begin(); it != lines->end(); it++) {
         auto line = *it;

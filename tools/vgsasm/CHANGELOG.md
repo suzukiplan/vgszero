@@ -1,5 +1,19 @@
 # Change log
 
+## Version 0.8 (beta-8)
+
+## Version 0.7 (beta-7)
+
+- Unit test on the Circle CI
+- Improved error message output when a name with no definition on the right side of the dot is specified in `#define`.
+- Fixed a case where `enum` did not produce the expected error.
+
+## Version 0.6 (beta-6)
+
+- Unexpected struct error: "It must be defined on the line after the definition of struct specified by the arrow operator." #38
+- Crash when address is specified as argument in #macro call #39
+- Several minor bugfix (unit test)
+
 ## Version 0.5 (beta-5)
 
 - Support mul, div, mod with immediate #34

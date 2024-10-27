@@ -6,7 +6,7 @@
 #pragma once
 #include "common.h"
 
-void parse_sizeof(LineData* line)
+void sizeof_parse(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->first == TokenType::Other) {
@@ -38,7 +38,7 @@ void parse_sizeof(LineData* line)
     }
 }
 
-void replace_sizeof(LineData* line)
+void sizeof_replace(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->first == TokenType::SizeOf) {

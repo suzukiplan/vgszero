@@ -6,8 +6,15 @@
 #pragma once
 #include "common.h"
 
-std::string evaluate_formulas(std::vector<std::pair<TokenType, std::string>>* token)
+std::string formulas_evaluate(std::vector<std::pair<TokenType, std::string>>* token)
 {
+#if 0
+    for (auto t : *token) {
+        printf(" %s", t.second.c_str());
+    }
+    puts("");
+#endif
+
     std::vector<std::pair<TokenType, std::string>>::iterator prev;
     std::vector<std::pair<TokenType, std::string>>::iterator next;
     bool calc;
@@ -20,10 +27,18 @@ std::string evaluate_formulas(std::vector<std::pair<TokenType, std::string>>* to
         for (auto it = token->begin(); it != token->end() && it->first != TokenType::BracketEnd; it++) {
             if (it->first == TokenType::BracketBegin) {
                 std::vector<std::pair<TokenType, std::string>> work;
-                for (auto itW = it + 1; itW->first != TokenType::BracketEnd; token->erase(itW)) {
+                int nest = 1;
+                for (auto itW = it + 1; nest; token->erase(itW)) {
+                    if (itW->first == TokenType::BracketEnd) {
+                        if (0 == --nest) {
+                            break;
+                        }
+                    } else if (itW->first == TokenType::BracketBegin) {
+                        nest++;
+                    }
                     work.push_back(std::make_pair(itW->first, itW->second));
                 }
-                evaluate_formulas(&work);
+                formulas_evaluate(&work);
                 token->erase(it + 1); // remove )
                 token->erase(it);     // remove (
                 for (int i = 0; i < work.size(); i++) {
@@ -110,7 +125,7 @@ std::string evaluate_formulas(std::vector<std::pair<TokenType, std::string>>* to
     return "";
 }
 
-void evaluate_formulas(LineData* line)
+void formulas_evaluate(LineData* line)
 {
     // sizeof, offset または 演算子前後が Other の演算を検出した行の計算をスキップ
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
@@ -137,14 +152,14 @@ void evaluate_formulas(LineData* line)
     }
 
     // 計算を実行
-    auto errmsg = evaluate_formulas(&line->token);
+    auto errmsg = formulas_evaluate(&line->token);
     if (!errmsg.empty()) {
         line->error = true;
         line->errmsg = errmsg;
     }
 }
 
-void evaluate_formulas_array(LineData* line)
+void formulas_evaluate_array(LineData* line)
 {
     std::vector<std::pair<TokenType, std::string>> before;
     std::vector<std::pair<TokenType, std::string>> elements;
@@ -167,7 +182,7 @@ void evaluate_formulas_array(LineData* line)
                     for (it++; it != line->token.end(); it++) {
                         after.push_back(std::make_pair(it->first, it->second));
                     }
-                    auto error = evaluate_formulas(&elements);
+                    auto error = formulas_evaluate(&elements);
                     if (!error.empty()) {
                         line->error = true;
                         line->errmsg = error;

@@ -6,7 +6,7 @@
 #pragma once
 #include "common.h"
 
-void replace_assignment(LineData* line)
+void assignment_replace(LineData* line)
 {
     std::vector<std::pair<TokenType, std::string>> left;
     std::vector<std::pair<TokenType, std::string>> right;

@@ -20,6 +20,7 @@
 #include "nametable.hpp"
 #include "numeric.hpp"
 #include "offset.hpp"
+#include "operand.hpp"
 #include "org.hpp"
 #include "sizeof.hpp"
 #include "string.hpp"
@@ -97,7 +98,7 @@ static int assemble(std::vector<LineData*> lines)
     }
 
     // enum の展開
-    extract_enum(&lines);
+    enum_extract(&lines);
     if (check_error(lines)) {
         return -1;
     }
@@ -114,7 +115,7 @@ static int assemble(std::vector<LineData*> lines)
     // ラベルをパース
     for (auto line = lines.begin(); line != lines.end(); line++) {
         // Other -> Label or LabelAt
-        auto newLine = parse_label(*line);
+        auto newLine = label_parse(*line);
         if (newLine) {
             lines.insert(line + 1, newLine);
             line = lines.begin();
@@ -125,7 +126,7 @@ static int assemble(std::vector<LineData*> lines)
     }
 
     // 匿名ラベルを展開
-    extract_anonymous_label(&lines);
+    label_extract_anonymous(&lines);
     if (check_error(lines)) {
         return -1;
     }
@@ -133,18 +134,18 @@ static int assemble(std::vector<LineData*> lines)
 
     // 基本構文解析
     for (auto line = lines.begin(); line != lines.end(); line++) {
-        replace_assignment(*line);  // X Equal* Y = {LD|ADD|SUB|AND|OR|XOR} X, Y
-        parse_mneoimonic(*line);    // Other -> Mnemonic
-        parse_operand(*line);       // Other -> Operand
-        parse_struct(*line);        // Other -> Struct
+        assignment_replace(*line);  // X Equal* Y = {LD|ADD|SUB|AND|OR|XOR} X, Y
+        mnemonic_parse(*line);      // Other -> Mnemonic
+        operand_parse(*line);       // Other -> Operand
+        struct_parse(*line);        // Other -> Struct
         bracket_to_address(*line);  // Braket -> Address
-        parse_numeric(*line);       // Other -> Numeric
-        parse_numeric_minus(*line); // Split, Minus, Numeric -> Split, -Numeric
-        parse_numeric_plus(*line);  // Split, Plus, Numeric -> Split, Numeric
-        parse_sizeof(*line);        // Other -> Sizeof
-        parse_offset(*line);        // Other -> Offset
-        parse_binary(*line);        // Other -> Binary
-        parse_macro(*line);         // Other -> Macro
+        numeric_parse(*line);       // Other -> Numeric
+        numeric_parse_minus(*line); // Split, Minus, Numeric -> Split, -Numeric
+        numeric_parse_plus(*line);  // Split, Plus, Numeric -> Split, Numeric
+        sizeof_parse(*line);        // Other -> Sizeof
+        offset_parse(*line);        // Other -> Offset
+        binary_parse(*line);        // Other -> Binary
+        macro_parse(*line);         // Other -> Macro
         error = check_error(*line) ? true : error;
     }
     if (error) {
@@ -152,13 +153,13 @@ static int assemble(std::vector<LineData*> lines)
     }
 
     // マクロ呼び出し箇所をパース
-    parse_macro_caller(&lines);
+    macro_parse_caller(&lines);
     if (check_error(lines)) {
         return -1;
     }
 
     // インクリメント、デクリメント演算子を展開
-    split_increment(&lines);
+    increment_split(&lines);
     if (check_error(lines)) {
         return -1;
     }
@@ -171,9 +172,9 @@ static int assemble(std::vector<LineData*> lines)
 
     // 演算を実行（1回目）
     for (auto line = lines.begin(); line != lines.end(); line++) {
-        evaluate_formulas(*line);
+        formulas_evaluate(*line);
         while (bracket_eliminate(*line)) {
-            evaluate_formulas(*line);
+            formulas_evaluate(*line);
         }
         error = check_error(*line) ? true : error;
     }
@@ -211,9 +212,9 @@ static int assemble(std::vector<LineData*> lines)
 
     // 構造体トークンをパース
     for (auto line : lines) {
-        parse_struct_name(line);
-        evaluate_formulas_array(line);
-        parse_struct_array(line);
+        struct_parse_name(line);
+        formulas_evaluate_array(line);
+        struct_parse_array(line);
     }
     if (check_error(lines)) {
         return -1;
@@ -222,11 +223,11 @@ static int assemble(std::vector<LineData*> lines)
 
     // 残存パース処理
     for (auto line : lines) {
-        replace_struct(line);   // 構造体 -> 数値
-        replace_sizeof(line);   // sizeof -> 数値
-        replace_offset(line);   // offset -> 数値
-        parse_label_jump(line); // Other -> LabelJump
-        parse_org(line);        // Other -> org
+        struct_replace(line);   // 構造体 -> 数値
+        sizeof_replace(line);   // sizeof -> 数値
+        offset_replace(line);   // offset -> 数値
+        label_parse_jump(line); // Other -> LabelJump
+        org_parse(line);        // Other -> org
     }
     if (check_error(lines)) {
         return -1;
@@ -235,7 +236,7 @@ static int assemble(std::vector<LineData*> lines)
 
     // 展開された全ての数値計算を実行
     for (auto line : lines) {
-        evaluate_formulas(line);
+        formulas_evaluate(line);
     }
     if (check_error(lines)) {
         return -1;
@@ -256,7 +257,7 @@ static int assemble(std::vector<LineData*> lines)
     }
 
     // org があれば org の次の行のプログラムカウンタを初期化
-    setpc_org(&lines);
+    org_setpc(&lines);
     if (check_error(lines)) {
         return -1;
     }

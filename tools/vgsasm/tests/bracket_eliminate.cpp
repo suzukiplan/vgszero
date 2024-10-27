@@ -10,7 +10,7 @@
 void test_normal(const char* text, int n, ...)
 {
     auto line = new LineData("", -1, text);
-    parse_numeric(line);
+    numeric_parse(line);
     bracket_eliminate(line);
     printf("N: %-12s ---> ", text);
     line->printDebug();

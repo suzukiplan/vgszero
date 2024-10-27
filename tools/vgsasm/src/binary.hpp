@@ -6,7 +6,7 @@
 #pragma once
 #include "common.h"
 
-void parse_binary(LineData* line)
+void binary_parse(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->second == "#BINARY") {

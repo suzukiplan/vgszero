@@ -10,8 +10,8 @@
 void test_normal(const char* text, int size, uint8_t firstByte, int n, ...)
 {
     auto line = new LineData("", -1, text);
-    parse_numeric(line);
-    parse_binary(line);
+    numeric_parse(line);
+    binary_parse(line);
     printf("N: %-12s ---> ", text);
     line->printDebug();
     if (line->error) {
@@ -49,8 +49,8 @@ void test_normal(const char* text, int size, uint8_t firstByte, int n, ...)
 void test_error(const char* text, const char* errmsg)
 {
     auto line = new LineData("", -1, text);
-    parse_numeric(line);
-    parse_binary(line);
+    numeric_parse(line);
+    binary_parse(line);
     printf("E: %-12s ---> ", text);
     if (!line->error) {
         puts("Error expect bad not...");

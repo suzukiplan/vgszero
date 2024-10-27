@@ -8,7 +8,7 @@
 
 static int lastOrg = -1;
 
-void parse_org(LineData* line)
+void org_parse(LineData* line)
 {
     if (line->token.empty()) {
         return;
@@ -39,7 +39,7 @@ void parse_org(LineData* line)
     line->token.erase(line->token.begin() + 1);
 }
 
-void setpc_org(std::vector<LineData*>* lines)
+void org_setpc(std::vector<LineData*>* lines)
 {
     auto prev = lines->end();
     for (auto it = lines->begin(); it != lines->end(); it++) {

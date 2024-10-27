@@ -9,7 +9,7 @@
 void test_normal(const char* text, int n, ...)
 {
     auto line = new LineData("", -1, text);
-    replace_assignment(line);
+    assignment_replace(line);
     printf("N: %-12s ---> ", text);
     line->printDebug();
     if (line->error) {
@@ -39,7 +39,7 @@ void test_normal(const char* text, int n, ...)
 void test_error(const char* text, const char* errmsg)
 {
     auto line = new LineData("", -1, text);
-    replace_assignment(line);
+    assignment_replace(line);
     printf("E: %-12s ---> ", text);
     if (!line->error) {
         puts("Error expect bad not...");

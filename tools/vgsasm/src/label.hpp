@@ -10,7 +10,7 @@
 static std::string lastLabel = "";
 static std::map<std::string, std::string> nonameLabels;
 
-LineData* parse_label(LineData* line)
+LineData* label_parse(LineData* line)
 {
     if (line->token.empty()) {
         return nullptr;
@@ -70,7 +70,7 @@ LineData* parse_label(LineData* line)
     return newLine;
 }
 
-void parse_label_jump(LineData* line)
+void label_parse_jump(LineData* line)
 {
     static auto lastLabel = line->token.end();
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
@@ -106,7 +106,7 @@ void parse_label_jump(LineData* line)
     }
 }
 
-void extract_anonymous_label(std::vector<LineData*>* lines)
+void label_extract_anonymous(std::vector<LineData*>* lines)
 {
     int count = 0;
     int lineNumber = 0;

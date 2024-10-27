@@ -6,7 +6,7 @@
 #pragma once
 #include "common.h"
 
-void parse_numeric(LineData* line)
+void numeric_parse(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->first != TokenType::Other) {
@@ -55,7 +55,7 @@ void parse_numeric(LineData* line)
 }
 
 // , - n を , -n にする
-void parse_numeric_minus(LineData* line)
+void numeric_parse_minus(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->first == TokenType::Split || it->first == TokenType::Mnemonic) {
@@ -71,7 +71,7 @@ void parse_numeric_minus(LineData* line)
 }
 
 // , + n を , n にする
-void parse_numeric_plus(LineData* line)
+void numeric_parse_plus(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->first == TokenType::Split || it->first == TokenType::Mnemonic) {

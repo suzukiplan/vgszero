@@ -17,49 +17,11 @@
 #include "mnemonic_load.hpp"
 #include "mnemonic_shift.hpp"
 #include "mnemonic_stack.hpp"
-#include "mnemonic_table.hpp"
 #include "mnemonic_vgs.hpp"
 
 std::vector<TempAddr*> tempAddrs;
 
-bool operand_is_condition(Operand op)
-{
-    switch (op) {
-        case Operand::NZ: return true;
-        case Operand::Z: return true;
-        case Operand::NC: return true;
-        case Operand::C: return true;
-        case Operand::PO: return true;
-        case Operand::PE: return true;
-        case Operand::P: return true;
-        case Operand::M: return true;
-    }
-    return false;
-}
-
-bool operand_is_condition(std::string str)
-{
-    auto op = operandTable.find(str);
-    if (op != operandTable.end()) {
-        return operand_is_condition(op->second);
-    }
-    return false;
-}
-
-void parse_operand(LineData* line)
-{
-    for (auto it = line->token.begin(); it != line->token.end(); it++) {
-        // Other ならチェック
-        if (it->first == TokenType::Other) {
-            auto op = operandTable.find(it->second);
-            if (op != operandTable.end()) {
-                it->first = TokenType::Operand;
-            }
-        }
-    }
-}
-
-void parse_mneoimonic(LineData* line)
+void mnemonic_parse(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         // Other ならチェック

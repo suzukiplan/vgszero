@@ -16,4 +16,4 @@ clean:
 	rm -f vgsasm
 
 vgsasm: src/vgsasm.cpp src/*.h src/*.hpp
-	g++ -std=c++17 -g -o vgsasm $<
+	g++ -std=c++17 -Wall -Wno-sign-compare -Wno-switch -g -o vgsasm $<

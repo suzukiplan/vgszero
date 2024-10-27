@@ -7,29 +7,24 @@
 #include "../src/define.hpp"
 #include "../src/nametable.hpp"
 
-void test_normal(const char* text, std::string name, int n, ...)
+void add_line(const char* text)
 {
     auto line = new LineData("", -1, text);
     define_parse(line);
+}
+
+void test_normal(const char* text, int n, ...)
+{
+    auto line = new LineData("", -1, text);
+    define_replace(line);
     printf("N: %-12s ---> ", text);
     line->printDebug();
     if (line->error) {
         puts(("Unexpected error: " + line->errmsg).c_str());
         throw -1;
     }
-    for (auto t : line->token) {
-        if (t.first != TokenType::Delete) {
-            puts(("Token not deleted: " + t.second).c_str());
-            throw -1;
-        }
-    }
-    if (defineTable.end() == defineTable.find(name)) {
-        puts(("Not defined: " + name).c_str());
-        throw -1;
-    }
-    auto def = defineTable[name];
-    if (n != def.size()) {
-        printf("Unexpected define number: %d, %d\n", n, (int)def.size());
+    if (n != line->token.size()) {
+        printf("Unexpected token number: %d, %d\n", n, (int)line->token.size());
         throw -1;
     }
     va_list arg;
@@ -37,11 +32,11 @@ void test_normal(const char* text, std::string name, int n, ...)
     for (int i = 0; i < n; i++) {
         auto first = va_arg(arg, TokenType);
         auto second = va_arg(arg, const char*);
-        if (def[i].first != first) {
+        if (line->token[i].first != first) {
             printf("Unexpected TokenType #%d\n", i + 1);
             throw -1;
         }
-        if (def[i].second != second) {
+        if (line->token[i].second != second) {
             printf("Unexpected Token#%d: %s != %s\n", i + 1, line->token[i].second.c_str(), second);
             throw -1;
         }
@@ -51,7 +46,7 @@ void test_normal(const char* text, std::string name, int n, ...)
 void test_error(const char* text, const char* errmsg)
 {
     auto line = new LineData("", -1, text);
-    define_parse(line);
+    define_replace(line);
     printf("E: %-12s ---> ", text);
     if (!line->error) {
         puts("Error expect bad not...");
@@ -67,13 +62,16 @@ void test_error(const char* text, const char* errmsg)
 int main()
 {
     try {
-        test_normal("#define AA", "AA", 1, TokenType::Delete, "");
-        test_normal("#define BB C", "BB", 1, TokenType::Other, "C");
-        test_error("#define AA B", "Duplicate definition name AA in #define.");
-        test_error("#define CC CC", "CC is included in #define CC.");
-        test_error("#define", "No definition name specified in #define.");
-        test_error("A #define", "#define must appear at the beginning of the line.");
-        test_error("#define #DEFINE", "Multiple #defines cannot be defined on a single line.");
+        add_line("#define A AAA");
+        test_normal("A B C", 3, TokenType::Other, "AAA", TokenType::Other, "B", TokenType::Other, "C");
+        add_line("#define B BB BB");
+        test_normal("A B C", 4, TokenType::Other, "AAA", TokenType::Other, "BB", TokenType::Other, "BB", TokenType::Other, "C");
+        test_normal("X B C", 4, TokenType::Other, "X", TokenType::Other, "BB", TokenType::Other, "BB", TokenType::Other, "C");
+        add_line("#define C A");
+        test_error("A B C", "Detect circular references in #define definition names.");
+        add_line("#define D.A FOO");
+        test_normal("D.A", 1, TokenType::Other, "FOO");
+        test_error("D.B", "`B` was not defined at `D`");
     } catch (...) {
         return -1;
     }
