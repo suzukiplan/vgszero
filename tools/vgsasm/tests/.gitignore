@@ -8,4 +8,6 @@ define_parse
 define_replace
 enum
 formulas_evaluate
+formulas_evaluate_array
+increment
 

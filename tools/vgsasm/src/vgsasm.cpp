@@ -8,6 +8,7 @@
 #include "assignment.hpp"
 #include "binary.hpp"
 #include "bracket.hpp"
+#include "clear.hpp"
 #include "decimal.hpp"
 #include "define.hpp"
 #include "enum.hpp"
@@ -51,25 +52,6 @@ static int check_error(std::vector<LineData*> lines)
         ret |= check_error(line);
     }
     return ret;
-}
-
-void clear_delete_token(std::vector<LineData*>* lines)
-{
-    for (auto it1 = lines->begin(); it1 != lines->end();) {
-        auto token = &(*it1)->token;
-        for (auto it2 = token->begin(); it2 != token->end();) {
-            if (it2->first == TokenType::Delete) {
-                token->erase(it2);
-            } else {
-                it2++;
-            }
-        }
-        if (token->empty()) {
-            lines->erase(it1);
-        } else {
-            it1++;
-        }
-    }
 }
 
 static int assemble(std::vector<LineData*> lines)
