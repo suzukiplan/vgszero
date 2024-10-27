@@ -102,6 +102,7 @@ static int assemble(std::vector<LineData*> lines)
     if (check_error(lines)) {
         return -1;
     }
+    clear_delete_token(&lines);
 
     // #define の展開
     for (auto it = lines.begin(); it != lines.end(); it++) {

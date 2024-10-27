@@ -278,11 +278,20 @@ void struct_parse_array(LineData* line)
                     return;
                 }
                 field++;
+                bool found = false;
                 for (auto f : str->second->fields) {
                     if (f->name == field) {
                         it->first = TokenType::StructArrayField;
                         it->second = field;
+                        found = true;
+                        break;
                     }
+                }
+                if (!found) {
+                    line->error = true;
+                    line->errmsg = "Fields not present in structure " + str->first + ": ";
+                    line->errmsg += field;
+                    return;
                 }
                 if (it->first != TokenType::StructArrayField) {
                     line->error = true;

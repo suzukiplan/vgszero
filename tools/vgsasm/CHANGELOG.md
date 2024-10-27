@@ -2,6 +2,10 @@
 
 ## Version 0.8 (beta-8)
 
+- unit test and refactor
+- Crash during operations involving nested brackets #42
+- Defining an enum results in a `Unexpected symbol:` error with no symbol
+
 ## Version 0.7 (beta-7)
 
 - Unit test on the Circle CI
