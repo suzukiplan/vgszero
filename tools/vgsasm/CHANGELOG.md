@@ -1,9 +1,17 @@
 # Change log
 
+## Version 0.10 (beta-10)
+
+- numeric error message detailed
+- `offset`: make error if not contained `.` at the name
+- `offset`: Just in case a field name contains a dot
+- `org`: make error judgment strict
+
 ## Version 0.9 (beta-9)
 
 - Stricter naming of prohibited items
 - Detail the error when a label name containing `@` is undefined
+- Several minor bugfix
 
 ## Version 0.8 (beta-8)
 

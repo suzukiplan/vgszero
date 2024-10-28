@@ -25,6 +25,10 @@ make
 sudo ln -s `pwd`/vgsasm /usr/local/bin/vgsasm
 ```
 
+> One of the main characteristics of this assembler is the small number of dependent packages. The assembler is **`build-essential` only** for Linux. This feature is intended for ease of integration into the VGS-Zero toolchain, so it will not depend on other external packages in the future.
+>
+> If you are looking for a Z80 assembler OSS to integrate into another game-specific SDK (e.g. GameGear), it may be a good option. vgsasm is a [GPLv3 licensed OSS](./LICENSE.txt). You are free to modify it to the extent permitted by the license.
+
 ## Usage
 
 ```

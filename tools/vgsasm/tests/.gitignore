@@ -13,4 +13,11 @@ increment
 label_parse
 label_parse_jump
 label_extract_anonymous
+literal
+nametable
+numeric
+offset_parse
+offset_replace
+operand
+org
 

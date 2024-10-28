@@ -25,7 +25,7 @@ void numeric_parse(LineData* line)
                 it->second = minus ? "-" + dec : dec;
             } else {
                 line->error = true;
-                line->errmsg = "Invalid hexadecimal number";
+                line->errmsg = "Invalid hexadecimal number: " + it->second;
                 return;
             }
         } else if ('%' == *str || 0 == strncmp("0B", str, 2)) {
@@ -35,7 +35,7 @@ void numeric_parse(LineData* line)
                 it->second = minus ? "-" + dec : dec;
             } else {
                 line->error = true;
-                line->errmsg = "Invalid binary number";
+                line->errmsg = "Invalid binary number: " + it->second;
                 return;
             }
         } else {

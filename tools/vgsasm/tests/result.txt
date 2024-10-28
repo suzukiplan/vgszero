@@ -1,0 +1,376 @@
+make[1]: Entering directory '/home/suzukiplan/dev/vgsasm/tests'
+./assignment
+N: A = B        --->  `LD` `A` `,` `B`
+N: A += B       --->  `ADD` `A` `,` `B`
+N: A -= B       --->  `SUB` `A` `,` `B`
+N: A *= B       --->  `MUL` `A` `,` `B`
+N: A /= B       --->  `DIV` `A` `,` `B`
+N: A %= B       --->  `MOD` `A` `,` `B`
+N: A &= B       --->  `AND` `A` `,` `B`
+N: A |= B       --->  `OR` `A` `,` `B`
+N: A ^= B       --->  `XOR` `A` `,` `B`
+N: A <<= B      --->  `SL` `A` `,` `B`
+N: A >>= B      --->  `SR` `A` `,` `B`
+E: A =          --->  Illegal assignment expression without left or right side.
+E: = B          --->  Illegal assignment expression without left or right side.
+E: =            --->  Illegal assignment expression without left or right side.
+E: A = B += C   --->  Multiple assignments are described.
+N: AB           --->  `AB`
+./binary
+N: #binary "data.bin" --->  Binary: "data.bin" `data.bin`
+N: #binary "data.bin", 0 --->  Binary: "data.bin" `data.bin` `,` `0`
+N: #binary "data.bin", 96 --->  Binary: "data.bin" `data.bin` `,` `96`
+N: #binary "data.bin", 4000 --->  Binary: "data.bin" `data.bin` `,` `4000`
+N: #binary "data.bin", 4096 --->  Binary: "data.bin" `data.bin` `,` `4096`
+E: #binary "data.bin", 4097 --->  #binary specified file size is smaller than the offset value.
+E: #binary "data.bin", -1 --->  Unexpected token: -
+E: #binary "data.bin", --->  #binary offset value is not specified.
+N: #binary "data.bin", 0, 100 --->  Binary: "data.bin" `data.bin` `,` `0` `,` `100`
+N: #binary "data.bin", 100, 100 --->  Binary: "data.bin" `data.bin` `,` `100` `,` `100`
+N: #binary "data.bin", 96, 4000 --->  Binary: "data.bin" `data.bin` `,` `96` `,` `4000`
+E: #binary "data.bin", 96, 4001 --->  Cannot read 4001 bytes.
+E: #binary "data.bin", 0, -1 --->  Unexpected token: -
+E: #binary "data.bin", 0, --->  #binary size value is not specified.
+E: #binary      --->  #binary syntax error.
+E: #binary data.bin --->  #binary syntax error.
+E: hoge #binary "data.bin" --->  #binary must appear at the beginning of the line.
+E: #binary "file_not_found" --->  #binary file open error: file_not_found
+./bracket_to_address
+N: LD (X), Y    --->  $???? <LD> _( `X` )_ `,` `Y`
+N: LD (X+Z), Y  --->  $???? <LD> _( `X` `+` `Z` )_ `,` `Y`
+N: LD (X)+Z, Y  --->  $???? <LD> `(` `X` `)` `+` `Z` `,` `Y`
+N: LD Z+(X), Y  --->  $???? <LD> `Z` `+` `(` `X` `)` `,` `Y`
+N: LD X, (Y)    --->  $???? <LD> `X` `,` _( `Y` )_
+N: LD X, (Y+Z)  --->  $???? <LD> `X` `,` _( `Y` `+` `Z` )_
+N: LD X, (Y)+Z  --->  $???? <LD> `X` `,` `(` `Y` `)` `+` `Z`
+N: LD X, Z+(Y)  --->  $???? <LD> `X` `,` `Z` `+` `(` `Y` `)`
+N: ()           --->  `(` `)`
+N: ()()         --->  `(` `)` `(` `)`
+N: (())         --->  `(` `(` `)` `)`
+N: LD ((X)), Y  --->  $???? <LD> _( `(` `X` `)` )_ `,` `Y`
+./bracket_eliminate
+N: (123)        --->  0x7B
+N: (0x123)      --->  0x123
+N: ($123)       --->  0x123
+N: (0b1010)     --->  0xA
+N: (%1010)      --->  0xA
+N: (X)          --->  `(` `X` `)`
+N: (1)(2)(3)    --->  0x1 0x2 0x3
+N: (1)(Z)(3)    --->  0x1 `(` `Z` `)` 0x3
+N: (((1)))      --->  0x1
+N: (1+2)        --->  `(` 0x1 `+` 0x2 `)`
+N: ((1)+((2)))  --->  `(` 0x1 `+` 0x2 `)`
+./decimal
+oct2dec:              ---> (empty) OK
+oct2dec: 1            ---> 1 OK
+oct2dec: 123456       ---> 42798 OK
+oct2dec: 1234567      ---> 342391 OK
+oct2dec: 12345678     ---> (empty) OK
+oct2dec: 1a           ---> (empty) OK
+oct2dec: a1           ---> (empty) OK
+hex2dec:              ---> (empty) OK
+hex2dec: 1            ---> 1 OK
+hex2dec: ffff         ---> (empty) OK
+hex2dec: FFFF         ---> 65535 OK
+hex2dec: EF           ---> 239 OK
+hex2dec: FG           ---> (empty) OK
+bin2dec:              ---> (empty) OK
+bin2dec: 10101        ---> 21 OK
+bin2dec: 01010        ---> 10 OK
+bin2dec: 1            ---> 1 OK
+bin2dec: 0            ---> 0 OK
+bin2dec: 12           ---> (empty) OK
+./define_parse
+N: #define AA   --->  `#DEFINE` `AA`
+N: #define BB C --->  `#DEFINE` `BB` `C`
+E: #define AA B --->  Duplicate definition name AA in #define.
+E: #define CC CC --->  CC is included in #define CC.
+E: #define      --->  No definition name specified in #define.
+E: A #define    --->  #define must appear at the beginning of the line.
+E: #define #DEFINE --->  Multiple #defines cannot be defined on a single line.
+./define_replace
+N: A B C        --->  `AAA` `B` `C`
+N: A B C        --->  `AAA` `BB` `BB` `C`
+N: X B C        --->  `X` `BB` `BB` `C`
+E: A B C        --->  Detect circular references in #define definition names.
+N: D.A          --->  `FOO`
+E: D.B          --->  `B` was not defined at `D`
+./enum
+ `ENUM` `FOO` `{`
+ `HOGE`
+ `HIGE`
+ `HAGE`
+ `}`
+N: LD A, foo.hoge --->  `LD` `A` `,` 0x0
+ `ENUM` `FOO` `{`
+ `HOGE`
+ `HIGE`
+ `HAGE`
+ `}`
+N: LD A, foo.hige --->  `LD` `A` `,` 0x1
+ `ENUM` `FOO` `{`
+ `HOGE`
+ `HIGE`
+ `HAGE`
+ `}`
+N: LD A, foo.hage --->  `LD` `A` `,` 0x2
+ `ENUM` `FOO`
+ `{`
+ `HOGE` `=` `10`
+ `HIGE`
+ `HAGE` `=` `100`
+ `}`
+N: LD A, foo.hoge --->  `LD` `A` `,` 0xA
+ `ENUM` `FOO`
+ `{`
+ `HOGE` `=` `10`
+ `HIGE`
+ `HAGE` `=` `100`
+ `}`
+N: LD A, foo.hige --->  `LD` `A` `,` 0xB
+ `ENUM` `FOO`
+ `{`
+ `HOGE` `=` `10`
+ `HIGE`
+ `HAGE` `=` `100`
+ `}`
+N: LD A, foo.hage --->  `LD` `A` `,` 0x64
+ `ENUM` `FUGA` `{`
+ `HOGE`
+ `HIGE`
+ `HAGE`
+ `}`
+ `ENUM` `FOO`
+ `{`
+ `HOGE` `=` `10`
+ `HIGE`
+ `HAGE` `=` `100`
+ `}`
+N: LD A, fuga.hoge --->  `LD` `A` `,` 0x0
+ `ENUM` `FUGA` `{`
+ `HOGE`
+ `HIGE`
+ `HAGE`
+ `}`
+ `ENUM` `FOO`
+ `{`
+ `HOGE` `=` `10`
+ `HIGE`
+ `HAGE` `=` `100`
+ `}`
+N: LD A, fuga.hige --->  `LD` `A` `,` 0x1
+ `ENUM` `FUGA` `{`
+ `HOGE`
+ `HIGE`
+ `HAGE`
+ `}`
+ `ENUM` `FOO`
+ `{`
+ `HOGE` `=` `10`
+ `HIGE`
+ `HAGE` `=` `100`
+ `}`
+N: LD A, fuga.hage --->  `LD` `A` `,` 0x2
+ `ENUM` `FUGA` `{`
+ `HOGE`
+ `HIGE`
+ `HAGE`
+ `}`
+ `ENUM` `FOO`
+ `{`
+ `HOGE` `=` `10`
+ `HIGE`
+ `HAGE` `=` `100`
+ `}`
+N: LD A, foo.hoge --->  `LD` `A` `,` 0xA
+ `ENUM` `FUGA` `{`
+ `HOGE`
+ `HIGE`
+ `HAGE`
+ `}`
+ `ENUM` `FOO`
+ `{`
+ `HOGE` `=` `10`
+ `HIGE`
+ `HAGE` `=` `100`
+ `}`
+N: LD A, foo.hige --->  `LD` `A` `,` 0xB
+ `ENUM` `FUGA` `{`
+ `HOGE`
+ `HIGE`
+ `HAGE`
+ `}`
+ `ENUM` `FOO`
+ `{`
+ `HOGE` `=` `10`
+ `HIGE`
+ `HAGE` `=` `100`
+ `}`
+N: LD A, foo.hage --->  `LD` `A` `,` 0x64
+E: ---> `enum` must be defined at the beginning of the line.
+E: ---> No enum name specified.
+E: ---> Invalid enum name: ,
+E: ---> Scope is not defined: FUGA
+E: ---> Scope was not closed.
+E: ---> Scope was not closed.
+E: ---> Unexpected symbol: HOGE
+E: ---> Unexpected symbol: }
+E: ---> Unexpected symbol: FOO
+E: ---> Illegal enum symbol number: 2
+E: ---> Illegal enum symbol number: 4
+E: ---> Unexpected symbol: HIGE
+E: ---> Unexpected symbol: FUGA
+./formulas_evaluate
+N: 1+2+3        --->  0x6
+N: 1+2+3*4      --->  0xF
+N: 1+2+3*4/2    --->  0x9
+N: (1+2+3)*4/2  --->  0xC
+N: (1+2+3)*(4/2+1) --->  0x12
+N: (1+(2+3))+4  --->  0xA
+N: A+1          --->  <A> `+` 0x1
+N: AA+1         --->  `AA` `+` 0x1
+N: A-1          --->  <A> `-` 0x1
+N: AA-1         --->  `AA` `-` 0x1
+E: A*1          --->  Illegal expression with no specification of the number of operations to be performed.
+E: A/1          --->  Illegal expression with no specification of the number of operations to be performed.
+E: 1+A          --->  Illegal expression with no specification of the number of operations to be performed.
+E: 1*A          --->  Illegal expression with no specification of the number of operations to be performed.
+E: 1/0          --->  Division by zero.
+E: 1/(5-5)      --->  Division by zero.
+E: 3/(1*2/3)    --->  Division by zero.
+./formulas_evaluate_array
+N: [1+2+3]      --->  `[` 0x6 `]`
+N: []           --->  `[` `]`
+N: [1+2+3],[5*6/2] --->  `[` 0x6 `]` `,` `[` 0xF `]`
+./increment
+N: LD (HL++), A --->  `LD` `(` <HL> `)` `,` <A>
+                $???? <INC> <HL>
+N: LD (++HL), A --->  $???? <INC> <HL>
+                `LD` `(` <HL> `)` `,` <A>
+N: LD (HL--), A --->  `LD` `(` <HL> `)` `,` <A>
+                $???? <DEC> <HL>
+N: LD (--HL), A --->  $???? <DEC> <HL>
+                `LD` `(` <HL> `)` `,` <A>
+N: LD (HL++), A++ --->  `LD` `(` <HL> `)` `,` <A>
+                $???? <INC> <A>
+                $???? <INC> <HL>
+N: LD (++HL), ++A --->  $???? <INC> <HL>
+                $???? <INC> <A>
+                `LD` `(` <HL> `)` `,` <A>
+N: LD (++HL), A++ --->  $???? <INC> <HL>
+                `LD` `(` <HL> `)` `,` <A>
+                $???? <INC> <A>
+N: LD (HL), ++A-- --->  $???? <INC> <A>
+                `LD` `(` <HL> `)` `,` <A>
+                $???? <DEC> <A>
+E: LD++         --->  `++` or `--` can only be specified before or after the register.
+E: ++           --->  `++` or `--` can only be specified before or after the register.
+E: ++--         --->  `++` or `--` can only be specified before or after the register.
+E: IYH++        --->  `++` or `--` cannot be specified in the IYH or IYL registers.
+E: IYL++        --->  `++` or `--` cannot be specified in the IYH or IYL registers.
+E: A++ B--      --->  Illegal `++` or `--` sequence.
+./label_parse
+N: .label1      --->  $???? LABEL1:
+N: @label       --->  $???? LABEL@LABEL1:
+N: label2:      --->  $???? LABEL2:
+N: @label       --->  $???? LABEL@LABEL2:
+E: label1:      --->  Duplicate label: LABEL1
+E: 0label1:     --->  The first letter is not an alphabetic letter: 0LABEL1
+N: label3: FOO  --->  $???? LABEL3:
+                `FOO`
+./label_parse_jump
+N: JR LABEL1    --->  `JR` `LABEL1`
+N: JR LABEL2    --->  `JR` `LABEL2`
+N: JR @LABEL    --->  `JR` `LABEL@LABEL2`
+N: JR LABEL@LABEL1 --->  `JR` `LABEL@LABEL1`
+N: JR LABEL@LABEL2 --->  `JR` `LABEL@LABEL2`
+E: JR @Unknown  --->  Unknown label specified: @UNKNOWN
+E: JR LABEL@Unknown --->  Label `UNKNOWN` is undefined.
+E: JR UNKNOWN@LABEL1 --->  Label `@UNKNOWN` is undefined in `LABEL1`.
+N: JR @         --->  `JR` `@`
+./label_extract_anonymous
+N: [ ]  $???? $@+0#0:
+   [x]  `JR` `@` `+` `$@+0#0`
+N: [ ]  $???? $@-1#0:
+   [ ]  `NOP`
+   [x]  `JR` `@` `-` `$@-1#0`
+   [ ]  `NOP`
+N: [ ]  `NOP`
+   [x]  `JR` `@` `+` `$@+1#0`
+   [ ]  $???? $@+1#0:
+   [ ]  `NOP`
+E: [ ]  `NOP`
+   [x]  `JR` `@` `+` `$@+1#0`
+   [ ]  $???? LABEL:
+Anonymous labels cannot cross another label: LABEL
+E: [ ]  `NOP`
+   [ ]  $???? LABEL_UP:
+   [x]  `JR` `@` `-` `$@-1#0`
+   [ ]  $???? LABEL_DOWN:
+   [ ]  `NOP`
+Anonymous labels cannot cross another label: LABEL_UP
+E: [x]  `JR` `@`
+Anonymous label syntax error. (no token)
+E: [x]  `JR` `@` `*`
+Anonymous label syntax error. (invalid token: *)
+E: [x]  `JR` `@` `+`
+Anonymous label syntax error. (no numeric specified)
+E: [x]  `JR` `@` `+` `A`
+Unexpected symbol specified: A
+E: [x]  `JR` `@` `+` `0` `B`
+Unexpected symbol specified: B
+E: [x]  `JR` `@` `+` `$@+2#0`
+   [ ]  `STRUCT` `FOO` `$C000`
+   [ ]  `{`
+   [ ]  `}`
+Anonymous labels cannot cross scopes.
+E: [x]  `JR` `@` `+` `$@+2#0`
+   [ ]  `#BINARY`
+   [ ]  `{`
+   [ ]  `}`
+Anonymous labels cannot cross #BINARY.
+./literal
+N: LD A, "HOGE" --->  `LD` `A` `,` `$0`
+                $???? $0:
+                $???? <DB> 0x48 `,` 0x4F `,` 0x47 `,` 0x45 `,` 0x0
+./nametable
+N: A            ---> OK
+E: 0A           ---> The first letter is not an alphabetic letter: 0A
+E: A            ---> Reserved symbol name A was specified.
+N: AA           ---> OK
+N: AAA          ---> OK
+./numeric
+N: 1,2,3        --->  0x1 `,` 0x2 `,` 0x3
+N: 0+1,+2,+3    --->  0x0 `+` 0x1 `,` 0x2 `,` 0x3
+N: 0-1,-2,-3    --->  0x0 `-` 0x1 `,` 0xFFFFFFFE `,` 0xFFFFFFFD
+N: $00ff        --->  0xFF
+N: 0xffff       --->  0xFFFF
+E: $00fg        --->  Invalid hexadecimal number: $00FG
+N: %10101       --->  0x15
+N: 0b01010      --->  0xA
+E: %0102        --->  Invalid binary number: %0102
+./offset_parse
+N: offset(hoge.foo) --->  `HOGE.FOO`
+E: offset hoge.foo) --->  No `(` in offset syntax.
+E: offset (+)   --->  No structure name specified in offset syntax.
+E: offset (hoge) --->  No structure field name specified in offset syntax.
+E: offset (hoge.foo --->  No `)` in offset syntax.
+./offset_replace
+N: offset(dummy.var1) --->  0x0
+N: offset(dummy.var2) --->  0x1
+N: offset(dummy.var3) --->  0x2
+E: offset(dummyy.var3) --->  Undefined structure DUMMYY is specified in offset.
+E: offset(dummy.var4) --->  Field name `VAR4` is not defined in structure `DUMMY`.
+./operand
+N: LD (IX+10), A --->  `LD` `(` <IX> `+` `10` `)` `,` <A>
+./org
+N: org $100     --->  `256`
+E: a org        --->  `org` must appear at the beginning of the line.
+E: org          --->  `org` address is not specified.
+E: org hoge     --->  Unexpected symbol: HOGE
+N: org 0xFFFF   --->  `65535`
+E: org 65536    --->  `org` address is incorrect: 65536
+E: org 65535 org --->  Unexpected symbol: ORG
+E: org 65534    --->  Multiple orgs must be written in ascending order from the beginning of the line.
+E: org 65535    --->  Multiple orgs must be written in ascending order from the beginning of the line.
+make[1]: Leaving directory '/home/suzukiplan/dev/vgsasm/tests'

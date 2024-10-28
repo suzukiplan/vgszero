@@ -46,7 +46,7 @@ void string_literal_extract(std::vector<LineData*>* lines)
         // 無名ラベル行を追加
         auto newLabelLine = new LineData();
         auto label = "$" + std::to_string(i);
-        newLabelLine->token.push_back(std::make_pair(TokenType::Label, label + ":"));
+        newLabelLine->token.push_back(std::make_pair(TokenType::Label, label));
         lines->push_back(newLabelLine);
         labelTable[label] = newLabelLine;
 
