@@ -47,7 +47,7 @@ void enum_extract(std::vector<LineData*>* lines)
             continue;
         }
         auto enumName = name->second;
-        addNameTable(enumName, line);
+        nametable_add(enumName, line);
         defineTable[enumName].push_back(std::make_pair(TokenType::None, ""));
         name->first = TokenType::Delete;
         if (line->error) {
@@ -138,7 +138,7 @@ void enum_extract(std::vector<LineData*>* lines)
                 line->token[0].first = TokenType::Delete;
             }
             auto field = name->second + "." + line->token[0].second;
-            addNameTable(field, line);
+            nametable_add(field, line);
             defineTable[field].push_back(std::make_pair(TokenType::Numeric, std::to_string(number++)));
         }
         if (!closed) {

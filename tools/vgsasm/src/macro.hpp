@@ -50,7 +50,7 @@ void macro_parse(LineData* line)
         line->errmsg = "Duplicate #macro names are defined: " + name;
         return;
     }
-    addNameTable(name, line);
+    nametable_add(name, line);
     if (line->error) {
         return;
     }
@@ -174,7 +174,7 @@ void macro_syntax_check(std::vector<LineData*>* lines)
 {
     for (auto it = macroTable.begin(); it != macroTable.end(); it++) {
         for (auto arg : it->second->args) {
-            if (checkNameTable(arg)) {
+            if (!nametable_check(arg).empty()) {
                 it->second->refer->error = true;
                 it->second->refer->errmsg = "A macro argument name conflict with the name used for structs, defines, etc.: " + arg;
             }

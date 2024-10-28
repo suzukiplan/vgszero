@@ -285,10 +285,10 @@ extern int bracketCount;
 extern int scopeCount;
 extern LineData* lastScopeBegin;
 
-void addNameTable(std::string name, LineData* line);             // main.cpp
-bool checkNameTable(std::string name);                           // main.cpp
-void trim_string(char* src);                                     // main.cpp
-std::vector<std::string> split_token(std::string str, char del); // main.cpp
+void nametable_add(std::string name, LineData* line);            // nametable.cpp
+std::string nametable_check(std::string name);                   // nametable.cpp
+void trim_string(char* src);                                     // string.cpp
+std::vector<std::string> split_token(std::string str, char del); // string.cpp
 std::string oct2dec(const char* hex);                            // formulas.hpp
 std::string hex2dec(const char* hex);                            // formulas.hpp
 std::string bin2dec(const char* bin);                            // formulas.hpp

@@ -48,14 +48,10 @@ LineData* label_parse(LineData* line)
     }
 
     // ラベルの禁則チェック
-    auto cp = label.c_str();
-    if (*cp == '$') {
-        line->error = true;
-        line->errmsg = "Label names beginning with `$` are not allowed.";
+    nametable_add(label, line);
+    if (line->error) {
         return nullptr;
     }
-
-    addNameTable(label, line);
     token->second = label;
     labelTable[label] = line;
 
@@ -80,7 +76,7 @@ void label_parse_jump(LineData* line)
             std::string labelName;
             bool errorIfNotFound;
             auto str = it->second.c_str();
-            if ('@' == str[0]) {
+            if ('@' == str[0] && 0 != str[1]) {
                 if (lastLabel == line->token.end()) {
                     line->error = true;
                     line->errmsg = "Unknown label specified: " + it->second;
@@ -101,6 +97,22 @@ void label_parse_jump(LineData* line)
                 line->error = true;
                 line->errmsg = "Unknown label specified: " + it->second;
                 return;
+            } else {
+                // @ が含まれる場合はチェック
+                auto at = labelName.find("@");
+                if (-1 != at && labelName != "@") {
+                    auto atLeft = labelName.substr(0, at);
+                    auto atRight = labelName.substr(at + 1);
+                    if (labelTable.end() == labelTable.find(atRight)) {
+                        line->error = true;
+                        line->errmsg = "Label `" + atRight + "` is undefined.";
+                        return;
+                    } else {
+                        line->error = true;
+                        line->errmsg = "Label `@" + atLeft + "` is undefined in `" + atRight + "`.";
+                        return;
+                    }
+                }
             }
         }
     }
@@ -136,11 +148,27 @@ void label_extract_anonymous(std::vector<LineData*>* lines)
                     break;
                 }
                 token->first = TokenType::LabelJump;
-                auto jump = atoi(token->second.c_str());
+                auto jumpNum = token->second.c_str();
+                for (int i = 0; jumpNum[i]; i++) {
+                    if (!isdigit(jumpNum[i])) {
+                        line->error = true;
+                        line->errmsg = "Unexpected symbol specified: " + token->second;
+                        break;
+                    }
+                }
+                if (line->error) {
+                    break;
+                }
+                if (token + 1 != line->token.end()) {
+                    line->error = true;
+                    line->errmsg = "Unexpected symbol specified: " + (token + 1)->second;
+                    break;
+                }
+                auto jump = atoi(jumpNum);
                 auto label = (isPlus ? "$@+" : "$@-") + std::to_string(jump) + "#" + std::to_string(count++);
                 token->second = label;
                 for (int i = 0; i < jump; i++) {
-                    if (it == lines->begin() || it == lines->end()) {
+                    if ((it == lines->begin() && !isPlus) || (it == lines->end() && isPlus)) {
                         line->error = true;
                         line->errmsg = "Anonymous label position ";
                         line->errmsg += isPlus ? "overflow." : "underflow";
@@ -175,68 +203,5 @@ void label_extract_anonymous(std::vector<LineData*>* lines)
                 }
             }
         }
-    }
-}
-
-// 文字列リテラルを探索して無名ラベルに置換
-void extract_string_literal(std::vector<LineData*>* lines)
-{
-    int count = 0;
-    for (auto it = lines->begin(); it != lines->end(); it++) {
-        auto line = *it;
-        auto mne = Mnemonic::None;
-        for (auto token = line->token.begin(); token != line->token.end(); token++) {
-            if (token->first == TokenType::Label || token->first == TokenType::LabelAt) {
-                break; // ラベル行なら変換しない
-            } else if (token->first == TokenType::Mnemonic) {
-                mne = mnemonicTable[token->second];
-                if (mne == Mnemonic::DB || mne == Mnemonic::DW) {
-                    break; // DB, DW なら変換しない
-                }
-            } else if (token->first == TokenType::String) {
-                token->first = TokenType::LabelJump;
-                // 定義済みの無名ラベルに同じ文字列があればそれを参照しておく
-                bool found = false;
-                for (auto n = nonameLabels.begin(); n != nonameLabels.end(); n++) {
-                    if (n->second == token->second) {
-                        token->second = n->first;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    // 新しい無名ラベルを作成してそれを参照
-                    auto label = "$" + std::to_string(count++);
-                    nonameLabels[label] = token->second;
-                    token->second = label;
-                }
-            }
-        }
-    }
-    // 無名ラベルとデータ行を展開
-    for (int i = 0; i < count; i++) {
-        // 無名ラベル行を追加
-        auto newLabelLine = new LineData();
-        auto label = "$" + std::to_string(i);
-        newLabelLine->token.push_back(std::make_pair(TokenType::Label, label + ":"));
-        lines->push_back(newLabelLine);
-        labelTable[label] = newLabelLine;
-
-        // データ行を追加
-        auto newDataLine = new LineData();
-        newDataLine->token.push_back(std::make_pair(TokenType::Mnemonic, "DB"));
-        bool first = true;
-        for (auto str = nonameLabels[label].c_str(); *str; str++) {
-            if (!first) {
-                newDataLine->token.push_back(std::make_pair(TokenType::Split, ","));
-            }
-            newDataLine->token.push_back(std::make_pair(TokenType::Numeric, std::to_string(*str)));
-            first = false;
-        }
-        if (!first) {
-            newDataLine->token.push_back(std::make_pair(TokenType::Split, ","));
-        }
-        newDataLine->token.push_back(std::make_pair(TokenType::Numeric, "0"));
-        lines->push_back(newDataLine);
     }
 }

@@ -16,6 +16,7 @@
 #include "formulas.hpp"
 #include "increment.hpp"
 #include "label.hpp"
+#include "literal.hpp"
 #include "macro.hpp"
 #include "mnemonic.hpp"
 #include "nametable.hpp"
@@ -148,7 +149,7 @@ static int assemble(std::vector<LineData*> lines)
     }
 
     // 文字列リテラルを無名ラベルの参照に変換し、末尾に無名ラベル+DBを展開
-    extract_string_literal(&lines);
+    string_literal_extract(&lines);
     if (check_error(lines)) {
         return -1;
     }
@@ -332,6 +333,7 @@ static int assemble(const char* path)
 
 int main(int argc, char* argv[])
 {
+    nametable_init();
     char in[1024];
     char out[1024];
     in[0] = 0;

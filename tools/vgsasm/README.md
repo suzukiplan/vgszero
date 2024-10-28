@@ -114,7 +114,8 @@ You can specify the size at which to start reading by `, number` after the offse
 #define DEFINITION_NAME Expanded expression
 ```
 
-The `DEFINITION_NAME` in the source code is expanded to an `Expanded expression`.
+- The `DEFINITION_NAME` in the source code is expanded to an `Expanded expression`.
+- The first character of `DEFINITION_NAME` must be an alphabetic letter.
 
 ## `#macro`
 
@@ -141,6 +142,7 @@ org $0000
 ```
 
 - A multifunctional version of [`#define`](#define) that can have arguments and multi-line expansion.
+- The first character of the macro definition name and argument name must be an alphabetic letter.
 - The number of arguments must match the definition and the caller.
 - Only numbers can be specified as arguments in the macro caller (including labels, formulas, and [String Literal](#string-literal)).
 - A macro caller with no arguments will automatically be read as `CALL NAME` if the macro name is not defined.
@@ -234,6 +236,7 @@ struct name3 <- name[3] {
   - `struct name <- previous[count]`
     - After a specific structure array
     - `count` must be greater than or equal to 1
+- The first character of `name` must be an alphabetic letter.
 - A struct is a grouping of single or multiple attributes in a common namespace.
 - Attributes are specified in the form `attribute_name {ds.b|ds.w|name} count`.
   - `ds.b` ... 1 byte
@@ -378,7 +381,7 @@ JP FOO@LABEL2   ; Jump to FOO@LABEL2
 - Inner labels are written in `@LABEL` format.
 - Labels and inner labels are not case sensitive.
 - The label and inner label are symbols that uniquely identify all source files with `#include`.
-- Labels beginning with `$` cannot be specified.
+- The first character of the label name, excluding `.` and `@`, must be an alphabetic character.
 
 ### Anonymous Labels
 

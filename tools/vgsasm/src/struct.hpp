@@ -115,7 +115,7 @@ bool struct_syntax_check(std::vector<LineData*>* lines)
                             line->errmsg = "Duplicate structure name: " + it2->second;
                             return false;
                         }
-                        addNameTable(it2->second, line);
+                        nametable_add(it2->second, line);
                         newStruct = new Struct(line, it2->second);
                         structTable[it2->second] = newStruct;
                         structNameList.push_back(newStruct->name);

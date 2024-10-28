@@ -1,5 +1,10 @@
 # Change log
 
+## Version 0.9 (beta-9)
+
+- Stricter naming of prohibited items
+- Detail the error when a label name containing `@` is undefined
+
 ## Version 0.8 (beta-8)
 
 - unit test and refactor

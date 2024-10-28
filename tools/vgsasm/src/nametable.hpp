@@ -6,25 +6,41 @@
 #pragma once
 #include "common.h"
 
-bool checkNameTable(std::string name)
+std::string nametable_check(std::string name)
 {
-    if (mnemonicTable.find(name) != mnemonicTable.end() ||
-        operandTable.find(name) != operandTable.end() ||
-        name == "SIZEOF" ||
-        name == "OFFSET" ||
-        nameTable.find(name) != nameTable.end()) {
-        return true;
+    if (!isalpha(name.c_str()[0])) {
+        return "The first letter is not an alphabetic letter: " + name;
+    } else if (nameTable.find(name) != nameTable.end()) {
+        return "Reserved symbol name " + name + " was specified.";
     } else {
-        return false;
+        return "";
     }
 }
 
-void addNameTable(std::string name, LineData* line)
+void nametable_add(std::string name, LineData* line)
 {
-    if (checkNameTable(name)) {
+    auto errmsg = nametable_check(name);
+    if (!errmsg.empty()) {
         line->error = true;
-        line->errmsg = "Reserved symbol name " + name + " was specified.";
+        line->errmsg = errmsg;
     } else {
         nameTable[name] = line;
     }
+}
+
+void nametable_init()
+{
+    for (auto mnemonic : mnemonicTable) {
+        nametable_add(mnemonic.first, nullptr);
+    }
+    for (auto operand : operandTable) {
+        nametable_add(operand.first, nullptr);
+    }
+    nametable_add("SIZEOF", nullptr);
+    nametable_add("OFFSET", nullptr);
+    nametable_add("STRUCT", nullptr);
+    nametable_add("ENUM", nullptr);
+    nametable_add("DS.B", nullptr);
+    nametable_add("DS.W", nullptr);
+    nametable_add("ORG", nullptr);
 }

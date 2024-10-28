@@ -99,14 +99,14 @@ bool define_parse(LineData* line)
                     it++;
                 }
                 // nametable に定義名を追加
-                addNameTable(name, line);
+                nametable_add(name, line);
                 // ドット付きの場合は左辺が未登録なら登録
                 auto dot = name.find('.');
                 if (-1 != dot) {
                     auto left = name.substr(0, dot);
                     if (nameTable.find(left) == nameTable.end()) {
-                        addNameTable(left, line);
-                        addNameTable(left + ".", line);
+                        nametable_add(left, line);
+                        nametable_add(left + ".", line);
                     }
                 }
             }
