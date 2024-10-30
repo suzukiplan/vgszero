@@ -10,7 +10,12 @@ void struct_parse(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->second == "STRUCT") {
-            it->first = TokenType::Struct;
+            if (it != line->token.begin()) {
+                line->error = true;
+                line->errmsg = "`struct` must appear at the beginning of the line.";
+            } else {
+                it->first = TokenType::Struct;
+            }
         }
     }
 }
@@ -36,6 +41,11 @@ bool struct_syntax_check(std::vector<LineData*>* lines)
                         newField->token.push_back(std::make_pair(it2->first, it2->second));
                         it2->first = TokenType::Delete;
                     } else {
+                        if (-1 != it2->second.find(".")) {
+                            line->error = true;
+                            line->errmsg = "Invalid structure field name: " + it2->second;
+                            return false;
+                        }
                         for (auto field : newStruct->fields) {
                             if (field->name == it2->second) {
                                 line->error = true;
@@ -78,7 +88,7 @@ bool struct_syntax_check(std::vector<LineData*>* lines)
                             it2++;
                             if (it2->first != TokenType::Numeric) {
                                 line->error = true;
-                                line->errmsg = "Unexpected token: " + it2->second;
+                                line->errmsg = "Unexpected symbol: " + it2->second;
                                 return false;
                             }
                             it2->first = TokenType::Delete;
@@ -115,11 +125,21 @@ bool struct_syntax_check(std::vector<LineData*>* lines)
                             line->errmsg = "Duplicate structure name: " + it2->second;
                             return false;
                         }
+                        if (-1 != it2->second.find(".")) {
+                            line->error = true;
+                            line->errmsg = "Invalid structure name: " + it2->second;
+                            return false;
+                        }
                         nametable_add(it2->second, line);
                         newStruct = new Struct(line, it2->second);
                         structTable[it2->second] = newStruct;
                         structNameList.push_back(newStruct->name);
-                        expect = TokenType::Numeric;
+                        if (it2 + 1 == line->token.end() || (it2 + 1)->first == TokenType::ScopeBegin) {
+                            newStruct->start = 0;
+                            expect = TokenType::ScopeBegin;
+                        } else {
+                            expect = TokenType::Numeric;
+                        }
                         break;
                     case TokenType::Numeric:
                         newStruct->start = atoi(it2->second.c_str());

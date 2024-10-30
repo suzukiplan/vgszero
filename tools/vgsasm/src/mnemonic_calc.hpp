@@ -45,7 +45,7 @@ void mnemonic_calc8(LineData* line, uint8_t code)
                line->token[2].first == TokenType::Operand) {
         auto op = operandTable[line->token[2].second];
         if (op == Operand::HL) {
-            if (4 != line->token.size() && line->token[3].first == TokenType::AddressEnd) {
+            if (4 != line->token.size() || line->token[3].first != TokenType::AddressEnd) {
                 line->error = true;
                 line->errmsg = "Illegal 8-bit arithmetic instruction.";
             } else {
@@ -69,7 +69,7 @@ void mnemonic_calc8(LineData* line, uint8_t code)
                        line->token[4].first == TokenType::Numeric &&
                        line->token[5].first == TokenType::AddressEnd) {
                 auto n = atoi(line->token[4].second.c_str());
-                if (mnemonic_range(line, n, 0, 128)) {
+                if (mnemonic_range(line, -n, -128, 0)) {
                     line->machine.push_back((0 - n) & 0xFF);
                 }
             } else {
@@ -89,7 +89,7 @@ void mnemonic_calc8(LineData* line, uint8_t code)
             mnemonic_calc8(line, code);
         } else {
             line->error = true;
-            line->errmsg = "Illegal arithmetic instruction.";
+            line->errmsg = "Illegal 8-bit arithmetic instruction.";
         }
     } else {
         line->error = true;
@@ -113,19 +113,19 @@ void mnemonic_calc16(LineData* line, uint8_t code)
     if (mnemonic_format_test(line, 4, TokenType::Operand, TokenType::Split, TokenType::Operand)) {
         auto op1 = operandTable[line->token[1].second];
         auto op2 = operandTable[line->token[3].second];
-        if (op1 == Operand::BC && op2 == Operand::A) {
+        if (mne == Mnemonic::ADD && op1 == Operand::BC && op2 == Operand::A) {
             ML_ADD_A_C;
             ML_LD_C_A;
             ML_JR_NC(1);
             ML_INC_B;
             return;
-        } else if (op1 == Operand::DE && op2 == Operand::A) {
+        } else if (mne == Mnemonic::ADD && op1 == Operand::DE && op2 == Operand::A) {
             ML_ADD_A_E;
             ML_LD_E_A;
             ML_JR_NC(1);
             ML_INC_D;
             return;
-        } else if (op1 == Operand::HL && op2 == Operand::A) {
+        } else if (mne == Mnemonic::ADD && op1 == Operand::HL && op2 == Operand::A) {
             ML_ADD_A_L;
             ML_LD_L_A;
             ML_JR_NC(1);

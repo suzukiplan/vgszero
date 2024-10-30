@@ -1,0 +1,10 @@
+                    push      de                            ;[0000] d5
+                    ld        e,(ix+$00)                    ;[0001] dd 5e 00
+                    ld        d,(ix+$01)                    ;[0004] dd 56 01
+                    add       hl,de                         ;[0007] 19
+                    pop       de                            ;[0008] d1
+                    push      de                            ;[0009] d5
+                    ld        e,(iy+$00)                    ;[000a] fd 5e 00
+                    ld        d,(iy+$01)                    ;[000d] fd 56 01
+                    add       hl,de                         ;[0010] 19
+                    pop       de                            ;[0011] d1

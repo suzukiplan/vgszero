@@ -225,6 +225,10 @@ struct name3 <- name[3] {
     var1 ds.b 1     ; name3.var1 = $C02D ($C000 + 15 * 3)
 }
 
+struct name4 {
+    var1 ds.b 1     ; name4.var1 = 0
+}
+
 // Array access
 // name[0].var1 = $C000
 // name[1].var1 = $C00F
@@ -232,8 +236,10 @@ struct name3 <- name[3] {
 ```
 
 - You can define a structure with:
+  - `struct name`
+    - Define a structure with a starting address of 0
   - `struct name start_address`
-    - Define structure to address.
+    - Define a structure to address.
   - `struct name <- previous`
     - After a specific structure.
     - `previous` must be defined on the line before this declaration.

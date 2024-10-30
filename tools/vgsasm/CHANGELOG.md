@@ -1,11 +1,31 @@
 # Change log
 
+## Version 0.12 (beta-12)
+
+- Fixed a bug at the beginning of file parsing that caused errors in lines that failed to parse to be ignored.
+- Correct error message of `DW`
+- Correct error message of `EX`
+
+## Version 0.11 (beta-11)
+
+- `#macro` must appear at the beginning of the line.
+- Fixed an error message when the start scope of a `#macro` was not defined at the expected position.
+- Fixed message when `d` in `IX-d` is out of range error.
+- Fixed a bug that `ADD (HL+3)` etc. were assembled as `ADD (HL)` without error.
+- Fixed a bug that caused `SUB {BC|DE|HL}, A` to incorrectly become `ADD {BC|DE|HL},A`.
+
 ## Version 0.10 (beta-10)
 
+- Support unspecified address structure
+- Forbidden to include `. ` in the structure and the field name are prohibited.
+- bugfix: Crash sometimes occurs when defining a malformed `struct`
+- bugfix: Crash if `}` is specified as the last line without a corresponding `{`.
 - numeric error message detailed
 - `offset`: make error if not contained `.` at the name
 - `offset`: Just in case a field name contains a dot
 - `org`: make error judgment strict
+- `sizeof`: correct error message
+- `struct`: correct error message
 
 ## Version 0.9 (beta-9)
 

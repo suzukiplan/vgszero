@@ -1,0 +1,4 @@
+                    add       ix,bc                         ;[0000] dd 09
+                    add       ix,de                         ;[0002] dd 19
+                    add       ix,ix                         ;[0004] dd 29
+                    add       ix,sp                         ;[0006] dd 39

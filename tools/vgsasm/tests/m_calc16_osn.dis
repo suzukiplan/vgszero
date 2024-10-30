@@ -1,0 +1,105 @@
+                    push      de                            ;[0000] d5
+                    ld        d,$80                         ;[0001] 16 80
+                    ld        e,$00                         ;[0003] 1e 00
+                    add       hl,de                         ;[0005] 19
+                    pop       de                            ;[0006] d1
+                    push      de                            ;[0007] d5
+                    ld        d,$ff                         ;[0008] 16 ff
+                    ld        e,$ff                         ;[000a] 1e ff
+                    add       hl,de                         ;[000c] 19
+                    pop       de                            ;[000d] d1
+                    push      de                            ;[000e] d5
+                    ld        d,$00                         ;[000f] 16 00
+                    ld        e,$00                         ;[0011] 1e 00
+                    add       hl,de                         ;[0013] 19
+                    pop       de                            ;[0014] d1
+                    push      de                            ;[0015] d5
+                    ld        d,$00                         ;[0016] 16 00
+                    ld        e,$01                         ;[0018] 1e 01
+                    add       hl,de                         ;[001a] 19
+                    pop       de                            ;[001b] d1
+                    push      de                            ;[001c] d5
+                    ld        d,$7f                         ;[001d] 16 7f
+                    ld        e,$ff                         ;[001f] 1e ff
+                    add       hl,de                         ;[0021] 19
+                    pop       de                            ;[0022] d1
+                    push      de                            ;[0023] d5
+                    ld        d,$80                         ;[0024] 16 80
+                    ld        e,$00                         ;[0026] 1e 00
+                    add       hl,de                         ;[0028] 19
+                    pop       de                            ;[0029] d1
+                    push      de                            ;[002a] d5
+                    ld        d,$ff                         ;[002b] 16 ff
+                    ld        e,$ff                         ;[002d] 1e ff
+                    add       hl,de                         ;[002f] 19
+                    pop       de                            ;[0030] d1
+                    push      de                            ;[0031] d5
+                    ld        d,$80                         ;[0032] 16 80
+                    ld        e,$00                         ;[0034] 1e 00
+                    add       ix,de                         ;[0036] dd 19
+                    pop       de                            ;[0038] d1
+                    push      de                            ;[0039] d5
+                    ld        d,$ff                         ;[003a] 16 ff
+                    ld        e,$ff                         ;[003c] 1e ff
+                    add       ix,de                         ;[003e] dd 19
+                    pop       de                            ;[0040] d1
+                    push      de                            ;[0041] d5
+                    ld        d,$00                         ;[0042] 16 00
+                    ld        e,$00                         ;[0044] 1e 00
+                    add       ix,de                         ;[0046] dd 19
+                    pop       de                            ;[0048] d1
+                    push      de                            ;[0049] d5
+                    ld        d,$00                         ;[004a] 16 00
+                    ld        e,$01                         ;[004c] 1e 01
+                    add       ix,de                         ;[004e] dd 19
+                    pop       de                            ;[0050] d1
+                    push      de                            ;[0051] d5
+                    ld        d,$7f                         ;[0052] 16 7f
+                    ld        e,$ff                         ;[0054] 1e ff
+                    add       ix,de                         ;[0056] dd 19
+                    pop       de                            ;[0058] d1
+                    push      de                            ;[0059] d5
+                    ld        d,$80                         ;[005a] 16 80
+                    ld        e,$00                         ;[005c] 1e 00
+                    add       ix,de                         ;[005e] dd 19
+                    pop       de                            ;[0060] d1
+                    push      de                            ;[0061] d5
+                    ld        d,$ff                         ;[0062] 16 ff
+                    ld        e,$ff                         ;[0064] 1e ff
+                    add       ix,de                         ;[0066] dd 19
+                    pop       de                            ;[0068] d1
+                    push      de                            ;[0069] d5
+                    ld        d,$80                         ;[006a] 16 80
+                    ld        e,$00                         ;[006c] 1e 00
+                    add       ix,de                         ;[006e] dd 19
+                    pop       de                            ;[0070] d1
+                    push      de                            ;[0071] d5
+                    ld        d,$ff                         ;[0072] 16 ff
+                    ld        e,$ff                         ;[0074] 1e ff
+                    add       ix,de                         ;[0076] dd 19
+                    pop       de                            ;[0078] d1
+                    push      de                            ;[0079] d5
+                    ld        d,$00                         ;[007a] 16 00
+                    ld        e,$00                         ;[007c] 1e 00
+                    add       ix,de                         ;[007e] dd 19
+                    pop       de                            ;[0080] d1
+                    push      de                            ;[0081] d5
+                    ld        d,$00                         ;[0082] 16 00
+                    ld        e,$01                         ;[0084] 1e 01
+                    add       ix,de                         ;[0086] dd 19
+                    pop       de                            ;[0088] d1
+                    push      de                            ;[0089] d5
+                    ld        d,$7f                         ;[008a] 16 7f
+                    ld        e,$ff                         ;[008c] 1e ff
+                    add       ix,de                         ;[008e] dd 19
+                    pop       de                            ;[0090] d1
+                    push      de                            ;[0091] d5
+                    ld        d,$80                         ;[0092] 16 80
+                    ld        e,$00                         ;[0094] 1e 00
+                    add       ix,de                         ;[0096] dd 19
+                    pop       de                            ;[0098] d1
+                    push      de                            ;[0099] d5
+                    ld        d,$ff                         ;[009a] 16 ff
+                    ld        e,$ff                         ;[009c] 1e ff
+                    add       ix,de                         ;[009e] dd 19
+                    pop       de                            ;[00a0] d1

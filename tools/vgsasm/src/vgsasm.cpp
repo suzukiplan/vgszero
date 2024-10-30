@@ -172,6 +172,9 @@ static int assemble(std::vector<LineData*> lines)
             return -1;
         }
     }
+    if (check_error(lines)) {
+        return -1;
+    }
     int retryCount = 0;
     while (struct_check_size()) {
         if (check_error(lines)) {

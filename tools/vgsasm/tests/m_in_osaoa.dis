@@ -1,0 +1,8 @@
+                    in        a,(c)                         ;[0000] ed 78
+                    in        b,(c)                         ;[0002] ed 40
+                    in        c,(c)                         ;[0004] ed 48
+                    in        d,(c)                         ;[0006] ed 50
+                    in        e,(c)                         ;[0008] ed 58
+                    in        (c)                           ;[000a] ed 70
+                    in        h,(c)                         ;[000c] ed 60
+                    in        l,(c)                         ;[000e] ed 68

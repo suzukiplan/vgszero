@@ -1,0 +1,17 @@
+                    dec       a                             ;[0000] 3d
+                    dec       b                             ;[0001] 05
+                    dec       c                             ;[0002] 0d
+                    dec       d                             ;[0003] 15
+                    dec       e                             ;[0004] 1d
+                    dec       h                             ;[0005] 25
+                    dec       l                             ;[0006] 2d
+                    dec       ixh                           ;[0007] dd 25
+                    dec       ixl                           ;[0009] dd 2d
+                    dec       iyh                           ;[000b] fd 25
+                    dec       iyl                           ;[000d] fd 2d
+                    dec       bc                            ;[000f] 0b
+                    dec       de                            ;[0010] 1b
+                    dec       hl                            ;[0011] 2b
+                    dec       sp                            ;[0012] 3b
+                    dec       ix                            ;[0013] dd 2b
+                    dec       iy                            ;[0015] fd 2b

@@ -69,7 +69,7 @@ void mnemonic_shift(LineData* line, uint8_t code)
                 return;
             }
         } else {
-            if (!mnemonic_range(line, n, 0, 128)) {
+            if (!mnemonic_range(line, -n, -128, 0)) {
                 return;
             }
             n = 0 - n;
@@ -102,7 +102,7 @@ void mnemonic_shift(LineData* line, uint8_t code)
                 return;
             }
         } else {
-            if (!mnemonic_range(line, n, 0, 128)) {
+            if (!mnemonic_range(line, -n, -128, 0)) {
                 return;
             }
             n = 0 - n;

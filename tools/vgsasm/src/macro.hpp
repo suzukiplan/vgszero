@@ -28,6 +28,15 @@ void macro_parse(LineData* line)
     if (line->token.empty()) {
         return;
     }
+    for (auto it = line->token.begin(); it != line->token.end(); it++) {
+        if (it->second == "#MACRO") {
+            if (it != line->token.begin()) {
+                line->error = true;
+                line->errmsg = "`#macro` must appear at the beginning of the line.";
+                return;
+            }
+        }
+    }
     auto it = line->token.begin();
     if (it->second != "#MACRO") {
         return;
@@ -215,7 +224,8 @@ void macro_syntax_check(std::vector<LineData*>* lines)
                     storeTokenToMacro = true;
                 } else {
                     line->error = true;
-                    line->errmsg = "Invalid #macro syntax. (Unexpected token: " + token->second + ")";
+                    line->errmsg = "Detect symbols that are not in the start scope of the macro: " + token->second;
+                    searchScopeBegin = false;
                 }
             } else if (token->first == TokenType::Macro) {
                 token->first = TokenType::Delete;

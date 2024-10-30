@@ -1,0 +1,10 @@
+                    inc       (ix-$80)                      ;[0000] dd 34 80
+                    inc       (ix-$01)                      ;[0003] dd 34 ff
+                    inc       (ix+$00)                      ;[0006] dd 34 00
+                    inc       (ix+$01)                      ;[0009] dd 34 01
+                    inc       (ix+$7f)                      ;[000c] dd 34 7f
+                    inc       (iy-$80)                      ;[000f] fd 34 80
+                    inc       (iy-$01)                      ;[0012] fd 34 ff
+                    inc       (iy+$00)                      ;[0015] fd 34 00
+                    inc       (iy+$01)                      ;[0018] fd 34 01
+                    inc       (iy+$7f)                      ;[001b] fd 34 7f

@@ -1,0 +1,8 @@
+ADD 0
+ADC 0
+SUB 0
+SBC 0
+CP 0
+AND 0
+OR 0
+XOR 0

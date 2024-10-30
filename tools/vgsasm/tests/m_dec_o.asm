@@ -1,0 +1,17 @@
+dec a
+dec b
+dec c
+dec d
+dec e
+dec h
+dec l
+dec ixh
+dec ixl
+dec iyh
+dec iyl
+dec bc
+dec de
+dec hl
+dec sp
+dec ix
+dec iy

@@ -1,0 +1,4 @@
+                    add       iy,bc                         ;[0000] fd 09
+                    add       iy,de                         ;[0002] fd 19
+                    add       iy,iy                         ;[0004] fd 29
+                    add       iy,sp                         ;[0006] fd 39

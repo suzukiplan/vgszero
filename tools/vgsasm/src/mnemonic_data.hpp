@@ -84,7 +84,7 @@ void mnemonic_DW(LineData* line)
             }
             default:
                 line->error = true;
-                line->errmsg = "Unexpected symbols detected in DB: " + it->second;
+                line->errmsg = "Unexpected symbols detected in DW: " + it->second;
                 return;
         }
         if (it + 1 != line->token.end()) {

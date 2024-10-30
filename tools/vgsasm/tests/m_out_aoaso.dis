@@ -1,0 +1,7 @@
+                    out       (c),a                         ;[0000] ed 79
+                    out       (c),b                         ;[0002] ed 41
+                    out       (c),c                         ;[0004] ed 49
+                    out       (c),d                         ;[0006] ed 51
+                    out       (c),e                         ;[0008] ed 59
+                    out       (c),h                         ;[000a] ed 61
+                    out       (c),l                         ;[000c] ed 69

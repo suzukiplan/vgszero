@@ -1,4 +1,3 @@
-make[1]: Entering directory '/home/suzukiplan/dev/vgsasm/tests'
 ./assignment
 N: A = B        --->  `LD` `A` `,` `B`
 N: A += B       --->  `ADD` `A` `,` `B`
@@ -373,4 +372,840 @@ E: org 65536    --->  `org` address is incorrect: 65536
 E: org 65535 org --->  Unexpected symbol: ORG
 E: org 65534    --->  Multiple orgs must be written in ascending order from the beginning of the line.
 E: org 65535    --->  Multiple orgs must be written in ascending order from the beginning of the line.
-make[1]: Leaving directory '/home/suzukiplan/dev/vgsasm/tests'
+./sizeof_parse
+N: sizeof(hoge) --->  sizeof(HOGE)
+E: sizeof hoge) --->  No `(` in sizeof syntax.
+E: sizeof (+)   --->  No structure name specified in sizeof syntax.
+E: sizeof (hoge --->  No `)` in sizeof syntax.
+./sizeof_replace
+N: sizeof(dummy) --->  0x3
+E: sizeof(dummyy) --->  Undefined structure DUMMYY is specified in sizeof.
+Testing: struct
+E: `struct` must appear at the beginning of the line. ... OK
+E: Duplicate field name `VAR1` in struct `HOGE` ... OK
+E: Invalid structure name: HOGE.COM ... OK
+E: Incorrect syntax for struct arrow. ... OK
+E: Incorrect syntax for struct arrow. ... OK
+E: Incorrect syntax for struct arrow. ... OK
+E: Unexpected symbol: ] ... OK
+E: Unexpected symbol: HIGE ... OK
+E: Unexpected symbol: 2 ... OK
+E: struct array must have a value of 1 or more: 0 ... OK
+E: Incorrect syntax for struct: ADDR ... OK
+N: struct_noaddr2
+../vgsasm struct_noaddr2.asm -v
+struct_noaddr2.asm:0005 $0000 <LD> <HL> `,` 0x0
+diff struct_noaddr2.bin struct_noaddr2.exp
+E: Invalid `}` without corresponding `{`. ... OK
+E: The scope `{` specified in this line is not closed with `}`. ... OK
+E: It must be defined on the line after the definition of struct specified by the arrow operator. ... OK
+E: It must be defined on the line after the definition of struct specified by the arrow operator. ... OK
+E: Invalid structure field name: VAR.FOO ... OK
+E: Invalid field VAR1 in structure HOGE ... OK
+E: Invalid field VAR1 in structure HOGE ... OK
+E: Specify non-numeric number of field VAR1 in structure HOGE: AAA ... OK
+E: Unknown structure name FOO specified in field VAR1 of structure HOGE ... OK
+E: Detects circular references between structures ... OK
+E: Unknown field name in structure HOGE: VAR2 ... OK
+E: Illegal array structure element: ] ... OK
+E: Illegal array structure element: FOO ... OK
+E: Illegal array structure element: 2 ... OK
+E: Invalid array field designation: VAR1 ... OK
+E: Unknown field name in structure HOGE: VAR2 ... OK
+N: struct_normal
+../vgsasm struct_normal.asm -v
+struct_normal.asm:0019 $0000 <LD> <HL> `,` 0xC000
+struct_normal.asm:0020 $0003 <LD> <HL> `,` 0xC001
+struct_normal.asm:0021 $0006 <LD> <HL> `,` 0xC003
+struct_normal.asm:0023 $0009 <LD> <DE> `,` 0xC005
+struct_normal.asm:0024 $000C <LD> <DE> `,` 0xC006
+struct_normal.asm:0025 $000F <LD> <DE> `,` 0xC008
+struct_normal.asm:0027 $0012 <LD> <BC> `,` 0xC00F
+struct_normal.asm:0028 $0015 <LD> <BC> `,` 0xC010
+struct_normal.asm:0029 $0018 <LD> <BC> `,` 0xC012
+struct_normal.asm:0031 $001B <LD> <BC> `,` 0xC01E
+struct_normal.asm:0032 $001E <LD> <BC> `,` 0xC01F
+struct_normal.asm:0033 $0021 <LD> <BC> `,` 0xC021
+diff struct_normal.bin struct_normal.exp
+Testing: macro
+E: `#macro` must appear at the beginning of the line. ... OK
+E: Invalid #macro syntax. ... OK
+E: Duplicate #macro names are defined: FOO ... OK
+E: Invalid #macro syntax. (Parentheses) ... OK
+E: Invalid #macro syntax. (Arguments not separated by commas) ... OK
+E: Invalid #macro syntax. (Invalid argument name: HL) ... OK
+E: Invalid #macro syntax. (Duplicate argument names: ARG1) ... OK
+E: `(` is not closed with `)`. ... OK
+E: Unspecified bracket for macro call. ... OK
+E: Unexpected symbol: A ... OK
+E: Unexpected symbol: B ... OK
+E: A macro argument name conflict with the name used for structs, defines, etc.: ARG1 ... OK
+E: Detect symbols that are not in the start scope of the macro: LD ... OK
+E: Macro calls are circulating: HOGE ... OK
+E: Unexpected macro argument symbol: 2 ... OK
+E: Invalid macro argument type: ) ... OK
+E: Invalid macro argument type: HL ... OK
+E: Macro argument mismatch: FOO ... OK
+N: macro_normal
+../vgsasm macro_normal.asm -v
+macro_normal.asm:0004 $0000 <LD> <BC> `,` 0x1
+macro_normal.asm:0005 $0003 <LD> <DE> `,` 0x5
+macro_normal.asm:0006 $0006 <LD> <HL> `,` 0xF
+../lib/vgszero.inc:0091 $0009 <PUSH> <BC>
+../lib/vgszero.inc:0092 $000A <PUSH> <DE>
+../lib/vgszero.inc:0093 $000B <PUSH> <HL>
+../lib/vgszero.inc:0094 $000C <LD> <BC> `,` 0xC000
+../lib/vgszero.inc:0095 $000F <LD> <DE> `,` `$0`
+../lib/vgszero.inc:0096 $0012 <LD> <HL> `,` 0x7
+../lib/vgszero.inc:0097 $0015 <OUT> _( 0xC3 )_ `,` <A>
+../lib/vgszero.inc:0098 $0017 <POP> <HL>
+../lib/vgszero.inc:0099 $0018 <POP> <DE>
+../lib/vgszero.inc:0100 $0019 <POP> <BC>
+../lib/vgszero.inc:0105 $001A <PUSH> <AF>
+../lib/vgszero.inc:0106 $001B <PUSH> <BC>
+../lib/vgszero.inc:0107 $001C <PUSH> <HL>
+../lib/vgszero.inc:0108 $001D <LD> <BC> `,` 0xC020
+../lib/vgszero.inc:0109 $0020 <LD> <A> `,` 0x20
+../lib/vgszero.inc:0110 $0022 <LD> <HL> `,` 0x400
+../lib/vgszero.inc:0111 $0025 <OUT> _( 0xC3 )_ `,` <A>
+../lib/vgszero.inc:0112 $0027 <POP> <HL>
+../lib/vgszero.inc:0113 $0028 <POP> <BC>
+../lib/vgszero.inc:0114 $0029 <POP> <AF>
+macro_normal.asm:0017 $002A <CALL> `HIGE`
+macro_normal.asm:0004 $002D <LD> <BC> `,` 0x1
+macro_normal.asm:0005 $0030 <LD> <DE> `,` 0x2
+macro_normal.asm:0006 $0033 <LD> <HL> `,` 0xC000
+macro_normal.asm:0020 $0036 HIGE:
+macro_normal.asm:0021 $0036 <RET>
+                :0000 $0037 $0:
+                :0000 $0037 <DB> 0x53 `,` 0x74 `,` 0x72 `,` 0x69 `,` 0x6E `,` 0x67 `,` 0x0
+diff macro_normal.bin macro_normal.exp
+Testing: mnemonic bits
+N: m_bit_nso
+../vgsasm m_bit_nso.asm -v
+   m_bit_nso.asm:0001 $0000 <BIT> 0x0 `,` <A>
+   m_bit_nso.asm:0002 $0002 <BIT> 0x1 `,` <B>
+   m_bit_nso.asm:0003 $0004 <BIT> 0x2 `,` <C>
+   m_bit_nso.asm:0004 $0006 <BIT> 0x3 `,` <D>
+   m_bit_nso.asm:0005 $0008 <BIT> 0x4 `,` <E>
+   m_bit_nso.asm:0006 $000A <BIT> 0x5 `,` <H>
+   m_bit_nso.asm:0007 $000C <BIT> 0x6 `,` <L>
+   m_bit_nso.asm:0008 $000E <SET> 0x7 `,` <A>
+   m_bit_nso.asm:0009 $0010 <RES> 0x0 `,` <B>
+diff m_bit_nso.bin m_bit_nso.exp
+E: Numerical range incorrect: 8 ... OK
+E: Illegal BIT/SET/RES instruction. ... OK
+N: m_bit_nsaoa
+../vgsasm m_bit_nsaoa.asm -v
+ m_bit_nsaoa.asm:0001 $0000 <BIT> 0x0 `,` _( <HL> )_
+ m_bit_nsaoa.asm:0002 $0002 <BIT> 0x7 `,` _( <IX> )_
+ m_bit_nsaoa.asm:0003 $0006 <BIT> 0x1 `,` _( <IY> )_
+ m_bit_nsaoa.asm:0004 $000A <SET> 0x6 `,` _( <IX> )_
+ m_bit_nsaoa.asm:0005 $000E <RES> 0x4 `,` _( <IY> )_
+diff m_bit_nsaoa.bin m_bit_nsaoa.exp
+E: Numerical range incorrect: 8 ... OK
+E: Illegal BIT/SET/RES instruction. ... OK
+N: m_bit_nsaopna
+../vgsasm m_bit_nsaopna.asm -v
+m_bit_nsaopna.asm:0001 $0000 <BIT> 0x0 `,` _( <IX> `-` 0x80 )_
+m_bit_nsaopna.asm:0002 $0004 <BIT> 0x7 `,` _( <IX> `+` 0x7F )_
+m_bit_nsaopna.asm:0003 $0008 <BIT> 0x4 `,` _( <IY> `+` 0x0 )_
+m_bit_nsaopna.asm:0004 $000C <BIT> 0x5 `,` _( <IY> `-` 0x1 )_
+diff m_bit_nsaopna.bin m_bit_nsaopna.exp
+E: Numerical range incorrect: 8 ... OK
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 128 ... OK
+E: Illegal BIT/SET/RES instruction. ... OK
+Testing: mnemonic calc8
+N: m_calc8_o
+../vgsasm m_calc8_o.asm -v
+   m_calc8_o.asm:0001 $0000 <ADD> <A>
+   m_calc8_o.asm:0002 $0001 <ADD> <B>
+   m_calc8_o.asm:0003 $0002 <ADD> <C>
+   m_calc8_o.asm:0004 $0003 <ADD> <D>
+   m_calc8_o.asm:0005 $0004 <ADD> <E>
+   m_calc8_o.asm:0006 $0005 <ADD> <H>
+   m_calc8_o.asm:0007 $0006 <ADD> <L>
+   m_calc8_o.asm:0008 $0007 <ADD> <IXH>
+   m_calc8_o.asm:0009 $0009 <ADD> <IXL>
+   m_calc8_o.asm:0010 $000B <ADD> <IYH>
+   m_calc8_o.asm:0011 $000D <ADD> <IYL>
+   m_calc8_o.asm:0013 $000F <ADC> <A>
+   m_calc8_o.asm:0014 $0010 <ADC> <B>
+   m_calc8_o.asm:0015 $0011 <ADC> <C>
+   m_calc8_o.asm:0016 $0012 <ADC> <D>
+   m_calc8_o.asm:0017 $0013 <ADC> <E>
+   m_calc8_o.asm:0018 $0014 <ADC> <H>
+   m_calc8_o.asm:0019 $0015 <ADC> <L>
+   m_calc8_o.asm:0020 $0016 <ADC> <IXH>
+   m_calc8_o.asm:0021 $0018 <ADC> <IXL>
+   m_calc8_o.asm:0022 $001A <ADC> <IYH>
+   m_calc8_o.asm:0023 $001C <ADC> <IYL>
+   m_calc8_o.asm:0025 $001E <SUB> <A>
+   m_calc8_o.asm:0026 $001F <SUB> <B>
+   m_calc8_o.asm:0027 $0020 <SUB> <C>
+   m_calc8_o.asm:0028 $0021 <SUB> <D>
+   m_calc8_o.asm:0029 $0022 <SUB> <E>
+   m_calc8_o.asm:0030 $0023 <SUB> <H>
+   m_calc8_o.asm:0031 $0024 <SUB> <L>
+   m_calc8_o.asm:0032 $0025 <SUB> <IXH>
+   m_calc8_o.asm:0033 $0027 <SUB> <IXL>
+   m_calc8_o.asm:0034 $0029 <SUB> <IYH>
+   m_calc8_o.asm:0035 $002B <SUB> <IYL>
+   m_calc8_o.asm:0037 $002D <SBC> <A>
+   m_calc8_o.asm:0038 $002E <SBC> <B>
+   m_calc8_o.asm:0039 $002F <SBC> <C>
+   m_calc8_o.asm:0040 $0030 <SBC> <D>
+   m_calc8_o.asm:0041 $0031 <SBC> <E>
+   m_calc8_o.asm:0042 $0032 <SBC> <H>
+   m_calc8_o.asm:0043 $0033 <SBC> <L>
+   m_calc8_o.asm:0044 $0034 <SBC> <IXH>
+   m_calc8_o.asm:0045 $0036 <SBC> <IXL>
+   m_calc8_o.asm:0046 $0038 <SBC> <IYH>
+   m_calc8_o.asm:0047 $003A <SBC> <IYL>
+   m_calc8_o.asm:0049 $003C <CP> <A>
+   m_calc8_o.asm:0050 $003D <CP> <B>
+   m_calc8_o.asm:0051 $003E <CP> <C>
+   m_calc8_o.asm:0052 $003F <CP> <D>
+   m_calc8_o.asm:0053 $0040 <CP> <E>
+   m_calc8_o.asm:0054 $0041 <CP> <H>
+   m_calc8_o.asm:0055 $0042 <CP> <L>
+   m_calc8_o.asm:0056 $0043 <CP> <IXH>
+   m_calc8_o.asm:0057 $0045 <CP> <IXL>
+   m_calc8_o.asm:0058 $0047 <CP> <IYH>
+   m_calc8_o.asm:0059 $0049 <CP> <IYL>
+   m_calc8_o.asm:0061 $004B <AND> <A>
+   m_calc8_o.asm:0062 $004C <AND> <B>
+   m_calc8_o.asm:0063 $004D <AND> <C>
+   m_calc8_o.asm:0064 $004E <AND> <D>
+   m_calc8_o.asm:0065 $004F <AND> <E>
+   m_calc8_o.asm:0066 $0050 <AND> <H>
+   m_calc8_o.asm:0067 $0051 <AND> <L>
+   m_calc8_o.asm:0068 $0052 <AND> <IXH>
+   m_calc8_o.asm:0069 $0054 <AND> <IXL>
+   m_calc8_o.asm:0070 $0056 <AND> <IYH>
+   m_calc8_o.asm:0071 $0058 <AND> <IYL>
+   m_calc8_o.asm:0073 $005A <OR> <A>
+   m_calc8_o.asm:0074 $005B <OR> <B>
+   m_calc8_o.asm:0075 $005C <OR> <C>
+   m_calc8_o.asm:0076 $005D <OR> <D>
+   m_calc8_o.asm:0077 $005E <OR> <E>
+   m_calc8_o.asm:0078 $005F <OR> <H>
+   m_calc8_o.asm:0079 $0060 <OR> <L>
+   m_calc8_o.asm:0080 $0061 <OR> <IXH>
+   m_calc8_o.asm:0081 $0063 <OR> <IXL>
+   m_calc8_o.asm:0082 $0065 <OR> <IYH>
+   m_calc8_o.asm:0083 $0067 <OR> <IYL>
+   m_calc8_o.asm:0085 $0069 <XOR> <A>
+   m_calc8_o.asm:0086 $006A <XOR> <B>
+   m_calc8_o.asm:0087 $006B <XOR> <C>
+   m_calc8_o.asm:0088 $006C <XOR> <D>
+   m_calc8_o.asm:0089 $006D <XOR> <E>
+   m_calc8_o.asm:0090 $006E <XOR> <H>
+   m_calc8_o.asm:0091 $006F <XOR> <L>
+   m_calc8_o.asm:0092 $0070 <XOR> <IXH>
+   m_calc8_o.asm:0093 $0072 <XOR> <IXL>
+   m_calc8_o.asm:0094 $0074 <XOR> <IYH>
+   m_calc8_o.asm:0095 $0076 <XOR> <IYL>
+diff m_calc8_o.bin m_calc8_o.exp
+E: Illegal 8-bit arithmetic instruction. ... OK
+N: m_calc8_n
+../vgsasm m_calc8_n.asm -v
+   m_calc8_n.asm:0001 $0000 <ADD> 0x0
+   m_calc8_n.asm:0002 $0002 <ADC> 0x0
+   m_calc8_n.asm:0003 $0004 <SUB> 0x0
+   m_calc8_n.asm:0004 $0006 <SBC> 0x0
+   m_calc8_n.asm:0005 $0008 <CP> 0x0
+   m_calc8_n.asm:0006 $000A <AND> 0x0
+   m_calc8_n.asm:0007 $000C <OR> 0x0
+   m_calc8_n.asm:0008 $000E <XOR> 0x0
+diff m_calc8_n.bin m_calc8_n.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 256 ... OK
+N: m_calc8_n_range3
+../vgsasm m_calc8_n_range3.asm -v
+m_calc8_n_range3.asm:0001 $0000 <ADD> 0xFFFFFF80
+m_calc8_n_range3.asm:0002 $0002 <ADD> 0xFFFFFFFF
+m_calc8_n_range3.asm:0003 $0004 <ADD> 0x0
+m_calc8_n_range3.asm:0004 $0006 <ADD> 0x1
+m_calc8_n_range3.asm:0005 $0008 <ADD> 0x7F
+m_calc8_n_range3.asm:0006 $000A <ADD> 0x80
+m_calc8_n_range3.asm:0007 $000C <ADD> 0xFF
+diff m_calc8_n_range3.bin m_calc8_n_range3.exp
+N: m_calc8_ao
+../vgsasm m_calc8_ao.asm -v
+  m_calc8_ao.asm:0001 $0000 <ADD> _( <HL> )_
+  m_calc8_ao.asm:0002 $0001 <ADD> _( <IX> )_
+  m_calc8_ao.asm:0003 $0004 <ADD> _( <IY> )_
+  m_calc8_ao.asm:0004 $0007 <ADD> _( <IX> `-` 0x80 )_
+  m_calc8_ao.asm:0005 $000A <ADD> _( <IY> `-` 0x80 )_
+  m_calc8_ao.asm:0006 $000D <ADD> _( <IX> `+` 0x7F )_
+  m_calc8_ao.asm:0007 $0010 <ADD> _( <IY> `+` 0x7F )_
+  m_calc8_ao.asm:0009 $0013 <ADC> _( <HL> )_
+  m_calc8_ao.asm:0010 $0014 <ADC> _( <IX> )_
+  m_calc8_ao.asm:0011 $0017 <ADC> _( <IY> )_
+  m_calc8_ao.asm:0012 $001A <ADC> _( <IX> `-` 0x80 )_
+  m_calc8_ao.asm:0013 $001D <ADC> _( <IY> `-` 0x80 )_
+  m_calc8_ao.asm:0014 $0020 <ADC> _( <IX> `+` 0x7F )_
+  m_calc8_ao.asm:0015 $0023 <ADC> _( <IY> `+` 0x7F )_
+  m_calc8_ao.asm:0017 $0026 <SUB> _( <HL> )_
+  m_calc8_ao.asm:0018 $0027 <SUB> _( <IX> )_
+  m_calc8_ao.asm:0019 $002A <SUB> _( <IY> )_
+  m_calc8_ao.asm:0020 $002D <SUB> _( <IX> `-` 0x80 )_
+  m_calc8_ao.asm:0021 $0030 <SUB> _( <IY> `-` 0x80 )_
+  m_calc8_ao.asm:0022 $0033 <SUB> _( <IX> `+` 0x7F )_
+  m_calc8_ao.asm:0023 $0036 <SUB> _( <IY> `+` 0x7F )_
+  m_calc8_ao.asm:0025 $0039 <SBC> _( <HL> )_
+  m_calc8_ao.asm:0026 $003A <SBC> _( <IX> )_
+  m_calc8_ao.asm:0027 $003D <SBC> _( <IY> )_
+  m_calc8_ao.asm:0028 $0040 <SBC> _( <IX> `-` 0x80 )_
+  m_calc8_ao.asm:0029 $0043 <SBC> _( <IY> `-` 0x80 )_
+  m_calc8_ao.asm:0030 $0046 <SBC> _( <IX> `+` 0x7F )_
+  m_calc8_ao.asm:0031 $0049 <SBC> _( <IY> `+` 0x7F )_
+  m_calc8_ao.asm:0033 $004C <CP> _( <HL> )_
+  m_calc8_ao.asm:0034 $004D <CP> _( <IX> )_
+  m_calc8_ao.asm:0035 $0050 <CP> _( <IY> )_
+  m_calc8_ao.asm:0036 $0053 <CP> _( <IX> `-` 0x80 )_
+  m_calc8_ao.asm:0037 $0056 <CP> _( <IY> `-` 0x80 )_
+  m_calc8_ao.asm:0038 $0059 <CP> _( <IX> `+` 0x7F )_
+  m_calc8_ao.asm:0039 $005C <CP> _( <IY> `+` 0x7F )_
+  m_calc8_ao.asm:0041 $005F <AND> _( <HL> )_
+  m_calc8_ao.asm:0042 $0060 <AND> _( <IX> )_
+  m_calc8_ao.asm:0043 $0063 <AND> _( <IY> )_
+  m_calc8_ao.asm:0044 $0066 <AND> _( <IX> `-` 0x80 )_
+  m_calc8_ao.asm:0045 $0069 <AND> _( <IY> `-` 0x80 )_
+  m_calc8_ao.asm:0046 $006C <AND> _( <IX> `+` 0x7F )_
+  m_calc8_ao.asm:0047 $006F <AND> _( <IY> `+` 0x7F )_
+  m_calc8_ao.asm:0049 $0072 <OR> _( <HL> )_
+  m_calc8_ao.asm:0050 $0073 <OR> _( <IX> )_
+  m_calc8_ao.asm:0051 $0076 <OR> _( <IY> )_
+  m_calc8_ao.asm:0052 $0079 <OR> _( <IX> `-` 0x80 )_
+  m_calc8_ao.asm:0053 $007C <OR> _( <IY> `-` 0x80 )_
+  m_calc8_ao.asm:0054 $007F <OR> _( <IX> `+` 0x7F )_
+  m_calc8_ao.asm:0055 $0082 <OR> _( <IY> `+` 0x7F )_
+  m_calc8_ao.asm:0057 $0085 <XOR> _( <HL> )_
+  m_calc8_ao.asm:0058 $0086 <XOR> _( <IX> )_
+  m_calc8_ao.asm:0059 $0089 <XOR> _( <IY> )_
+  m_calc8_ao.asm:0060 $008C <XOR> _( <IX> `-` 0x80 )_
+  m_calc8_ao.asm:0061 $008F <XOR> _( <IY> `-` 0x80 )_
+  m_calc8_ao.asm:0062 $0092 <XOR> _( <IX> `+` 0x7F )_
+  m_calc8_ao.asm:0063 $0095 <XOR> _( <IY> `+` 0x7F )_
+diff m_calc8_ao.bin m_calc8_ao.exp
+E: Illegal 8-bit arithmetic instruction. ... OK
+E: Illegal 8-bit arithmetic instruction. ... OK
+E: Illegal 8-bit arithmetic instruction. ... OK
+N: m_calc8_os
+../vgsasm m_calc8_os.asm -v
+  m_calc8_os.asm:0001 $0000 <ADD> <A>
+  m_calc8_os.asm:0002 $0001 <ADD> <B>
+  m_calc8_os.asm:0003 $0002 <ADD> <C>
+  m_calc8_os.asm:0004 $0003 <ADD> <D>
+  m_calc8_os.asm:0005 $0004 <ADD> <E>
+  m_calc8_os.asm:0006 $0005 <ADD> <H>
+  m_calc8_os.asm:0007 $0006 <ADD> <L>
+  m_calc8_os.asm:0008 $0007 <ADD> <IXH>
+  m_calc8_os.asm:0009 $0009 <ADD> <IXL>
+  m_calc8_os.asm:0010 $000B <ADD> <IYH>
+  m_calc8_os.asm:0011 $000D <ADD> <IYL>
+  m_calc8_os.asm:0013 $000F <ADC> <A>
+  m_calc8_os.asm:0014 $0010 <ADC> <B>
+  m_calc8_os.asm:0015 $0011 <ADC> <C>
+  m_calc8_os.asm:0016 $0012 <ADC> <D>
+  m_calc8_os.asm:0017 $0013 <ADC> <E>
+  m_calc8_os.asm:0018 $0014 <ADC> <H>
+  m_calc8_os.asm:0019 $0015 <ADC> <L>
+  m_calc8_os.asm:0020 $0016 <ADC> <IXH>
+  m_calc8_os.asm:0021 $0018 <ADC> <IXL>
+  m_calc8_os.asm:0022 $001A <ADC> <IYH>
+  m_calc8_os.asm:0023 $001C <ADC> <IYL>
+  m_calc8_os.asm:0025 $001E <SUB> <A>
+  m_calc8_os.asm:0026 $001F <SUB> <B>
+  m_calc8_os.asm:0027 $0020 <SUB> <C>
+  m_calc8_os.asm:0028 $0021 <SUB> <D>
+  m_calc8_os.asm:0029 $0022 <SUB> <E>
+  m_calc8_os.asm:0030 $0023 <SUB> <H>
+  m_calc8_os.asm:0031 $0024 <SUB> <L>
+  m_calc8_os.asm:0032 $0025 <SUB> <IXH>
+  m_calc8_os.asm:0033 $0027 <SUB> <IXL>
+  m_calc8_os.asm:0034 $0029 <SUB> <IYH>
+  m_calc8_os.asm:0035 $002B <SUB> <IYL>
+  m_calc8_os.asm:0037 $002D <SBC> <A>
+  m_calc8_os.asm:0038 $002E <SBC> <B>
+  m_calc8_os.asm:0039 $002F <SBC> <C>
+  m_calc8_os.asm:0040 $0030 <SBC> <D>
+  m_calc8_os.asm:0041 $0031 <SBC> <E>
+  m_calc8_os.asm:0042 $0032 <SBC> <H>
+  m_calc8_os.asm:0043 $0033 <SBC> <L>
+  m_calc8_os.asm:0044 $0034 <SBC> <IXH>
+  m_calc8_os.asm:0045 $0036 <SBC> <IXL>
+  m_calc8_os.asm:0046 $0038 <SBC> <IYH>
+  m_calc8_os.asm:0047 $003A <SBC> <IYL>
+  m_calc8_os.asm:0049 $003C <CP> <A>
+  m_calc8_os.asm:0050 $003D <CP> <B>
+  m_calc8_os.asm:0051 $003E <CP> <C>
+  m_calc8_os.asm:0052 $003F <CP> <D>
+  m_calc8_os.asm:0053 $0040 <CP> <E>
+  m_calc8_os.asm:0054 $0041 <CP> <H>
+  m_calc8_os.asm:0055 $0042 <CP> <L>
+  m_calc8_os.asm:0056 $0043 <CP> <IXH>
+  m_calc8_os.asm:0057 $0045 <CP> <IXL>
+  m_calc8_os.asm:0058 $0047 <CP> <IYH>
+  m_calc8_os.asm:0059 $0049 <CP> <IYL>
+  m_calc8_os.asm:0061 $004B <AND> <A>
+  m_calc8_os.asm:0062 $004C <AND> <B>
+  m_calc8_os.asm:0063 $004D <AND> <C>
+  m_calc8_os.asm:0064 $004E <AND> <D>
+  m_calc8_os.asm:0065 $004F <AND> <E>
+  m_calc8_os.asm:0066 $0050 <AND> <H>
+  m_calc8_os.asm:0067 $0051 <AND> <L>
+  m_calc8_os.asm:0068 $0052 <AND> <IXH>
+  m_calc8_os.asm:0069 $0054 <AND> <IXL>
+  m_calc8_os.asm:0070 $0056 <AND> <IYH>
+  m_calc8_os.asm:0071 $0058 <AND> <IYL>
+  m_calc8_os.asm:0073 $005A <OR> <A>
+  m_calc8_os.asm:0074 $005B <OR> <B>
+  m_calc8_os.asm:0075 $005C <OR> <C>
+  m_calc8_os.asm:0076 $005D <OR> <D>
+  m_calc8_os.asm:0077 $005E <OR> <E>
+  m_calc8_os.asm:0078 $005F <OR> <H>
+  m_calc8_os.asm:0079 $0060 <OR> <L>
+  m_calc8_os.asm:0080 $0061 <OR> <IXH>
+  m_calc8_os.asm:0081 $0063 <OR> <IXL>
+  m_calc8_os.asm:0082 $0065 <OR> <IYH>
+  m_calc8_os.asm:0083 $0067 <OR> <IYL>
+  m_calc8_os.asm:0085 $0069 <XOR> <A>
+  m_calc8_os.asm:0086 $006A <XOR> <B>
+  m_calc8_os.asm:0087 $006B <XOR> <C>
+  m_calc8_os.asm:0088 $006C <XOR> <D>
+  m_calc8_os.asm:0089 $006D <XOR> <E>
+  m_calc8_os.asm:0090 $006E <XOR> <H>
+  m_calc8_os.asm:0091 $006F <XOR> <L>
+  m_calc8_os.asm:0092 $0070 <XOR> <IXH>
+  m_calc8_os.asm:0093 $0072 <XOR> <IXL>
+  m_calc8_os.asm:0094 $0074 <XOR> <IYH>
+  m_calc8_os.asm:0095 $0076 <XOR> <IYL>
+diff m_calc8_os.bin m_calc8_os.exp
+E: Illegal 8-bit arithmetic instruction. ... OK
+E: Illegal 8-bit arithmetic instruction. ... OK
+Testing: mnemonic calc16
+N: m_calc16_add_bc_a
+../vgsasm m_calc16_add_bc_a.asm -v
+m_calc16_add_bc_a.asm:0001 $0000 <ADD> <BC> `,` <A>
+diff m_calc16_add_bc_a.bin m_calc16_add_bc_a.exp
+N: m_calc16_add_de_a
+../vgsasm m_calc16_add_de_a.asm -v
+m_calc16_add_de_a.asm:0001 $0000 <ADD> <DE> `,` <A>
+diff m_calc16_add_de_a.bin m_calc16_add_de_a.exp
+N: m_calc16_add_hl_a
+../vgsasm m_calc16_add_hl_a.asm -v
+m_calc16_add_hl_a.asm:0001 $0000 <ADD> <HL> `,` <A>
+diff m_calc16_add_hl_a.bin m_calc16_add_hl_a.exp
+N: m_calc16_hl_rr
+../vgsasm m_calc16_hl_rr.asm -v
+m_calc16_hl_rr.asm:0001 $0000 <ADD> <HL> `,` <BC>
+m_calc16_hl_rr.asm:0002 $0001 <ADD> <HL> `,` <DE>
+m_calc16_hl_rr.asm:0003 $0002 <ADD> <HL> `,` <HL>
+m_calc16_hl_rr.asm:0004 $0003 <ADD> <HL> `,` <SP>
+m_calc16_hl_rr.asm:0006 $0004 <ADC> <HL> `,` <BC>
+m_calc16_hl_rr.asm:0007 $0006 <ADC> <HL> `,` <DE>
+m_calc16_hl_rr.asm:0008 $0008 <ADC> <HL> `,` <HL>
+m_calc16_hl_rr.asm:0009 $000A <ADC> <HL> `,` <SP>
+m_calc16_hl_rr.asm:0011 $000C <SBC> <HL> `,` <BC>
+m_calc16_hl_rr.asm:0012 $000E <SBC> <HL> `,` <DE>
+m_calc16_hl_rr.asm:0013 $0010 <SBC> <HL> `,` <HL>
+m_calc16_hl_rr.asm:0014 $0012 <SBC> <HL> `,` <SP>
+diff m_calc16_hl_rr.bin m_calc16_hl_rr.exp
+E: Illegal 16-bit arithmetic instruction. ... OK
+N: m_calc16_ix_rr
+../vgsasm m_calc16_ix_rr.asm -v
+m_calc16_ix_rr.asm:0001 $0000 <ADD> <IX> `,` <BC>
+m_calc16_ix_rr.asm:0002 $0002 <ADD> <IX> `,` <DE>
+m_calc16_ix_rr.asm:0003 $0004 <ADD> <IX> `,` <IX>
+m_calc16_ix_rr.asm:0004 $0006 <ADD> <IX> `,` <SP>
+diff m_calc16_ix_rr.bin m_calc16_ix_rr.exp
+E: Illegal 16-bit arithmetic instruction. ... OK
+N: m_calc16_iy_rr
+../vgsasm m_calc16_iy_rr.asm -v
+m_calc16_iy_rr.asm:0001 $0000 <ADD> <IY> `,` <BC>
+m_calc16_iy_rr.asm:0002 $0002 <ADD> <IY> `,` <DE>
+m_calc16_iy_rr.asm:0003 $0004 <ADD> <IY> `,` <IY>
+m_calc16_iy_rr.asm:0004 $0006 <ADD> <IY> `,` <SP>
+diff m_calc16_iy_rr.bin m_calc16_iy_rr.exp
+E: Illegal 16-bit arithmetic instruction. ... OK
+E: Illegal 16-bit arithmetic instruction. ... OK
+N: m_calc16_osn
+../vgsasm m_calc16_osn.asm -v
+m_calc16_osn.asm:0001 $0000 <ADD> <HL> `,` 0xFFFF8000
+m_calc16_osn.asm:0002 $0007 <ADD> <HL> `,` 0xFFFFFFFF
+m_calc16_osn.asm:0003 $000E <ADD> <HL> `,` 0x0
+m_calc16_osn.asm:0004 $0015 <ADD> <HL> `,` 0x1
+m_calc16_osn.asm:0005 $001C <ADD> <HL> `,` 0x7FFF
+m_calc16_osn.asm:0006 $0023 <ADD> <HL> `,` 0x8000
+m_calc16_osn.asm:0007 $002A <ADD> <HL> `,` 0xFFFF
+m_calc16_osn.asm:0009 $0031 <ADD> <IX> `,` 0xFFFF8000
+m_calc16_osn.asm:0010 $0039 <ADD> <IX> `,` 0xFFFFFFFF
+m_calc16_osn.asm:0011 $0041 <ADD> <IX> `,` 0x0
+m_calc16_osn.asm:0012 $0049 <ADD> <IX> `,` 0x1
+m_calc16_osn.asm:0013 $0051 <ADD> <IX> `,` 0x7FFF
+m_calc16_osn.asm:0014 $0059 <ADD> <IX> `,` 0x8000
+m_calc16_osn.asm:0015 $0061 <ADD> <IX> `,` 0xFFFF
+m_calc16_osn.asm:0017 $0069 <ADD> <IX> `,` 0xFFFF8000
+m_calc16_osn.asm:0018 $0071 <ADD> <IX> `,` 0xFFFFFFFF
+m_calc16_osn.asm:0019 $0079 <ADD> <IX> `,` 0x0
+m_calc16_osn.asm:0020 $0081 <ADD> <IX> `,` 0x1
+m_calc16_osn.asm:0021 $0089 <ADD> <IX> `,` 0x7FFF
+m_calc16_osn.asm:0022 $0091 <ADD> <IX> `,` 0x8000
+m_calc16_osn.asm:0023 $0099 <ADD> <IX> `,` 0xFFFF
+diff m_calc16_osn.bin m_calc16_osn.exp
+E: Numerical range incorrect: -32769 ... OK
+E: Numerical range incorrect: 65536 ... OK
+E: Illegal 16-bit arithmetic instruction. ... OK
+N: m_calc16_osaoa
+../vgsasm m_calc16_osaoa.asm -v
+m_calc16_osaoa.asm:0001 $0000 <ADD> <HL> `,` _( <IX> )_
+m_calc16_osaoa.asm:0002 $0009 <ADD> <HL> `,` _( <IY> )_
+diff m_calc16_osaoa.bin m_calc16_osaoa.exp
+E: Illegal 16-bit arithmetic instruction. ... OK
+N: m_calc16_osaopna
+../vgsasm m_calc16_osaopna.asm -v
+m_calc16_osaopna.asm:0001 $0000 <ADD> <HL> `,` _( <IX> `-` 0x80 )_
+m_calc16_osaopna.asm:0002 $0009 <ADD> <HL> `,` _( <IX> `-` 0x1 )_
+m_calc16_osaopna.asm:0003 $0012 <ADD> <HL> `,` _( <IX> `+` 0x0 )_
+m_calc16_osaopna.asm:0004 $001B <ADD> <HL> `,` _( <IX> `+` 0x1 )_
+m_calc16_osaopna.asm:0005 $0024 <ADD> <HL> `,` _( <IX> `+` 0x7E )_
+m_calc16_osaopna.asm:0007 $002D <ADD> <HL> `,` _( <IY> `-` 0x80 )_
+m_calc16_osaopna.asm:0008 $0036 <ADD> <HL> `,` _( <IY> `-` 0x1 )_
+m_calc16_osaopna.asm:0009 $003F <ADD> <HL> `,` _( <IY> `+` 0x0 )_
+m_calc16_osaopna.asm:0010 $0048 <ADD> <HL> `,` _( <IY> `+` 0x1 )_
+m_calc16_osaopna.asm:0011 $0051 <ADD> <HL> `,` _( <IY> `+` 0x7E )_
+diff m_calc16_osaopna.bin m_calc16_osaopna.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 127 ... OK
+E: Illegal 16-bit arithmetic instruction. ... OK
+E: Illegal 16-bit arithmetic instruction. ... OK
+E: Illegal arithmetic instruction. ... OK
+E: Illegal arithmetic instruction. ... OK
+N: m_calc_ana
+../vgsasm m_calc_ana.asm -v
+  m_calc_ana.asm:0001 $0000 <ADD> _( 0x0 )_
+  m_calc_ana.asm:0002 $0007 <ADD> _( 0xFFFF )_
+  m_calc_ana.asm:0003 $000E <ADC> _( 0x0 )_
+  m_calc_ana.asm:0004 $0015 <ADC> _( 0xFFFF )_
+  m_calc_ana.asm:0005 $001C <SUB> _( 0x0 )_
+  m_calc_ana.asm:0006 $0023 <SUB> _( 0xFFFF )_
+  m_calc_ana.asm:0007 $002A <SBC> _( 0x0 )_
+  m_calc_ana.asm:0008 $0031 <SBC> _( 0xFFFF )_
+diff m_calc_ana.bin m_calc_ana.exp
+E: Numerical range incorrect: 65536 ... OK
+Testing: mnemonic data
+N: m_db
+../vgsasm m_db.asm -v
+        m_db.asm:0001 $0000 <DB> 0xFFFFFF80 `,` 0xFFFFFFFF `,` 0x0 `,` 0x1 `,` 0xFF
+        m_db.asm:0002 $0005 <DB> `Hello, World!`
+diff m_db.bin m_db.exp
+E: No binary data. ... OK
+E: An invalid range of number specified: -129 ... OK
+E: An invalid range of number specified: 256 ... OK
+E: Unexpected symbols detected in DB: HL ... OK
+E: Symbols are not specified as comma-separated: 2 ... OK
+E: No symbol is specified after the comma. ... OK
+E: String literals are not closed with double quotes. ... OK
+N: m_dw
+../vgsasm m_dw.asm -v
+        m_dw.asm:0001 $0000 LABEL1:
+        m_dw.asm:0002 $0000 LABEL2:
+        m_dw.asm:0003 $0000 LABEL3@LABEL2:
+        m_dw.asm:0005 $0000 <DW> 0xFFFF8000 `,` 0xFFFFFFFF `,` 0x0 `,` 0x1 `,` 0x7FFF `,` 0x8000 `,` 0xFFFF
+        m_dw.asm:0006 $000E <DW> `Hello, World!` `,` 0x0
+        m_dw.asm:0007 $002A <DW> `LABEL1` `,` `LABEL2` `,` `LABEL3@LABEL2` `,` `LABEL3@LABEL2`
+diff m_dw.bin m_dw.exp
+E: No binary data. ... OK
+E: An invalid range of number specified: -32769 ... OK
+E: An invalid range of number specified: 65536 ... OK
+E: Unexpected symbols detected in DW: BC ... OK
+E: Symbols are not specified as comma-separated: 2 ... OK
+E: No symbol is specified after the comma. ... OK
+E: String literals are not closed with double quotes. ... OK
+E: Label `@LABEL3` is undefined in `LABEL1`. ... OK
+Testing: mnemonic djnz
+N: m_djnz
+../vgsasm m_djnz.asm -v
+      m_djnz.asm:0001 $0000 LABEL:
+      m_djnz.asm:0002 $0000 <DJNZ> 0xFFFFFF80
+      m_djnz.asm:0003 $0002 <DJNZ> 0xFFFFFFFF
+      m_djnz.asm:0004 $0004 <DJNZ> 0x0
+      m_djnz.asm:0005 $0006 <DJNZ> 0x1
+      m_djnz.asm:0006 $0008 <DJNZ> 0x7F
+      m_djnz.asm:0007 $000A <DJNZ> `LABEL`
+diff m_djnz.bin m_djnz.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 128 ... OK
+E: Illegal DJNZ instruction. ... OK
+E: Illegal DJNZ instruction. ... OK
+N: m_ex
+../vgsasm m_ex.asm -v
+        m_ex.asm:0001 $0000 <EX> <DE> `,` <HL>
+        m_ex.asm:0002 $0001 <EX> <AF> `,` <AF'>
+diff m_ex.bin m_ex.exp
+E: Excessive or insufficient number of operands. ... OK
+E: Unexpected operand: B ... OK
+E: Incorrect EX syntax. ... OK
+E: Incorrect EX syntax. ... OK
+N: m_ex_aoaso
+../vgsasm m_ex_aoaso.asm -v
+  m_ex_aoaso.asm:0001 $0000 <EX> _( <SP> )_ `,` <HL>
+  m_ex_aoaso.asm:0002 $0001 <EX> _( <SP> )_ `,` <IX>
+  m_ex_aoaso.asm:0003 $0003 <EX> _( <SP> )_ `,` <IY>
+diff m_ex_aoaso.bin m_ex_aoaso.exp
+E: Unexpected operand: 4660 ... OK
+E: Incorrect EX syntax. ... OK
+N: m_im
+../vgsasm m_im.asm -v
+        m_im.asm:0001 $0000 <IM> 0x0
+        m_im.asm:0002 $0002 <IM> 0x1
+        m_im.asm:0003 $0004 <IM> 0x2
+diff m_im.bin m_im.exp
+E: Unsupported interrupt mode: 3 ... OK
+E: Unexpected operand: A ... OK
+N: m_inc_o
+../vgsasm m_inc_o.asm -v
+     m_inc_o.asm:0001 $0000 <INC> <A>
+     m_inc_o.asm:0002 $0001 <INC> <B>
+     m_inc_o.asm:0003 $0002 <INC> <C>
+     m_inc_o.asm:0004 $0003 <INC> <D>
+     m_inc_o.asm:0005 $0004 <INC> <E>
+     m_inc_o.asm:0006 $0005 <INC> <H>
+     m_inc_o.asm:0007 $0006 <INC> <L>
+     m_inc_o.asm:0008 $0007 <INC> <IXH>
+     m_inc_o.asm:0009 $0009 <INC> <IXL>
+     m_inc_o.asm:0010 $000B <INC> <IYH>
+     m_inc_o.asm:0011 $000D <INC> <IYL>
+     m_inc_o.asm:0012 $000F <INC> <BC>
+     m_inc_o.asm:0013 $0010 <INC> <DE>
+     m_inc_o.asm:0014 $0011 <INC> <HL>
+     m_inc_o.asm:0015 $0012 <INC> <SP>
+     m_inc_o.asm:0016 $0013 <INC> <IX>
+     m_inc_o.asm:0017 $0015 <INC> <IY>
+diff m_inc_o.bin m_inc_o.exp
+E: Illegal INC instruction. ... OK
+N: m_inc_aoa
+../vgsasm m_inc_aoa.asm -v
+   m_inc_aoa.asm:0001 $0000 <INC> _( <HL> )_
+   m_inc_aoa.asm:0002 $0001 <INC> _( <IX> )_
+   m_inc_aoa.asm:0003 $0004 <INC> _( <IY> )_
+diff m_inc_aoa.bin m_inc_aoa.exp
+E: Illegal INC instruction. ... OK
+N: m_inc_ana
+../vgsasm m_inc_ana.asm -v
+   m_inc_ana.asm:0001 $0000 <INC> _( 0x1234 )_
+diff m_inc_ana.bin m_inc_ana.exp
+E: Numerical range incorrect: 65536 ... OK
+N: m_inc_aopna
+../vgsasm m_inc_aopna.asm -v
+ m_inc_aopna.asm:0001 $0000 <INC> _( <IX> `-` 0x80 )_
+ m_inc_aopna.asm:0002 $0003 <INC> _( <IX> `-` 0x1 )_
+ m_inc_aopna.asm:0003 $0006 <INC> _( <IX> `+` 0x0 )_
+ m_inc_aopna.asm:0004 $0009 <INC> _( <IX> `+` 0x1 )_
+ m_inc_aopna.asm:0005 $000C <INC> _( <IX> `+` 0x7F )_
+ m_inc_aopna.asm:0006 $000F <INC> _( <IY> `-` 0x80 )_
+ m_inc_aopna.asm:0007 $0012 <INC> _( <IY> `-` 0x1 )_
+ m_inc_aopna.asm:0008 $0015 <INC> _( <IY> `+` 0x0 )_
+ m_inc_aopna.asm:0009 $0018 <INC> _( <IY> `+` 0x1 )_
+ m_inc_aopna.asm:0010 $001B <INC> _( <IY> `+` 0x7F )_
+diff m_inc_aopna.bin m_inc_aopna.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 128 ... OK
+E: Illegal INC instruction. ... OK
+N: m_dec_o
+../vgsasm m_dec_o.asm -v
+     m_dec_o.asm:0001 $0000 <DEC> <A>
+     m_dec_o.asm:0002 $0001 <DEC> <B>
+     m_dec_o.asm:0003 $0002 <DEC> <C>
+     m_dec_o.asm:0004 $0003 <DEC> <D>
+     m_dec_o.asm:0005 $0004 <DEC> <E>
+     m_dec_o.asm:0006 $0005 <DEC> <H>
+     m_dec_o.asm:0007 $0006 <DEC> <L>
+     m_dec_o.asm:0008 $0007 <DEC> <IXH>
+     m_dec_o.asm:0009 $0009 <DEC> <IXL>
+     m_dec_o.asm:0010 $000B <DEC> <IYH>
+     m_dec_o.asm:0011 $000D <DEC> <IYL>
+     m_dec_o.asm:0012 $000F <DEC> <BC>
+     m_dec_o.asm:0013 $0010 <DEC> <DE>
+     m_dec_o.asm:0014 $0011 <DEC> <HL>
+     m_dec_o.asm:0015 $0012 <DEC> <SP>
+     m_dec_o.asm:0016 $0013 <DEC> <IX>
+     m_dec_o.asm:0017 $0015 <DEC> <IY>
+diff m_dec_o.bin m_dec_o.exp
+E: Illegal DEC instruction. ... OK
+N: m_dec_aoa
+../vgsasm m_dec_aoa.asm -v
+   m_dec_aoa.asm:0001 $0000 <DEC> _( <HL> )_
+   m_dec_aoa.asm:0002 $0001 <DEC> _( <IX> )_
+   m_dec_aoa.asm:0003 $0004 <DEC> _( <IY> )_
+diff m_dec_aoa.bin m_dec_aoa.exp
+E: Illegal DEC instruction. ... OK
+N: m_dec_ana
+../vgsasm m_dec_ana.asm -v
+   m_dec_ana.asm:0001 $0000 <DEC> _( 0x1234 )_
+diff m_dec_ana.bin m_dec_ana.exp
+E: Numerical range incorrect: 65536 ... OK
+N: m_dec_aopna
+../vgsasm m_dec_aopna.asm -v
+ m_dec_aopna.asm:0001 $0000 <DEC> _( <IX> `-` 0x80 )_
+ m_dec_aopna.asm:0002 $0003 <DEC> _( <IX> `-` 0x1 )_
+ m_dec_aopna.asm:0003 $0006 <DEC> _( <IX> `+` 0x0 )_
+ m_dec_aopna.asm:0004 $0009 <DEC> _( <IX> `+` 0x1 )_
+ m_dec_aopna.asm:0005 $000C <DEC> _( <IX> `+` 0x7F )_
+ m_dec_aopna.asm:0006 $000F <DEC> _( <IY> `-` 0x80 )_
+ m_dec_aopna.asm:0007 $0012 <DEC> _( <IY> `-` 0x1 )_
+ m_dec_aopna.asm:0008 $0015 <DEC> _( <IY> `+` 0x0 )_
+ m_dec_aopna.asm:0009 $0018 <DEC> _( <IY> `+` 0x1 )_
+ m_dec_aopna.asm:0010 $001B <DEC> _( <IY> `+` 0x7F )_
+diff m_dec_aopna.bin m_dec_aopna.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 128 ... OK
+E: Illegal DEC instruction. ... OK
+N: m_in_osana
+../vgsasm m_in_osana.asm -v
+  m_in_osana.asm:0001 $0000 <IN> <A> `,` _( 0x0 )_
+  m_in_osana.asm:0002 $0002 <IN> <A> `,` _( 0xFF )_
+diff m_in_osana.bin m_in_osana.exp
+E: Numerical range incorrect: 256 ... OK
+N: m_in_osaoa
+../vgsasm m_in_osaoa.asm -v
+  m_in_osaoa.asm:0001 $0000 <IN> <A> `,` _( <C> )_
+  m_in_osaoa.asm:0002 $0002 <IN> <B> `,` _( <C> )_
+  m_in_osaoa.asm:0003 $0004 <IN> <C> `,` _( <C> )_
+  m_in_osaoa.asm:0004 $0006 <IN> <D> `,` _( <C> )_
+  m_in_osaoa.asm:0005 $0008 <IN> <E> `,` _( <C> )_
+  m_in_osaoa.asm:0006 $000A <IN> <F> `,` _( <C> )_
+  m_in_osaoa.asm:0007 $000C <IN> <H> `,` _( <C> )_
+  m_in_osaoa.asm:0008 $000E <IN> <L> `,` _( <C> )_
+diff m_in_osaoa.bin m_in_osaoa.exp
+E: Illegal IN instruction. ... OK
+E: Illegal IN instruction. ... OK
+N: m_out_anaso
+../vgsasm m_out_anaso.asm -v
+ m_out_anaso.asm:0001 $0000 <OUT> _( 0x0 )_ `,` <A>
+ m_out_anaso.asm:0002 $0002 <OUT> _( 0xFF )_ `,` <A>
+diff m_out_anaso.bin m_out_anaso.exp
+E: Numerical range incorrect: 256 ... OK
+N: m_out_aoaso
+../vgsasm m_out_aoaso.asm -v
+ m_out_aoaso.asm:0001 $0000 <OUT> _( <C> )_ `,` <A>
+ m_out_aoaso.asm:0002 $0002 <OUT> _( <C> )_ `,` <B>
+ m_out_aoaso.asm:0003 $0004 <OUT> _( <C> )_ `,` <C>
+ m_out_aoaso.asm:0004 $0006 <OUT> _( <C> )_ `,` <D>
+ m_out_aoaso.asm:0005 $0008 <OUT> _( <C> )_ `,` <E>
+ m_out_aoaso.asm:0006 $000A <OUT> _( <C> )_ `,` <H>
+ m_out_aoaso.asm:0007 $000C <OUT> _( <C> )_ `,` <L>
+diff m_out_aoaso.bin m_out_aoaso.exp
+E: Illegal OUT instruction. ... OK
+N: m_out_osaoa
+../vgsasm m_out_osaoa.asm -v
+ m_out_osaoa.asm:0001 $0000 <OUT> <F> `,` _( <C> )_
+diff m_out_osaoa.bin m_out_osaoa.exp
+N: m_out_aoa
+../vgsasm m_out_aoa.asm -v
+   m_out_aoa.asm:0001 $0000 <OUT> _( <C> )_
+diff m_out_aoa.bin m_out_aoa.exp
+E: Illegal OUT instruction. ... OK
+N: m_jp_n
+../vgsasm m_jp_n.asm -v
+      m_jp_n.asm:0001 $0000 <JP> 0x0
+      m_jp_n.asm:0002 $0003 <JP> 0xFFFF
+diff m_jp_n.bin m_jp_n.exp
+E: Numerical range incorrect: 65536 ... OK
+N: m_jp_l
+../vgsasm m_jp_l.asm -v
+      m_jp_l.asm:0001 $0000 LABEL:
+      m_jp_l.asm:0002 $0000 <NOP>
+      m_jp_l.asm:0003 $0001 FOO@LABEL:
+      m_jp_l.asm:0004 $0001 <NOP>
+      m_jp_l.asm:0006 $0002 <JP> `LABEL`
+      m_jp_l.asm:0007 $0005 <JP> `FOO@LABEL`
+      m_jp_l.asm:0008 $0008 <JP> `FOO@LABEL`
+diff m_jp_l.bin m_jp_l.exp
+N: m_jp_osn
+../vgsasm m_jp_osn.asm -v
+    m_jp_osn.asm:0001 $0000 <JP> <Z> `,` 0x0
+    m_jp_osn.asm:0002 $0003 <JP> <Z> `,` 0xFFFF
+    m_jp_osn.asm:0003 $0006 <JP> <NZ> `,` 0x1
+    m_jp_osn.asm:0004 $0009 <JP> <C> `,` 0x2
+    m_jp_osn.asm:0005 $000C <JP> <NC> `,` 0x3
+    m_jp_osn.asm:0006 $000F <JP> <PE> `,` 0x4
+    m_jp_osn.asm:0007 $0012 <JP> <PO> `,` 0x5
+    m_jp_osn.asm:0008 $0015 <JP> <M> `,` 0x6
+    m_jp_osn.asm:0009 $0018 <JP> <P> `,` 0x7
+diff m_jp_osn.bin m_jp_osn.exp
+N: m_jp_osl
+../vgsasm m_jp_osl.asm -v
+    m_jp_osl.asm:0001 $0000 LABEL:
+    m_jp_osl.asm:0002 $0000 <NOP>
+    m_jp_osl.asm:0004 $0001 <JP> <NZ> `,` `LABEL`
+    m_jp_osl.asm:0005 $0004 <JP> <Z> `,` `LABEL`
+    m_jp_osl.asm:0006 $0007 <JP> <NC> `,` `LABEL`
+    m_jp_osl.asm:0007 $000A <JP> <C> `,` `LABEL`
+    m_jp_osl.asm:0008 $000D <JP> <PO> `,` `LABEL`
+    m_jp_osl.asm:0009 $0010 <JP> <PE> `,` `LABEL`
+    m_jp_osl.asm:0010 $0013 <JP> <M> `,` `LABEL`
+    m_jp_osl.asm:0011 $0016 <JP> <P> `,` `LABEL`
+diff m_jp_osl.bin m_jp_osl.exp
+N: m_jp_aoa
+../vgsasm m_jp_aoa.asm -v
+    m_jp_aoa.asm:0001 $0000 <JP> _( <HL> )_
+    m_jp_aoa.asm:0002 $0001 <JP> _( <IX> )_
+    m_jp_aoa.asm:0003 $0003 <JP> _( <IY> )_
+    m_jp_aoa.asm:0004 $0005 <JP> _( <BC> )_
+    m_jp_aoa.asm:0005 $0007 <JP> _( <DE> )_
+diff m_jp_aoa.bin m_jp_aoa.exp
+N: m_jp_o
+../vgsasm m_jp_o.asm -v
+      m_jp_o.asm:0001 $0000 <JP> <HL>
+      m_jp_o.asm:0002 $0001 <JP> <IX>
+      m_jp_o.asm:0003 $0003 <JP> <IY>
+      m_jp_o.asm:0004 $0005 <JP> <BC>
+      m_jp_o.asm:0005 $0007 <JP> <DE>
+diff m_jp_o.bin m_jp_o.exp
+E: Illegal JP instruction. ... OK
+N: m_jr_n
+../vgsasm m_jr_n.asm -v
+      m_jr_n.asm:0001 $0000 <JR> 0xFFFFFF80
+      m_jr_n.asm:0002 $0002 <JR> 0x7F
+diff m_jr_n.bin m_jr_n.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 128 ... OK
+N: m_jr_l
+../vgsasm m_jr_l.asm -v
+      m_jr_l.asm:0001 $0000 LABEL1:
+      m_jr_l.asm:0002 $0000 <NOP>
+      m_jr_l.asm:0003 $0001 LABEL2:
+      m_jr_l.asm:0004 $0001 <NOP>
+      m_jr_l.asm:0005 $0002 FOO@LABEL2:
+      m_jr_l.asm:0006 $0002 <NOP>
+      m_jr_l.asm:0008 $0003 <JR> `LABEL1`
+      m_jr_l.asm:0009 $0005 <JR> `LABEL2`
+      m_jr_l.asm:0010 $0007 <JR> `FOO@LABEL2`
+      m_jr_l.asm:0011 $0009 <JR> `FOO@LABEL2`
+diff m_jr_l.bin m_jr_l.exp
+N: m_jr_osn
+../vgsasm m_jr_osn.asm -v
+    m_jr_osn.asm:0001 $0000 <JR> <NZ> `,` 0xFFFFFF80
+    m_jr_osn.asm:0002 $0002 <JR> <Z> `,` 0xFFFFFFFF
+    m_jr_osn.asm:0003 $0004 <JR> <NC> `,` 0x1
+    m_jr_osn.asm:0004 $0006 <JR> <C> `,` 0x7F
+diff m_jr_osn.bin m_jr_osn.exp
+E: Invalid condition: PE ... OK
+N: m_jr_osl
+../vgsasm m_jr_osl.asm -v
+    m_jr_osl.asm:0001 $0000 LABEL:
+    m_jr_osl.asm:0003 $0000 <JR> <NZ> `,` `LABEL`
+    m_jr_osl.asm:0004 $0002 <JR> <Z> `,` `LABEL`
+    m_jr_osl.asm:0005 $0004 <JR> <NC> `,` `LABEL`
+    m_jr_osl.asm:0006 $0006 <JR> <C> `,` `LABEL`
+diff m_jr_osl.bin m_jr_osl.exp
+E: Invalid condition: PO ... OK
+E: Illegal JR instruction. ... OK
+Normal case: 167
+Error case: 210
+Total: 377

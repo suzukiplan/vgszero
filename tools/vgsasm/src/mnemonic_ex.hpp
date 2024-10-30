@@ -12,8 +12,7 @@ void mnemonic_EX(LineData* line)
     if (line->token.size() < 4) {
         line->error = true;
         line->errmsg = "Excessive or insufficient number of operands.";
-    }
-    if (line->token[1].first == TokenType::Operand) {
+    } else if (line->token[1].first == TokenType::Operand) {
         if (mnemonic_format_check(line, 4, TokenType::Operand, TokenType::Split, TokenType::Operand)) {
             auto left = operandTable[line->token[1].second];
             auto right = operandTable[line->token[3].second];

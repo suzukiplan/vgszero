@@ -22,7 +22,7 @@ void sizeof_parse(LineData* line)
                 it++;
                 if (it == line->token.end() || it->first != TokenType::Other) {
                     line->error = true;
-                    line->errmsg = "No name specified in sizeof syntax.";
+                    line->errmsg = "No structure name specified in sizeof syntax.";
                     return;
                 }
                 it->first = TokenType::SizeOf;

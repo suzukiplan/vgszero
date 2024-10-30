@@ -1,4 +1,5 @@
 *.o
+*.tmp
 assignment
 binary
 bracket_to_address
@@ -20,4 +21,7 @@ offset_parse
 offset_replace
 operand
 org
+sizeof_parse
+sizeof_replace
+check
 

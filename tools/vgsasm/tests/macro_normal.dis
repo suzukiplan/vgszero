@@ -1,0 +1,36 @@
+                    ld        bc,$0001                      ;[0000] 01 01 00
+                    ld        de,$0005                      ;[0003] 11 05 00
+                    ld        hl,$000f                      ;[0006] 21 0f 00
+                    push      bc                            ;[0009] c5
+                    push      de                            ;[000a] d5
+                    push      hl                            ;[000b] e5
+                    ld        bc,$c000                      ;[000c] 01 00 c0
+                    ld        de,$0037                      ;[000f] 11 37 00
+                    ld        hl,$0007                      ;[0012] 21 07 00
+                    out       ($c3),a                       ;[0015] d3 c3
+                    pop       hl                            ;[0017] e1
+                    pop       de                            ;[0018] d1
+                    pop       bc                            ;[0019] c1
+                    push      af                            ;[001a] f5
+                    push      bc                            ;[001b] c5
+                    push      hl                            ;[001c] e5
+                    ld        bc,$c020                      ;[001d] 01 20 c0
+                    ld        a,$20                         ;[0020] 3e 20
+                    ld        hl,$0400                      ;[0022] 21 00 04
+                    out       ($c3),a                       ;[0025] d3 c3
+                    pop       hl                            ;[0027] e1
+                    pop       bc                            ;[0028] c1
+                    pop       af                            ;[0029] f1
+                    call      $0036                         ;[002a] cd 36 00
+                    ld        bc,$0001                      ;[002d] 01 01 00
+                    ld        de,$0002                      ;[0030] 11 02 00
+                    ld        hl,$c000                      ;[0033] 21 00 c0
+                    ret                                     ;[0036] c9
+
+                    ld        d,e                           ;[0037] 53
+                    ld        (hl),h                        ;[0038] 74
+                    ld        (hl),d                        ;[0039] 72
+                    ld        l,c                           ;[003a] 69
+                    ld        l,(hl)                        ;[003b] 6e
+                    ld        h,a                           ;[003c] 67
+                    nop                                     ;[003d] 00

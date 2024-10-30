@@ -1,0 +1,3 @@
+                    ex        (sp),hl                       ;[0000] e3
+                    ex        (sp),ix                       ;[0001] dd e3
+                    ex        (sp),iy                       ;[0003] fd e3

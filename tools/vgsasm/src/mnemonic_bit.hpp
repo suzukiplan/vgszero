@@ -101,7 +101,7 @@ void mnemonic_bit_op(LineData* line, Mnemonic mne)
                 return;
             }
         } else {
-            if (!mnemonic_range(line, n, 0, 128)) {
+            if (!mnemonic_range(line, -n, -128, 0)) {
                 return;
             }
             n = 0 - n;
@@ -144,7 +144,7 @@ void mnemonic_bit_op(LineData* line, Mnemonic mne)
                 return;
             }
         } else {
-            if (!mnemonic_range(line, n, 0, 128)) {
+            if (!mnemonic_range(line, -n, -128, 0)) {
                 return;
             }
             n = 0 - n;
