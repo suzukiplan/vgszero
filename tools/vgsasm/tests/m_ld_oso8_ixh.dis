@@ -1,0 +1,7 @@
+                    ld        ixh,a                         ;[0000] dd 67
+                    ld        ixh,b                         ;[0002] dd 60
+                    ld        ixh,c                         ;[0004] dd 61
+                    ld        ixh,d                         ;[0006] dd 62
+                    ld        ixh,e                         ;[0008] dd 63
+                    ld        ixh,ixh                       ;[000a] dd 64
+                    ld        ixh,ixl                       ;[000c] dd 65

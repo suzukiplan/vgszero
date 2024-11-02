@@ -1,0 +1,3 @@
+                    ld        sp,hl                         ;[0000] f9
+                    ld        sp,ix                         ;[0001] dd f9
+                    ld        sp,iy                         ;[0003] fd f9

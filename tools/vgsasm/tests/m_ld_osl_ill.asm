@@ -1,0 +1,4 @@
+label:
+
+ld a, label
+

@@ -1,5 +1,24 @@
 # Change log
 
+## Version 1.0.0
+
+WIP
+
+## Version 0.15 (beta-15)
+
+- Correct LD error message
+- Support `LD {B|C|D|E|H|L|IXH|IXL|IYH|IYL}, (LABEL)`
+- Support `LD (LABEL), {A|B|C|D|E|H|L|IXH|IXL|IYH|IYL|BC|DE|HL|SP|IX|IY}`
+- Support `LD (LABEL), n`
+
+## Version 0.14 (beta-14)
+
+- Split [vgsasm-extension](https://github.com/suzukiplan/vgsasm-extension) repository.
+
+## Version 0.13 (beta-13)
+
+- Added vscode extension (WIP)
+
 ## Version 0.12 (beta-12)
 
 - Fixed a bug at the beginning of file parsing that caused errors in lines that failed to parse to be ignored.

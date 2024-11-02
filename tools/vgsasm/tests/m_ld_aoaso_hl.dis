@@ -1,0 +1,47 @@
+                    ld        (hl),a                        ;[0000] 77
+                    ld        (hl),b                        ;[0001] 70
+                    ld        (hl),c                        ;[0002] 71
+                    ld        (hl),d                        ;[0003] 72
+                    ld        (hl),e                        ;[0004] 73
+                    ld        (hl),h                        ;[0005] 74
+                    ld        (hl),l                        ;[0006] 75
+                    push      af                            ;[0007] f5
+                    ld        a,ixh                         ;[0008] dd 7c
+                    ld        (hl),a                        ;[000a] 77
+                    pop       af                            ;[000b] f1
+                    push      af                            ;[000c] f5
+                    ld        a,ixl                         ;[000d] dd 7d
+                    ld        (hl),a                        ;[000f] 77
+                    pop       af                            ;[0010] f1
+                    push      af                            ;[0011] f5
+                    ld        a,iyh                         ;[0012] fd 7c
+                    ld        (hl),a                        ;[0014] 77
+                    pop       af                            ;[0015] f1
+                    push      af                            ;[0016] f5
+                    ld        a,iyl                         ;[0017] fd 7d
+                    ld        (hl),a                        ;[0019] 77
+                    pop       af                            ;[001a] f1
+                    ld        (hl),c                        ;[001b] 71
+                    inc       hl                            ;[001c] 23
+                    ld        (hl),b                        ;[001d] 70
+                    dec       hl                            ;[001e] 2b
+                    ld        (hl),e                        ;[001f] 73
+                    inc       hl                            ;[0020] 23
+                    ld        (hl),d                        ;[0021] 72
+                    dec       hl                            ;[0022] 2b
+                    push      af                            ;[0023] f5
+                    ld        a,ixl                         ;[0024] dd 7d
+                    ld        (hl),a                        ;[0026] 77
+                    inc       hl                            ;[0027] 23
+                    ld        a,ixh                         ;[0028] dd 7c
+                    ld        (hl),a                        ;[002a] 77
+                    dec       hl                            ;[002b] 2b
+                    pop       af                            ;[002c] f1
+                    push      af                            ;[002d] f5
+                    ld        a,iyl                         ;[002e] fd 7d
+                    ld        (hl),a                        ;[0030] 77
+                    inc       hl                            ;[0031] 23
+                    ld        a,iyh                         ;[0032] fd 7c
+                    ld        (hl),a                        ;[0034] 77
+                    dec       hl                            ;[0035] 2b
+                    pop       af                            ;[0036] f1

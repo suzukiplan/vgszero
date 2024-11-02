@@ -1,0 +1,2 @@
+                    call      $0000                         ;[0000] cd 00 00
+                    call      $ffff                         ;[0003] cd ff ff

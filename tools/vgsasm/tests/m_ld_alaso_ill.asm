@@ -1,0 +1,3 @@
+.label
+
+ld (label), f

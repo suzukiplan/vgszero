@@ -1,0 +1,47 @@
+                    ld        ($0000),a                     ;[0000] 32 00 00
+                    push      af                            ;[0003] f5
+                    ld        a,b                           ;[0004] 78
+                    ld        ($0100),a                     ;[0005] 32 00 01
+                    pop       af                            ;[0008] f1
+                    push      af                            ;[0009] f5
+                    ld        a,c                           ;[000a] 79
+                    ld        ($0200),a                     ;[000b] 32 00 02
+                    pop       af                            ;[000e] f1
+                    push      af                            ;[000f] f5
+                    ld        a,d                           ;[0010] 7a
+                    ld        ($0400),a                     ;[0011] 32 00 04
+                    pop       af                            ;[0014] f1
+                    push      af                            ;[0015] f5
+                    ld        a,e                           ;[0016] 7b
+                    ld        ($0800),a                     ;[0017] 32 00 08
+                    pop       af                            ;[001a] f1
+                    push      af                            ;[001b] f5
+                    ld        a,h                           ;[001c] 7c
+                    ld        ($1000),a                     ;[001d] 32 00 10
+                    pop       af                            ;[0020] f1
+                    push      af                            ;[0021] f5
+                    ld        a,l                           ;[0022] 7d
+                    ld        ($2000),a                     ;[0023] 32 00 20
+                    pop       af                            ;[0026] f1
+                    push      af                            ;[0027] f5
+                    ld        a,ixh                         ;[0028] dd 7c
+                    ld        ($4000),a                     ;[002a] 32 00 40
+                    pop       af                            ;[002d] f1
+                    push      af                            ;[002e] f5
+                    ld        a,ixl                         ;[002f] dd 7d
+                    ld        ($8000),a                     ;[0031] 32 00 80
+                    pop       af                            ;[0034] f1
+                    push      af                            ;[0035] f5
+                    ld        a,iyh                         ;[0036] fd 7c
+                    ld        ($ffff),a                     ;[0038] 32 ff ff
+                    pop       af                            ;[003b] f1
+                    push      af                            ;[003c] f5
+                    ld        a,iyl                         ;[003d] fd 7d
+                    ld        ($03e8),a                     ;[003f] 32 e8 03
+                    pop       af                            ;[0042] f1
+                    ld        ($07d0),bc                    ;[0043] ed 43 d0 07
+                    ld        ($0bb8),de                    ;[0047] ed 53 b8 0b
+                    ld        ($0fa0),hl                    ;[004b] 22 a0 0f
+                    ld        ($1388),sp                    ;[004e] ed 73 88 13
+                    ld        ($1770),ix                    ;[0052] dd 22 70 17
+                    ld        ($1b58),iy                    ;[0056] fd 22 58 1b

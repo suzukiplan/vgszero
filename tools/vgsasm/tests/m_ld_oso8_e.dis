@@ -1,0 +1,11 @@
+                    ld        e,a                           ;[0000] 5f
+                    ld        e,b                           ;[0001] 58
+                    ld        e,c                           ;[0002] 59
+                    ld        e,d                           ;[0003] 5a
+                    ld        e,e                           ;[0004] 5b
+                    ld        e,h                           ;[0005] 5c
+                    ld        e,l                           ;[0006] 5d
+                    ld        e,ixh                         ;[0007] dd 5c
+                    ld        e,ixl                         ;[0009] dd 5d
+                    ld        e,iyh                         ;[000b] fd 5c
+                    ld        e,iyl                         ;[000d] fd 5d

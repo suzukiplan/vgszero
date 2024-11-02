@@ -1,0 +1,11 @@
+                    ld        a,$80                         ;[0000] 3e 80
+                    ld        b,$ff                         ;[0002] 06 ff
+                    ld        c,$00                         ;[0004] 0e 00
+                    ld        d,$01                         ;[0006] 16 01
+                    ld        e,$7f                         ;[0008] 1e 7f
+                    ld        h,$80                         ;[000a] 26 80
+                    ld        l,$ff                         ;[000c] 2e ff
+                    ld        ixh,$3f                       ;[000e] dd 26 3f
+                    ld        ixl,$40                       ;[0011] dd 2e 40
+                    ld        iyh,$64                       ;[0014] fd 26 64
+                    ld        iyl,$c8                       ;[0017] fd 2e c8

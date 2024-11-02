@@ -68,13 +68,17 @@ void mnemonic_LD(LineData* line)
         auto op2 = operandTable[line->token[3].second];
         if (isReg8(op1) && isReg8(op2)) {
             if (op1 == Operand::IXH || op1 == Operand::IXL || op1 == Operand::IYH || op1 == Operand::IYL) {
-                if (op2 == Operand::H || op2 == Operand::L) {
-                    line->error = true;
-                    line->errmsg = "LD {IXH|IXL},{H|L} is not supported.";
-                    return;
-                }
                 bool isOp1IX = op1 == Operand::IXH || op1 == Operand::IXL;
                 bool isOp1IY = op1 == Operand::IYH || op1 == Operand::IYL;
+                if (op2 == Operand::H || op2 == Operand::L) {
+                    line->error = true;
+                    if (isOp1IX) {
+                        line->errmsg = "LD {IXH|IXL},{H|L} is not supported.";
+                    } else {
+                        line->errmsg = "LD {IYH|IYL},{H|L} is not supported.";
+                    }
+                    return;
+                }
                 bool isOp2IX = op2 == Operand::IXH || op2 == Operand::IXL;
                 bool isOp2IY = op2 == Operand::IYH || op2 == Operand::IYL;
                 if (isOp1IX && isOp2IY) {
@@ -454,6 +458,99 @@ void mnemonic_LD(LineData* line)
             line->machine.push_back(0x00);
             line->machine.push_back(0x00);
             return;
+        } else {
+            switch (op) {
+                case Operand::B:
+                    ML_PUSH_AF;
+                    line->machine.push_back(0x3A);
+                    tempAddrs.push_back(new TempAddr(line, line->token[4].second, line->machine.size(), false));
+                    line->machine.push_back(0);
+                    line->machine.push_back(0);
+                    ML_LD_B_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::C:
+                    ML_PUSH_AF;
+                    line->machine.push_back(0x3A);
+                    tempAddrs.push_back(new TempAddr(line, line->token[4].second, line->machine.size(), false));
+                    line->machine.push_back(0);
+                    line->machine.push_back(0);
+                    ML_LD_C_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::D:
+                    ML_PUSH_AF;
+                    line->machine.push_back(0x3A);
+                    tempAddrs.push_back(new TempAddr(line, line->token[4].second, line->machine.size(), false));
+                    line->machine.push_back(0);
+                    line->machine.push_back(0);
+                    ML_LD_D_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::E:
+                    ML_PUSH_AF;
+                    line->machine.push_back(0x3A);
+                    tempAddrs.push_back(new TempAddr(line, line->token[4].second, line->machine.size(), false));
+                    line->machine.push_back(0);
+                    line->machine.push_back(0);
+                    ML_LD_E_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::H:
+                    ML_PUSH_AF;
+                    line->machine.push_back(0x3A);
+                    tempAddrs.push_back(new TempAddr(line, line->token[4].second, line->machine.size(), false));
+                    line->machine.push_back(0);
+                    line->machine.push_back(0);
+                    ML_LD_H_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::L:
+                    ML_PUSH_AF;
+                    line->machine.push_back(0x3A);
+                    tempAddrs.push_back(new TempAddr(line, line->token[4].second, line->machine.size(), false));
+                    line->machine.push_back(0);
+                    line->machine.push_back(0);
+                    ML_LD_L_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::IXH:
+                    ML_PUSH_AF;
+                    line->machine.push_back(0x3A);
+                    tempAddrs.push_back(new TempAddr(line, line->token[4].second, line->machine.size(), false));
+                    line->machine.push_back(0);
+                    line->machine.push_back(0);
+                    ML_LD_IXH_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::IXL:
+                    ML_PUSH_AF;
+                    line->machine.push_back(0x3A);
+                    tempAddrs.push_back(new TempAddr(line, line->token[4].second, line->machine.size(), false));
+                    line->machine.push_back(0);
+                    line->machine.push_back(0);
+                    ML_LD_IXL_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::IYH:
+                    ML_PUSH_AF;
+                    line->machine.push_back(0x3A);
+                    tempAddrs.push_back(new TempAddr(line, line->token[4].second, line->machine.size(), false));
+                    line->machine.push_back(0);
+                    line->machine.push_back(0);
+                    ML_LD_IYH_A;
+                    ML_POP_AF;
+                    return;
+                case Operand::IYL:
+                    ML_PUSH_AF;
+                    line->machine.push_back(0x3A);
+                    tempAddrs.push_back(new TempAddr(line, line->token[4].second, line->machine.size(), false));
+                    line->machine.push_back(0);
+                    line->machine.push_back(0);
+                    ML_LD_IYL_A;
+                    ML_POP_AF;
+                    return;
+            }
         }
     } else if (mnemonic_format_test(line, 6, TokenType::AddressBegin, TokenType::Numeric, TokenType::AddressEnd, TokenType::Split, TokenType::Operand)) {
         // LD (nn),r
@@ -529,6 +626,107 @@ void mnemonic_LD(LineData* line)
                     return;
             }
         }
+    } else if (mnemonic_format_test(line, 6, TokenType::AddressBegin, TokenType::LabelJump, TokenType::AddressEnd, TokenType::Split, TokenType::Operand)) {
+        switch (operandTable[line->token[5].second]) {
+            case Operand::A:
+                ML_LD_NN_A(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                return;
+            case Operand::BC:
+                ML_LD_NN_BC(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                return;
+            case Operand::DE:
+                ML_LD_NN_DE(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                return;
+            case Operand::HL:
+                ML_LD_NN_HL(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                return;
+            case Operand::SP:
+                ML_LD_NN_SP(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                return;
+            case Operand::IX:
+                ML_LD_NN_IX(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                return;
+            case Operand::IY:
+                ML_LD_NN_IY(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                return;
+            case Operand::B:
+                ML_PUSH_AF;
+                ML_LD_A_B;
+                ML_LD_NN_A(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                ML_POP_AF;
+                return;
+            case Operand::C:
+                ML_PUSH_AF;
+                ML_LD_A_C;
+                ML_LD_NN_A(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                ML_POP_AF;
+                return;
+            case Operand::D:
+                ML_PUSH_AF;
+                ML_LD_A_D;
+                ML_LD_NN_A(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                ML_POP_AF;
+                return;
+            case Operand::E:
+                ML_PUSH_AF;
+                ML_LD_A_E;
+                ML_LD_NN_A(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                ML_POP_AF;
+                return;
+            case Operand::H:
+                ML_PUSH_AF;
+                ML_LD_A_H;
+                ML_LD_NN_A(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                ML_POP_AF;
+                return;
+            case Operand::L:
+                ML_PUSH_AF;
+                ML_LD_A_L;
+                ML_LD_NN_A(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                ML_POP_AF;
+                return;
+            case Operand::IXH:
+                ML_PUSH_AF;
+                ML_LD_A_IXH;
+                ML_LD_NN_A(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                ML_POP_AF;
+                return;
+            case Operand::IXL:
+                ML_PUSH_AF;
+                ML_LD_A_IXL;
+                ML_LD_NN_A(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                ML_POP_AF;
+                return;
+            case Operand::IYH:
+                ML_PUSH_AF;
+                ML_LD_A_IYH;
+                ML_LD_NN_A(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                ML_POP_AF;
+                return;
+            case Operand::IYL:
+                ML_PUSH_AF;
+                ML_LD_A_IYL;
+                ML_LD_NN_A(0);
+                tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
+                ML_POP_AF;
+                return;
+        }
     } else if (mnemonic_format_test(line, 6, TokenType::AddressBegin, TokenType::Numeric, TokenType::AddressEnd, TokenType::Split, TokenType::Numeric)) {
         // LD (nn),n
         auto addr = atoi(line->token[2].second.c_str());
@@ -537,6 +735,17 @@ void mnemonic_LD(LineData* line)
             ML_PUSH_AF;
             ML_LD_A_n(n);
             ML_LD_NN_A(addr);
+            ML_POP_AF;
+            return;
+        }
+    } else if (mnemonic_format_test(line, 6, TokenType::AddressBegin, TokenType::LabelJump, TokenType::AddressEnd, TokenType::Split, TokenType::Numeric)) {
+        // LD (LABEL),n
+        auto n = atoi(line->token[5].second.c_str());
+        if (mnemonic_range(line, n, -128, 255)) {
+            ML_PUSH_AF;
+            ML_LD_A_n(n);
+            ML_LD_NN_A(0);
+            tempAddrs.push_back(new TempAddr(line, line->token[2].second, line->machine.size() - 2, false));
             ML_POP_AF;
             return;
         }

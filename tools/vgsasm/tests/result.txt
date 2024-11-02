@@ -451,26 +451,26 @@ N: macro_normal
 macro_normal.asm:0004 $0000 <LD> <BC> `,` 0x1
 macro_normal.asm:0005 $0003 <LD> <DE> `,` 0x5
 macro_normal.asm:0006 $0006 <LD> <HL> `,` 0xF
-../lib/vgszero.inc:0091 $0009 <PUSH> <BC>
-../lib/vgszero.inc:0092 $000A <PUSH> <DE>
-../lib/vgszero.inc:0093 $000B <PUSH> <HL>
-../lib/vgszero.inc:0094 $000C <LD> <BC> `,` 0xC000
-../lib/vgszero.inc:0095 $000F <LD> <DE> `,` `$0`
-../lib/vgszero.inc:0096 $0012 <LD> <HL> `,` 0x7
-../lib/vgszero.inc:0097 $0015 <OUT> _( 0xC3 )_ `,` <A>
-../lib/vgszero.inc:0098 $0017 <POP> <HL>
-../lib/vgszero.inc:0099 $0018 <POP> <DE>
-../lib/vgszero.inc:0100 $0019 <POP> <BC>
-../lib/vgszero.inc:0105 $001A <PUSH> <AF>
-../lib/vgszero.inc:0106 $001B <PUSH> <BC>
-../lib/vgszero.inc:0107 $001C <PUSH> <HL>
-../lib/vgszero.inc:0108 $001D <LD> <BC> `,` 0xC020
-../lib/vgszero.inc:0109 $0020 <LD> <A> `,` 0x20
-../lib/vgszero.inc:0110 $0022 <LD> <HL> `,` 0x400
-../lib/vgszero.inc:0111 $0025 <OUT> _( 0xC3 )_ `,` <A>
-../lib/vgszero.inc:0112 $0027 <POP> <HL>
-../lib/vgszero.inc:0113 $0028 <POP> <BC>
-../lib/vgszero.inc:0114 $0029 <POP> <AF>
+../lib/vgszero.inc:0102 $0009 <PUSH> <BC>
+../lib/vgszero.inc:0103 $000A <PUSH> <DE>
+../lib/vgszero.inc:0104 $000B <PUSH> <HL>
+../lib/vgszero.inc:0105 $000C <LD> <BC> `,` 0xC000
+../lib/vgszero.inc:0106 $000F <LD> <DE> `,` `$0`
+../lib/vgszero.inc:0107 $0012 <LD> <HL> `,` 0x7
+../lib/vgszero.inc:0108 $0015 <OUT> _( 0xC3 )_ `,` <A>
+../lib/vgszero.inc:0109 $0017 <POP> <HL>
+../lib/vgszero.inc:0110 $0018 <POP> <DE>
+../lib/vgszero.inc:0111 $0019 <POP> <BC>
+../lib/vgszero.inc:0116 $001A <PUSH> <AF>
+../lib/vgszero.inc:0117 $001B <PUSH> <BC>
+../lib/vgszero.inc:0118 $001C <PUSH> <HL>
+../lib/vgszero.inc:0119 $001D <LD> <BC> `,` 0xC020
+../lib/vgszero.inc:0120 $0020 <LD> <A> `,` 0x20
+../lib/vgszero.inc:0121 $0022 <LD> <HL> `,` 0x400
+../lib/vgszero.inc:0122 $0025 <OUT> _( 0xC3 )_ `,` <A>
+../lib/vgszero.inc:0123 $0027 <POP> <HL>
+../lib/vgszero.inc:0124 $0028 <POP> <BC>
+../lib/vgszero.inc:0125 $0029 <POP> <AF>
 macro_normal.asm:0017 $002A <CALL> `HIGE`
 macro_normal.asm:0004 $002D <LD> <BC> `,` 0x1
 macro_normal.asm:0005 $0030 <LD> <DE> `,` 0x2
@@ -1206,6 +1206,1270 @@ N: m_jr_osl
 diff m_jr_osl.bin m_jr_osl.exp
 E: Invalid condition: PO ... OK
 E: Illegal JR instruction. ... OK
-Normal case: 167
-Error case: 210
-Total: 377
+N: m_rst
+../vgsasm m_rst.asm -v
+       m_rst.asm:0001 $0000 <RST> 0x0
+       m_rst.asm:0002 $0001 <RST> 0x1
+       m_rst.asm:0003 $0002 <RST> 0x2
+       m_rst.asm:0004 $0003 <RST> 0x3
+       m_rst.asm:0005 $0004 <RST> 0x4
+       m_rst.asm:0006 $0005 <RST> 0x5
+       m_rst.asm:0007 $0006 <RST> 0x6
+       m_rst.asm:0008 $0007 <RST> 0x7
+       m_rst.asm:0010 $0008 <RST> 0x0
+       m_rst.asm:0011 $0009 <RST> 0x8
+       m_rst.asm:0012 $000A <RST> 0x10
+       m_rst.asm:0013 $000B <RST> 0x18
+       m_rst.asm:0014 $000C <RST> 0x20
+       m_rst.asm:0015 $000D <RST> 0x28
+       m_rst.asm:0016 $000E <RST> 0x30
+       m_rst.asm:0017 $000F <RST> 0x38
+diff m_rst.bin m_rst.exp
+E: Illegal RST instruction. ... OK
+N: m_shift_o
+../vgsasm m_shift_o.asm -v
+   m_shift_o.asm:0001 $0000 <SLA> <A>
+   m_shift_o.asm:0002 $0002 <SLA> <B>
+   m_shift_o.asm:0003 $0004 <SLA> <C>
+   m_shift_o.asm:0004 $0006 <SLA> <D>
+   m_shift_o.asm:0005 $0008 <SLA> <E>
+   m_shift_o.asm:0006 $000A <SLA> <H>
+   m_shift_o.asm:0007 $000C <SLA> <L>
+   m_shift_o.asm:0009 $000E <SLL> <A>
+   m_shift_o.asm:0010 $0010 <SLL> <B>
+   m_shift_o.asm:0011 $0012 <SLL> <C>
+   m_shift_o.asm:0012 $0014 <SLL> <D>
+   m_shift_o.asm:0013 $0016 <SLL> <E>
+   m_shift_o.asm:0014 $0018 <SLL> <H>
+   m_shift_o.asm:0015 $001A <SLL> <L>
+   m_shift_o.asm:0017 $001C <SRA> <A>
+   m_shift_o.asm:0018 $001E <SRA> <B>
+   m_shift_o.asm:0019 $0020 <SRA> <C>
+   m_shift_o.asm:0020 $0022 <SRA> <D>
+   m_shift_o.asm:0021 $0024 <SRA> <E>
+   m_shift_o.asm:0022 $0026 <SRA> <H>
+   m_shift_o.asm:0023 $0028 <SRA> <L>
+   m_shift_o.asm:0025 $002A <SRL> <A>
+   m_shift_o.asm:0026 $002C <SRL> <B>
+   m_shift_o.asm:0027 $002E <SRL> <C>
+   m_shift_o.asm:0028 $0030 <SRL> <D>
+   m_shift_o.asm:0029 $0032 <SRL> <E>
+   m_shift_o.asm:0030 $0034 <SRL> <H>
+   m_shift_o.asm:0031 $0036 <SRL> <L>
+   m_shift_o.asm:0033 $0038 <RLC> <A>
+   m_shift_o.asm:0034 $003A <RLC> <B>
+   m_shift_o.asm:0035 $003C <RLC> <C>
+   m_shift_o.asm:0036 $003E <RLC> <D>
+   m_shift_o.asm:0037 $0040 <RLC> <E>
+   m_shift_o.asm:0038 $0042 <RLC> <H>
+   m_shift_o.asm:0039 $0044 <RLC> <L>
+   m_shift_o.asm:0041 $0046 <RL> <A>
+   m_shift_o.asm:0042 $0048 <RL> <B>
+   m_shift_o.asm:0043 $004A <RL> <C>
+   m_shift_o.asm:0044 $004C <RL> <D>
+   m_shift_o.asm:0045 $004E <RL> <E>
+   m_shift_o.asm:0046 $0050 <RL> <H>
+   m_shift_o.asm:0047 $0052 <RL> <L>
+   m_shift_o.asm:0049 $0054 <RRC> <A>
+   m_shift_o.asm:0050 $0056 <RRC> <B>
+   m_shift_o.asm:0051 $0058 <RRC> <C>
+   m_shift_o.asm:0052 $005A <RRC> <D>
+   m_shift_o.asm:0053 $005C <RRC> <E>
+   m_shift_o.asm:0054 $005E <RRC> <H>
+   m_shift_o.asm:0055 $0060 <RRC> <L>
+   m_shift_o.asm:0057 $0062 <RR> <A>
+   m_shift_o.asm:0058 $0064 <RR> <B>
+   m_shift_o.asm:0059 $0066 <RR> <C>
+   m_shift_o.asm:0060 $0068 <RR> <D>
+   m_shift_o.asm:0061 $006A <RR> <E>
+   m_shift_o.asm:0062 $006C <RR> <H>
+   m_shift_o.asm:0063 $006E <RR> <L>
+   m_shift_o.asm:0065 $0070 <SL> <A>
+   m_shift_o.asm:0066 $0072 <SL> <B>
+   m_shift_o.asm:0067 $0074 <SL> <C>
+   m_shift_o.asm:0068 $0076 <SL> <D>
+   m_shift_o.asm:0069 $0078 <SL> <E>
+   m_shift_o.asm:0070 $007A <SL> <H>
+   m_shift_o.asm:0071 $007C <SL> <L>
+   m_shift_o.asm:0073 $007E <SR> <A>
+   m_shift_o.asm:0074 $0080 <SR> <B>
+   m_shift_o.asm:0075 $0082 <SR> <C>
+   m_shift_o.asm:0076 $0084 <SR> <D>
+   m_shift_o.asm:0077 $0086 <SR> <E>
+   m_shift_o.asm:0078 $0088 <SR> <H>
+   m_shift_o.asm:0079 $008A <SR> <L>
+diff m_shift_o.bin m_shift_o.exp
+E: Illegal shift/rotate instruction. ... OK
+N: m_shift_osn
+../vgsasm m_shift_osn.asm -v
+ m_shift_osn.asm:0001 $0000 <SL> <A> `,` 0x5
+diff m_shift_osn.bin m_shift_osn.exp
+N: m_shift_aoa
+../vgsasm m_shift_aoa.asm -v
+ m_shift_aoa.asm:0001 $0000 <SLA> _( <HL> )_
+ m_shift_aoa.asm:0002 $0002 <SLA> _( <IX> )_
+ m_shift_aoa.asm:0003 $0006 <SLA> _( <IY> )_
+ m_shift_aoa.asm:0005 $000A <SLL> _( <HL> )_
+ m_shift_aoa.asm:0006 $000C <SLL> _( <IX> )_
+ m_shift_aoa.asm:0007 $0010 <SLL> _( <IY> )_
+ m_shift_aoa.asm:0009 $0014 <SRA> _( <HL> )_
+ m_shift_aoa.asm:0010 $0016 <SRA> _( <IX> )_
+ m_shift_aoa.asm:0011 $001A <SRA> _( <IY> )_
+ m_shift_aoa.asm:0013 $001E <SRL> _( <HL> )_
+ m_shift_aoa.asm:0014 $0020 <SRL> _( <IX> )_
+ m_shift_aoa.asm:0015 $0024 <SRL> _( <IY> )_
+ m_shift_aoa.asm:0017 $0028 <RLC> _( <HL> )_
+ m_shift_aoa.asm:0018 $002A <RLC> _( <IX> )_
+ m_shift_aoa.asm:0019 $002E <RLC> _( <IY> )_
+ m_shift_aoa.asm:0021 $0032 <RL> _( <HL> )_
+ m_shift_aoa.asm:0022 $0034 <RL> _( <IX> )_
+ m_shift_aoa.asm:0023 $0038 <RL> _( <IY> )_
+ m_shift_aoa.asm:0025 $003C <RRC> _( <HL> )_
+ m_shift_aoa.asm:0026 $003E <RRC> _( <IX> )_
+ m_shift_aoa.asm:0027 $0042 <RRC> _( <IY> )_
+ m_shift_aoa.asm:0029 $0046 <RR> _( <HL> )_
+ m_shift_aoa.asm:0030 $0048 <RR> _( <IX> )_
+ m_shift_aoa.asm:0031 $004C <RR> _( <IY> )_
+ m_shift_aoa.asm:0033 $0050 <SL> _( <HL> )_
+ m_shift_aoa.asm:0034 $0052 <SL> _( <IX> )_
+ m_shift_aoa.asm:0035 $0056 <SL> _( <IY> )_
+ m_shift_aoa.asm:0037 $005A <SR> _( <HL> )_
+ m_shift_aoa.asm:0038 $005C <SR> _( <IX> )_
+ m_shift_aoa.asm:0039 $0060 <SR> _( <IY> )_
+diff m_shift_aoa.bin m_shift_aoa.exp
+E: Illegal shift/rotate instruction. ... OK
+N: m_shift_aoasn
+../vgsasm m_shift_aoasn.asm -v
+m_shift_aoasn.asm:0001 $0000 <SLA> _( <HL> )_ `,` 0x3
+diff m_shift_aoasn.bin m_shift_aoasn.exp
+N: m_shift_aopna
+../vgsasm m_shift_aopna.asm -v
+m_shift_aopna.asm:0001 $0000 <SLA> _( <IX> `-` 0x80 )_
+m_shift_aopna.asm:0002 $0004 <SLA> _( <IY> `+` 0x7F )_
+m_shift_aopna.asm:0004 $0008 <SLL> _( <IX> `-` 0x80 )_
+m_shift_aopna.asm:0005 $000C <SLL> _( <IY> `+` 0x7F )_
+m_shift_aopna.asm:0007 $0010 <SRA> _( <IX> `-` 0x80 )_
+m_shift_aopna.asm:0008 $0014 <SRA> _( <IY> `+` 0x7F )_
+m_shift_aopna.asm:0010 $0018 <SRL> _( <IX> `-` 0x80 )_
+m_shift_aopna.asm:0011 $001C <SRL> _( <IY> `+` 0x7F )_
+m_shift_aopna.asm:0013 $0020 <RLC> _( <IX> `-` 0x80 )_
+m_shift_aopna.asm:0014 $0024 <RLC> _( <IY> `+` 0x7F )_
+m_shift_aopna.asm:0016 $0028 <RL> _( <IX> `-` 0x80 )_
+m_shift_aopna.asm:0017 $002C <RL> _( <IY> `+` 0x7F )_
+m_shift_aopna.asm:0019 $0030 <RRC> _( <IX> `-` 0x80 )_
+m_shift_aopna.asm:0020 $0034 <RRC> _( <IY> `+` 0x7F )_
+m_shift_aopna.asm:0022 $0038 <RR> _( <IX> `-` 0x80 )_
+m_shift_aopna.asm:0023 $003C <RR> _( <IY> `+` 0x7F )_
+m_shift_aopna.asm:0025 $0040 <SL> _( <IX> `+` 0x7F )_
+m_shift_aopna.asm:0026 $0044 <SL> _( <IY> `-` 0x80 )_
+m_shift_aopna.asm:0028 $0048 <SR> _( <IX> `+` 0x7F )_
+m_shift_aopna.asm:0029 $004C <SR> _( <IY> `-` 0x80 )_
+diff m_shift_aopna.bin m_shift_aopna.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 128 ... OK
+E: Illegal shift/rotate instruction. ... OK
+N: m_shift_aopna_o
+../vgsasm m_shift_aopna_o.asm -v
+m_shift_aopna_o.asm:0001 $0000 <RLC> _( <IX> `+` 0x0 )_ `&` <A>
+m_shift_aopna_o.asm:0002 $0004 <RLC> _( <IX> `+` 0x0 )_ `&` <B>
+m_shift_aopna_o.asm:0003 $0008 <RLC> _( <IX> `+` 0x0 )_ `&` <C>
+m_shift_aopna_o.asm:0004 $000C <RLC> _( <IX> `+` 0x0 )_ `&` <D>
+m_shift_aopna_o.asm:0005 $0010 <RLC> _( <IX> `+` 0x0 )_ `&` <E>
+m_shift_aopna_o.asm:0006 $0014 <RLC> _( <IX> `+` 0x0 )_ `&` <F>
+m_shift_aopna_o.asm:0007 $0018 <RLC> _( <IX> `+` 0x0 )_ `&` <H>
+m_shift_aopna_o.asm:0008 $001C <RLC> _( <IX> `+` 0x0 )_ `&` <L>
+m_shift_aopna_o.asm:0010 $0020 <RRC> _( <IX> `+` 0x1 )_ `&` <B>
+m_shift_aopna_o.asm:0011 $0024 <RL> _( <IX> `+` 0x1 )_ `&` <B>
+m_shift_aopna_o.asm:0012 $0028 <RR> _( <IX> `+` 0x1 )_ `&` <B>
+m_shift_aopna_o.asm:0013 $002C <SLA> _( <IX> `+` 0x1 )_ `&` <B>
+m_shift_aopna_o.asm:0014 $0030 <SRA> _( <IX> `+` 0x1 )_ `&` <B>
+m_shift_aopna_o.asm:0015 $0034 <SLL> _( <IX> `+` 0x1 )_ `&` <B>
+m_shift_aopna_o.asm:0016 $0038 <SRL> _( <IX> `+` 0x1 )_ `&` <B>
+diff m_shift_aopna_o.bin m_shift_aopna_o.exp
+E: Illegal shift/rotate instruction. ... OK
+N: m_push_o
+../vgsasm m_push_o.asm -v
+    m_push_o.asm:0001 $0000 <PUSH> <AF>
+    m_push_o.asm:0002 $0001 <PUSH> <BC>
+    m_push_o.asm:0003 $0002 <PUSH> <DE>
+    m_push_o.asm:0004 $0003 <PUSH> <HL>
+    m_push_o.asm:0005 $0004 <PUSH> <IX>
+    m_push_o.asm:0006 $0006 <PUSH> <IY>
+diff m_push_o.bin m_push_o.exp
+E: Unsupported PUSH operand: A ... OK
+E: Excessive or insufficient number of operands. ... OK
+N: m_pop_o
+../vgsasm m_pop_o.asm -v
+     m_pop_o.asm:0001 $0000 <POP> <AF>
+     m_pop_o.asm:0002 $0001 <POP> <BC>
+     m_pop_o.asm:0003 $0002 <POP> <DE>
+     m_pop_o.asm:0004 $0003 <POP> <HL>
+     m_pop_o.asm:0005 $0004 <POP> <IX>
+     m_pop_o.asm:0006 $0006 <POP> <IY>
+diff m_pop_o.bin m_pop_o.exp
+E: Unsupported POP operand: SP ... OK
+E: Excessive or insufficient number of operands. ... OK
+N: m_call_n
+../vgsasm m_call_n.asm -v
+    m_call_n.asm:0001 $0000 <CALL> 0x0
+    m_call_n.asm:0002 $0003 <CALL> 0xFFFF
+diff m_call_n.bin m_call_n.exp
+E: Numerical range incorrect: 65536 ... OK
+N: m_call_l
+../vgsasm m_call_l.asm -v
+    m_call_l.asm:0001 $0000 LABEL1:
+    m_call_l.asm:0002 $0000 LABEL2:
+    m_call_l.asm:0003 $0000 LABEL3@LABEL2:
+    m_call_l.asm:0005 $0000 <CALL> `LABEL1`
+    m_call_l.asm:0006 $0003 <CALL> `LABEL2`
+    m_call_l.asm:0007 $0006 <CALL> `LABEL3@LABEL2`
+    m_call_l.asm:0008 $0009 <CALL> `LABEL3@LABEL2`
+diff m_call_l.bin m_call_l.exp
+N: m_call_osn
+../vgsasm m_call_osn.asm -v
+  m_call_osn.asm:0001 $0000 <CALL> <NZ> `,` 0x0
+  m_call_osn.asm:0002 $0003 <CALL> <Z> `,` 0x1
+  m_call_osn.asm:0003 $0006 <CALL> <NC> `,` 0x7FFF
+  m_call_osn.asm:0004 $0009 <CALL> <C> `,` 0x8000
+  m_call_osn.asm:0005 $000C <CALL> <PO> `,` 0xFFFF
+  m_call_osn.asm:0006 $000F <CALL> <PE> `,` 0x0
+  m_call_osn.asm:0007 $0012 <CALL> <M> `,` 0x64
+  m_call_osn.asm:0008 $0015 <CALL> <P> `,` 0xC8
+diff m_call_osn.bin m_call_osn.exp
+E: Invalid condition: A ... OK
+E: Numerical range incorrect: 65536 ... OK
+N: m_call_osl
+../vgsasm m_call_osl.asm -v
+  m_call_osl.asm:0001 $0000 LABEL:
+  m_call_osl.asm:0002 $0000 LABEL1:
+  m_call_osl.asm:0003 $0000 LABEL2:
+  m_call_osl.asm:0004 $0000 LABEL3@LABEL2:
+  m_call_osl.asm:0006 $0000 <CALL> <NZ> `,` `LABEL1`
+  m_call_osl.asm:0007 $0003 <CALL> <Z> `,` `LABEL2`
+  m_call_osl.asm:0008 $0006 <CALL> <NC> `,` `LABEL3@LABEL2`
+  m_call_osl.asm:0009 $0009 <CALL> <C> `,` `LABEL`
+  m_call_osl.asm:0010 $000C <CALL> <PO> `,` `LABEL1`
+  m_call_osl.asm:0011 $000F <CALL> <PE> `,` `LABEL2`
+  m_call_osl.asm:0012 $0012 <CALL> <M> `,` `LABEL3@LABEL2`
+  m_call_osl.asm:0013 $0015 <CALL> <P> `,` `LABEL3@LABEL2`
+diff m_call_osl.bin m_call_osl.exp
+E: Illegal CALL instruction. ... OK
+N: m_hage_oso_hl
+../vgsasm m_hage_oso_hl.asm -v
+m_hage_oso_hl.asm:0001 $0000 <MUL> <HL> `,` <A>
+m_hage_oso_hl.asm:0002 $0009 <MUL> <HL> `,` <B>
+m_hage_oso_hl.asm:0003 $0012 <MUL> <HL> `,` <C>
+m_hage_oso_hl.asm:0004 $0018 <MUL> <HL> `,` <D>
+m_hage_oso_hl.asm:0005 $0021 <MUL> <HL> `,` <E>
+m_hage_oso_hl.asm:0007 $002A <MULS> <HL> `,` <A>
+m_hage_oso_hl.asm:0008 $0033 <MULS> <HL> `,` <B>
+m_hage_oso_hl.asm:0009 $003C <MULS> <HL> `,` <C>
+m_hage_oso_hl.asm:0010 $0042 <MULS> <HL> `,` <D>
+m_hage_oso_hl.asm:0011 $004B <MULS> <HL> `,` <E>
+m_hage_oso_hl.asm:0013 $0054 <DIV> <HL> `,` <A>
+m_hage_oso_hl.asm:0014 $005D <DIV> <HL> `,` <B>
+m_hage_oso_hl.asm:0015 $0066 <DIV> <HL> `,` <C>
+m_hage_oso_hl.asm:0016 $006C <DIV> <HL> `,` <D>
+m_hage_oso_hl.asm:0017 $0075 <DIV> <HL> `,` <E>
+m_hage_oso_hl.asm:0019 $007E <DIVS> <HL> `,` <A>
+m_hage_oso_hl.asm:0020 $0087 <DIVS> <HL> `,` <B>
+m_hage_oso_hl.asm:0021 $0090 <DIVS> <HL> `,` <C>
+m_hage_oso_hl.asm:0022 $0096 <DIVS> <HL> `,` <D>
+m_hage_oso_hl.asm:0023 $009F <DIVS> <HL> `,` <E>
+m_hage_oso_hl.asm:0025 $00A8 <MOD> <HL> `,` <A>
+m_hage_oso_hl.asm:0026 $00B1 <MOD> <HL> `,` <B>
+m_hage_oso_hl.asm:0027 $00BA <MOD> <HL> `,` <C>
+m_hage_oso_hl.asm:0028 $00C0 <MOD> <HL> `,` <D>
+m_hage_oso_hl.asm:0029 $00C9 <MOD> <HL> `,` <E>
+diff m_hage_oso_hl.bin m_hage_oso_hl.exp
+N: m_hage_oso_a
+../vgsasm m_hage_oso_a.asm -v
+m_hage_oso_a.asm:0001 $0000 <MUL> <A> `,` <A>
+m_hage_oso_a.asm:0002 $0009 <MUL> <A> `,` <B>
+m_hage_oso_a.asm:0003 $0012 <MUL> <A> `,` <C>
+m_hage_oso_a.asm:0004 $001B <MUL> <A> `,` <D>
+m_hage_oso_a.asm:0005 $0024 <MUL> <A> `,` <E>
+m_hage_oso_a.asm:0007 $002D <MULS> <A> `,` <A>
+m_hage_oso_a.asm:0008 $0036 <MULS> <A> `,` <B>
+m_hage_oso_a.asm:0009 $003F <MULS> <A> `,` <C>
+m_hage_oso_a.asm:0010 $0048 <MULS> <A> `,` <D>
+m_hage_oso_a.asm:0011 $0051 <MULS> <A> `,` <E>
+m_hage_oso_a.asm:0013 $005A <DIV> <A> `,` <A>
+m_hage_oso_a.asm:0014 $0063 <DIV> <A> `,` <B>
+m_hage_oso_a.asm:0015 $006C <DIV> <A> `,` <C>
+m_hage_oso_a.asm:0016 $0075 <DIV> <A> `,` <D>
+m_hage_oso_a.asm:0017 $007E <DIV> <A> `,` <E>
+m_hage_oso_a.asm:0019 $0087 <DIVS> <A> `,` <A>
+m_hage_oso_a.asm:0020 $0090 <DIVS> <A> `,` <B>
+m_hage_oso_a.asm:0021 $0099 <DIVS> <A> `,` <C>
+m_hage_oso_a.asm:0022 $00A2 <DIVS> <A> `,` <D>
+m_hage_oso_a.asm:0023 $00AB <DIVS> <A> `,` <E>
+m_hage_oso_a.asm:0025 $00B4 <MOD> <A> `,` <A>
+m_hage_oso_a.asm:0026 $00BD <MOD> <A> `,` <B>
+m_hage_oso_a.asm:0027 $00C6 <MOD> <A> `,` <C>
+m_hage_oso_a.asm:0028 $00CF <MOD> <A> `,` <D>
+m_hage_oso_a.asm:0029 $00D8 <MOD> <A> `,` <E>
+diff m_hage_oso_a.bin m_hage_oso_a.exp
+N: m_hage_oso_b
+../vgsasm m_hage_oso_b.asm -v
+m_hage_oso_b.asm:0001 $0000 <MUL> <B> `,` <A>
+m_hage_oso_b.asm:0002 $000B <MUL> <B> `,` <B>
+m_hage_oso_b.asm:0003 $0016 <MUL> <B> `,` <C>
+m_hage_oso_b.asm:0004 $0021 <MUL> <B> `,` <D>
+m_hage_oso_b.asm:0005 $002C <MUL> <B> `,` <E>
+m_hage_oso_b.asm:0007 $0037 <MULS> <B> `,` <A>
+m_hage_oso_b.asm:0008 $0042 <MULS> <B> `,` <B>
+m_hage_oso_b.asm:0009 $004D <MULS> <B> `,` <C>
+m_hage_oso_b.asm:0010 $0058 <MULS> <B> `,` <D>
+m_hage_oso_b.asm:0011 $0063 <MULS> <B> `,` <E>
+m_hage_oso_b.asm:0013 $006E <DIV> <B> `,` <A>
+m_hage_oso_b.asm:0014 $0079 <DIV> <B> `,` <B>
+m_hage_oso_b.asm:0015 $0084 <DIV> <B> `,` <C>
+m_hage_oso_b.asm:0016 $008F <DIV> <B> `,` <D>
+m_hage_oso_b.asm:0017 $009A <DIV> <B> `,` <E>
+m_hage_oso_b.asm:0019 $00A5 <DIVS> <B> `,` <A>
+m_hage_oso_b.asm:0020 $00B0 <DIVS> <B> `,` <B>
+m_hage_oso_b.asm:0021 $00BB <DIVS> <B> `,` <C>
+m_hage_oso_b.asm:0022 $00C6 <DIVS> <B> `,` <D>
+m_hage_oso_b.asm:0023 $00D1 <DIVS> <B> `,` <E>
+m_hage_oso_b.asm:0025 $00DC <MOD> <B> `,` <A>
+m_hage_oso_b.asm:0026 $00E7 <MOD> <B> `,` <B>
+m_hage_oso_b.asm:0027 $00F2 <MOD> <B> `,` <C>
+m_hage_oso_b.asm:0028 $00FD <MOD> <B> `,` <D>
+m_hage_oso_b.asm:0029 $0108 <MOD> <B> `,` <E>
+diff m_hage_oso_b.bin m_hage_oso_b.exp
+N: m_hage_oso_c
+../vgsasm m_hage_oso_c.asm -v
+m_hage_oso_c.asm:0001 $0000 <MUL> <C> `,` <A>
+m_hage_oso_c.asm:0002 $000B <MUL> <C> `,` <B>
+m_hage_oso_c.asm:0003 $0016 <MUL> <C> `,` <C>
+m_hage_oso_c.asm:0004 $0021 <MUL> <C> `,` <D>
+m_hage_oso_c.asm:0005 $002C <MUL> <C> `,` <E>
+m_hage_oso_c.asm:0007 $0037 <MULS> <C> `,` <A>
+m_hage_oso_c.asm:0008 $0042 <MULS> <C> `,` <B>
+m_hage_oso_c.asm:0009 $004D <MULS> <C> `,` <C>
+m_hage_oso_c.asm:0010 $0058 <MULS> <C> `,` <D>
+m_hage_oso_c.asm:0011 $0063 <MULS> <C> `,` <E>
+m_hage_oso_c.asm:0013 $006E <DIV> <C> `,` <A>
+m_hage_oso_c.asm:0014 $0079 <DIV> <C> `,` <B>
+m_hage_oso_c.asm:0015 $0084 <DIV> <C> `,` <C>
+m_hage_oso_c.asm:0016 $008F <DIV> <C> `,` <D>
+m_hage_oso_c.asm:0017 $009A <DIV> <C> `,` <E>
+m_hage_oso_c.asm:0019 $00A5 <DIVS> <C> `,` <A>
+m_hage_oso_c.asm:0020 $00B0 <DIVS> <C> `,` <B>
+m_hage_oso_c.asm:0021 $00BB <DIVS> <C> `,` <C>
+m_hage_oso_c.asm:0022 $00C6 <DIVS> <C> `,` <D>
+m_hage_oso_c.asm:0023 $00D1 <DIVS> <C> `,` <E>
+m_hage_oso_c.asm:0025 $00DC <MOD> <C> `,` <A>
+m_hage_oso_c.asm:0026 $00E7 <MOD> <C> `,` <B>
+m_hage_oso_c.asm:0027 $00F2 <MOD> <C> `,` <C>
+m_hage_oso_c.asm:0028 $00FD <MOD> <C> `,` <D>
+m_hage_oso_c.asm:0029 $0108 <MOD> <C> `,` <E>
+diff m_hage_oso_c.bin m_hage_oso_c.exp
+N: m_hage_oso_d
+../vgsasm m_hage_oso_d.asm -v
+m_hage_oso_d.asm:0001 $0000 <MUL> <D> `,` <A>
+m_hage_oso_d.asm:0002 $000B <MUL> <D> `,` <B>
+m_hage_oso_d.asm:0003 $0016 <MUL> <D> `,` <C>
+m_hage_oso_d.asm:0004 $0021 <MUL> <D> `,` <D>
+m_hage_oso_d.asm:0005 $002C <MUL> <D> `,` <E>
+m_hage_oso_d.asm:0007 $0037 <MULS> <D> `,` <A>
+m_hage_oso_d.asm:0008 $0042 <MULS> <D> `,` <B>
+m_hage_oso_d.asm:0009 $004D <MULS> <D> `,` <C>
+m_hage_oso_d.asm:0010 $0058 <MULS> <D> `,` <D>
+m_hage_oso_d.asm:0011 $0063 <MULS> <D> `,` <E>
+m_hage_oso_d.asm:0013 $006E <DIV> <D> `,` <A>
+m_hage_oso_d.asm:0014 $0079 <DIV> <D> `,` <B>
+m_hage_oso_d.asm:0015 $0084 <DIV> <D> `,` <C>
+m_hage_oso_d.asm:0016 $008F <DIV> <D> `,` <D>
+m_hage_oso_d.asm:0017 $009A <DIV> <D> `,` <E>
+m_hage_oso_d.asm:0019 $00A5 <DIVS> <D> `,` <A>
+m_hage_oso_d.asm:0020 $00B0 <DIVS> <D> `,` <B>
+m_hage_oso_d.asm:0021 $00BB <DIVS> <D> `,` <C>
+m_hage_oso_d.asm:0022 $00C6 <DIVS> <D> `,` <D>
+m_hage_oso_d.asm:0023 $00D1 <DIVS> <D> `,` <E>
+m_hage_oso_d.asm:0025 $00DC <MOD> <D> `,` <A>
+m_hage_oso_d.asm:0026 $00E7 <MOD> <D> `,` <B>
+m_hage_oso_d.asm:0027 $00F2 <MOD> <D> `,` <C>
+m_hage_oso_d.asm:0028 $00FD <MOD> <D> `,` <D>
+m_hage_oso_d.asm:0029 $0108 <MOD> <D> `,` <E>
+diff m_hage_oso_d.bin m_hage_oso_d.exp
+N: m_hage_oso_e
+../vgsasm m_hage_oso_e.asm -v
+m_hage_oso_e.asm:0001 $0000 <MUL> <E> `,` <A>
+m_hage_oso_e.asm:0002 $000B <MUL> <E> `,` <B>
+m_hage_oso_e.asm:0003 $0016 <MUL> <E> `,` <C>
+m_hage_oso_e.asm:0004 $0021 <MUL> <E> `,` <D>
+m_hage_oso_e.asm:0005 $002C <MUL> <E> `,` <E>
+m_hage_oso_e.asm:0007 $0037 <MULS> <E> `,` <A>
+m_hage_oso_e.asm:0008 $0042 <MULS> <E> `,` <B>
+m_hage_oso_e.asm:0009 $004D <MULS> <E> `,` <C>
+m_hage_oso_e.asm:0010 $0058 <MULS> <E> `,` <D>
+m_hage_oso_e.asm:0011 $0063 <MULS> <E> `,` <E>
+m_hage_oso_e.asm:0013 $006E <DIV> <E> `,` <A>
+m_hage_oso_e.asm:0014 $0079 <DIV> <E> `,` <B>
+m_hage_oso_e.asm:0015 $0084 <DIV> <E> `,` <C>
+m_hage_oso_e.asm:0016 $008F <DIV> <E> `,` <D>
+m_hage_oso_e.asm:0017 $009A <DIV> <E> `,` <E>
+m_hage_oso_e.asm:0019 $00A5 <DIVS> <E> `,` <A>
+m_hage_oso_e.asm:0020 $00B0 <DIVS> <E> `,` <B>
+m_hage_oso_e.asm:0021 $00BB <DIVS> <E> `,` <C>
+m_hage_oso_e.asm:0022 $00C6 <DIVS> <E> `,` <D>
+m_hage_oso_e.asm:0023 $00D1 <DIVS> <E> `,` <E>
+m_hage_oso_e.asm:0025 $00DC <MOD> <E> `,` <A>
+m_hage_oso_e.asm:0026 $00E7 <MOD> <E> `,` <B>
+m_hage_oso_e.asm:0027 $00F2 <MOD> <E> `,` <C>
+m_hage_oso_e.asm:0028 $00FD <MOD> <E> `,` <D>
+m_hage_oso_e.asm:0029 $0108 <MOD> <E> `,` <E>
+diff m_hage_oso_e.bin m_hage_oso_e.exp
+N: m_hage_oso_h
+../vgsasm m_hage_oso_h.asm -v
+m_hage_oso_h.asm:0001 $0000 <MUL> <H> `,` <A>
+m_hage_oso_h.asm:0002 $000B <MUL> <H> `,` <B>
+m_hage_oso_h.asm:0003 $0016 <MUL> <H> `,` <C>
+m_hage_oso_h.asm:0004 $0021 <MUL> <H> `,` <D>
+m_hage_oso_h.asm:0005 $002C <MUL> <H> `,` <E>
+m_hage_oso_h.asm:0007 $0037 <MULS> <H> `,` <A>
+m_hage_oso_h.asm:0008 $0042 <MULS> <H> `,` <B>
+m_hage_oso_h.asm:0009 $004D <MULS> <H> `,` <C>
+m_hage_oso_h.asm:0010 $0058 <MULS> <H> `,` <D>
+m_hage_oso_h.asm:0011 $0063 <MULS> <H> `,` <E>
+m_hage_oso_h.asm:0013 $006E <DIV> <H> `,` <A>
+m_hage_oso_h.asm:0014 $0079 <DIV> <H> `,` <B>
+m_hage_oso_h.asm:0015 $0084 <DIV> <H> `,` <C>
+m_hage_oso_h.asm:0016 $008F <DIV> <H> `,` <D>
+m_hage_oso_h.asm:0017 $009A <DIV> <H> `,` <E>
+m_hage_oso_h.asm:0019 $00A5 <DIVS> <H> `,` <A>
+m_hage_oso_h.asm:0020 $00B0 <DIVS> <H> `,` <B>
+m_hage_oso_h.asm:0021 $00BB <DIVS> <H> `,` <C>
+m_hage_oso_h.asm:0022 $00C6 <DIVS> <H> `,` <D>
+m_hage_oso_h.asm:0023 $00D1 <DIVS> <H> `,` <E>
+m_hage_oso_h.asm:0025 $00DC <MOD> <H> `,` <A>
+m_hage_oso_h.asm:0026 $00E7 <MOD> <H> `,` <B>
+m_hage_oso_h.asm:0027 $00F2 <MOD> <H> `,` <C>
+m_hage_oso_h.asm:0028 $00FD <MOD> <H> `,` <D>
+m_hage_oso_h.asm:0029 $0108 <MOD> <H> `,` <E>
+diff m_hage_oso_h.bin m_hage_oso_h.exp
+N: m_hage_oso_l
+../vgsasm m_hage_oso_l.asm -v
+m_hage_oso_l.asm:0001 $0000 <MUL> <L> `,` <A>
+m_hage_oso_l.asm:0002 $000C <MUL> <L> `,` <B>
+m_hage_oso_l.asm:0003 $0018 <MUL> <L> `,` <C>
+m_hage_oso_l.asm:0004 $0024 <MUL> <L> `,` <D>
+m_hage_oso_l.asm:0005 $0030 <MUL> <L> `,` <E>
+m_hage_oso_l.asm:0007 $003C <MULS> <L> `,` <A>
+m_hage_oso_l.asm:0008 $0048 <MULS> <L> `,` <B>
+m_hage_oso_l.asm:0009 $0054 <MULS> <L> `,` <C>
+m_hage_oso_l.asm:0010 $0060 <MULS> <L> `,` <D>
+m_hage_oso_l.asm:0011 $006C <MULS> <L> `,` <E>
+m_hage_oso_l.asm:0013 $0078 <DIV> <L> `,` <A>
+m_hage_oso_l.asm:0014 $0084 <DIV> <L> `,` <B>
+m_hage_oso_l.asm:0015 $0090 <DIV> <L> `,` <C>
+m_hage_oso_l.asm:0016 $009C <DIV> <L> `,` <D>
+m_hage_oso_l.asm:0017 $00A8 <DIV> <L> `,` <E>
+m_hage_oso_l.asm:0019 $00B4 <DIVS> <L> `,` <A>
+m_hage_oso_l.asm:0020 $00C0 <DIVS> <L> `,` <B>
+m_hage_oso_l.asm:0021 $00CC <DIVS> <L> `,` <C>
+m_hage_oso_l.asm:0022 $00D8 <DIVS> <L> `,` <D>
+m_hage_oso_l.asm:0023 $00E4 <DIVS> <L> `,` <E>
+m_hage_oso_l.asm:0025 $00F0 <MOD> <L> `,` <A>
+m_hage_oso_l.asm:0026 $00FC <MOD> <L> `,` <B>
+m_hage_oso_l.asm:0027 $0108 <MOD> <L> `,` <C>
+m_hage_oso_l.asm:0028 $0114 <MOD> <L> `,` <D>
+m_hage_oso_l.asm:0029 $0120 <MOD> <L> `,` <E>
+diff m_hage_oso_l.bin m_hage_oso_l.exp
+E: Illegal MUL instruction. ... OK
+E: Illegal MUL instruction. ... OK
+E: Illegal MULS instruction. ... OK
+E: Illegal DIV instruction. ... OK
+E: Illegal DIVS instruction. ... OK
+E: Illegal MOD instruction. ... OK
+E: Illegal MUL instruction. ... OK
+E: Illegal MULS instruction. ... OK
+E: Illegal MUL instruction. ... OK
+N: m_hage_osn
+../vgsasm m_hage_osn.asm -v
+  m_hage_osn.asm:0001 $0000 <MUL> <A> `,` 0xFFFFFF80
+  m_hage_osn.asm:0002 $000A <MUL> <B> `,` 0xFFFFFFFF
+  m_hage_osn.asm:0003 $0016 <MUL> <C> `,` 0x0
+  m_hage_osn.asm:0004 $0022 <MUL> <D> `,` 0x1
+  m_hage_osn.asm:0005 $002E <MUL> <E> `,` 0x7F
+  m_hage_osn.asm:0006 $003A <MUL> <H> `,` 0x80
+  m_hage_osn.asm:0007 $0046 <MUL> <L> `,` 0xFF
+  m_hage_osn.asm:0009 $0053 <MULS> <A> `,` 0xFFFFFF80
+  m_hage_osn.asm:0010 $005D <MULS> <B> `,` 0xFFFFFFFF
+  m_hage_osn.asm:0011 $0069 <MULS> <C> `,` 0x0
+  m_hage_osn.asm:0012 $0075 <MULS> <D> `,` 0x1
+  m_hage_osn.asm:0013 $0081 <MULS> <E> `,` 0x7F
+  m_hage_osn.asm:0014 $008D <MULS> <H> `,` 0x80
+  m_hage_osn.asm:0015 $0099 <MULS> <L> `,` 0xFF
+  m_hage_osn.asm:0017 $00A6 <DIV> <A> `,` 0xFFFFFF80
+  m_hage_osn.asm:0018 $00B0 <DIV> <B> `,` 0xFFFFFFFF
+  m_hage_osn.asm:0019 $00BC <DIV> <C> `,` 0x0
+  m_hage_osn.asm:0020 $00C8 <DIV> <D> `,` 0x1
+  m_hage_osn.asm:0021 $00D4 <DIV> <E> `,` 0x7F
+  m_hage_osn.asm:0022 $00E0 <DIV> <H> `,` 0x80
+  m_hage_osn.asm:0023 $00EC <DIV> <L> `,` 0xFF
+  m_hage_osn.asm:0025 $00F9 <DIVS> <A> `,` 0xFFFFFF80
+  m_hage_osn.asm:0026 $0103 <DIVS> <B> `,` 0xFFFFFFFF
+  m_hage_osn.asm:0027 $010F <DIVS> <C> `,` 0x0
+  m_hage_osn.asm:0028 $011B <DIVS> <D> `,` 0x1
+  m_hage_osn.asm:0029 $0127 <DIVS> <E> `,` 0x7F
+  m_hage_osn.asm:0030 $0133 <DIVS> <H> `,` 0x80
+  m_hage_osn.asm:0031 $013F <DIVS> <L> `,` 0xFF
+  m_hage_osn.asm:0033 $014C <MOD> <A> `,` 0x0
+  m_hage_osn.asm:0034 $0156 <MOD> <B> `,` 0x1
+  m_hage_osn.asm:0035 $0162 <MOD> <C> `,` 0x3F
+  m_hage_osn.asm:0036 $016E <MOD> <D> `,` 0x40
+  m_hage_osn.asm:0037 $017A <MOD> <E> `,` 0x7F
+  m_hage_osn.asm:0038 $0186 <MOD> <H> `,` 0x80
+  m_hage_osn.asm:0039 $0192 <MOD> <L> `,` 0xFF
+diff m_hage_osn.bin m_hage_osn.exp
+E: MOD cannot operate on negative numbers. ... OK
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 256 ... OK
+E: Illegal MUL instruction. ... OK
+N: m_atn2_oso
+../vgsasm m_atn2_oso.asm -v
+  m_atn2_oso.asm:0001 $0000 <ATN2> <A> `,` <HL>
+  m_atn2_oso.asm:0002 $0002 <ATN2> <A> `,` <BC>
+  m_atn2_oso.asm:0003 $0008 <ATN2> <A> `,` <DE>
+diff m_atn2_oso.bin m_atn2_oso.exp
+E: Illegal ATN2 instruction. ... OK
+E: Illegal ATN2 instruction. ... OK
+E: Illegal ATN2 instruction. ... OK
+N: m_sin_o
+../vgsasm m_sin_o.asm -v
+     m_sin_o.asm:0001 $0000 <SIN> <A>
+     m_sin_o.asm:0002 $0002 <SIN> <B>
+     m_sin_o.asm:0003 $0005 <SIN> <C>
+     m_sin_o.asm:0004 $0008 <SIN> <D>
+     m_sin_o.asm:0005 $000B <SIN> <E>
+     m_sin_o.asm:0006 $000E <SIN> <H>
+     m_sin_o.asm:0007 $0011 <SIN> <L>
+diff m_sin_o.bin m_sin_o.exp
+E: Illegal SIN instruction. ... OK
+N: m_sin_oso
+../vgsasm m_sin_oso.asm -v
+   m_sin_oso.asm:0001 $0000 <SIN> <A> `,` <A>
+   m_sin_oso.asm:0002 $0002 <SIN> <A> `,` <B>
+   m_sin_oso.asm:0003 $0005 <SIN> <A> `,` <C>
+   m_sin_oso.asm:0004 $0008 <SIN> <A> `,` <D>
+   m_sin_oso.asm:0005 $000B <SIN> <A> `,` <E>
+   m_sin_oso.asm:0006 $000E <SIN> <A> `,` <H>
+   m_sin_oso.asm:0007 $0011 <SIN> <A> `,` <L>
+diff m_sin_oso.bin m_sin_oso.exp
+E: Illegal SIN instruction. ... OK
+E: Illegal SIN instruction. ... OK
+E: Illegal SIN instruction. ... OK
+N: m_cos_o
+../vgsasm m_cos_o.asm -v
+     m_cos_o.asm:0001 $0000 <COS> <A>
+     m_cos_o.asm:0002 $0002 <COS> <B>
+     m_cos_o.asm:0003 $0005 <COS> <C>
+     m_cos_o.asm:0004 $0008 <COS> <D>
+     m_cos_o.asm:0005 $000B <COS> <E>
+     m_cos_o.asm:0006 $000E <COS> <H>
+     m_cos_o.asm:0007 $0011 <COS> <L>
+diff m_cos_o.bin m_cos_o.exp
+E: Illegal COS instruction. ... OK
+N: m_cos_oso
+../vgsasm m_cos_oso.asm -v
+   m_cos_oso.asm:0001 $0000 <COS> <A> `,` <A>
+   m_cos_oso.asm:0002 $0002 <COS> <A> `,` <B>
+   m_cos_oso.asm:0003 $0005 <COS> <A> `,` <C>
+   m_cos_oso.asm:0004 $0008 <COS> <A> `,` <D>
+   m_cos_oso.asm:0005 $000B <COS> <A> `,` <E>
+   m_cos_oso.asm:0006 $000E <COS> <A> `,` <H>
+   m_cos_oso.asm:0007 $0011 <COS> <A> `,` <L>
+diff m_cos_oso.bin m_cos_oso.exp
+E: Illegal COS instruction. ... OK
+E: Illegal COS instruction. ... OK
+E: Illegal COS instruction. ... OK
+N: m_ld_oso8_a
+../vgsasm m_ld_oso8_a.asm -v
+ m_ld_oso8_a.asm:0001 $0000 <LD> <A> `,` <A>
+ m_ld_oso8_a.asm:0002 $0001 <LD> <A> `,` <B>
+ m_ld_oso8_a.asm:0003 $0002 <LD> <A> `,` <C>
+ m_ld_oso8_a.asm:0004 $0003 <LD> <A> `,` <D>
+ m_ld_oso8_a.asm:0005 $0004 <LD> <A> `,` <E>
+ m_ld_oso8_a.asm:0006 $0005 <LD> <A> `,` <H>
+ m_ld_oso8_a.asm:0007 $0006 <LD> <A> `,` <L>
+ m_ld_oso8_a.asm:0008 $0007 <LD> <A> `,` <IXH>
+ m_ld_oso8_a.asm:0009 $0009 <LD> <A> `,` <IXL>
+ m_ld_oso8_a.asm:0010 $000B <LD> <A> `,` <IYH>
+ m_ld_oso8_a.asm:0011 $000D <LD> <A> `,` <IYL>
+diff m_ld_oso8_a.bin m_ld_oso8_a.exp
+N: m_ld_oso8_b
+../vgsasm m_ld_oso8_b.asm -v
+ m_ld_oso8_b.asm:0001 $0000 <LD> <B> `,` <A>
+ m_ld_oso8_b.asm:0002 $0001 <LD> <B> `,` <B>
+ m_ld_oso8_b.asm:0003 $0002 <LD> <B> `,` <C>
+ m_ld_oso8_b.asm:0004 $0003 <LD> <B> `,` <D>
+ m_ld_oso8_b.asm:0005 $0004 <LD> <B> `,` <E>
+ m_ld_oso8_b.asm:0006 $0005 <LD> <B> `,` <H>
+ m_ld_oso8_b.asm:0007 $0006 <LD> <B> `,` <L>
+ m_ld_oso8_b.asm:0008 $0007 <LD> <B> `,` <IXH>
+ m_ld_oso8_b.asm:0009 $0009 <LD> <B> `,` <IXL>
+ m_ld_oso8_b.asm:0010 $000B <LD> <B> `,` <IYH>
+ m_ld_oso8_b.asm:0011 $000D <LD> <B> `,` <IYL>
+diff m_ld_oso8_b.bin m_ld_oso8_b.exp
+N: m_ld_oso8_c
+../vgsasm m_ld_oso8_c.asm -v
+ m_ld_oso8_c.asm:0001 $0000 <LD> <C> `,` <A>
+ m_ld_oso8_c.asm:0002 $0001 <LD> <C> `,` <B>
+ m_ld_oso8_c.asm:0003 $0002 <LD> <C> `,` <C>
+ m_ld_oso8_c.asm:0004 $0003 <LD> <C> `,` <D>
+ m_ld_oso8_c.asm:0005 $0004 <LD> <C> `,` <E>
+ m_ld_oso8_c.asm:0006 $0005 <LD> <C> `,` <H>
+ m_ld_oso8_c.asm:0007 $0006 <LD> <C> `,` <L>
+ m_ld_oso8_c.asm:0008 $0007 <LD> <C> `,` <IXH>
+ m_ld_oso8_c.asm:0009 $0009 <LD> <C> `,` <IXL>
+ m_ld_oso8_c.asm:0010 $000B <LD> <C> `,` <IYH>
+ m_ld_oso8_c.asm:0011 $000D <LD> <C> `,` <IYL>
+diff m_ld_oso8_c.bin m_ld_oso8_c.exp
+N: m_ld_oso8_d
+../vgsasm m_ld_oso8_d.asm -v
+ m_ld_oso8_d.asm:0001 $0000 <LD> <D> `,` <A>
+ m_ld_oso8_d.asm:0002 $0001 <LD> <D> `,` <B>
+ m_ld_oso8_d.asm:0003 $0002 <LD> <D> `,` <C>
+ m_ld_oso8_d.asm:0004 $0003 <LD> <D> `,` <D>
+ m_ld_oso8_d.asm:0005 $0004 <LD> <D> `,` <E>
+ m_ld_oso8_d.asm:0006 $0005 <LD> <D> `,` <H>
+ m_ld_oso8_d.asm:0007 $0006 <LD> <D> `,` <L>
+ m_ld_oso8_d.asm:0008 $0007 <LD> <D> `,` <IXH>
+ m_ld_oso8_d.asm:0009 $0009 <LD> <D> `,` <IXL>
+ m_ld_oso8_d.asm:0010 $000B <LD> <D> `,` <IYH>
+ m_ld_oso8_d.asm:0011 $000D <LD> <D> `,` <IYL>
+diff m_ld_oso8_d.bin m_ld_oso8_d.exp
+N: m_ld_oso8_e
+../vgsasm m_ld_oso8_e.asm -v
+ m_ld_oso8_e.asm:0001 $0000 <LD> <E> `,` <A>
+ m_ld_oso8_e.asm:0002 $0001 <LD> <E> `,` <B>
+ m_ld_oso8_e.asm:0003 $0002 <LD> <E> `,` <C>
+ m_ld_oso8_e.asm:0004 $0003 <LD> <E> `,` <D>
+ m_ld_oso8_e.asm:0005 $0004 <LD> <E> `,` <E>
+ m_ld_oso8_e.asm:0006 $0005 <LD> <E> `,` <H>
+ m_ld_oso8_e.asm:0007 $0006 <LD> <E> `,` <L>
+ m_ld_oso8_e.asm:0008 $0007 <LD> <E> `,` <IXH>
+ m_ld_oso8_e.asm:0009 $0009 <LD> <E> `,` <IXL>
+ m_ld_oso8_e.asm:0010 $000B <LD> <E> `,` <IYH>
+ m_ld_oso8_e.asm:0011 $000D <LD> <E> `,` <IYL>
+diff m_ld_oso8_e.bin m_ld_oso8_e.exp
+N: m_ld_oso8_h
+../vgsasm m_ld_oso8_h.asm -v
+ m_ld_oso8_h.asm:0001 $0000 <LD> <H> `,` <A>
+ m_ld_oso8_h.asm:0002 $0001 <LD> <H> `,` <B>
+ m_ld_oso8_h.asm:0003 $0002 <LD> <H> `,` <C>
+ m_ld_oso8_h.asm:0004 $0003 <LD> <H> `,` <D>
+ m_ld_oso8_h.asm:0005 $0004 <LD> <H> `,` <E>
+ m_ld_oso8_h.asm:0006 $0005 <LD> <H> `,` <H>
+ m_ld_oso8_h.asm:0007 $0006 <LD> <H> `,` <L>
+diff m_ld_oso8_h.bin m_ld_oso8_h.exp
+N: m_ld_oso8_l
+../vgsasm m_ld_oso8_l.asm -v
+ m_ld_oso8_l.asm:0001 $0000 <LD> <L> `,` <A>
+ m_ld_oso8_l.asm:0002 $0001 <LD> <L> `,` <B>
+ m_ld_oso8_l.asm:0003 $0002 <LD> <L> `,` <C>
+ m_ld_oso8_l.asm:0004 $0003 <LD> <L> `,` <D>
+ m_ld_oso8_l.asm:0005 $0004 <LD> <L> `,` <E>
+ m_ld_oso8_l.asm:0006 $0005 <LD> <L> `,` <H>
+ m_ld_oso8_l.asm:0007 $0006 <LD> <L> `,` <L>
+diff m_ld_oso8_l.bin m_ld_oso8_l.exp
+N: m_ld_oso8_ixh
+../vgsasm m_ld_oso8_ixh.asm -v
+m_ld_oso8_ixh.asm:0001 $0000 <LD> <IXH> `,` <A>
+m_ld_oso8_ixh.asm:0002 $0002 <LD> <IXH> `,` <B>
+m_ld_oso8_ixh.asm:0003 $0004 <LD> <IXH> `,` <C>
+m_ld_oso8_ixh.asm:0004 $0006 <LD> <IXH> `,` <D>
+m_ld_oso8_ixh.asm:0005 $0008 <LD> <IXH> `,` <E>
+m_ld_oso8_ixh.asm:0008 $000A <LD> <IXH> `,` <IXH>
+m_ld_oso8_ixh.asm:0009 $000C <LD> <IXH> `,` <IXL>
+diff m_ld_oso8_ixh.bin m_ld_oso8_ixh.exp
+N: m_ld_oso8_ixl
+../vgsasm m_ld_oso8_ixl.asm -v
+m_ld_oso8_ixl.asm:0001 $0000 <LD> <IXL> `,` <A>
+m_ld_oso8_ixl.asm:0002 $0002 <LD> <IXL> `,` <B>
+m_ld_oso8_ixl.asm:0003 $0004 <LD> <IXL> `,` <C>
+m_ld_oso8_ixl.asm:0004 $0006 <LD> <IXL> `,` <D>
+m_ld_oso8_ixl.asm:0005 $0008 <LD> <IXL> `,` <E>
+m_ld_oso8_ixl.asm:0008 $000A <LD> <IXL> `,` <IXH>
+m_ld_oso8_ixl.asm:0009 $000C <LD> <IXL> `,` <IXL>
+diff m_ld_oso8_ixl.bin m_ld_oso8_ixl.exp
+N: m_ld_oso8_iyh
+../vgsasm m_ld_oso8_iyh.asm -v
+m_ld_oso8_iyh.asm:0001 $0000 <LD> <IYH> `,` <A>
+m_ld_oso8_iyh.asm:0002 $0002 <LD> <IYH> `,` <B>
+m_ld_oso8_iyh.asm:0003 $0004 <LD> <IYH> `,` <C>
+m_ld_oso8_iyh.asm:0004 $0006 <LD> <IYH> `,` <D>
+m_ld_oso8_iyh.asm:0005 $0008 <LD> <IYH> `,` <E>
+m_ld_oso8_iyh.asm:0010 $000A <LD> <IYH> `,` <IYH>
+m_ld_oso8_iyh.asm:0011 $000C <LD> <IYH> `,` <IYL>
+diff m_ld_oso8_iyh.bin m_ld_oso8_iyh.exp
+N: m_ld_oso8_iyl
+../vgsasm m_ld_oso8_iyl.asm -v
+m_ld_oso8_iyl.asm:0001 $0000 <LD> <IYL> `,` <A>
+m_ld_oso8_iyl.asm:0002 $0002 <LD> <IYL> `,` <B>
+m_ld_oso8_iyl.asm:0003 $0004 <LD> <IYL> `,` <C>
+m_ld_oso8_iyl.asm:0004 $0006 <LD> <IYL> `,` <D>
+m_ld_oso8_iyl.asm:0005 $0008 <LD> <IYL> `,` <E>
+m_ld_oso8_iyl.asm:0010 $000A <LD> <IYL> `,` <IYH>
+m_ld_oso8_iyl.asm:0011 $000C <LD> <IYL> `,` <IYL>
+diff m_ld_oso8_iyl.bin m_ld_oso8_iyl.exp
+E: LD {H|L},{IXH|IXL} is not supported. ... OK
+E: LD {H|L},{IXH|IXL} is not supported. ... OK
+E: LD {H|L},{IYH|IYL} is not supported. ... OK
+E: LD {H|L},{IYH|IYL} is not supported. ... OK
+E: LD {H|L},{IXH|IXL} is not supported. ... OK
+E: LD {H|L},{IXH|IXL} is not supported. ... OK
+E: LD {H|L},{IYH|IYL} is not supported. ... OK
+E: LD {H|L},{IYH|IYL} is not supported. ... OK
+E: LD {IXH|IXL},{H|L} is not supported. ... OK
+E: LD {IXH|IXL},{H|L} is not supported. ... OK
+E: LD {IXH|IXL},{IYH|IYL} is not supported. ... OK
+E: LD {IXH|IXL},{IYH|IYL} is not supported. ... OK
+E: LD {IXH|IXL},{H|L} is not supported. ... OK
+E: LD {IXH|IXL},{H|L} is not supported. ... OK
+E: LD {IXH|IXL},{IYH|IYL} is not supported. ... OK
+E: LD {IXH|IXL},{IYH|IYL} is not supported. ... OK
+E: LD {IYH|IYL},{H|L} is not supported. ... OK
+E: LD {IYH|IYL},{H|L} is not supported. ... OK
+E: LD {IYH|IYL},{IXH|IXL} is not supported. ... OK
+E: LD {IYH|IYL},{IXH|IXL} is not supported. ... OK
+N: m_ld_oso16_bc
+../vgsasm m_ld_oso16_bc.asm -v
+m_ld_oso16_bc.asm:0001 $0000 <LD> <BC> `,` <BC>
+m_ld_oso16_bc.asm:0002 $0002 <LD> <BC> `,` <DE>
+m_ld_oso16_bc.asm:0003 $0004 <LD> <BC> `,` <HL>
+m_ld_oso16_bc.asm:0004 $0006 <LD> <BC> `,` <IX>
+m_ld_oso16_bc.asm:0005 $000A <LD> <BC> `,` <IY>
+diff m_ld_oso16_bc.bin m_ld_oso16_bc.exp
+N: m_ld_oso16_de
+../vgsasm m_ld_oso16_de.asm -v
+m_ld_oso16_de.asm:0001 $0000 <LD> <DE> `,` <BC>
+m_ld_oso16_de.asm:0002 $0002 <LD> <DE> `,` <DE>
+m_ld_oso16_de.asm:0003 $0004 <LD> <DE> `,` <HL>
+m_ld_oso16_de.asm:0004 $0006 <LD> <DE> `,` <IX>
+m_ld_oso16_de.asm:0005 $000A <LD> <DE> `,` <IY>
+diff m_ld_oso16_de.bin m_ld_oso16_de.exp
+N: m_ld_oso16_hl
+../vgsasm m_ld_oso16_hl.asm -v
+m_ld_oso16_hl.asm:0001 $0000 <LD> <HL> `,` <BC>
+m_ld_oso16_hl.asm:0002 $0002 <LD> <HL> `,` <DE>
+m_ld_oso16_hl.asm:0003 $0004 <LD> <HL> `,` <HL>
+m_ld_oso16_hl.asm:0004 $0006 <LD> <HL> `,` <IX>
+m_ld_oso16_hl.asm:0005 $0009 <LD> <HL> `,` <IY>
+diff m_ld_oso16_hl.bin m_ld_oso16_hl.exp
+N: m_ld_oso16_ix
+../vgsasm m_ld_oso16_ix.asm -v
+m_ld_oso16_ix.asm:0001 $0000 <LD> <IX> `,` <BC>
+m_ld_oso16_ix.asm:0002 $0004 <LD> <IX> `,` <DE>
+m_ld_oso16_ix.asm:0003 $0008 <LD> <IX> `,` <HL>
+m_ld_oso16_ix.asm:0004 $000B <LD> <IX> `,` <IX>
+m_ld_oso16_ix.asm:0005 $000F <LD> <IX> `,` <IY>
+diff m_ld_oso16_ix.bin m_ld_oso16_ix.exp
+N: m_ld_oso16_iy
+../vgsasm m_ld_oso16_iy.asm -v
+m_ld_oso16_iy.asm:0001 $0000 <LD> <IY> `,` <BC>
+m_ld_oso16_iy.asm:0002 $0004 <LD> <IY> `,` <DE>
+m_ld_oso16_iy.asm:0003 $0008 <LD> <IY> `,` <HL>
+m_ld_oso16_iy.asm:0004 $000B <LD> <IY> `,` <IX>
+m_ld_oso16_iy.asm:0005 $000F <LD> <IY> `,` <IY>
+diff m_ld_oso16_iy.bin m_ld_oso16_iy.exp
+N: m_ld_oso16_sp
+../vgsasm m_ld_oso16_sp.asm -v
+m_ld_oso16_sp.asm:0001 $0000 <LD> <SP> `,` <HL>
+m_ld_oso16_sp.asm:0002 $0001 <LD> <SP> `,` <IX>
+m_ld_oso16_sp.asm:0003 $0003 <LD> <SP> `,` <IY>
+diff m_ld_oso16_sp.bin m_ld_oso16_sp.exp
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+N: m_ld_osaoa_hl
+../vgsasm m_ld_osaoa_hl.asm -v
+m_ld_osaoa_hl.asm:0001 $0000 <LD> <A> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0002 $0001 <LD> <B> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0003 $0002 <LD> <C> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0004 $0003 <LD> <D> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0005 $0004 <LD> <E> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0006 $0005 <LD> <H> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0007 $0006 <LD> <L> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0008 $0007 <LD> <IXH> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0009 $000C <LD> <IXL> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0010 $0011 <LD> <IYH> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0011 $0016 <LD> <IYL> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0012 $001B <LD> <BC> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0013 $001F <LD> <DE> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0014 $0023 <LD> <IX> `,` _( <HL> )_
+m_ld_osaoa_hl.asm:0015 $002D <LD> <IY> `,` _( <HL> )_
+diff m_ld_osaoa_hl.bin m_ld_osaoa_hl.exp
+E: Illegal LD instruction. ... OK
+N: m_ld_aoaso_hl
+../vgsasm m_ld_aoaso_hl.asm -v
+m_ld_aoaso_hl.asm:0001 $0000 <LD> _( <HL> )_ `,` <A>
+m_ld_aoaso_hl.asm:0002 $0001 <LD> _( <HL> )_ `,` <B>
+m_ld_aoaso_hl.asm:0003 $0002 <LD> _( <HL> )_ `,` <C>
+m_ld_aoaso_hl.asm:0004 $0003 <LD> _( <HL> )_ `,` <D>
+m_ld_aoaso_hl.asm:0005 $0004 <LD> _( <HL> )_ `,` <E>
+m_ld_aoaso_hl.asm:0006 $0005 <LD> _( <HL> )_ `,` <H>
+m_ld_aoaso_hl.asm:0007 $0006 <LD> _( <HL> )_ `,` <L>
+m_ld_aoaso_hl.asm:0008 $0007 <LD> _( <HL> )_ `,` <IXH>
+m_ld_aoaso_hl.asm:0009 $000C <LD> _( <HL> )_ `,` <IXL>
+m_ld_aoaso_hl.asm:0010 $0011 <LD> _( <HL> )_ `,` <IYH>
+m_ld_aoaso_hl.asm:0011 $0016 <LD> _( <HL> )_ `,` <IYL>
+m_ld_aoaso_hl.asm:0012 $001B <LD> _( <HL> )_ `,` <BC>
+m_ld_aoaso_hl.asm:0013 $001F <LD> _( <HL> )_ `,` <DE>
+m_ld_aoaso_hl.asm:0014 $0023 <LD> _( <HL> )_ `,` <IX>
+m_ld_aoaso_hl.asm:0015 $002D <LD> _( <HL> )_ `,` <IY>
+diff m_ld_aoaso_hl.bin m_ld_aoaso_hl.exp
+E: Illegal LD instruction. ... OK
+N: m_ld_a_bc
+../vgsasm m_ld_a_bc.asm -v
+   m_ld_a_bc.asm:0001 $0000 <LD> <A> `,` _( <BC> )_
+diff m_ld_a_bc.bin m_ld_a_bc.exp
+N: m_ld_a_de
+../vgsasm m_ld_a_de.asm -v
+   m_ld_a_de.asm:0001 $0000 <LD> <A> `,` _( <DE> )_
+diff m_ld_a_de.bin m_ld_a_de.exp
+N: m_ld_bc_a
+../vgsasm m_ld_bc_a.asm -v
+   m_ld_bc_a.asm:0001 $0000 <LD> _( <BC> )_ `,` <A>
+diff m_ld_bc_a.bin m_ld_bc_a.exp
+N: m_ld_de_a
+../vgsasm m_ld_de_a.asm -v
+   m_ld_de_a.asm:0001 $0000 <LD> _( <DE> )_ `,` <A>
+diff m_ld_de_a.bin m_ld_de_a.exp
+N: m_ld_osn8
+../vgsasm m_ld_osn8.asm -v
+   m_ld_osn8.asm:0001 $0000 <LD> <A> `,` 0xFFFFFF80
+   m_ld_osn8.asm:0002 $0002 <LD> <B> `,` 0xFFFFFFFF
+   m_ld_osn8.asm:0003 $0004 <LD> <C> `,` 0x0
+   m_ld_osn8.asm:0004 $0006 <LD> <D> `,` 0x1
+   m_ld_osn8.asm:0005 $0008 <LD> <E> `,` 0x7F
+   m_ld_osn8.asm:0006 $000A <LD> <H> `,` 0x80
+   m_ld_osn8.asm:0007 $000C <LD> <L> `,` 0xFF
+   m_ld_osn8.asm:0008 $000E <LD> <IXH> `,` 0x3F
+   m_ld_osn8.asm:0009 $0011 <LD> <IXL> `,` 0x40
+   m_ld_osn8.asm:0010 $0014 <LD> <IYH> `,` 0x64
+   m_ld_osn8.asm:0011 $0017 <LD> <IYL> `,` 0xC8
+diff m_ld_osn8.bin m_ld_osn8.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 256 ... OK
+N: m_ld_osn16
+../vgsasm m_ld_osn16.asm -v
+  m_ld_osn16.asm:0001 $0000 <LD> <BC> `,` 0xFFFF8000
+  m_ld_osn16.asm:0002 $0003 <LD> <DE> `,` 0xFFFFFFFF
+  m_ld_osn16.asm:0003 $0006 <LD> <HL> `,` 0x0
+  m_ld_osn16.asm:0004 $0009 <LD> <IX> `,` 0x1
+  m_ld_osn16.asm:0005 $000D <LD> <IY> `,` 0x7FFF
+  m_ld_osn16.asm:0006 $0011 <LD> <SP> `,` 0xFFFF
+diff m_ld_osn16.bin m_ld_osn16.exp
+E: Numerical range incorrect: -32769 ... OK
+E: Numerical range incorrect: 65536 ... OK
+E: Illegal LD instruction. ... OK
+N: m_ld_osl
+../vgsasm m_ld_osl.asm -v
+    m_ld_osl.asm:0001 $0000 LABEL1:
+    m_ld_osl.asm:0002 $0000 <NOP>
+    m_ld_osl.asm:0003 $0001 LABEL2:
+    m_ld_osl.asm:0004 $0001 <NOP>
+    m_ld_osl.asm:0005 $0002 LABEL3@LABEL2:
+    m_ld_osl.asm:0006 $0002 <NOP>
+    m_ld_osl.asm:0008 $0003 <LD> <BC> `,` `LABEL1`
+    m_ld_osl.asm:0009 $0006 <LD> <DE> `,` `LABEL2`
+    m_ld_osl.asm:0010 $0009 <LD> <HL> `,` `LABEL3@LABEL2`
+    m_ld_osl.asm:0011 $000C <LD> <SP> `,` `LABEL3@LABEL2`
+    m_ld_osl.asm:0012 $000F <LD> <IX> `,` `LABEL1`
+    m_ld_osl.asm:0013 $0013 <LD> <IY> `,` `LABEL2`
+diff m_ld_osl.bin m_ld_osl.exp
+E: Illegal LD instruction. ... OK
+N: m_ld_osana
+../vgsasm m_ld_osana.asm -v
+  m_ld_osana.asm:0001 $0000 <LD> <A> `,` _( 0x0 )_
+  m_ld_osana.asm:0002 $0003 <LD> <B> `,` _( 0x64 )_
+  m_ld_osana.asm:0003 $0009 <LD> <C> `,` _( 0xC8 )_
+  m_ld_osana.asm:0004 $000F <LD> <D> `,` _( 0x12C )_
+  m_ld_osana.asm:0005 $0015 <LD> <E> `,` _( 0x190 )_
+  m_ld_osana.asm:0006 $001B <LD> <H> `,` _( 0x1F4 )_
+  m_ld_osana.asm:0007 $0021 <LD> <L> `,` _( 0x258 )_
+  m_ld_osana.asm:0008 $0027 <LD> <IXH> `,` _( 0x3E8 )_
+  m_ld_osana.asm:0009 $002E <LD> <IXL> `,` _( 0x7D0 )_
+  m_ld_osana.asm:0010 $0035 <LD> <IYH> `,` _( 0xBB8 )_
+  m_ld_osana.asm:0011 $003C <LD> <IYL> `,` _( 0xFA0 )_
+  m_ld_osana.asm:0012 $0043 <LD> <BC> `,` _( 0x1 )_
+  m_ld_osana.asm:0013 $0047 <LD> <DE> `,` _( 0x7FFF )_
+  m_ld_osana.asm:0014 $004B <LD> <HL> `,` _( 0x8000 )_
+  m_ld_osana.asm:0015 $004E <LD> <SP> `,` _( 0xFFFF )_
+  m_ld_osana.asm:0016 $0052 <LD> <IX> `,` _( 0x4D2 )_
+  m_ld_osana.asm:0017 $0056 <LD> <IY> `,` _( 0x162E )_
+diff m_ld_osana.bin m_ld_osana.exp
+E: Numerical range incorrect: 65536 ... OK
+E: Illegal LD instruction. ... OK
+N: m_ld_osala
+../vgsasm m_ld_osala.asm -v
+  m_ld_osala.asm:0001 $0000 <NOP>
+  m_ld_osala.asm:0002 $0001 LABEL1:
+  m_ld_osala.asm:0003 $0001 <NOP>
+  m_ld_osala.asm:0004 $0002 LABEL2:
+  m_ld_osala.asm:0005 $0002 <NOP>
+  m_ld_osala.asm:0006 $0003 LABEL3@LABEL2:
+  m_ld_osala.asm:0007 $0003 <NOP>
+  m_ld_osala.asm:0009 $0004 <LD> <A> `,` _( `LABEL1` )_
+  m_ld_osala.asm:0010 $0007 <LD> <B> `,` _( `LABEL2` )_
+  m_ld_osala.asm:0011 $000D <LD> <C> `,` _( `LABEL3@LABEL2` )_
+  m_ld_osala.asm:0012 $0013 <LD> <D> `,` _( `LABEL1` )_
+  m_ld_osala.asm:0013 $0019 <LD> <E> `,` _( `LABEL2` )_
+  m_ld_osala.asm:0014 $001F <LD> <H> `,` _( `LABEL3@LABEL2` )_
+  m_ld_osala.asm:0015 $0025 <LD> <L> `,` _( `LABEL3@LABEL2` )_
+  m_ld_osala.asm:0016 $002B <LD> <IXH> `,` _( `LABEL1` )_
+  m_ld_osala.asm:0017 $0032 <LD> <IXL> `,` _( `LABEL2` )_
+  m_ld_osala.asm:0018 $0039 <LD> <IYH> `,` _( `LABEL3@LABEL2` )_
+  m_ld_osala.asm:0019 $0040 <LD> <IYL> `,` _( `LABEL1` )_
+  m_ld_osala.asm:0020 $0047 <LD> <HL> `,` _( `LABEL2` )_
+  m_ld_osala.asm:0021 $004A <LD> <DE> `,` _( `LABEL3@LABEL2` )_
+  m_ld_osala.asm:0022 $004E <LD> <BC> `,` _( `LABEL1` )_
+  m_ld_osala.asm:0023 $0052 <LD> <SP> `,` _( `LABEL2` )_
+  m_ld_osala.asm:0024 $0056 <LD> <IX> `,` _( `LABEL3@LABEL2` )_
+  m_ld_osala.asm:0025 $005A <LD> <IY> `,` _( `LABEL1` )_
+diff m_ld_osala.bin m_ld_osala.exp
+E: Illegal LD instruction. ... OK
+N: m_ld_anaso
+../vgsasm m_ld_anaso.asm -v
+  m_ld_anaso.asm:0001 $0000 <LD> _( 0x0 )_ `,` <A>
+  m_ld_anaso.asm:0002 $0003 <LD> _( 0x100 )_ `,` <B>
+  m_ld_anaso.asm:0003 $0009 <LD> _( 0x200 )_ `,` <C>
+  m_ld_anaso.asm:0004 $000F <LD> _( 0x400 )_ `,` <D>
+  m_ld_anaso.asm:0005 $0015 <LD> _( 0x800 )_ `,` <E>
+  m_ld_anaso.asm:0006 $001B <LD> _( 0x1000 )_ `,` <H>
+  m_ld_anaso.asm:0007 $0021 <LD> _( 0x2000 )_ `,` <L>
+  m_ld_anaso.asm:0008 $0027 <LD> _( 0x4000 )_ `,` <IXH>
+  m_ld_anaso.asm:0009 $002E <LD> _( 0x8000 )_ `,` <IXL>
+  m_ld_anaso.asm:0010 $0035 <LD> _( 0xFFFF )_ `,` <IYH>
+  m_ld_anaso.asm:0011 $003C <LD> _( 0x3E8 )_ `,` <IYL>
+  m_ld_anaso.asm:0012 $0043 <LD> _( 0x7D0 )_ `,` <BC>
+  m_ld_anaso.asm:0013 $0047 <LD> _( 0xBB8 )_ `,` <DE>
+  m_ld_anaso.asm:0014 $004B <LD> _( 0xFA0 )_ `,` <HL>
+  m_ld_anaso.asm:0015 $004E <LD> _( 0x1388 )_ `,` <SP>
+  m_ld_anaso.asm:0016 $0052 <LD> _( 0x1770 )_ `,` <IX>
+  m_ld_anaso.asm:0017 $0056 <LD> _( 0x1B58 )_ `,` <IY>
+diff m_ld_anaso.bin m_ld_anaso.exp
+E: Numerical range incorrect: 65536 ... OK
+E: Illegal LD instruction. ... OK
+N: m_ld_alaso
+../vgsasm m_ld_alaso.asm -v
+  m_ld_alaso.asm:0001 $0000 <NOP>
+  m_ld_alaso.asm:0002 $0001 LABEL1:
+  m_ld_alaso.asm:0003 $0001 <NOP>
+  m_ld_alaso.asm:0004 $0002 LABEL2:
+  m_ld_alaso.asm:0005 $0002 <NOP>
+  m_ld_alaso.asm:0006 $0003 LABEL3@LABEL2:
+  m_ld_alaso.asm:0007 $0003 <NOP>
+  m_ld_alaso.asm:0008 $0004 LABEL4@LABEL2:
+  m_ld_alaso.asm:0010 $0004 <LD> _( `LABEL1` )_ `,` <A>
+  m_ld_alaso.asm:0011 $0007 <LD> _( `LABEL2` )_ `,` <B>
+  m_ld_alaso.asm:0012 $000D <LD> _( `LABEL3@LABEL2` )_ `,` <C>
+  m_ld_alaso.asm:0013 $0013 <LD> _( `LABEL4@LABEL2` )_ `,` <D>
+  m_ld_alaso.asm:0014 $0019 <LD> _( `LABEL1` )_ `,` <E>
+  m_ld_alaso.asm:0015 $001F <LD> _( `LABEL2` )_ `,` <H>
+  m_ld_alaso.asm:0016 $0025 <LD> _( `LABEL3@LABEL2` )_ `,` <L>
+  m_ld_alaso.asm:0017 $002B <LD> _( `LABEL4@LABEL2` )_ `,` <IXH>
+  m_ld_alaso.asm:0018 $0032 <LD> _( `LABEL1` )_ `,` <IXL>
+  m_ld_alaso.asm:0019 $0039 <LD> _( `LABEL2` )_ `,` <IYH>
+  m_ld_alaso.asm:0020 $0040 <LD> _( `LABEL3@LABEL2` )_ `,` <IYL>
+  m_ld_alaso.asm:0021 $0047 <LD> _( `LABEL4@LABEL2` )_ `,` <BC>
+  m_ld_alaso.asm:0022 $004B <LD> _( `LABEL1` )_ `,` <DE>
+  m_ld_alaso.asm:0023 $004F <LD> _( `LABEL2` )_ `,` <HL>
+  m_ld_alaso.asm:0024 $0052 <LD> _( `LABEL3@LABEL2` )_ `,` <SP>
+  m_ld_alaso.asm:0025 $0056 <LD> _( `LABEL4@LABEL2` )_ `,` <IX>
+  m_ld_alaso.asm:0026 $005A <LD> _( `LABEL1` )_ `,` <IY>
+diff m_ld_alaso.bin m_ld_alaso.exp
+E: Illegal LD instruction. ... OK
+N: m_ld_anasn
+../vgsasm m_ld_anasn.asm -v
+  m_ld_anasn.asm:0001 $0000 <LD> _( 0x0 )_ `,` 0xFFFFFF80
+  m_ld_anasn.asm:0002 $0007 <LD> _( 0x400 )_ `,` 0xFFFFFFFF
+  m_ld_anasn.asm:0003 $000E <LD> _( 0x800 )_ `,` 0x0
+  m_ld_anasn.asm:0004 $0015 <LD> _( 0x1000 )_ `,` 0x1
+  m_ld_anasn.asm:0005 $001C <LD> _( 0x2000 )_ `,` 0x7F
+  m_ld_anasn.asm:0006 $0023 <LD> _( 0x4000 )_ `,` 0x80
+  m_ld_anasn.asm:0007 $002A <LD> _( 0x8000 )_ `,` 0xFE
+  m_ld_anasn.asm:0008 $0031 <LD> _( 0xFFFF )_ `,` 0xFF
+diff m_ld_anasn.bin m_ld_anasn.exp
+E: Numerical range incorrect: 65536 ... OK
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 256 ... OK
+N: m_ld_alasn
+../vgsasm m_ld_alasn.asm -v
+  m_ld_alasn.asm:0001 $0000 LABEL:
+  m_ld_alasn.asm:0002 $0000 <LD> _( `LABEL` )_ `,` 0xFFFFFF80
+  m_ld_alasn.asm:0003 $0007 <LD> _( `LABEL` )_ `,` 0xFF
+diff m_ld_alasn.bin m_ld_alasn.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 256 ... OK
+N: m_ld_osaopna8_ix
+../vgsasm m_ld_osaopna8_ix.asm -v
+m_ld_osaopna8_ix.asm:0001 $0000 <LD> <A> `,` _( <IX> `-` 0x80 )_
+m_ld_osaopna8_ix.asm:0002 $0003 <LD> <B> `,` _( <IX> `-` 0x1 )_
+m_ld_osaopna8_ix.asm:0003 $0006 <LD> <C> `,` _( <IX> `-` 0x0 )_
+m_ld_osaopna8_ix.asm:0004 $0009 <LD> <D> `,` _( <IX> `+` 0x1 )_
+m_ld_osaopna8_ix.asm:0005 $000C <LD> <E> `,` _( <IX> `+` 0x7F )_
+m_ld_osaopna8_ix.asm:0006 $000F <LD> <H> `,` _( <IX> `+` 0x3F )_
+m_ld_osaopna8_ix.asm:0007 $0012 <LD> <L> `,` _( <IX> `-` 0x40 )_
+diff m_ld_osaopna8_ix.bin m_ld_osaopna8_ix.exp
+N: m_ld_osaopna8_iy
+../vgsasm m_ld_osaopna8_iy.asm -v
+m_ld_osaopna8_iy.asm:0001 $0000 <LD> <A> `,` _( <IY> `-` 0x80 )_
+m_ld_osaopna8_iy.asm:0002 $0003 <LD> <B> `,` _( <IY> `-` 0x1 )_
+m_ld_osaopna8_iy.asm:0003 $0006 <LD> <C> `,` _( <IY> `-` 0x0 )_
+m_ld_osaopna8_iy.asm:0004 $0009 <LD> <D> `,` _( <IY> `+` 0x1 )_
+m_ld_osaopna8_iy.asm:0005 $000C <LD> <E> `,` _( <IY> `+` 0x7F )_
+m_ld_osaopna8_iy.asm:0006 $000F <LD> <H> `,` _( <IY> `+` 0x3F )_
+m_ld_osaopna8_iy.asm:0007 $0012 <LD> <L> `,` _( <IY> `-` 0x40 )_
+diff m_ld_osaopna8_iy.bin m_ld_osaopna8_iy.exp
+N: m_ld_osaopna16_ix
+../vgsasm m_ld_osaopna16_ix.asm -v
+m_ld_osaopna16_ix.asm:0001 $0000 <LD> <BC> `,` _( <IX> `-` 0x80 )_
+m_ld_osaopna16_ix.asm:0002 $0006 <LD> <DE> `,` _( <IX> `-` 0x1 )_
+m_ld_osaopna16_ix.asm:0003 $000C <LD> <HL> `,` _( <IX> `+` 0x7F )_
+diff m_ld_osaopna16_ix.bin m_ld_osaopna16_ix.exp
+N: m_ld_osaopna16_iy
+../vgsasm m_ld_osaopna16_iy.asm -v
+m_ld_osaopna16_iy.asm:0001 $0000 <LD> <BC> `,` _( <IY> `-` 0x80 )_
+m_ld_osaopna16_iy.asm:0002 $0006 <LD> <DE> `,` _( <IY> `-` 0x1 )_
+m_ld_osaopna16_iy.asm:0003 $000C <LD> <HL> `,` _( <IY> `+` 0x7F )_
+diff m_ld_osaopna16_iy.bin m_ld_osaopna16_iy.exp
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 128 ... OK
+N: m_ld_osaoa_ix
+../vgsasm m_ld_osaoa_ix.asm -v
+m_ld_osaoa_ix.asm:0001 $0000 <LD> <A> `,` _( <IX> )_
+m_ld_osaoa_ix.asm:0002 $0003 <LD> <B> `,` _( <IX> )_
+m_ld_osaoa_ix.asm:0003 $0006 <LD> <C> `,` _( <IX> )_
+m_ld_osaoa_ix.asm:0004 $0009 <LD> <D> `,` _( <IX> )_
+m_ld_osaoa_ix.asm:0005 $000C <LD> <E> `,` _( <IX> )_
+m_ld_osaoa_ix.asm:0006 $000F <LD> <H> `,` _( <IX> )_
+m_ld_osaoa_ix.asm:0007 $0012 <LD> <L> `,` _( <IX> )_
+m_ld_osaoa_ix.asm:0012 $0015 <LD> <BC> `,` _( <IX> )_
+m_ld_osaoa_ix.asm:0013 $001B <LD> <DE> `,` _( <IX> )_
+m_ld_osaoa_ix.asm:0014 $0021 <LD> <HL> `,` _( <IX> )_
+diff m_ld_osaoa_ix.bin m_ld_osaoa_ix.exp
+N: m_ld_osaoa_iy
+../vgsasm m_ld_osaoa_iy.asm -v
+m_ld_osaoa_iy.asm:0001 $0000 <LD> <A> `,` _( <IY> )_
+m_ld_osaoa_iy.asm:0002 $0003 <LD> <B> `,` _( <IY> )_
+m_ld_osaoa_iy.asm:0003 $0006 <LD> <C> `,` _( <IY> )_
+m_ld_osaoa_iy.asm:0004 $0009 <LD> <D> `,` _( <IY> )_
+m_ld_osaoa_iy.asm:0005 $000C <LD> <E> `,` _( <IY> )_
+m_ld_osaoa_iy.asm:0006 $000F <LD> <H> `,` _( <IY> )_
+m_ld_osaoa_iy.asm:0007 $0012 <LD> <L> `,` _( <IY> )_
+m_ld_osaoa_iy.asm:0012 $0015 <LD> <BC> `,` _( <IY> )_
+m_ld_osaoa_iy.asm:0013 $001B <LD> <DE> `,` _( <IY> )_
+m_ld_osaoa_iy.asm:0014 $0021 <LD> <HL> `,` _( <IY> )_
+diff m_ld_osaoa_iy.bin m_ld_osaoa_iy.exp
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+N: m_ld_aopnaso_ix
+../vgsasm m_ld_aopnaso_ix.asm -v
+m_ld_aopnaso_ix.asm:0001 $0000 <LD> _( <IX> `-` 0x80 )_ `,` <A>
+m_ld_aopnaso_ix.asm:0002 $0003 <LD> _( <IX> `-` 0x1 )_ `,` <B>
+m_ld_aopnaso_ix.asm:0003 $0006 <LD> _( <IX> `+` 0x0 )_ `,` <C>
+m_ld_aopnaso_ix.asm:0004 $0009 <LD> _( <IX> `+` 0x1 )_ `,` <D>
+m_ld_aopnaso_ix.asm:0005 $000C <LD> _( <IX> `+` 0x7F )_ `,` <E>
+m_ld_aopnaso_ix.asm:0006 $000F <LD> _( <IX> `+` 0x40 )_ `,` <H>
+m_ld_aopnaso_ix.asm:0007 $0012 <LD> _( <IX> `-` 0x40 )_ `,` <L>
+m_ld_aopnaso_ix.asm:0012 $0015 <LD> _( <IX> `+` 0x3F )_ `,` <BC>
+m_ld_aopnaso_ix.asm:0013 $001B <LD> _( <IX> `+` 0x40 )_ `,` <DE>
+m_ld_aopnaso_ix.asm:0014 $0021 <LD> _( <IX> `+` 0x7F )_ `,` <HL>
+diff m_ld_aopnaso_ix.bin m_ld_aopnaso_ix.exp
+N: m_ld_aopnaso_iy
+../vgsasm m_ld_aopnaso_iy.asm -v
+m_ld_aopnaso_iy.asm:0001 $0000 <LD> _( <IY> `-` 0x80 )_ `,` <A>
+m_ld_aopnaso_iy.asm:0002 $0003 <LD> _( <IY> `-` 0x1 )_ `,` <B>
+m_ld_aopnaso_iy.asm:0003 $0006 <LD> _( <IY> `+` 0x0 )_ `,` <C>
+m_ld_aopnaso_iy.asm:0004 $0009 <LD> _( <IY> `+` 0x1 )_ `,` <D>
+m_ld_aopnaso_iy.asm:0005 $000C <LD> _( <IY> `+` 0x7F )_ `,` <E>
+m_ld_aopnaso_iy.asm:0006 $000F <LD> _( <IY> `+` 0x40 )_ `,` <H>
+m_ld_aopnaso_iy.asm:0007 $0012 <LD> _( <IY> `-` 0x40 )_ `,` <L>
+m_ld_aopnaso_iy.asm:0012 $0015 <LD> _( <IY> `+` 0x3F )_ `,` <BC>
+m_ld_aopnaso_iy.asm:0013 $001B <LD> _( <IY> `+` 0x40 )_ `,` <DE>
+m_ld_aopnaso_iy.asm:0014 $0021 <LD> _( <IY> `+` 0x7F )_ `,` <HL>
+diff m_ld_aopnaso_iy.bin m_ld_aopnaso_iy.exp
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 128 ... OK
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 128 ... OK
+N: m_ld_aoaso_ix
+../vgsasm m_ld_aoaso_ix.asm -v
+m_ld_aoaso_ix.asm:0001 $0000 <LD> _( <IX> )_ `,` <A>
+m_ld_aoaso_ix.asm:0002 $0003 <LD> _( <IX> )_ `,` <B>
+m_ld_aoaso_ix.asm:0003 $0006 <LD> _( <IX> )_ `,` <C>
+m_ld_aoaso_ix.asm:0004 $0009 <LD> _( <IX> )_ `,` <D>
+m_ld_aoaso_ix.asm:0005 $000C <LD> _( <IX> )_ `,` <E>
+m_ld_aoaso_ix.asm:0006 $000F <LD> _( <IX> )_ `,` <H>
+m_ld_aoaso_ix.asm:0007 $0012 <LD> _( <IX> )_ `,` <L>
+m_ld_aoaso_ix.asm:0012 $0015 <LD> _( <IX> )_ `,` <BC>
+m_ld_aoaso_ix.asm:0013 $001B <LD> _( <IX> )_ `,` <DE>
+m_ld_aoaso_ix.asm:0014 $0021 <LD> _( <IX> )_ `,` <HL>
+diff m_ld_aoaso_ix.bin m_ld_aoaso_ix.exp
+N: m_ld_aoaso_iy
+../vgsasm m_ld_aoaso_iy.asm -v
+m_ld_aoaso_iy.asm:0001 $0000 <LD> _( <IY> )_ `,` <A>
+m_ld_aoaso_iy.asm:0002 $0003 <LD> _( <IY> )_ `,` <B>
+m_ld_aoaso_iy.asm:0003 $0006 <LD> _( <IY> )_ `,` <C>
+m_ld_aoaso_iy.asm:0004 $0009 <LD> _( <IY> )_ `,` <D>
+m_ld_aoaso_iy.asm:0005 $000C <LD> _( <IY> )_ `,` <E>
+m_ld_aoaso_iy.asm:0006 $000F <LD> _( <IY> )_ `,` <H>
+m_ld_aoaso_iy.asm:0007 $0012 <LD> _( <IY> )_ `,` <L>
+m_ld_aoaso_iy.asm:0012 $0015 <LD> _( <IY> )_ `,` <BC>
+m_ld_aoaso_iy.asm:0013 $001B <LD> _( <IY> )_ `,` <DE>
+m_ld_aoaso_iy.asm:0014 $0021 <LD> _( <IY> )_ `,` <HL>
+diff m_ld_aoaso_iy.bin m_ld_aoaso_iy.exp
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+E: Illegal LD instruction. ... OK
+N: m_ld_aopnasn_ix
+../vgsasm m_ld_aopnasn_ix.asm -v
+m_ld_aopnasn_ix.asm:0001 $0000 <LD> _( <IX> `-` 0x80 )_ `,` 0xFF
+m_ld_aopnasn_ix.asm:0002 $0004 <LD> _( <IX> `-` 0x1 )_ `,` 0x0
+m_ld_aopnasn_ix.asm:0003 $0008 <LD> _( <IX> `+` 0x0 )_ `,` 0x80
+m_ld_aopnasn_ix.asm:0004 $000C <LD> _( <IX> `+` 0x1 )_ `,` 0xC0
+m_ld_aopnasn_ix.asm:0005 $0010 <LD> _( <IX> `+` 0x7F )_ `,` 0x40
+diff m_ld_aopnasn_ix.bin m_ld_aopnasn_ix.exp
+N: m_ld_aopnasn_iy
+../vgsasm m_ld_aopnasn_iy.asm -v
+m_ld_aopnasn_iy.asm:0001 $0000 <LD> _( <IY> `-` 0x80 )_ `,` 0xFF
+m_ld_aopnasn_iy.asm:0002 $0004 <LD> _( <IY> `-` 0x1 )_ `,` 0x0
+m_ld_aopnasn_iy.asm:0003 $0008 <LD> _( <IY> `+` 0x0 )_ `,` 0x80
+m_ld_aopnasn_iy.asm:0004 $000C <LD> _( <IY> `+` 0x1 )_ `,` 0xC0
+m_ld_aopnasn_iy.asm:0005 $0010 <LD> _( <IY> `+` 0x7F )_ `,` 0x40
+diff m_ld_aopnasn_iy.bin m_ld_aopnasn_iy.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 128 ... OK
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 256 ... OK
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 128 ... OK
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 256 ... OK
+N: m_ld_aoasn
+../vgsasm m_ld_aoasn.asm -v
+  m_ld_aoasn.asm:0001 $0000 <LD> _( <BC> )_ `,` 0xFFFFFF80
+  m_ld_aoasn.asm:0002 $0006 <LD> _( <DE> )_ `,` 0xFFFFFFFF
+  m_ld_aoasn.asm:0003 $000C <LD> _( <HL> )_ `,` 0x1
+  m_ld_aoasn.asm:0004 $000E <LD> _( <IX> )_ `,` 0x7F
+  m_ld_aoasn.asm:0005 $0012 <LD> _( <IY> )_ `,` 0xFF
+diff m_ld_aoasn.bin m_ld_aoasn.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 256 ... OK
+E: Illegal LD instruction. ... OK
+N: m_single
+../vgsasm m_single.asm -v
+    m_single.asm:0001 $0000 <NOP>
+    m_single.asm:0002 $0001 <DI>
+    m_single.asm:0003 $0002 <EI>
+    m_single.asm:0004 $0003 <HALT>
+    m_single.asm:0005 $0004 <EXX>
+    m_single.asm:0006 $0005 <DAA>
+    m_single.asm:0007 $0006 <CPL>
+    m_single.asm:0008 $0007 <CCF>
+    m_single.asm:0009 $0008 <SCF>
+    m_single.asm:0010 $0009 <NEG>
+    m_single.asm:0011 $000B <LDI>
+    m_single.asm:0012 $000D <LDIR>
+    m_single.asm:0013 $000F <LDD>
+    m_single.asm:0014 $0011 <LDDR>
+    m_single.asm:0015 $0013 <CPI>
+    m_single.asm:0016 $0015 <CPIR>
+    m_single.asm:0017 $0017 <CPD>
+    m_single.asm:0018 $0019 <CPDR>
+    m_single.asm:0019 $001B <OUTI>
+    m_single.asm:0020 $001D <OUTIR>
+    m_single.asm:0021 $001F <OTIR>
+    m_single.asm:0022 $0021 <OUTD>
+    m_single.asm:0023 $0023 <OUTDR>
+    m_single.asm:0024 $0025 <OTDR>
+    m_single.asm:0025 $0027 <INI>
+    m_single.asm:0026 $0029 <INIR>
+    m_single.asm:0027 $002B <IND>
+    m_single.asm:0028 $002D <INDR>
+    m_single.asm:0029 $002F <RLCA>
+    m_single.asm:0030 $0030 <RRCA>
+    m_single.asm:0031 $0031 <RLA>
+    m_single.asm:0032 $0032 <RRA>
+    m_single.asm:0033 $0033 <RLD>
+    m_single.asm:0034 $0035 <RRD>
+    m_single.asm:0035 $0037 <RETI>
+    m_single.asm:0036 $0039 <RETN>
+diff m_single.bin m_single.exp
+E: Relative jump destination address is too far away: -129 ... OK
+N: m_far_m128
+../vgsasm m_far_m128.asm -v
+  m_far_m128.asm:0001 $0000 LABEL:
+  m_far_m128.asm:0003 Binary: "bin120.dat"
+  m_far_m128.asm:0004 $0078 <DB> 0x0 `,` 0x0 `,` 0x0 `,` 0x0 `,` 0x0 `,` 0x0
+  m_far_m128.asm:0006 $007E <JR> `LABEL`
+diff m_far_m128.bin m_far_m128.exp
+N: m_far_p127
+../vgsasm m_far_p127.asm -v
+  m_far_p127.asm:0001 $0000 <JR> `LABEL`
+  m_far_p127.asm:0003 Binary: "bin120.dat"
+  m_far_p127.asm:0004 $007A <DB> 0x0 `,` 0x0 `,` 0x0 `,` 0x0 `,` 0x0 `,` 0x0 `,` 0x0
+  m_far_p127.asm:0006 $0081 LABEL:
+diff m_far_p127.bin m_far_p127.exp
+E: Relative jump destination address is too far away: 128 ... OK
+Normal case: 242
+Error case: 368
+Total: 610

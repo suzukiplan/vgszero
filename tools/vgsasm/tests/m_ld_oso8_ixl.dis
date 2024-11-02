@@ -1,0 +1,7 @@
+                    ld        ixl,a                         ;[0000] dd 6f
+                    ld        ixl,b                         ;[0002] dd 68
+                    ld        ixl,c                         ;[0004] dd 69
+                    ld        ixl,d                         ;[0006] dd 6a
+                    ld        ixl,e                         ;[0008] dd 6b
+                    ld        ixl,ixh                       ;[000a] dd 6c
+                    ld        ixl,ixl                       ;[000c] dd 6d

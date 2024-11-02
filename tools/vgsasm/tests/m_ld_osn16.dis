@@ -1,0 +1,6 @@
+                    ld        bc,$8000                      ;[0000] 01 00 80
+                    ld        de,$ffff                      ;[0003] 11 ff ff
+                    ld        hl,$0000                      ;[0006] 21 00 00
+                    ld        ix,$0001                      ;[0009] dd 21 01 00
+                    ld        iy,$7fff                      ;[000d] fd 21 ff 7f
+                    ld        sp,$ffff                      ;[0011] 31 ff ff

@@ -1,0 +1,30 @@
+                    sla       (hl)                          ;[0000] cb 26
+                    sla       (ix+$00)                      ;[0002] dd cb 00 26
+                    sla       (iy+$00)                      ;[0006] fd cb 00 26
+                    sll       (hl)                          ;[000a] cb 36
+                    sll       (ix+$00)                      ;[000c] dd cb 00 36
+                    sll       (iy+$00)                      ;[0010] fd cb 00 36
+                    sra       (hl)                          ;[0014] cb 2e
+                    sra       (ix+$00)                      ;[0016] dd cb 00 2e
+                    sra       (iy+$00)                      ;[001a] fd cb 00 2e
+                    srl       (hl)                          ;[001e] cb 3e
+                    srl       (ix+$00)                      ;[0020] dd cb 00 3e
+                    srl       (iy+$00)                      ;[0024] fd cb 00 3e
+                    rlc       (hl)                          ;[0028] cb 06
+                    rlc       (ix+$00)                      ;[002a] dd cb 00 06
+                    rlc       (iy+$00)                      ;[002e] fd cb 00 06
+                    rl        (hl)                          ;[0032] cb 16
+                    rl        (ix+$00)                      ;[0034] dd cb 00 16
+                    rl        (iy+$00)                      ;[0038] fd cb 00 16
+                    rrc       (hl)                          ;[003c] cb 0e
+                    rrc       (ix+$00)                      ;[003e] dd cb 00 0e
+                    rrc       (iy+$00)                      ;[0042] fd cb 00 0e
+                    rr        (hl)                          ;[0046] cb 1e
+                    rr        (ix+$00)                      ;[0048] dd cb 00 1e
+                    rr        (iy+$00)                      ;[004c] fd cb 00 1e
+                    sla       (hl)                          ;[0050] cb 26
+                    sla       (ix+$00)                      ;[0052] dd cb 00 26
+                    sla       (iy+$00)                      ;[0056] fd cb 00 26
+                    srl       (hl)                          ;[005a] cb 3e
+                    srl       (ix+$00)                      ;[005c] dd cb 00 3e
+                    srl       (iy+$00)                      ;[0060] fd cb 00 3e

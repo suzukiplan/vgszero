@@ -1,0 +1,1 @@
+mul a, ixh

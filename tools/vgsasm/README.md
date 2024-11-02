@@ -2,6 +2,8 @@
 
 Z80 Assembler for VGS-Zero is a Z80 assembler that supports the entire Z80 instruction set, including hidden instructions, and enables highly readable full assembly language programming using [“structures”](#struct).
 
+We also provide an [official VisualStudio Code Extension](https://github.com/suzukiplan/vgsasm-extension) that supports the suggestion of input candidates for the structure member variables of this assembly language, so you can be more productive than any other Z80 assembler when programming for VGS-Zero games.
+
 Although it was developed for use in game development on the VGS-Zero, it is versatile enough to be used for game development for a wide range of game consoles and PCs, including SMS, GameGear, MSX, and PC-88. _(However, the design guideline is to specialize in VGS-Zero, but not in other console or PC-specific enhancements.)_
 
 # Runtime Specification
@@ -17,6 +19,8 @@ Although it was developed for use in game development on the VGS-Zero, it is ver
 
 ## How to Install
 
+### Assembler
+
 ```
 sudo apt install build-essential
 git clone https://github.com/suzukiplan/vgsasm
@@ -28,6 +32,12 @@ sudo ln -s `pwd`/vgsasm /usr/local/bin/vgsasm
 > One of the main characteristics of this assembler is the small number of dependent packages. The assembler is **`build-essential` only** for Linux. This feature is intended for ease of integration into the VGS-Zero toolchain, so it will not depend on other external packages in the future.
 >
 > If you are looking for a Z80 assembler OSS to integrate into another game-specific SDK (e.g. GameGear), it may be a good option. vgsasm is a [GPLv3 licensed OSS](./LICENSE.txt). You are free to modify it to the extent permitted by the license.
+
+### Visual Studio Code Extension
+
+We provide an [Extension for Visual Studio Code](https://github.com/suzukiplan/vgsasm-extension) that supports struct and enum input assistance.
+
+Search for `vgsasm` in the Visual Studio Code marketplace and install it.
 
 ## Usage
 
@@ -67,6 +77,7 @@ vgsasm [-o /path/to/output.bin]
 - [Increment and Decrement](#increment-and-decrement)
 - [Assignment](#assignment)
 - [Support Instructions](#support-instructions)
+- [Support Alias Instructions](#support-alias-instructions)
 - [Instructions Specialized for VGS-Zero](#instructions-specialized-for-vgs-zero)
 - [Auto Expand Instructions](#auto-expand-instructions)
 
@@ -271,7 +282,6 @@ struct OAM $9000 {
     bank        ds.b    1
     reserved    ds.b    1
 }
-```
 
 org $0000
 
@@ -470,7 +480,7 @@ Increments and decrements can be automatically inserted before and after a regis
 
 ## Assignment
 
-`LD(=)`, `ADD(+=)`, `SUB(-=)`, `AND(&=)`, `OR(|=)`, `XOR(^=)`, `SLA(<<=)`, `SRL(>>=)` can also be written in the form of assignment expressions.
+`LD(=)`, `ADD(+=)`, `SUB(-=)`, `MUL(*=)`, `DIV(/=)`, `MOD(%=)`, `AND(&=)`, `OR(|=)`, `XOR(^=)`, `SLA(<<=)`, `SRL(>>=)` can also be written in the form of assignment expressions.
 
 ```
 A = B         ; expand to -> LD A, B
@@ -507,6 +517,17 @@ VARS.posX = 123
 - Supports all Z80 instructions, including undocumented.
 - Some undocumented instructions are in a slightly special format.
 - All instructions are described in [./test/all.asm](./test/all.asm).
+
+## Support Alias Instructions
+
+| Alias | Assignment | Description |
+|:-----:|:----------:|:------------|
+| `SL`  | `SLA`      | **LOGICAL** Shift Left |
+| `SR`  | `SRL`      | Logical Shift Right |
+| `OUTIR` | `OTIR`   | There is no necessity to abbreviate, so it should be allowed. |
+| `OUTDR` | `OTDR`   | There is no necessity to abbreviate, so it should be allowed. |
+| `DEFB`, `BYTE` | `DB` | Since both patterns of assemblers exist, both are acceptable. |
+| `DEFW`, `WORD` | `DW` | Since both patterns of assemblers exist, both are acceptable. |
 
 ## Instructions Specialized for VGS-Zero
 

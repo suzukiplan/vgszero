@@ -1,0 +1,32 @@
+                    push      af                            ;[0000] f5
+                    ld        a,$80                         ;[0001] 3e 80
+                    ld        ($0000),a                     ;[0003] 32 00 00
+                    pop       af                            ;[0006] f1
+                    push      af                            ;[0007] f5
+                    ld        a,$ff                         ;[0008] 3e ff
+                    ld        ($0400),a                     ;[000a] 32 00 04
+                    pop       af                            ;[000d] f1
+                    push      af                            ;[000e] f5
+                    ld        a,$00                         ;[000f] 3e 00
+                    ld        ($0800),a                     ;[0011] 32 00 08
+                    pop       af                            ;[0014] f1
+                    push      af                            ;[0015] f5
+                    ld        a,$01                         ;[0016] 3e 01
+                    ld        ($1000),a                     ;[0018] 32 00 10
+                    pop       af                            ;[001b] f1
+                    push      af                            ;[001c] f5
+                    ld        a,$7f                         ;[001d] 3e 7f
+                    ld        ($2000),a                     ;[001f] 32 00 20
+                    pop       af                            ;[0022] f1
+                    push      af                            ;[0023] f5
+                    ld        a,$80                         ;[0024] 3e 80
+                    ld        ($4000),a                     ;[0026] 32 00 40
+                    pop       af                            ;[0029] f1
+                    push      af                            ;[002a] f5
+                    ld        a,$fe                         ;[002b] 3e fe
+                    ld        ($8000),a                     ;[002d] 32 00 80
+                    pop       af                            ;[0030] f1
+                    push      af                            ;[0031] f5
+                    ld        a,$ff                         ;[0032] 3e ff
+                    ld        ($ffff),a                     ;[0034] 32 ff ff
+                    pop       af                            ;[0037] f1

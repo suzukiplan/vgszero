@@ -1,34 +1,45 @@
-#define IO.joypad       0xA0
-#define IO.bank0        0xB0
-#define IO.bank1        0xB1
-#define IO.bank2        0xB2
-#define IO.bank3        0xB3
-#define IO.ram.bank     0xB4
-#define IO.ram.dup      0xB5
-#define IO.dma          0xC0
-#define IO.bank         0xC1
-#define IO.memset       0xC2
-#define IO.memcpy       0xC3
-#define IO.collision    0xC4
-#define IO.rand8        0xC9
-#define IO.rand16       0xCA
-#define IO.save         0xDA
-#define IO.bgm.play     0xE0
-#define IO.bgm.ctrl     0xE1
-#define IO.eff.play     0xF0
-#define IO.eff.stop     0xF1
-#define IO.eff.check    0xF2
+enum IO {
+    joypad = 0xA0           ; Joypad (IN only)
+    bank0 = 0xB0            ; Bank0 (I/O)
+    bank1                   ; Bank1 (I/O)
+    bank2                   ; Bank2 (I/O)
+    bank3                   ; Bank3 (I/O)
+    ram_bank                ; Extra RAM bank (I/O)
+    ram_dup                 ; Duplicate Extra RAM Bank (OUT only)
+    rom2chr = 0xC0          ; ROM to Character DMA (OUT only)
+    rom2ram                 ; ROM to Memory DMA (OUT only)
+    memset                  ; memset DMA (OUT only)
+    memcpy                  ; memcpy DMA (OUT only)
+    collision               ; Collision check (IN only)
+    calculation             ; MUL, DIV, MOD (OUT only)
+    sin_io                  ; SIN (OUT only)
+    cos_io                  ; COS (OUT only)
+    atan2                   ; ATAN2 (IN only)
+    rand8                   ; 8-bits random (I/O)
+    rand16                  ; 16-bits random (I/O)
+    perin_seed              ; Perin Noise Seed (OUT only)
+    perin_x_scale           ; Perin Noise X Scale (OUT only)
+    perin_y_scale           ; Perin Noise Y Scale (OUT only)
+    save_load = 0xDA        ; Save (OUT) and Load (IN)
+    bgm_play = 0xE0         ; Play BGM (OUT)
+    bgm_ctrl                ; Pause(0), Resume(1), Fadeout(2) BGM (OUT)
+    sfx_play = 0xF0         ; Play SFX (OUT)
+    sfx_stop                ; Stop SFX (OUT)
+    sfx_check               ; Check playing SFX (OUT)
+}
 
 // IN A, (IO.joypad)
 // BIT {below}, A
-#define PAD.up          7
-#define PAD.down        6
-#define PAD.left        5
-#define PAD.right       4
-#define PAD.start       3
-#define PAD.select      2
-#define PAD.a           1
-#define PAD.b           0
+enum PAD {
+    b                       ; B button (Fire, Dash)
+    a                       ; A button (Bomber, Jump)
+    start                   ; START button
+    select                  ; SELECT button
+    right                   ; Right cursor
+    left                    ; Left cursor
+    down                    ; Down cursor
+    up                      ; Up cursor
+}
 
 struct OAM $9000 {
     y           ds.b    1
@@ -82,7 +93,7 @@ struct VRAM $8000 {
 {
     PUSH AF
     LD A, bank_number
-    OUT (IO.dma), A
+    OUT (IO.rom2chr), A
     POP AF
 }
 
@@ -114,11 +125,11 @@ struct VRAM $8000 {
     POP AF
 }
 
-#macro bgm_play(bgm_number)
+#macro bgm_play(number)
 {
     PUSH AF
-    LD A, bgm_number
-    OUT (IO.bgm.play), A
+    LD A, number
+    OUT (IO.bgm_play), A
     POP AF
 }
 
@@ -126,7 +137,7 @@ struct VRAM $8000 {
 {
     PUSH AF
     LD A, $00
-    OUT (IO.bgm.ctrl), A
+    OUT (IO.bgm_ctrl), A
     POP AF
 }
 
@@ -134,7 +145,7 @@ struct VRAM $8000 {
 {
     PUSH AF
     LD A, $01
-    OUT (IO.bgm.ctrl), A
+    OUT (IO.bgm_ctrl), A
     POP AF
 }
 
@@ -142,22 +153,22 @@ struct VRAM $8000 {
 {
     PUSH AF
     LD A, $02
-    OUT (IO.bgm.ctrl), A
+    OUT (IO.bgm_ctrl), A
     POP AF
 }
 
-#macro eff_play(eff_number)
+#macro sfx_play(number)
 {
     PUSH AF
-    LD A, eff_number
-    OUT (IO.eff.play), A
+    LD A, number
+    OUT (IO.sfx_play), A
     POP AF
 }
 
-#macro eff_stop(eff_number)
+#macro sfx_stop(number)
 {
     PUSH AF
-    LD A, eff_number
-    OUT (IO.eff.stop), A
+    LD A, number
+    OUT (IO.sfx_stop), A
     POP AF
 }

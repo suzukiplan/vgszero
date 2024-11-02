@@ -1,0 +1,13 @@
+                    out       ($c7),a                       ;[0000] d3 c7
+                    ld        a,b                           ;[0002] 78
+                    out       ($c7),a                       ;[0003] d3 c7
+                    ld        a,c                           ;[0005] 79
+                    out       ($c7),a                       ;[0006] d3 c7
+                    ld        a,d                           ;[0008] 7a
+                    out       ($c7),a                       ;[0009] d3 c7
+                    ld        a,e                           ;[000b] 7b
+                    out       ($c7),a                       ;[000c] d3 c7
+                    ld        a,h                           ;[000e] 7c
+                    out       ($c7),a                       ;[000f] d3 c7
+                    ld        a,l                           ;[0011] 7d
+                    out       ($c7),a                       ;[0012] d3 c7

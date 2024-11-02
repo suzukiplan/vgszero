@@ -159,6 +159,260 @@ mnemonic:
 	${MAK} mnemonic_out_tests
 	${MAK} mnemonic_jp_tests
 	${MAK} mnemonic_jr_tests
+	${MAK} mnemonic_rst_tests
+	${MAK} mnemonic_shift_tests
+	${MAK} mnemonic_stack_tests
+	${MAK} mnemonic_sub_tests
+	${MAK} mnemonic_vgs_tests
+	${MAK} mnemonic_load_tests
+	${MAK} mnemonic_other_tests
+
+mnemonic_other_tests: check ../vgsasm
+	${MAK} normal_case src=m_single
+	@./check "`../vgsasm m_far_m129.asm`" "Relative jump destination address is too far away: -129"
+	${MAK} normal_case src=m_far_m128
+	${MAK} normal_case src=m_far_p127
+	@./check "`../vgsasm m_far_p128.asm`" "Relative jump destination address is too far away: 128"
+
+mnemonic_load_tests: check ../vgsasm
+	${MAK} normal_case src=m_ld_oso8_a
+	${MAK} normal_case src=m_ld_oso8_b
+	${MAK} normal_case src=m_ld_oso8_c
+	${MAK} normal_case src=m_ld_oso8_d
+	${MAK} normal_case src=m_ld_oso8_e
+	${MAK} normal_case src=m_ld_oso8_h
+	${MAK} normal_case src=m_ld_oso8_l
+	${MAK} normal_case src=m_ld_oso8_ixh
+	${MAK} normal_case src=m_ld_oso8_ixl
+	${MAK} normal_case src=m_ld_oso8_iyh
+	${MAK} normal_case src=m_ld_oso8_iyl
+	@./check "`../vgsasm m_ld_oso8_ill01.asm`" "LD {H|L},{IXH|IXL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill02.asm`" "LD {H|L},{IXH|IXL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill03.asm`" "LD {H|L},{IYH|IYL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill04.asm`" "LD {H|L},{IYH|IYL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill05.asm`" "LD {H|L},{IXH|IXL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill06.asm`" "LD {H|L},{IXH|IXL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill07.asm`" "LD {H|L},{IYH|IYL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill08.asm`" "LD {H|L},{IYH|IYL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill09.asm`" "LD {IXH|IXL},{H|L} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill10.asm`" "LD {IXH|IXL},{H|L} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill11.asm`" "LD {IXH|IXL},{IYH|IYL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill12.asm`" "LD {IXH|IXL},{IYH|IYL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill13.asm`" "LD {IXH|IXL},{H|L} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill14.asm`" "LD {IXH|IXL},{H|L} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill15.asm`" "LD {IXH|IXL},{IYH|IYL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill16.asm`" "LD {IXH|IXL},{IYH|IYL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill17.asm`" "LD {IYH|IYL},{H|L} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill18.asm`" "LD {IYH|IYL},{H|L} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill19.asm`" "LD {IYH|IYL},{IXH|IXL} is not supported."
+	@./check "`../vgsasm m_ld_oso8_ill20.asm`" "LD {IYH|IYL},{IXH|IXL} is not supported."
+	${MAK} normal_case src=m_ld_oso16_bc
+	${MAK} normal_case src=m_ld_oso16_de
+	${MAK} normal_case src=m_ld_oso16_hl
+	${MAK} normal_case src=m_ld_oso16_ix
+	${MAK} normal_case src=m_ld_oso16_iy
+	${MAK} normal_case src=m_ld_oso16_sp
+	@./check "`../vgsasm m_ld_oso16_bc_ill.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_oso16_de_ill.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_oso16_hl_ill.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_oso16_ix_ill.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_oso16_iy_ill.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_oso16_sp_ill.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_oso16_ill.asm`" "Illegal LD instruction."
+	${MAK} normal_case src=m_ld_osaoa_hl
+	@./check "`../vgsasm m_ld_osaoa_hl_ill.asm`" "Illegal LD instruction."
+	${MAK} normal_case src=m_ld_aoaso_hl
+	@./check "`../vgsasm m_ld_aoaso_hl_ill.asm`" "Illegal LD instruction."
+	${MAK} normal_case src=m_ld_a_bc
+	${MAK} normal_case src=m_ld_a_de
+	${MAK} normal_case src=m_ld_bc_a
+	${MAK} normal_case src=m_ld_de_a
+	${MAK} normal_case src=m_ld_osn8
+	@./check "`../vgsasm m_ld_osn8_range1.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_ld_osn8_range2.asm`" "Numerical range incorrect: 256"
+	${MAK} normal_case src=m_ld_osn16
+	@./check "`../vgsasm m_ld_osn16_range1.asm`" "Numerical range incorrect: -32769"
+	@./check "`../vgsasm m_ld_osn16_range2.asm`" "Numerical range incorrect: 65536"
+	@./check "`../vgsasm m_ld_osn_ill.asm`" "Illegal LD instruction."
+	${MAK} normal_case src=m_ld_osl
+	@./check "`../vgsasm m_ld_osl_ill.asm`" "Illegal LD instruction."
+	${MAK} normal_case src=m_ld_osana
+	@./check "`../vgsasm m_ld_osana_range1.asm`" "Numerical range incorrect: 65536"
+	@./check "`../vgsasm m_ld_osana_ill.asm`" "Illegal LD instruction."
+	${MAK} normal_case src=m_ld_osala
+	@./check "`../vgsasm m_ld_osala_ill.asm`" "Illegal LD instruction."
+	${MAK} normal_case src=m_ld_anaso
+	@./check "`../vgsasm m_ld_anaso_range.asm`" "Numerical range incorrect: 65536"
+	@./check "`../vgsasm m_ld_anaso_ill.asm`" "Illegal LD instruction."
+	${MAK} normal_case src=m_ld_alaso
+	@./check "`../vgsasm m_ld_alaso_ill.asm`" "Illegal LD instruction."
+	${MAK} normal_case src=m_ld_anasn
+	@./check "`../vgsasm m_ld_anasn_range1.asm`" "Numerical range incorrect: 65536"
+	@./check "`../vgsasm m_ld_anasn_range2.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_ld_anasn_range3.asm`" "Numerical range incorrect: 256"
+	${MAK} normal_case src=m_ld_alasn
+	@./check "`../vgsasm m_ld_alasn_range1.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_ld_alasn_range2.asm`" "Numerical range incorrect: 256"
+	${MAK} normal_case src=m_ld_osaopna8_ix
+	${MAK} normal_case src=m_ld_osaopna8_iy
+	${MAK} normal_case src=m_ld_osaopna16_ix
+	${MAK} normal_case src=m_ld_osaopna16_iy
+	@./check "`../vgsasm m_ld_osaopna8_ix_ill1.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna8_ix_ill2.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna8_ix_ill3.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna8_ix_ill4.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna8_iy_ill1.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna8_iy_ill2.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna8_iy_ill3.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna8_iy_ill4.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna16_ix_ill1.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna16_ix_ill2.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna16_iy_ill1.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna16_iy_ill2.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaopna_range1.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_ld_osaopna_range2.asm`" "Numerical range incorrect: 128"
+	${MAK} normal_case src=m_ld_osaoa_ix
+	${MAK} normal_case src=m_ld_osaoa_iy
+	@./check "`../vgsasm m_ld_osaoa_ix_ill1.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaoa_ix_ill2.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaoa_ix_ill3.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaoa_ix_ill4.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaoa_ix_ill5.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaoa_iy_ill1.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaoa_iy_ill2.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaoa_iy_ill3.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaoa_iy_ill4.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_osaoa_iy_ill5.asm`" "Illegal LD instruction."
+	${MAK} normal_case src=m_ld_aopnaso_ix
+	${MAK} normal_case src=m_ld_aopnaso_iy
+	@./check "`../vgsasm m_ld_aopnaso_ix_ill1.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_ix_ill2.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_ix_ill3.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_ix_ill4.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_ix_ill5.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_ix_ill6.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_ix_ill7.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_ix_ill8.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_iy_ill1.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_iy_ill2.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_iy_ill3.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_iy_ill4.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_iy_ill5.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_iy_ill6.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_iy_ill7.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_iy_ill8.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aopnaso_ix_range1.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_ld_aopnaso_ix_range2.asm`" "Numerical range incorrect: 128"
+	@./check "`../vgsasm m_ld_aopnaso_iy_range1.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_ld_aopnaso_iy_range2.asm`" "Numerical range incorrect: 128"
+	${MAK} normal_case src=m_ld_aoaso_ix
+	${MAK} normal_case src=m_ld_aoaso_iy
+	@./check "`../vgsasm m_ld_aoaso_ix_ill1.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_ix_ill2.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_ix_ill3.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_ix_ill4.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_ix_ill5.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_ix_ill6.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_ix_ill7.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_ix_ill8.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_iy_ill1.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_iy_ill2.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_iy_ill3.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_iy_ill4.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_iy_ill5.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_iy_ill6.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_iy_ill7.asm`" "Illegal LD instruction."
+	@./check "`../vgsasm m_ld_aoaso_iy_ill8.asm`" "Illegal LD instruction."
+	${MAK} normal_case src=m_ld_aopnasn_ix
+	${MAK} normal_case src=m_ld_aopnasn_iy
+	@./check "`../vgsasm m_ld_aopnasn_ix_range1.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_ld_aopnasn_ix_range2.asm`" "Numerical range incorrect: 128"
+	@./check "`../vgsasm m_ld_aopnasn_ix_range3.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_ld_aopnasn_ix_range4.asm`" "Numerical range incorrect: 256"
+	@./check "`../vgsasm m_ld_aopnasn_iy_range1.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_ld_aopnasn_iy_range2.asm`" "Numerical range incorrect: 128"
+	@./check "`../vgsasm m_ld_aopnasn_iy_range3.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_ld_aopnasn_iy_range4.asm`" "Numerical range incorrect: 256"
+	${MAK} normal_case src=m_ld_aoasn
+	@./check "`../vgsasm m_ld_aoasn_range1.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_ld_aoasn_range2.asm`" "Numerical range incorrect: 256"
+	@./check "`../vgsasm m_ld_ill.asm`" "Illegal LD instruction."
+
+mnemonic_vgs_tests: check ../vgsasm
+	${MAK} normal_case src=m_hage_oso_hl
+	${MAK} normal_case src=m_hage_oso_a
+	${MAK} normal_case src=m_hage_oso_b
+	${MAK} normal_case src=m_hage_oso_c
+	${MAK} normal_case src=m_hage_oso_d
+	${MAK} normal_case src=m_hage_oso_e
+	${MAK} normal_case src=m_hage_oso_h
+	${MAK} normal_case src=m_hage_oso_l
+	@./check "`../vgsasm m_hage_oso_hl_ill.asm`" "Illegal MUL instruction."
+	@./check "`../vgsasm m_hage_oso_a_ill.asm`" "Illegal MUL instruction."
+	@./check "`../vgsasm m_hage_oso_b_ill.asm`" "Illegal MULS instruction."
+	@./check "`../vgsasm m_hage_oso_c_ill.asm`" "Illegal DIV instruction."
+	@./check "`../vgsasm m_hage_oso_d_ill.asm`" "Illegal DIVS instruction."
+	@./check "`../vgsasm m_hage_oso_e_ill.asm`" "Illegal MOD instruction."
+	@./check "`../vgsasm m_hage_oso_h_ill.asm`" "Illegal MUL instruction."
+	@./check "`../vgsasm m_hage_oso_l_ill.asm`" "Illegal MULS instruction."
+	@./check "`../vgsasm m_hage_oso_ill.asm`" "Illegal MUL instruction."
+	${MAK} normal_case src=m_hage_osn
+	@./check "`../vgsasm m_hage_osn_mod.asm`" "MOD cannot operate on negative numbers."
+	@./check "`../vgsasm m_hage_osn_range1.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_hage_osn_range2.asm`" "Numerical range incorrect: 256"
+	@./check "`../vgsasm m_hage_osn_ill.asm`" "Illegal MUL instruction."
+	${MAK} normal_case src=m_atn2_oso
+	@./check "`../vgsasm m_atn2_oso_ill.asm`" "Illegal ATN2 instruction."
+	@./check "`../vgsasm m_atn2_oso_ill2.asm`" "Illegal ATN2 instruction."
+	@./check "`../vgsasm m_atn2_ill.asm`" "Illegal ATN2 instruction."
+	${MAK} normal_case src=m_sin_o
+	@./check "`../vgsasm m_sin_o_ill.asm`" "Illegal SIN instruction."
+	${MAK} normal_case src=m_sin_oso
+	@./check "`../vgsasm m_sin_oso_ill1.asm`" "Illegal SIN instruction."
+	@./check "`../vgsasm m_sin_oso_ill2.asm`" "Illegal SIN instruction."
+	@./check "`../vgsasm m_sin_ill.asm`" "Illegal SIN instruction."
+	${MAK} normal_case src=m_cos_o
+	@./check "`../vgsasm m_cos_o_ill.asm`" "Illegal COS instruction."
+	${MAK} normal_case src=m_cos_oso
+	@./check "`../vgsasm m_cos_oso_ill1.asm`" "Illegal COS instruction."
+	@./check "`../vgsasm m_cos_oso_ill2.asm`" "Illegal COS instruction."
+	@./check "`../vgsasm m_cos_ill.asm`" "Illegal COS instruction."
+
+mnemonic_sub_tests: check ../vgsasm
+	${MAK} normal_case src=m_call_n
+	@./check "`../vgsasm m_call_n_range.asm`" "Numerical range incorrect: 65536"
+	${MAK} normal_case src=m_call_l
+	${MAK} normal_case src=m_call_osn
+	@./check "`../vgsasm m_call_osn_ill.asm`" "Invalid condition: A"
+	@./check "`../vgsasm m_call_osn_range.asm`" "Numerical range incorrect: 65536"
+	${MAK} normal_case src=m_call_osl
+	@./check "`../vgsasm m_call_ill.asm`" "Illegal CALL instruction."
+
+mnemonic_stack_tests: check ../vgsasm
+	${MAK} normal_case src=m_push_o
+	@./check "`../vgsasm m_push_o_ill.asm`" "Unsupported PUSH operand: A"
+	@./check "`../vgsasm m_push_ill.asm`" "Excessive or insufficient number of operands."
+	${MAK} normal_case src=m_pop_o
+	@./check "`../vgsasm m_pop_o_ill.asm`" "Unsupported POP operand: SP"
+	@./check "`../vgsasm m_pop_ill.asm`" "Excessive or insufficient number of operands."
+
+mnemonic_shift_tests: check ../vgsasm
+	${MAK} normal_case src=m_shift_o
+	@./check "`../vgsasm m_shift_o_ill.asm`" "Illegal shift/rotate instruction."
+	${MAK} normal_case src=m_shift_osn
+	${MAK} normal_case src=m_shift_aoa
+	@./check "`../vgsasm m_shift_aoa_ill.asm`" "Illegal shift/rotate instruction."
+	${MAK} normal_case src=m_shift_aoasn
+	${MAK} normal_case src=m_shift_aopna
+	@./check "`../vgsasm m_shift_aopna_range1.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_shift_aopna_range2.asm`" "Numerical range incorrect: 128"
+	@./check "`../vgsasm m_shift_aopna_ill.asm`" "Illegal shift/rotate instruction."
+	${MAK} normal_case src=m_shift_aopna_o
+	@./check "`../vgsasm m_shift_ill.asm`" "Illegal shift/rotate instruction."
+
+mnemonic_rst_tests: check ../vgsasm
+	${MAK} normal_case src=m_rst
+	@./check "`../vgsasm m_rst_ill.asm`" "Illegal RST instruction."
 
 mnemonic_jr_tests: check ../vgsasm
 	${MAK} normal_case src=m_jr_n

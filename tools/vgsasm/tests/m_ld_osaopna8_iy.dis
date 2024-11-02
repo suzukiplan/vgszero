@@ -1,0 +1,7 @@
+                    ld        a,(iy-$80)                    ;[0000] fd 7e 80
+                    ld        b,(iy-$01)                    ;[0003] fd 46 ff
+                    ld        c,(iy+$00)                    ;[0006] fd 4e 00
+                    ld        d,(iy+$01)                    ;[0009] fd 56 01
+                    ld        e,(iy+$7f)                    ;[000c] fd 5e 7f
+                    ld        h,(iy+$3f)                    ;[000f] fd 66 3f
+                    ld        l,(iy-$40)                    ;[0012] fd 6e c0

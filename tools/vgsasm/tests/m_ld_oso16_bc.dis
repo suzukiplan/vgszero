@@ -1,0 +1,10 @@
+                    ld        b,b                           ;[0000] 40
+                    ld        c,c                           ;[0001] 49
+                    ld        b,d                           ;[0002] 42
+                    ld        c,e                           ;[0003] 4b
+                    ld        b,h                           ;[0004] 44
+                    ld        c,l                           ;[0005] 4d
+                    ld        b,ixh                         ;[0006] dd 44
+                    ld        c,ixl                         ;[0008] dd 4d
+                    ld        b,iyh                         ;[000a] fd 44
+                    ld        c,iyl                         ;[000c] fd 4d
