@@ -114,10 +114,10 @@ enum SFX {
     bgm_fadeout()
     jr @End
 @Play
-    out (IO.bgm.play), a
+    out (IO.bgm_play), a
 @End
     pop_all_without_i()
-    eff_play(SFX.enter)
+    sfx_play(SFX.enter)
     ret
 
 ;------------------------------------------------------------
@@ -164,7 +164,7 @@ enum SFX {
 .draw_cur
     call get_cur_pos
     (hl) = '>'
-    eff_play(SFX.move)
+    sfx_play(SFX.move)
     ret
 
 ;------------------------------------------------------------
