@@ -17,6 +17,7 @@ enum BANK {
     memcpy(vram.palette, palette_data, 512)     ; パレットを初期化
     dma2chr(bank.image)                         ; image を Character Pattern Table に転送 (DMA)
 
+    memset(vram.bg_name, 0, sizeof(vram.bg_name))
     b = 32
     hl = vram.bg_attr
     a = 0
