@@ -1198,7 +1198,7 @@ _We hope to address this in the future._
 - VGS-Zero itself includes NEZplug (Free Software): [LICENSE-NEZplug.txt](./LICENSE-NEZplug.txt)
 - VGS-Zero itself includes Modified NSFPlay (GPLv3): [LICENSE-NSFPlay-alter.txt](./LICENSE-NSFPlay-alter.txt)
 - VGS-Zero itself includes KM6502 (Free Software): [LICENSE-km6502.txt](./LICENSE-km6502.txt)
-- VGS-Zero Library for Z80 is MIT licensed OSS:　[LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
+- VGS-Zero Library for Z80 is MIT licensed OSS: [LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
 
 > The copyright of [game.pkg](#gamepkg) developed by you belongs to you and you are free to use it, including commercial use.
 >
