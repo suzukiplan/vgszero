@@ -1179,7 +1179,7 @@ _We hope to address this in the future._
 | `06_save` | [Z80](./example/06_save-asm/), [C](./example/06_save/) | Example of [Save Function](#save-data) Usage |
 | `07_palette` | [Z80](./example/07_palette-asm/), [C](./example/07_palette/) | Example using all 16 [palettes](#palette) |
 | `08_map-scroll` | [Z80](./example/08_map-scroll-asm/), [C](./example/08_map-scroll/) | Scrolling map data created with the Tiled Map Editor |
-| `09_joypad` | [C](./example/09_joypad/) | Preview joypad input results |
+| `09_joypad` | [Z80](./example/09_joypad-asm/), [C](./example/09_joypad/) | Preview joypad input results |
 | `10_chr720` | [C](./example/10_chr720/) | Example of displaying a single picture in [Direct Pattern Mapping](#direct-pattern-mapping) |
 | `11_bigsprite` | [C](./example/11_bigsprite/) | Example of displaying a huge sprite by specifying `widthMinus1`, `heightMinus1`, and `bank` in [OAM](#oam) |
 | `12_angle` | [C](./example/12_angle) | Example of implementing complete self-targeting using [atan2](#hardware-atan2-table) |
