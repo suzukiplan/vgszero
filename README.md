@@ -1187,7 +1187,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | `05_sprite256` | [Z80](./example/05_sprite256-asm/), [C](./example/05_sprite256/) | スプライトを256表示して動かす例 |
 | `06_save` | [Z80](./example/06_save-asm/), [C](./example/06_save/) | [セーブ機能](#save-data)の例 |
 | `07_palette` | [Z80](./example/07_palette-asm/), [C](./example/07_palette/) | 16個の[パレット](#palette)を全て使った例 |
-| `08_map-scroll` | [C](./example/08_map-scroll/) | Tiled Map Editor で作ったマップデータのスクロール |
+| `08_map-scroll` | [Z80](./example/08_map-scroll-asm/), [C](./example/08_map-scroll/) | Tiled Map Editor で作ったマップデータのスクロール |
 | `09_joypad` | [C](./example/09_joypad/) | ジョイパッドの入力結果をプレビュー |
 | `10_chr720` | [C](./example/10_chr720/) | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
 | `11_bigsprite` | [C](./example/11_bigsprite/) | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の使用例 |
