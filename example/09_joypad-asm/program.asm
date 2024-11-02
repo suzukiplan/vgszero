@@ -1,9 +1,5 @@
 #include "../../lib/z80/stdio.asm"
 
-struct VARS $C000 {
-    mcnt ds.b 1
-}
-
 enum BANK {
     program
     font
@@ -40,8 +36,8 @@ enum BANK {
     set_sprite_cursor(36, 44)   // 右カーソル (12~15)
     set_sprite_ctrl(60, 61)     // SELECT (16~18)
     set_sprite_ctrl(88, 61)     // START (19~21)
-    set_sprite_button(124, 50); // B (22~29)
-    set_sprite_button(150, 50); // A (30~37)
+    set_sprite_button(124, 50)  // B (22~29)
+    set_sprite_button(150, 50)  // A (30~37)
 
 @loop
     wait_vblank()
