@@ -1,0 +1,35 @@
+                    push      af                            ;[0000] f5
+                    ld        a,$80                         ;[0001] 3e 80
+                    add       h                             ;[0003] 84
+                    ld        h,a                           ;[0004] 67
+                    pop       af                            ;[0005] f1
+                    push      af                            ;[0006] f5
+                    ld        a,$ff                         ;[0007] 3e ff
+                    add       h                             ;[0009] 84
+                    ld        h,a                           ;[000a] 67
+                    pop       af                            ;[000b] f1
+                    push      af                            ;[000c] f5
+                    ld        a,$00                         ;[000d] 3e 00
+                    add       h                             ;[000f] 84
+                    ld        h,a                           ;[0010] 67
+                    pop       af                            ;[0011] f1
+                    push      af                            ;[0012] f5
+                    ld        a,$01                         ;[0013] 3e 01
+                    add       h                             ;[0015] 84
+                    ld        h,a                           ;[0016] 67
+                    pop       af                            ;[0017] f1
+                    push      af                            ;[0018] f5
+                    ld        a,$7f                         ;[0019] 3e 7f
+                    add       h                             ;[001b] 84
+                    ld        h,a                           ;[001c] 67
+                    pop       af                            ;[001d] f1
+                    push      af                            ;[001e] f5
+                    ld        a,$80                         ;[001f] 3e 80
+                    add       h                             ;[0021] 84
+                    ld        h,a                           ;[0022] 67
+                    pop       af                            ;[0023] f1
+                    push      af                            ;[0024] f5
+                    ld        a,$ff                         ;[0025] 3e ff
+                    add       h                             ;[0027] 84
+                    ld        h,a                           ;[0028] 67
+                    pop       af                            ;[0029] f1

@@ -1,1 +1,1 @@
-ADD A, B, C
+ADD A, 8, C

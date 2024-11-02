@@ -785,7 +785,7 @@ N: m_calc8_os
   m_calc8_os.asm:0094 $0074 <XOR> <IYH>
   m_calc8_os.asm:0095 $0076 <XOR> <IYL>
 diff m_calc8_os.bin m_calc8_os.exp
-E: Illegal 8-bit arithmetic instruction. ... OK
+E: Illegal arithmetic instruction. ... OK
 E: Illegal 8-bit arithmetic instruction. ... OK
 Testing: mnemonic calc16
 N: m_calc16_add_bc_a
@@ -883,7 +883,7 @@ E: Numerical range incorrect: -129 ... OK
 E: Numerical range incorrect: 127 ... OK
 E: Illegal 16-bit arithmetic instruction. ... OK
 E: Illegal 16-bit arithmetic instruction. ... OK
-E: Illegal arithmetic instruction. ... OK
+E: Illegal 8-bit arithmetic instruction. ... OK
 E: Illegal arithmetic instruction. ... OK
 N: m_calc_ana
 ../vgsasm m_calc_ana.asm -v
@@ -2535,6 +2535,73 @@ E: Numerical range incorrect: -32769 ... OK
 E: Numerical range incorrect: 65536 ... OK
 E: Numerical range incorrect: -32769 ... OK
 E: Numerical range incorrect: 65536 ... OK
-Normal case: 245
-Error case: 374
-Total: 619
+N: m_add_b_n
+../vgsasm m_add_b_n.asm -v
+   m_add_b_n.asm:0001 $0000 <ADD> <B> `,` 0xFFFFFF80
+   m_add_b_n.asm:0002 $0006 <ADD> <B> `,` 0xFFFFFFFF
+   m_add_b_n.asm:0003 $000C <ADD> <B> `,` 0x0
+   m_add_b_n.asm:0004 $0012 <ADD> <B> `,` 0x1
+   m_add_b_n.asm:0005 $0018 <ADD> <B> `,` 0x7F
+   m_add_b_n.asm:0006 $001E <ADD> <B> `,` 0x80
+   m_add_b_n.asm:0007 $0024 <ADD> <B> `,` 0xFF
+diff m_add_b_n.bin m_add_b_n.exp
+N: m_add_c_n
+../vgsasm m_add_c_n.asm -v
+   m_add_c_n.asm:0001 $0000 <ADD> <C> `,` 0xFFFFFF80
+   m_add_c_n.asm:0002 $0006 <ADD> <C> `,` 0xFFFFFFFF
+   m_add_c_n.asm:0003 $000C <ADD> <C> `,` 0x0
+   m_add_c_n.asm:0004 $0012 <ADD> <C> `,` 0x1
+   m_add_c_n.asm:0005 $0018 <ADD> <C> `,` 0x7F
+   m_add_c_n.asm:0006 $001E <ADD> <C> `,` 0x80
+   m_add_c_n.asm:0007 $0024 <ADD> <C> `,` 0xFF
+diff m_add_c_n.bin m_add_c_n.exp
+N: m_add_d_n
+../vgsasm m_add_d_n.asm -v
+   m_add_d_n.asm:0001 $0000 <ADD> <D> `,` 0xFFFFFF80
+   m_add_d_n.asm:0002 $0006 <ADD> <D> `,` 0xFFFFFFFF
+   m_add_d_n.asm:0003 $000C <ADD> <D> `,` 0x0
+   m_add_d_n.asm:0004 $0012 <ADD> <D> `,` 0x1
+   m_add_d_n.asm:0005 $0018 <ADD> <D> `,` 0x7F
+   m_add_d_n.asm:0006 $001E <ADD> <D> `,` 0x80
+   m_add_d_n.asm:0007 $0024 <ADD> <D> `,` 0xFF
+diff m_add_d_n.bin m_add_d_n.exp
+N: m_add_e_n
+../vgsasm m_add_e_n.asm -v
+   m_add_e_n.asm:0001 $0000 <ADD> <E> `,` 0xFFFFFF80
+   m_add_e_n.asm:0002 $0006 <ADD> <E> `,` 0xFFFFFFFF
+   m_add_e_n.asm:0003 $000C <ADD> <E> `,` 0x0
+   m_add_e_n.asm:0004 $0012 <ADD> <E> `,` 0x1
+   m_add_e_n.asm:0005 $0018 <ADD> <E> `,` 0x7F
+   m_add_e_n.asm:0006 $001E <ADD> <E> `,` 0x80
+   m_add_e_n.asm:0007 $0024 <ADD> <E> `,` 0xFF
+diff m_add_e_n.bin m_add_e_n.exp
+N: m_add_h_n
+../vgsasm m_add_h_n.asm -v
+   m_add_h_n.asm:0001 $0000 <ADD> <H> `,` 0xFFFFFF80
+   m_add_h_n.asm:0002 $0006 <ADD> <H> `,` 0xFFFFFFFF
+   m_add_h_n.asm:0003 $000C <ADD> <H> `,` 0x0
+   m_add_h_n.asm:0004 $0012 <ADD> <H> `,` 0x1
+   m_add_h_n.asm:0005 $0018 <ADD> <H> `,` 0x7F
+   m_add_h_n.asm:0006 $001E <ADD> <H> `,` 0x80
+   m_add_h_n.asm:0007 $0024 <ADD> <H> `,` 0xFF
+diff m_add_h_n.bin m_add_h_n.exp
+N: m_add_l_n
+../vgsasm m_add_l_n.asm -v
+   m_add_l_n.asm:0001 $0000 <ADD> <L> `,` 0xFFFFFF80
+   m_add_l_n.asm:0002 $0006 <ADD> <L> `,` 0xFFFFFFFF
+   m_add_l_n.asm:0003 $000C <ADD> <L> `,` 0x0
+   m_add_l_n.asm:0004 $0012 <ADD> <L> `,` 0x1
+   m_add_l_n.asm:0005 $0018 <ADD> <L> `,` 0x7F
+   m_add_l_n.asm:0006 $001E <ADD> <L> `,` 0x80
+   m_add_l_n.asm:0007 $0024 <ADD> <L> `,` 0xFF
+diff m_add_l_n.bin m_add_l_n.exp
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 256 ... OK
+E: Illegal 8-bit arithmetic instruction. ... OK
+E: Illegal arithmetic instruction. ... OK
+E: Illegal arithmetic instruction. ... OK
+E: Illegal arithmetic instruction. ... OK
+E: Illegal arithmetic instruction. ... OK
+Normal case: 251
+Error case: 381
+Total: 632

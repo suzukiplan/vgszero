@@ -3,6 +3,8 @@
 ## Version 1.0.0
 
 - Support `sizeof(name.field)` #55
+- Support `ADD {BC|DE}, nn` #56
+- Support `ADD {B|C|D|E|H|L}, n` #57
 - bugfix: Fixed a bug that the error occurs when include stdio.asm
 - bugfix: `memset` has unintended behavior
 

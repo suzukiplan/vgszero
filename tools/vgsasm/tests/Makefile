@@ -66,6 +66,23 @@ execute: ${TEST_MODULES}
 	${MAK} mnemonic
 	${MAK} test55
 	${MAK} test56
+	${MAK} test57
+
+test57: check ../vgsasm
+	${MAK} normal_case src=m_add_b_n
+	${MAK} normal_case src=m_add_c_n
+	${MAK} normal_case src=m_add_d_n
+	${MAK} normal_case src=m_add_e_n
+	${MAK} normal_case src=m_add_h_n
+	${MAK} normal_case src=m_add_l_n
+	@./check "`../vgsasm m_add_b_n_range1.asm`" "Numerical range incorrect: -129"
+	@./check "`../vgsasm m_add_b_n_range2.asm`" "Numerical range incorrect: 256"
+	@./check "`../vgsasm m_adc_b_n.asm`" "Illegal 8-bit arithmetic instruction."
+	@./check "`../vgsasm m_add_ixh_n.asm`" "Illegal arithmetic instruction."
+	@./check "`../vgsasm m_add_ixl_n.asm`" "Illegal arithmetic instruction."
+	@./check "`../vgsasm m_add_iyh_n.asm`" "Illegal arithmetic instruction."
+	@./check "`../vgsasm m_add_iyl_n.asm`" "Illegal arithmetic instruction."
+
 
 test56: check ../vgsasm
 	${MAK} normal_case src=m_add_bc_nn
@@ -546,7 +563,7 @@ mnemonic_calc_tests: check ../vgsasm
 	@./check "`../vgsasm m_calc8_ao_ill2.asm`" "Illegal 8-bit arithmetic instruction."
 	@./check "`../vgsasm m_calc8_ao_ill3.asm`" "Illegal 8-bit arithmetic instruction."
 	${MAK} normal_case src=m_calc8_os
-	@./check "`../vgsasm m_calc8_os_ill.asm`" "Illegal 8-bit arithmetic instruction."
+	@./check "`../vgsasm m_calc8_os_ill.asm`" "Illegal arithmetic instruction."
 	@./check "`../vgsasm m_calc8_ill.asm`" "Illegal 8-bit arithmetic instruction."
 	@echo Testing: mnemonic calc16
 	${MAK} normal_case src=m_calc16_add_bc_a
@@ -570,7 +587,7 @@ mnemonic_calc_tests: check ../vgsasm
 	@./check "`../vgsasm m_calc16_osaopna_range2.asm`" "Numerical range incorrect: 127"
 	@./check "`../vgsasm m_calc16_osaopna_ill.asm`" "Illegal 16-bit arithmetic instruction."
 	@./check "`../vgsasm m_calc16_ill.asm`" "Illegal 16-bit arithmetic instruction."
-	@./check "`../vgsasm m_calc_ill1.asm`" "Illegal arithmetic instruction."
+	@./check "`../vgsasm m_calc_ill1.asm`" "Illegal 8-bit arithmetic instruction."
 	@./check "`../vgsasm m_calc_ill2.asm`" "Illegal arithmetic instruction."
 	${MAK} normal_case src=m_calc_ana
 	@./check "`../vgsasm m_calc_ana_range.asm`" "Numerical range incorrect: 65536"

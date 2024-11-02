@@ -687,6 +687,12 @@ In vgsasm, instructions that __do not exist in the Z80__ are complemented by exi
 | `LD (nn), n` | `PUSH AF`, `LD A, n`, `LD (nn), A`, `POP AF` |
 | `LD r, (nn)` <br>`r`: 8bit reg exclude `A` | `PUSH AF`, `LD A, (nn)`, `LD r, A`, `POP AF` |
 | `LD (nn), r` <br>`r`: 8bit reg exclude `A` | `PUSH AF`, `LD A, r`, `LD (nn),A`, `POP AF` |
+| `ADD B,n` | `PUSH AF`, `LD A,n`, `ADD B`, `LD B,A`, `POP AF` <br> Flag does not change |
+| `ADD C,n` | `PUSH AF`, `LD A,n`, `ADD C`, `LD C,A`, `POP AF` <br> Flag does not change |
+| `ADD D,n` | `PUSH AF`, `LD A,n`, `ADD D`, `LD D,A`, `POP AF` <br> Flag does not change |
+| `ADD E,n` | `PUSH AF`, `LD A,n`, `ADD E`, `LD E,A`, `POP AF` <br> Flag does not change |
+| `ADD H,n` | `PUSH AF`, `LD A,n`, `ADD H`, `LD H,A`, `POP AF` <br> Flag does not change |
+| `ADD L,n` | `PUSH AF`, `LD A,n`, `ADD L`, `LD L,A`, `POP AF` <br> Flag does not change |
 | `ADD BC,nn` | `PUSH HL`, `LD HL, nn`, `ADD HL,BC`, `LD BC, HL`, `POP HL` |
 | `ADD DE,nn` | `PUSH HL`, `LD HL, nn`, `ADD HL,DE`, `LD DE, HL`, `POP HL` |
 | `ADD HL,nn` | `PUSH DE`, `LD DE,nn`, `ADD HL,DE`, `POP DE`|
