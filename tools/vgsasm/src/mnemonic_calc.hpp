@@ -168,7 +168,7 @@ void mnemonic_calc16(LineData* line, uint8_t code)
                mnemonic_format_test(line, 4, TokenType::Operand, TokenType::Split, TokenType::Numeric)) {
         auto op = operandTable[line->token[1].second];
         auto nn = atoi(line->token[3].second.c_str());
-        if (op != Operand::HL && op != Operand::IX && op != Operand::IY) {
+        if (op != Operand::BC && op != Operand::DE && op != Operand::HL && op != Operand::IX && op != Operand::IY) {
             line->error = true;
             line->errmsg = "Illegal 16-bit arithmetic instruction.";
             return;
@@ -176,15 +176,31 @@ void mnemonic_calc16(LineData* line, uint8_t code)
         if (mnemonic_range(line, nn, -32768, 65535)) {
             uint8_t nl = nn & 0xFF;
             uint8_t nh = (nn & 0xFF00) >> 8;
-            ML_PUSH_DE;
-            ML_LD_D_n(nh);
-            ML_LD_E_n(nl);
-            switch (op) {
-                case Operand::IX: line->machine.push_back(0xDD); break;
-                case Operand::IY: line->machine.push_back(0xFD); break;
+            if (op == Operand::BC) {
+                ML_PUSH_HL;
+                ML_LD_H_n(nh);
+                ML_LD_L_n(nl);
+                ML_ADD_HL_BC;
+                ML_LD_BC_HL;
+                ML_POP_HL;
+            } else if (op == Operand::DE) {
+                ML_PUSH_HL;
+                ML_LD_H_n(nh);
+                ML_LD_L_n(nl);
+                ML_ADD_HL_DE;
+                ML_LD_DE_HL;
+                ML_POP_HL;
+            } else {
+                ML_PUSH_DE;
+                ML_LD_D_n(nh);
+                ML_LD_E_n(nl);
+                switch (op) {
+                    case Operand::IX: line->machine.push_back(0xDD); break;
+                    case Operand::IY: line->machine.push_back(0xFD); break;
+                }
+                line->machine.push_back(code | 0x10);
+                ML_POP_DE;
             }
-            line->machine.push_back(code | 0x10);
-            ML_POP_DE;
         }
     } else if (mne == Mnemonic::ADD && mnemonic_format_test(line, 6, TokenType::Operand, TokenType::Split, TokenType::AddressBegin, TokenType::Operand, TokenType::AddressEnd)) {
         auto op1 = operandTable[line->token[1].second];

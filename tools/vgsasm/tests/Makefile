@@ -65,6 +65,15 @@ execute: ${TEST_MODULES}
 	${MAK} macro_tests
 	${MAK} mnemonic
 	${MAK} test55
+	${MAK} test56
+
+test56: check ../vgsasm
+	${MAK} normal_case src=m_add_bc_nn
+	${MAK} normal_case src=m_add_de_nn
+	@./check "`../vgsasm m_add_bc_nn_range1.asm`" "Numerical range incorrect: -32769"
+	@./check "`../vgsasm m_add_bc_nn_range2.asm`" "Numerical range incorrect: 65536"
+	@./check "`../vgsasm m_add_de_nn_range1.asm`" "Numerical range incorrect: -32769"
+	@./check "`../vgsasm m_add_de_nn_range2.asm`" "Numerical range incorrect: 65536"
 
 test55: check ../vgsasm
 	${MAK} normal_case src=m_sizeof

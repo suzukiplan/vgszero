@@ -1,0 +1,49 @@
+                    push      hl                            ;[0000] e5
+                    ld        h,$80                         ;[0001] 26 80
+                    ld        l,$00                         ;[0003] 2e 00
+                    add       hl,bc                         ;[0005] 09
+                    ld        b,h                           ;[0006] 44
+                    ld        c,l                           ;[0007] 4d
+                    pop       hl                            ;[0008] e1
+                    push      hl                            ;[0009] e5
+                    ld        h,$ff                         ;[000a] 26 ff
+                    ld        l,$ff                         ;[000c] 2e ff
+                    add       hl,bc                         ;[000e] 09
+                    ld        b,h                           ;[000f] 44
+                    ld        c,l                           ;[0010] 4d
+                    pop       hl                            ;[0011] e1
+                    push      hl                            ;[0012] e5
+                    ld        h,$00                         ;[0013] 26 00
+                    ld        l,$00                         ;[0015] 2e 00
+                    add       hl,bc                         ;[0017] 09
+                    ld        b,h                           ;[0018] 44
+                    ld        c,l                           ;[0019] 4d
+                    pop       hl                            ;[001a] e1
+                    push      hl                            ;[001b] e5
+                    ld        h,$00                         ;[001c] 26 00
+                    ld        l,$01                         ;[001e] 2e 01
+                    add       hl,bc                         ;[0020] 09
+                    ld        b,h                           ;[0021] 44
+                    ld        c,l                           ;[0022] 4d
+                    pop       hl                            ;[0023] e1
+                    push      hl                            ;[0024] e5
+                    ld        h,$7f                         ;[0025] 26 7f
+                    ld        l,$ff                         ;[0027] 2e ff
+                    add       hl,bc                         ;[0029] 09
+                    ld        b,h                           ;[002a] 44
+                    ld        c,l                           ;[002b] 4d
+                    pop       hl                            ;[002c] e1
+                    push      hl                            ;[002d] e5
+                    ld        h,$80                         ;[002e] 26 80
+                    ld        l,$00                         ;[0030] 2e 00
+                    add       hl,bc                         ;[0032] 09
+                    ld        b,h                           ;[0033] 44
+                    ld        c,l                           ;[0034] 4d
+                    pop       hl                            ;[0035] e1
+                    push      hl                            ;[0036] e5
+                    ld        h,$ff                         ;[0037] 26 ff
+                    ld        l,$ff                         ;[0039] 2e ff
+                    add       hl,bc                         ;[003b] 09
+                    ld        b,h                           ;[003c] 44
+                    ld        c,l                           ;[003d] 4d
+                    pop       hl                            ;[003e] e1

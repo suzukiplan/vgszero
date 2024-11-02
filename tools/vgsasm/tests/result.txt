@@ -2511,6 +2511,30 @@ N: m_sizeof
 diff m_sizeof.bin m_sizeof.exp
 E: Undefined field XXXX of strcture VRAM is specified in sizeof. ... OK
 E: Undefined structure YYYYY is specified in sizeof. ... OK
-Normal case: 243
-Error case: 370
-Total: 613
+N: m_add_bc_nn
+../vgsasm m_add_bc_nn.asm -v
+ m_add_bc_nn.asm:0001 $0000 <ADD> <BC> `,` 0xFFFF8000
+ m_add_bc_nn.asm:0002 $0009 <ADD> <BC> `,` 0xFFFFFFFF
+ m_add_bc_nn.asm:0003 $0012 <ADD> <BC> `,` 0x0
+ m_add_bc_nn.asm:0004 $001B <ADD> <BC> `,` 0x1
+ m_add_bc_nn.asm:0005 $0024 <ADD> <BC> `,` 0x7FFF
+ m_add_bc_nn.asm:0006 $002D <ADD> <BC> `,` 0x8000
+ m_add_bc_nn.asm:0007 $0036 <ADD> <BC> `,` 0xFFFF
+diff m_add_bc_nn.bin m_add_bc_nn.exp
+N: m_add_de_nn
+../vgsasm m_add_de_nn.asm -v
+ m_add_de_nn.asm:0001 $0000 <ADD> <DE> `,` 0xFFFF8000
+ m_add_de_nn.asm:0002 $0009 <ADD> <DE> `,` 0xFFFFFFFF
+ m_add_de_nn.asm:0003 $0012 <ADD> <DE> `,` 0x0
+ m_add_de_nn.asm:0004 $001B <ADD> <DE> `,` 0x1
+ m_add_de_nn.asm:0005 $0024 <ADD> <DE> `,` 0x7FFF
+ m_add_de_nn.asm:0006 $002D <ADD> <DE> `,` 0x8000
+ m_add_de_nn.asm:0007 $0036 <ADD> <DE> `,` 0xFFFF
+diff m_add_de_nn.bin m_add_de_nn.exp
+E: Numerical range incorrect: -32769 ... OK
+E: Numerical range incorrect: 65536 ... OK
+E: Numerical range incorrect: -32769 ... OK
+E: Numerical range incorrect: 65536 ... OK
+Normal case: 245
+Error case: 374
+Total: 619
