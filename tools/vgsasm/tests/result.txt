@@ -467,7 +467,7 @@ macro_normal.asm:0006 $0006 <LD> <HL> `,` 0xF
 ../lib/vgszero.inc:0119 $001D <LD> <BC> `,` 0xC020
 ../lib/vgszero.inc:0120 $0020 <LD> <A> `,` 0x20
 ../lib/vgszero.inc:0121 $0022 <LD> <HL> `,` 0x400
-../lib/vgszero.inc:0122 $0025 <OUT> _( 0xC3 )_ `,` <A>
+../lib/vgszero.inc:0122 $0025 <OUT> _( 0xC2 )_ `,` <A>
 ../lib/vgszero.inc:0123 $0027 <POP> <HL>
 ../lib/vgszero.inc:0124 $0028 <POP> <BC>
 ../lib/vgszero.inc:0125 $0029 <POP> <AF>
@@ -2504,7 +2504,7 @@ N: m_sizeof
 ../lib/vgszero.inc:0119 $0033 <LD> <BC> `,` 0x8000
 ../lib/vgszero.inc:0120 $0036 <LD> <A> `,` 0x0
 ../lib/vgszero.inc:0121 $0038 <LD> <HL> `,` 0x400
-../lib/vgszero.inc:0122 $003B <OUT> _( 0xC3 )_ `,` <A>
+../lib/vgszero.inc:0122 $003B <OUT> _( 0xC2 )_ `,` <A>
 ../lib/vgszero.inc:0123 $003D <POP> <HL>
 ../lib/vgszero.inc:0124 $003E <POP> <BC>
 ../lib/vgszero.inc:0125 $003F <POP> <AF>
