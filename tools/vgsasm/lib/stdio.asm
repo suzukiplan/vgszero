@@ -78,7 +78,7 @@
     push hl
     ld bc, addr
     ld hl, size
-    out (IO.save), a
+    out (IO.save_load), a
     pop hl
     pop bc
     and a
@@ -93,7 +93,7 @@
     push hl
     ld bc, addr
     ld hl, size
-    in a, (IO.save)
+    in a, (IO.save_load)
     pop hl
     pop bc
     and a

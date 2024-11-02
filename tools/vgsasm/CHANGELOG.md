@@ -2,7 +2,12 @@
 
 ## Version 1.0.0
 
-WIP
+### bugfix: Fixed a bug that the following error occurs when include stdio.asm
+
+```
+Error: ../../lib/z80/stdio.asm (81) `SAVE` was not defined at `IO`
+Error: ../../lib/z80/stdio.asm (96) `SAVE` was not defined at `IO`
+```
 
 ## Version 0.15 (beta-15)
 
