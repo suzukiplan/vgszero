@@ -64,6 +64,12 @@ execute: ${TEST_MODULES}
 	${MAK} struct_tests
 	${MAK} macro_tests
 	${MAK} mnemonic
+	${MAK} test55
+
+test55: check ../vgsasm
+	${MAK} normal_case src=m_sizeof
+	@./check "`../vgsasm m_sizeof_nofield.asm`" "Undefined field XXXX of strcture VRAM is specified in sizeof."
+	@./check "`../vgsasm m_sizeof_nostr.asm`" "Undefined structure YYYYY is specified in sizeof."
 
 single: sizeof_replace
 	./sizeof_replace

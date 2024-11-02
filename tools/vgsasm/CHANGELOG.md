@@ -2,6 +2,10 @@
 
 ## Version 1.0.0
 
+### Support `sizeof(name.field)`
+
+see the #55
+
 ### bugfix: Fixed a bug that the following error occurs when include stdio.asm
 
 ```

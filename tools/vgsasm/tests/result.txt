@@ -2470,6 +2470,47 @@ N: m_far_p127
   m_far_p127.asm:0006 $0081 LABEL:
 diff m_far_p127.bin m_far_p127.exp
 E: Relative jump destination address is too far away: 128 ... OK
-Normal case: 242
-Error case: 368
-Total: 610
+N: m_sizeof
+../vgsasm m_sizeof.asm -v
+ ../lib/init.asm:0004 $0000 INIT:
+ ../lib/init.asm:0005 $0000 <LD> <SP> `,` 0x0
+ ../lib/init.asm:0006 $0003 <JP> `MAIN`
+../lib/stdio.asm:0040 $0006 PRINT_TEXT_SUB:
+../lib/stdio.asm:0043 $0006 <LD> <A> `,` <H>
+../lib/stdio.asm:0044 $0007 <LD> <H> `,` 0x0
+../lib/stdio.asm:0045 $0009 <LD> <C> `,` 0x20
+../lib/stdio.asm:0046 $000B <MUL> <HL> `,` <C>
+../lib/stdio.asm:0047 $0011 <ADD> <HL> `,` <A>
+../lib/stdio.asm:0048 $0016 <ADD> <HL> `,` 0x8800
+../lib/stdio.asm:0050 $001D LOOP@PRINT_TEXT_SUB:
+../lib/stdio.asm:0052 $001D <LD> <A> `,` _( <DE> )_
+../lib/stdio.asm:0053 $001E <AND> <A>
+../lib/stdio.asm:0054 $001F <RET> <Z>
+../lib/stdio.asm:0057 $0020 <LD> _( <HL> )_ `,` <A>
+../lib/stdio.asm:0060 $0021 <PUSH> <DE>
+../lib/stdio.asm:0061 $0022 <LD> <DE> `,` 0x400
+../lib/stdio.asm:0062 $0025 <ADD> <HL> `,` <DE>
+../lib/stdio.asm:0063 $0026 <LD> _( <HL> )_ `,` <B>
+../lib/stdio.asm:0064 $0027 <LD> <DE> `,` 0xFFFFFC01
+../lib/stdio.asm:0065 $002A <ADD> <HL> `,` <DE>
+../lib/stdio.asm:0066 $002B <POP> <DE>
+../lib/stdio.asm:0068 $002C <INC> <DE>
+../lib/stdio.asm:0069 $002D <JR> `LOOP@PRINT_TEXT_SUB`
+../lib/stdio.asm:0070 $002F <RET>
+    m_sizeof.asm:0003 $0030 MAIN:
+../lib/vgszero.inc:0116 $0030 <PUSH> <AF>
+../lib/vgszero.inc:0117 $0031 <PUSH> <BC>
+../lib/vgszero.inc:0118 $0032 <PUSH> <HL>
+../lib/vgszero.inc:0119 $0033 <LD> <BC> `,` 0x8000
+../lib/vgszero.inc:0120 $0036 <LD> <A> `,` 0x0
+../lib/vgszero.inc:0121 $0038 <LD> <HL> `,` 0x400
+../lib/vgszero.inc:0122 $003B <OUT> _( 0xC3 )_ `,` <A>
+../lib/vgszero.inc:0123 $003D <POP> <HL>
+../lib/vgszero.inc:0124 $003E <POP> <BC>
+../lib/vgszero.inc:0125 $003F <POP> <AF>
+diff m_sizeof.bin m_sizeof.exp
+E: Undefined field XXXX of strcture VRAM is specified in sizeof. ... OK
+E: Undefined structure YYYYY is specified in sizeof. ... OK
+Normal case: 243
+Error case: 370
+Total: 613

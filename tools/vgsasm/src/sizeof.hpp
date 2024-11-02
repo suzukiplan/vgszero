@@ -44,6 +44,31 @@ void sizeof_replace(LineData* line)
         if (it->first == TokenType::SizeOf) {
             auto s = structTable.find(it->second);
             if (s == structTable.end()) {
+                auto token = split_token(it->second, '.');
+                if (token.size() == 2) {
+                    s = structTable.find(token[0]);
+                    if (s != structTable.end()) {
+                        int size = 0;
+                        for (auto field : s->second->fields) {
+                            if (field->name == token[1]) {
+                                size = field->size * field->count;
+                            }
+                        }
+                        if (!size) {
+                            line->error = true;
+                            line->errmsg = "Undefined field " + token[1] + " of strcture " + token[0] + " is specified in sizeof.";
+                            return;
+                        } else {
+                            it->first = TokenType::Numeric;
+                            it->second = std::to_string(size);
+                            continue;
+                        }
+                    } else {
+                        line->error = true;
+                        line->errmsg = "Undefined structure " + token[0] + " is specified in sizeof.";
+                        return;
+                    }
+                }
                 line->error = true;
                 line->errmsg = "Undefined structure " + it->second + " is specified in sizeof.";
                 return;
