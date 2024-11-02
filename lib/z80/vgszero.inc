@@ -119,7 +119,7 @@ struct VRAM $8000 {
     LD BC, destination
     LD A, value
     LD HL, size
-    OUT (IO.memcpy), A
+    OUT (IO.memset), A
     POP HL
     POP BC
     POP AF

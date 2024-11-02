@@ -2,16 +2,9 @@
 
 ## Version 1.0.0
 
-### Support `sizeof(name.field)`
-
-see the #55
-
-### bugfix: Fixed a bug that the following error occurs when include stdio.asm
-
-```
-Error: ../../lib/z80/stdio.asm (81) `SAVE` was not defined at `IO`
-Error: ../../lib/z80/stdio.asm (96) `SAVE` was not defined at `IO`
-```
+- Support `sizeof(name.field)` #55
+- bugfix: Fixed a bug that the error occurs when include stdio.asm
+- bugfix: `memset` has unintended behavior
 
 ## Version 0.15 (beta-15)
 
