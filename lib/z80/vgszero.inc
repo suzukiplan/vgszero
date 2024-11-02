@@ -33,8 +33,8 @@ enum IO {
 enum PAD {
     b                       ; B button (Fire, Dash)
     a                       ; A button (Bomber, Jump)
-    start                   ; START button
     select                  ; SELECT button
+    start                   ; START button
     right                   ; Right cursor
     left                    ; Left cursor
     down                    ; Down cursor
