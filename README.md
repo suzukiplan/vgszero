@@ -392,42 +392,23 @@ VGS-Zero のゲーム開発に必要なツールの情報を記します。
 
 ## Programming Guide
 
-ゲームを開発する時の初期プロジェクトについては次のリポジトリを参考にしてください。
-
-[https://github.com/suzukiplan/vgszero-empty-project](https://github.com/suzukiplan/vgszero-empty-project)
-
 ### Programming Language
 
 - VGS-Zero のゲームは Z80 アセンブリ言語 または C言語 で記述することができます
-  - Z80 アセンブリ言語: [./example/01_hello-asm](./example/01_hello-asm)
+  - Z80: [./example/01_hello-asm](./example/01_hello-asm)
   - C言語: [./example/01_hello](./example/01_hello)
 - アセンブリ言語で記述する場合:
-  - 推奨アセンブラ: ツールチェインの [vgsasm](./tools/vgsasm/)
-  - Z80 対応のアセンブラであれば何でも使用できます
+  - 推奨アセンブラ: [vgsasm](./tools/vgsasm/)
+  - _もちろん、その他の Z80 アセンブラも使用することができます_
 - C言語で記述する場合:
-  - クロスコンパイラに [SDCC (Small Device C Compiler)](https://sdcc.sourceforge.net/) が使用できます
-  - VGS-Zero が対応している SDCC は **バージョン 4.1.0 のみ** です
-    - `brew`, `apt` 等でのデフォルトインストールバージョンとは異なります
-    - [公式ダウンロードサイト](https://sourceforge.net/projects/sdcc/files/) からお使いの PC の機種の sdcc-4.1.0 をダウンロード＆展開して環境変数 `PATH` を切ってご使用ください
-    - macOS(x64): [https://sourceforge.net/projects/sdcc/files/sdcc-macos-amd64/4.1.0/](https://sourceforge.net/projects/sdcc/files/sdcc-macos-amd64/4.1.0/)
-    - Linux(x64): [https://sourceforge.net/projects/sdcc/files/sdcc-linux-amd64/4.1.0/](https://sourceforge.net/projects/sdcc/files/sdcc-linux-amd64/4.1.0/)
-    - バージョン 4.2 〜 4.4 では [致命的な不具合](https://github.com/suzukiplan/vgszero/issues/8) が発生するので利用しないでください
+  - クロスコンパイラに [SDCC (Small Device C Compiler)](https://sdcc.sourceforge.net/) を使用できます
+  - 使用できる SDCC は **バージョン 4.1.0 のみ** です
   - 標準ライブラリは使用できません
   - [vgs0.lib](./lib/sdcc/) を使用することができます
 
-### API Manual for Programming Language C
+**[vgsasm](./tools/vgsasm/) を用いた Z80 アセンブリ言語でのプログラミングを推奨します。**
 
-[vgs0lib.h](./lib/sdcc/vgs0lib.h) の実装を参照してください。
-
-実装を見た方が手っ取り早いと思われるので非推奨ですが、以下のコマンドを実行すれば HTML 形式のマニュアルを閲覧できます。
-
-```
-sudo apt install doxygen build-essential
-git clone https://github.com/suzukiplan/vgszero
-cd vgszero/lib/sdcc
-make doc
-open doc/html/index.html
-```
+Z80 アセンブリ言語でプログラミングする場合、VSCode (Visual Studio Code) の [Extension `vgsasm`](https://marketplace.visualstudio.com/items?itemName=suzukiplan.vgsasm) を用いることで快適なプログラミングができるようになります。
 
 ### Create Sound Data
 
