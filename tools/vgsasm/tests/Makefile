@@ -67,6 +67,10 @@ execute: ${TEST_MODULES}
 	${MAK} test55
 	${MAK} test56
 	${MAK} test57
+	${MAK} test58
+
+test58: check ../vgsasm
+	${MAK} normal_case src=test58
 
 test57: check ../vgsasm
 	${MAK} normal_case src=m_add_b_n

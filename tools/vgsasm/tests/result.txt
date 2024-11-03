@@ -2602,6 +2602,10 @@ E: Illegal arithmetic instruction. ... OK
 E: Illegal arithmetic instruction. ... OK
 E: Illegal arithmetic instruction. ... OK
 E: Illegal arithmetic instruction. ... OK
-Normal case: 251
+N: test58
+../vgsasm test58.asm -v
+      test58.asm:0016 $0000 <LD> _( <IY> `+` 0x6 )_ `,` 0x1
+diff test58.bin test58.exp
+Normal case: 252
 Error case: 381
-Total: 632
+Total: 633

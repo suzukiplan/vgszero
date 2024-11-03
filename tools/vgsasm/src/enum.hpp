@@ -48,7 +48,6 @@ void enum_extract(std::vector<LineData*>* lines)
         }
         auto enumName = name->second;
         nametable_add(enumName, line);
-        defineTable[enumName].push_back(std::make_pair(TokenType::None, ""));
         name->first = TokenType::Delete;
         if (line->error) {
             continue;
