@@ -12,7 +12,7 @@
 ```zsh
 sudo apt install build-essential libsdl2-dev libasound2 libasound2-dev
 git clone https://github.com/suzukiplan/vgszero
-cd vgszero/example/07_palette-asm
+cd vgszero/example/12_angle-asm
 make
 ```
 
