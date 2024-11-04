@@ -273,6 +273,7 @@ void struct_parse_array(LineData* line)
             if (it->first != TokenType::ArrayBegin) {
                 continue;
             }
+            (it - 1)->first = TokenType::Delete;
             it->first = TokenType::Delete;
             // ArrayBegin があれば同一行内に必ず ArrayEnd がある
             if ((++it)->first != TokenType::Numeric) {
@@ -280,45 +281,34 @@ void struct_parse_array(LineData* line)
                 line->errmsg = "Illegal array structure element: " + it->second;
                 return;
             }
-            it->first = TokenType::StructArray;
+            auto arrayNum = atoi(it->second.c_str());
+            it->first = TokenType::Delete;
             if ((++it)->first != TokenType::ArrayEnd) {
                 line->error = true;
                 line->errmsg = "Illegal array structure element: " + it->second;
                 return;
             }
-            it->first = TokenType::Delete;
-            if (++it == line->token.end()) {
-                return;
-            }
-            if (it->first == TokenType::Other) {
-                auto field = it->second.c_str();
-                if ('.' != *field) {
-                    line->error = true;
-                    line->errmsg = "Invalid array field designation: " + it->second;
-                    return;
-                }
-                field++;
+            it->first = TokenType::Numeric;
+            if ((it + 1)->first == TokenType::Other && (it + 1)->second.c_str()[0] == '.') {
+                (it + 1)->first = TokenType::Delete;
+                auto fieldName = (it + 1)->second.substr(1);
                 bool found = false;
-                for (auto f : str->second->fields) {
-                    if (f->name == field) {
-                        it->first = TokenType::StructArrayField;
-                        it->second = field;
+                int offset = 0;
+                for (auto field : str->second->fields) {
+                    if (field->name == fieldName) {
                         found = true;
+                        it->second = std::to_string(str->second->start + str->second->size * arrayNum + offset);
                         break;
                     }
+                    offset += field->size;
                 }
                 if (!found) {
                     line->error = true;
-                    line->errmsg = "Fields not present in structure " + str->first + ": ";
-                    line->errmsg += field;
+                    line->errmsg = "Undefined field name `" + fieldName + "` in struct `" + str->second->name + "` was specified.";
                     return;
                 }
-                if (it->first != TokenType::StructArrayField) {
-                    line->error = true;
-                    line->errmsg = "Non-existent structure field: ";
-                    line->errmsg += field;
-                    return;
-                }
+            } else {
+                it->second = std::to_string(str->second->start + str->second->size * arrayNum);
             }
         }
     }
@@ -328,30 +318,18 @@ void struct_replace(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->first == TokenType::StructName) {
-            it->first = TokenType::Numeric;
             auto token = it->second;
             auto tokens = split_token(token, '.');
             auto str = structTable.find(tokens[0]);
             if (tokens.size() == 1) {
-                if (it + 1 != line->token.end() && (it + 1)->first == TokenType::StructArray) {
-                    auto n = str->second->size * atoi((it + 1)->second.c_str());
-                    if (it + 2 != line->token.end() && ((it + 2)->first) == TokenType::StructArrayField) {
-                        (it + 1)->first = TokenType::Delete;
-                        (it + 2)->first = TokenType::Delete;
-                        for (auto field : str->second->fields) {
-                            if (field->name == (it + 2)->second) {
-                                break;
-                            }
-                            n += field->size * field->count;
-                        }
-                    } else {
-                        (it + 1)->first = TokenType::Delete;
-                    }
-                    it->second = std::to_string(str->second->start + n);
+                if (it + 1 != line->token.end() && (it + 1)->first == TokenType::ArrayBegin) {
+                    // skip replace array style
                 } else {
+                    it->first = TokenType::Numeric;
                     it->second = std::to_string(str->second->start);
                 }
             } else {
+                it->first = TokenType::Numeric;
                 for (auto field : str->second->fields) {
                     if (field->name == tokens[1]) {
                         it->second = std::to_string(field->address);

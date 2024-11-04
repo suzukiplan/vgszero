@@ -138,7 +138,7 @@ void formulas_evaluate(LineData* line)
             case TokenType::Mul:
             case TokenType::Div:
                 if (it != line->token.begin()) {
-                    if ((it - 1)->first == TokenType::Other) {
+                    if ((it - 1)->first == TokenType::Other || (it - 1)->first == TokenType::ArrayEnd) {
                         return;
                     }
                 }

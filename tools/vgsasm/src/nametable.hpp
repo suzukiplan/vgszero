@@ -21,8 +21,10 @@ void nametable_add(std::string name, LineData* line)
 {
     auto errmsg = nametable_check(name);
     if (!errmsg.empty()) {
-        line->error = true;
-        line->errmsg = errmsg;
+        if (line) {
+            line->error = true;
+            line->errmsg = errmsg;
+        }
     } else {
         nameTable[name] = line;
     }

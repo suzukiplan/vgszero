@@ -18,61 +18,59 @@
 #include <list>
 
 enum class TokenType {
-    None,             // トークンが無い
-    Delete,           // 削除マーク
-    Mnemonic,         // ニーモニック
-    Operand,          // オペランド
-    Org,              // 開始アドレス
-    Struct,           // 構造体
-    StructName,       // 構造体名
-    StructArray,      // 構造体配列
-    StructArrayField, // 構造体配列のフィールド指定
-    SizeOf,           // 構造体サイズ
-    Offset,           // 構造体フィールドのオフセット
-    String,           // 文字列 "str" or 'str'
-    Label,            // ラベル（HOGE: or .HOGE）
-    LabelAt,          // @HOGE 形式のラベル
-    LabelJump,        // ジャンプ先ラベル
-    Numeric,          // 数値
-    Split,            // , カンマ
-    Plus,             // + プラス
-    Minus,            // - マイナス
-    PlusOrMinus,      // + or - (比較用)
-    Div,              // / 割り算
-    Mul,              // * 掛け算
-    Modulo,           // % 剰余残
-    ArrayBegin,       // [ 配列起点
-    ArrayEnd,         // ] 配列終点
-    BracketBegin,     // ( カッコ
-    BracketEnd,       // ) カッコ
-    AddressBegin,     // ( カッコ（※特定箇所のみ）
-    AddressEnd,       // ) カッコ (※特定箇所のみ)
-    ArgumentBegin,    // ( カッコ（※特定箇所のみ）
-    ArgumentEnd,      // ) カッコ (※特定箇所のみ)
-    ScopeBegin,       // { スコープ起点
-    ScopeEnd,         // } スコープ終点
-    And,              // & アンパーサンド
-    Or,               // |
-    Caret,            // ^
-    Inc,              // インクリメント
-    Dec,              // デクリメント
-    Binary,           // #binary
-    Macro,            // #macro
-    MacroCaller,      // マクロ呼び出し
-    Equal,            // = 代入
-    EqualPlus,        // += 加算代入
-    EqualMinus,       // -= 減算代入
-    EqualAnd,         // &= 論理積代入
-    EqualOr,          // |= 論理和代入
-    EqualXor,         // ^= 排他的論理和代入
-    EqualShiftLeft,   // <<= 左論理シフト代入
-    EqualShiftRight,  // >>= 右論理シフト代入
-    EqualMul,         // *= 乗算代入
-    EqualDiv,         // /= 除算代入
-    EqualMod,         // %= 剰余残代入
-    ArrowLeft,        // <-
-    ArrowRight,       // ->
-    Other             // その他 (構文解析の仮定で最終的にはなくなる)
+    None,            // トークンが無い
+    Delete,          // 削除マーク
+    Mnemonic,        // ニーモニック
+    Operand,         // オペランド
+    Org,             // 開始アドレス
+    Struct,          // 構造体
+    StructName,      // 構造体名
+    SizeOf,          // 構造体サイズ
+    Offset,          // 構造体フィールドのオフセット
+    String,          // 文字列 "str" or 'str'
+    Label,           // ラベル（HOGE: or .HOGE）
+    LabelAt,         // @HOGE 形式のラベル
+    LabelJump,       // ジャンプ先ラベル
+    Numeric,         // 数値
+    Split,           // , カンマ
+    Plus,            // + プラス
+    Minus,           // - マイナス
+    PlusOrMinus,     // + or - (比較用)
+    Div,             // / 割り算
+    Mul,             // * 掛け算
+    Modulo,          // % 剰余残
+    ArrayBegin,      // [ 配列起点
+    ArrayEnd,        // ] 配列終点
+    BracketBegin,    // ( カッコ
+    BracketEnd,      // ) カッコ
+    AddressBegin,    // ( カッコ（※特定箇所のみ）
+    AddressEnd,      // ) カッコ (※特定箇所のみ)
+    ArgumentBegin,   // ( カッコ（※特定箇所のみ）
+    ArgumentEnd,     // ) カッコ (※特定箇所のみ)
+    ScopeBegin,      // { スコープ起点
+    ScopeEnd,        // } スコープ終点
+    And,             // & アンパーサンド
+    Or,              // |
+    Caret,           // ^
+    Inc,             // インクリメント
+    Dec,             // デクリメント
+    Binary,          // #binary
+    Macro,           // #macro
+    MacroCaller,     // マクロ呼び出し
+    Equal,           // = 代入
+    EqualPlus,       // += 加算代入
+    EqualMinus,      // -= 減算代入
+    EqualAnd,        // &= 論理積代入
+    EqualOr,         // |= 論理和代入
+    EqualXor,        // ^= 排他的論理和代入
+    EqualShiftLeft,  // <<= 左論理シフト代入
+    EqualShiftRight, // >>= 右論理シフト代入
+    EqualMul,        // *= 乗算代入
+    EqualDiv,        // /= 除算代入
+    EqualMod,        // %= 剰余残代入
+    ArrowLeft,       // <-
+    ArrowRight,      // ->
+    Other            // その他 (構文解析の仮定で最終的にはなくなる)
 };
 
 enum class Mnemonic;

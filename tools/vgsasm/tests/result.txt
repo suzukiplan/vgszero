@@ -410,7 +410,7 @@ E: Unknown field name in structure HOGE: VAR2 ... OK
 E: Illegal array structure element: ] ... OK
 E: Illegal array structure element: FOO ... OK
 E: Illegal array structure element: 2 ... OK
-E: Invalid array field designation: VAR1 ... OK
+E: Illegal LD instruction. ... OK
 E: Unknown field name in structure HOGE: VAR2 ... OK
 N: struct_normal
 ../vgsasm struct_normal.asm -v
@@ -2606,6 +2606,38 @@ N: test58
 ../vgsasm test58.asm -v
       test58.asm:0016 $0000 <LD> _( <IY> `+` 0x6 )_ `,` 0x1
 diff test58.bin test58.exp
-Normal case: 252
-Error case: 381
-Total: 633
+N: ifdef
+../vgsasm ifdef.asm -v
+       ifdef.asm:0004 $0000 <LD> <A> `,` <A>
+       ifdef.asm:0012 $0001 <LD> <A> `,` <D>
+diff ifdef.bin ifdef.exp
+E: #ifdef must appear at the beginning of the line. ... OK
+E: Definition name not specified in #ifdef. ... OK
+E: Multiple definition names specified in #ifdef: B ... OK
+E: The corresponding #ifdef is not defined. ... OK
+E: The corresponding #ifdef is not defined. ... OK
+E: #else must appear at the beginning of the line. ... OK
+E: Unexpected symbol has specified: B ... OK
+E: #endif must appear at the beginning of the line. ... OK
+E: Unexpected symbol has specified: Y ... OK
+E: #ifdef is specified as nested. ... OK
+E: #ifdef is specified as nested. ... OK
+E: #ifdef is not closed with #endif. ... OK
+N: test60
+../vgsasm test60.asm -v
+      test60.asm:0011 $0000 <LD> <IX> `,` _( 0xC000 )_
+      test60.asm:0012 $0004 <LD> <IY> `,` _( 0xC002 )_
+      test60.asm:0013 $0008 <LD> <HL> `,` _( 0xC008 )_
+      test60.asm:0014 $000B <LD> <HL> `,` _( 0xC005 )_
+      test60.asm:0016 $000E <LD> <IX> `,` _( 0xC000 )_
+      test60.asm:0017 $0012 <LD> <IY> `,` _( 0xC002 )_
+      test60.asm:0018 $0016 <LD> <HL> `,` _( 0xC008 )_
+      test60.asm:0019 $0019 <LD> <HL> `,` _( 0xC005 )_
+      test60.asm:0021 $001C <LD> <IX> `,` _( 0xC001 )_
+      test60.asm:0022 $0020 <LD> <IY> `,` _( 0xC003 )_
+      test60.asm:0023 $0024 <LD> <HL> `,` _( 0xC009 )_
+      test60.asm:0024 $0027 <LD> <HL> `,` _( 0xC006 )_
+diff test60.bin test60.exp
+Normal case: 254
+Error case: 393
+Total: 647
