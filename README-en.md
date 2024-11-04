@@ -1104,7 +1104,7 @@ When selling games for VGS-Zero at comic markets (events) or by mail order, the 
 3. Replace [game.pkg](#gamepkg)
 4. Delete [README](/image/README)
 5. Store README.txt (text describing how to play the game)
-6. Store micro-SD card in [case](https://www.amazon.co.jp/dp/B08TWR47LV/) etc.
+6. Store micro-SD card in case etc.
 7. Apply game label to the case
 
 Legend of README.txt description:

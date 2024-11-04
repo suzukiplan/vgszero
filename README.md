@@ -116,17 +116,10 @@ VGS-Zero で扱えるグラフィックスの描画、効果音の作成、音�
 以下のハードウェアが必要です。
 
 - RaspberryPi Zero 2W
-  - [https://www.switch-science.com/products/7600](https://www.switch-science.com/products/7600)
-  - [https://www.amazon.co.jp/dp/B0B55MFH1D/](https://www.amazon.co.jp/dp/B0B55MFH1D/)
 - HDMI ケーブル (mini HDMI Type C → HDMI Type A)
-  - [https://www.amazon.co.jp/dp/B08R7BVL7T/](https://www.amazon.co.jp/dp/B08R7BVL7T/)
 - USB ジョイパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
-  - [https://www.amazon.co.jp/dp/B07M7SYX11/](https://www.amazon.co.jp/dp/B07M7SYX11/)
-  - [https://www.amazon.co.jp/dp/B08BNFKCYM/](https://www.amazon.co.jp/dp/B08BNFKCYM/)
 - USB 電源
-  - [https://www.amazon.co.jp/dp/B09T3C758Q/](https://www.amazon.co.jp/dp/B09T3C758Q/)
 - micro SD カード
-  - [https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/](https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/)
   - 最大 20MB 程度の空き容量が必要です（ゲーム本体: 最大16MB、ファームウェア: 約4MB）
 - テレビなど（以下の条件のもの）
   - HDMI入力対応
@@ -1089,7 +1082,7 @@ JZ  EFF03_IS_NOT_PLAYING
 3. [game.pkg](#gamepkg) を差し替え
 4. [README](./image/README) を削除
 5. README.txt（ゲームの遊び方を記載したテキスト）を格納
-6. micro-SD カードを[ケース](https://www.amazon.co.jp/dp/B08TWR47LV/)などに格納
+6. micro-SD カードをケースなどに格納
 7. ケースにゲームのラベルを塗布
 
 といった形で媒体を準備して販売するのが良いかと思われます。（ダウンロード販売の場合は SD カードに格納するものと同等のものを ZIP で固めて販売）
@@ -1108,15 +1101,9 @@ README.txtの記載凡例:
 
 【必要なハードウェア】
 ・RaspberryPi Zero 2W
-  - https://www.switch-science.com/products/7600
-  - https://www.amazon.co.jp/dp/B0B55MFH1D/
 ・HDMI ケーブル (mini HDMI Type C → HDMI Type A)
-  - https://www.amazon.co.jp/dp/B08R7BVL7T/
 ・USB ジョイパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
-  - https://www.amazon.co.jp/dp/B07M7SYX11/
-  - https://www.amazon.co.jp/dp/B08BNFKCYM/
 ・USB 電源
-  - https://www.amazon.co.jp/dp/B09T3C758Q/
 ・テレビなど（以下の条件のもの）
   - HDMI入力対応
   - リフレッシュレート60Hz
