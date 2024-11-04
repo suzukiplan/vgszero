@@ -1172,7 +1172,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | `09_joypad` | [Z80](./example/09_joypad-asm/), [C](./example/09_joypad/) | ジョイパッドの入力結果をプレビュー |
 | `10_chr720` | [Z80](./example/10_chr720-asm/), [C](./example/10_chr720/) | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
 | `11_bigsprite` | [Z80](./example/11_bigsprite-asm/), [C](./example/11_bigsprite/) | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の使用例 |
-| `12_angle` | [C](./example/12_angle) | [atan2](#hardware-atan2-table) を用いた自機狙いの実装例 |
+| `12_angle` | [Z80](./example/12_angle-asm), [C](./example/12_angle) | [atan2](#hardware-atan2-table) を用いた自機狙いの実装例 |
 | `13_perlin` | [C](./example/13_perlin) | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
 | `14_1024ptn` | [C](./example/14_1024ptn) | [1024 パターンモード](#1024-patterns-mode) の利用例 |
 | `15_nsf` | [C](./example/15_nsf/) | [NSF](#nsf) の利用例 |
