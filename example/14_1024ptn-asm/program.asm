@@ -32,22 +32,22 @@ enum BANK {
 @check_left
     bit pad.left, a
     jr nz, @check_right
-    dec (vram.bgSX)
+    vram.bgSX += -2
     jr @check_up
 @check_right
     bit pad.right, a
     jr nz, @check_up
-    inc (vram.bgSX)
+    vram.bgSX += 2
 
 @check_up
     bit pad.up, a
     jr nz, @check_down
-    dec (vram.bgSY)
+    vram.bgSY += -2
     jr @loop
 @check_down
     bit pad.down, a
     jr nz, @loop
-    inc (vram.bgSY)
+    vram.bgSY += 2
     jr @loop
 
 ;------------------------------------------------------------
