@@ -1163,7 +1163,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | `13_perlin` | [Z80](./example/13_perlin-asm), [C](./example/13_perlin) | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
 | `14_1024ptn` | [Z80](./example/14_1024ptn-asm), [C](./example/14_1024ptn) | [1024 パターンモード](#1024-patterns-mode) の利用例 |
 | `15_nsf` | [Z80](./example/15_nsf-asm/), [C](./example/15_nsf/) | [NSF](#nsf) の利用例 |
-| `16_ptn-plus1` | [C](./example/16_ptn-plus1/) | [Attribute](#attribute) の `ptn` の使用例 |
+| `16_ptn-plus1` | [Z80](./example/16_ptn-plus1-asm/), [C](./example/16_ptn-plus1/) | [Attribute](#attribute) の `ptn` の使用例 |
 | `17_clip` | [C](./example/17_clip/) | [OAM16](#oam16) の使用例 |
 
 ## License

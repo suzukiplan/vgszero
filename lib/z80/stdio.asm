@@ -33,11 +33,11 @@
     ld l, posY
     ld b, attr
     ld de, string
-    call print_text_sub
+    call print_text_fg_sub
     pop_all_without_i()
 }
 
-.print_text_sub
+.print_text_fg_sub
     ; 座標をネームテーブルアドレスへ変換
     ; HL = L * 32 + H + VRAM.fg_name
     ld a, h
@@ -67,7 +67,51 @@
 
     inc de
     jr @Loop
-    ret
+
+;------------------------------------------------------------
+; BG へ $00 終端の文字列を表示
+;------------------------------------------------------------
+#macro print_text_bg(posX, posY, attr, string)
+{
+    push_all_without_i()
+    ld h, posX
+    ld l, posY
+    ld b, attr
+    ld de, string
+    call print_text_bg_sub
+    pop_all_without_i()
+}
+
+.print_text_bg_sub
+    ; 座標をネームテーブルアドレスへ変換
+    ; HL = L * 32 + H + VRAM.fg_name
+    ld a, h
+    ld h, 0
+    ld c, 32
+    mul hl, c
+    add hl, a
+    add hl, VRAM.bg_name
+
+@Loop
+    ; 文字コード取得
+    ld a, (de)
+    and a
+    ret z
+
+    ; 文字コード書き込み
+    ld (hl), a
+
+    ; 属性更新
+    push de
+    ld de, $0400
+    add hl, de
+    ld (hl), b
+    ld de, -$03FF
+    add hl, de
+    pop de
+
+    inc de
+    jr @Loop
 
 ;------------------------------------------------------------
 ; セーブデータの保存

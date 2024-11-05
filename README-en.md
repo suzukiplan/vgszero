@@ -1186,7 +1186,7 @@ _We hope to address this in the future._
 | `13_perlin` | [Z80](./example/13_perlin-asm), [C](./example/13_perlin) | Example usage of [Perlin Noise](#hardware-perlin-noise) |
 | `14_1024ptn` | [Z80](./example/14_1024ptn-asm), [C](./example/14_1024ptn) | [1024-patterns-mode](#1024-patterns-mode) usage example |
 | `15_nsf` | [Z80](./example/15_nsf-asm/), [C](./example/15_nsf/) | Example usage of [NSF](#nsf) |
-| `16_ptn-plus1` | [C](./example/16_ptn-plus1/) | Example usage of `ptn` in [Attribute](#attribute) |
+| `16_ptn-plus1` | [Z80](./example/16_ptn-plus1-asm/), [C](./example/16_ptn-plus1/) | Example usage of `ptn` in [Attribute](#attribute) |
 | `17_clip` | [C](./example/17_clip/) | Example usage of [OAM16](#oam16) |
 
 ## License
