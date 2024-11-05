@@ -2,14 +2,17 @@
 
 ## Version 1.0.0
 
+- All system tests finished #7
 - Support `sizeof(name.field)` #55
 - Support `ADD {BC|DE}, nn` #56
 - Support `ADD {B|C|D|E|H|L}, n` #57
 - bugfix: Unexpected field not defined error #58
 - Support `#ifdef` ~ `#else` ~ `#endif` and -d option #59
 - bugfix: Cannot use structure for array elements of structure #60
+- Support `ADD` with Address and Immediate Value #61
 - bugfix: Fixed a bug that the error occurs when include stdio.asm
 - bugfix: `memset` has unintended behavior
+- Change lib directory to [vgszero](https://github.com/suzukiplan/vgszero) repository jurisdiction
 
 ## Version 0.15 (beta-15)
 

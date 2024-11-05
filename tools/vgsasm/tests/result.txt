@@ -1297,6 +1297,68 @@ N: all
          all.asm:1496 $0D0C <LD> <IYH> `,` _( 0xC000 )_
          all.asm:1497 $0D13 <LD> <IYL> `,` _( 0xC000 )_
 diff all.bin all.exp
+N: msx
+../vgsasm msx.asm -v
+         msx.asm:0003 $4000 HEADER:
+         msx.asm:0004 $4000 ID@HEADER:
+         msx.asm:0004 $4000 <DB> `AB`
+         msx.asm:0005 $4002 INIT@HEADER:
+         msx.asm:0005 $4002 <DW> `START`
+         msx.asm:0006 $4004 STATE@HEADER:
+         msx.asm:0006 $4004 <DW> 0x0
+         msx.asm:0007 $4006 DEVICE@HEADER:
+         msx.asm:0007 $4006 <DW> 0x0
+         msx.asm:0008 $4008 TEXT@HEADER:
+         msx.asm:0008 $4008 <DW> 0x0
+         msx.asm:0009 $400A RSRVD@HEADER:
+         msx.asm:0009 $400A <DB> 0x0 `,` 0x0 `,` 0x0 `,` 0x0 `,` 0x0 `,` 0x0
+         msx.asm:0012 $4010 START:
+         msx.asm:0015 $4010 <LD> <SP> `,` 0xF380
+         msx.asm:0019 $4013 <LD> <A> `,` _( 0x7 )_
+         msx.asm:0019 $4016 <INC> <A>
+         msx.asm:0020 $4017 <LD> <C> `,` <A>
+         msx.asm:0021 $4018 <DI>
+         msx.asm:0022 $4019 <LD> <A> `,` 0x0
+         msx.asm:0023 $401B <OUT> _( <C> )_ `,` <A>
+         msx.asm:0024 $401D <LD> <A> `,` 0x58
+         msx.asm:0025 $401F <OUT> _( <C> )_ `,` <A>
+         msx.asm:0026 $4021 <EI>
+         msx.asm:0029 $4022 <CALL> `CLEARSCREEN`
+         msx.asm:0033 $4025 <INC> <C>
+         msx.asm:0034 $4026 <DI>
+         msx.asm:0035 $4027 <LD> <A> `,` 0x89
+         msx.asm:0036 $4029 <OUT> _( <C> )_ `,` <A>
+         msx.asm:0037 $402B <LD> <A> `,` 0x59
+         msx.asm:0038 $402D <OUT> _( <C> )_ `,` <A>
+         msx.asm:0039 $402F <EI>
+         msx.asm:0042 $4030 <DEC> <C>
+         msx.asm:0043 $4031 <LD> <HL> `,` `$0`
+         msx.asm:0044 $4034 <LD> <B> `,` 0xD
+         msx.asm:0045 $4036 LOOP@START:
+         msx.asm:0046 $4036 <PUSH> <AF>
+         msx.asm:0047 $4037 <POP> <AF>
+         msx.asm:0048 $4038 <LD> <A> `,` _( <HL> )_
+         msx.asm:0048 $4039 <INC> <HL>
+         msx.asm:0049 $403A <OUT> _( <C> )_ `,` <A>
+         msx.asm:0050 $403C <DJNZ> `LOOP@START`
+                :0000 $403E $@+0#0:
+         msx.asm:0053 $403E <JR> `$@+0#0`
+         msx.asm:0055 $4040 CLEARSCREEN:
+         msx.asm:0057 $4040 <LD> <C> `,` _( 0x7 )_
+         msx.asm:0058 $4046 <LD> <A> `,` 0x20
+         msx.asm:0059 $4048 <LD> <B> `,` 0x0
+         msx.asm:0060 $404A <LD> <D> `,` 0x3
+         msx.asm:0061 $404C LOOP@CLEARSCREEN:
+         msx.asm:0062 $404C <PUSH> <AF>
+         msx.asm:0063 $404D <POP> <AF>
+         msx.asm:0064 $404E <OUT> _( <C> )_ `,` <A>
+         msx.asm:0065 $4050 <DJNZ> `LOOP@CLEARSCREEN`
+         msx.asm:0066 $4052 <DEC> <D>
+         msx.asm:0067 $4053 <JR> <NZ> `,` `LOOP@CLEARSCREEN`
+         msx.asm:0068 $4055 <RET>
+                :0000 $4056 $0:
+                :0000 $4056 <DB> 0x48 `,` 0x65 `,` 0x6C `,` 0x6C `,` 0x6F `,` 0x2C `,` 0x20 `,` 0x57 `,` 0x6F `,` 0x72 `,` 0x6C `,` 0x64 `,` 0x21 `,` 0x0
+diff msx.bin msx.exp
 ./assignment
 N: A = B        --->  `LD` `A` `,` `B`
 N: A += B       --->  `ADD` `A` `,` `B`
@@ -3953,6 +4015,6 @@ diff m_add_nsn.bin m_add_nsn.exp
 E: Numerical range incorrect: 65536 ... OK
 E: Numerical range incorrect: -129 ... OK
 E: Numerical range incorrect: 256 ... OK
-Normal case: 257
+Normal case: 258
 Error case: 399
-Total: 656
+Total: 657

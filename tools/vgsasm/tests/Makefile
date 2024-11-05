@@ -39,6 +39,7 @@ show_result_count:
 
 execute: ${TEST_MODULES}
 	${MAK} all_instructions
+	${MAK} msx
 	./assignment
 	./binary
 	./bracket_to_address
@@ -135,6 +136,9 @@ test55: check ../vgsasm
 
 all_instructions: check ../vgsasm
 	${MAK} normal_case src=all
+
+msx: check ../vgsasm
+	${MAK} normal_case src=msx
 
 single: sizeof_replace
 	./sizeof_replace
