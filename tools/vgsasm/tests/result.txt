@@ -3937,6 +3937,22 @@ N: test60
       test60.asm:0023 $0024 <LD> <HL> `,` _( 0xC009 )_
       test60.asm:0024 $0027 <LD> <HL> `,` _( 0xC006 )_
 diff test60.bin test60.exp
-Normal case: 255
-Error case: 393
-Total: 648
+N: m_add_anasn
+../vgsasm m_add_anasn.asm -v
+ m_add_anasn.asm:0001 $0000 <ADD> _( 0x0 )_ `,` 0xFFFFFF80
+ m_add_anasn.asm:0002 $000C <ADD> _( 0xFFFF )_ `,` 0xFF
+diff m_add_anasn.bin m_add_anasn.exp
+E: Numerical range incorrect: 65536 ... OK
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 256 ... OK
+N: m_add_nsn
+../vgsasm m_add_nsn.asm -v
+   m_add_nsn.asm:0001 $0000 <ADD> 0x0 `,` 0xFFFFFF80
+   m_add_nsn.asm:0002 $000C <ADD> 0xFFFF `,` 0xFF
+diff m_add_nsn.bin m_add_nsn.exp
+E: Numerical range incorrect: 65536 ... OK
+E: Numerical range incorrect: -129 ... OK
+E: Numerical range incorrect: 256 ... OK
+Normal case: 257
+Error case: 399
+Total: 656

@@ -735,6 +735,7 @@ In vgsasm, instructions that __do not exist in the Z80__ are complemented by exi
 | `SBC (nn)` | `PUSH HL`, `LD L,nL`, `LD H,nH`, `SBC (HL)`, `POP HL` |
 | `INC (nn)` | `PUSH HL`, `LD HL,nn`, `INC (HL)` `POP HL`|
 | `DEC (nn)` | `PUSH HL`, `LD HL,nn`, `DEC (HL)` `POP HL`|
+| `ADD (nn), n` | `PUSH AF`, `PUSH HL`, `LD A,n`, `LD HL,nn`, `ADD (HL)`, `LD (HL),A`, `POP HL`, `POP AF` |
 | `SHIFT r, n` | `SHIFT r` x n times (n bits) |
 | `SHIFT (HL), n` | `SHIFT (HL)` x n times (n bits) |
 | `SHIFT (IX+d), n` | `SHIFT (IX+d)` x n times (n bits) |
