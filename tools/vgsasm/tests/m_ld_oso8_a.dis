@@ -1,0 +1,11 @@
+                    ld        a,a                           ;[0000] 7f
+                    ld        a,b                           ;[0001] 78
+                    ld        a,c                           ;[0002] 79
+                    ld        a,d                           ;[0003] 7a
+                    ld        a,e                           ;[0004] 7b
+                    ld        a,h                           ;[0005] 7c
+                    ld        a,l                           ;[0006] 7d
+                    ld        a,ixh                         ;[0007] dd 7c
+                    ld        a,ixl                         ;[0009] dd 7d
+                    ld        a,iyh                         ;[000b] fd 7c
+                    ld        a,iyl                         ;[000d] fd 7d

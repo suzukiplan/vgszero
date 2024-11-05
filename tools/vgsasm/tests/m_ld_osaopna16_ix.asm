@@ -1,0 +1,5 @@
+ld bc, (ix-128)
+ld de, (ix-1)
+ld hl, (ix+127)
+;ld ix, (ix+64)
+;ld iy, (ix+64)

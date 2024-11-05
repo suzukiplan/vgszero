@@ -1,5 +1,11 @@
 # Change Log
 
+## [Version 1.14.0](https://github.com/suzukiplan/vgszero/releases/tag/1.14.0)
+
+- ツールチェインに [vgsasm](https://github.com/suzukiplan/vgsasm) を追加
+- 推奨アセンブラを z88dk から [vgsasm](https://github.com/suzukiplan/vgsasm) に変更
+- 全ての example にアセンブリ言語版を追加
+
 ## [Version 1.13.0](https://github.com/suzukiplan/vgszero/releases/tag/1.13.0)
 
 - [OAM16](./README.md#oam16) 機能を追加

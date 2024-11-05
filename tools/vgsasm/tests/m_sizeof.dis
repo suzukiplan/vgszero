@@ -1,0 +1,43 @@
+                    ld        sp,$0000                      ;[0000] 31 00 00
+                    jp        $0030                         ;[0003] c3 30 00
+                    ld        a,h                           ;[0006] 7c
+                    ld        h,$00                         ;[0007] 26 00
+                    ld        c,$20                         ;[0009] 0e 20
+                    push      af                            ;[000b] f5
+                    ld        a,$80                         ;[000c] 3e 80
+                    out       ($c5),a                       ;[000e] d3 c5
+                    pop       af                            ;[0010] f1
+                    add       l                             ;[0011] 85
+                    ld        l,a                           ;[0012] 6f
+                    jr        nc,$0016                      ;[0013] 30 01
+                    inc       h                             ;[0015] 24
+                    push      de                            ;[0016] d5
+                    ld        d,$88                         ;[0017] 16 88
+                    ld        e,$00                         ;[0019] 1e 00
+                    add       hl,de                         ;[001b] 19
+                    pop       de                            ;[001c] d1
+                    ld        a,(de)                        ;[001d] 1a
+                    and       a                             ;[001e] a7
+                    ret       z                             ;[001f] c8
+                    ld        (hl),a                        ;[0020] 77
+                    push      de                            ;[0021] d5
+                    ld        de,$0400                      ;[0022] 11 00 04
+                    add       hl,de                         ;[0025] 19
+                    ld        (hl),b                        ;[0026] 70
+                    ld        de,$fc01                      ;[0027] 11 01 fc
+                    add       hl,de                         ;[002a] 19
+                    pop       de                            ;[002b] d1
+                    inc       de                            ;[002c] 13
+                    jr        $001d                         ;[002d] 18 ee
+                    ret                                     ;[002f] c9
+
+                    push      af                            ;[0030] f5
+                    push      bc                            ;[0031] c5
+                    push      hl                            ;[0032] e5
+                    ld        bc,$8000                      ;[0033] 01 00 80
+                    ld        a,$00                         ;[0036] 3e 00
+                    ld        hl,$0400                      ;[0038] 21 00 04
+                    out       ($c3),a                       ;[003b] d3 c3
+                    pop       hl                            ;[003d] e1
+                    pop       bc                            ;[003e] c1
+                    pop       af                            ;[003f] f1

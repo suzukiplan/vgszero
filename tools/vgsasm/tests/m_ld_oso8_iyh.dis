@@ -1,0 +1,7 @@
+                    ld        iyh,a                         ;[0000] fd 67
+                    ld        iyh,b                         ;[0002] fd 60
+                    ld        iyh,c                         ;[0004] fd 61
+                    ld        iyh,d                         ;[0006] fd 62
+                    ld        iyh,e                         ;[0008] fd 63
+                    ld        iyh,iyh                       ;[000a] fd 64
+                    ld        iyh,iyl                       ;[000c] fd 65

@@ -1,0 +1,38 @@
+                    nop                                     ;[0000] 00
+                    di                                      ;[0001] f3
+                    ei                                      ;[0002] fb
+                    halt                                    ;[0003] 76
+                    exx                                     ;[0004] d9
+                    daa                                     ;[0005] 27
+                    cpl                                     ;[0006] 2f
+                    ccf                                     ;[0007] 3f
+                    scf                                     ;[0008] 37
+                    neg                                     ;[0009] ed 44
+                    ldi                                     ;[000b] ed a0
+                    ldir                                    ;[000d] ed b0
+                    ldd                                     ;[000f] ed a8
+                    lddr                                    ;[0011] ed b8
+                    cpi                                     ;[0013] ed a1
+                    cpir                                    ;[0015] ed b1
+                    cpd                                     ;[0017] ed a9
+                    cpdr                                    ;[0019] ed b9
+                    outi                                    ;[001b] ed a3
+                    otir                                    ;[001d] ed b3
+                    otir                                    ;[001f] ed b3
+                    outd                                    ;[0021] ed ab
+                    otdr                                    ;[0023] ed bb
+                    otdr                                    ;[0025] ed bb
+                    ini                                     ;[0027] ed a2
+                    inir                                    ;[0029] ed b2
+                    ind                                     ;[002b] ed aa
+                    indr                                    ;[002d] ed ba
+                    rlca                                    ;[002f] 07
+                    rrca                                    ;[0030] 0f
+                    rla                                     ;[0031] 17
+                    rra                                     ;[0032] 1f
+                    rld                                     ;[0033] ed 6f
+                    rrd                                     ;[0035] ed 67
+                    reti                                    ;[0037] ed 4d
+
+                    retn                                    ;[0039] ed 45
+

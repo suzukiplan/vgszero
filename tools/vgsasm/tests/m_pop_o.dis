@@ -1,0 +1,6 @@
+                    pop       af                            ;[0000] f1
+                    pop       bc                            ;[0001] c1
+                    pop       de                            ;[0002] d1
+                    pop       hl                            ;[0003] e1
+                    pop       ix                            ;[0004] dd e1
+                    pop       iy                            ;[0006] fd e1

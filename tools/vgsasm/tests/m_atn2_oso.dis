@@ -1,0 +1,11 @@
+                    in        a,($c8)                       ;[0000] db c8
+                    push      hl                            ;[0002] e5
+                    ld        h,b                           ;[0003] 60
+                    ld        l,c                           ;[0004] 69
+                    in        a,($c8)                       ;[0005] db c8
+                    pop       hl                            ;[0007] e1
+                    push      hl                            ;[0008] e5
+                    ld        h,d                           ;[0009] 62
+                    ld        l,e                           ;[000a] 6b
+                    in        a,($c8)                       ;[000b] db c8
+                    pop       hl                            ;[000d] e1

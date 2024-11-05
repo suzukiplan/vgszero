@@ -1,0 +1,9 @@
+                    jp        (hl)                          ;[0000] e9
+                    jp        (ix)                          ;[0001] dd e9
+                    jp        (iy)                          ;[0003] fd e9
+                    push      bc                            ;[0005] c5
+                    ret                                     ;[0006] c9
+
+                    push      de                            ;[0007] d5
+                    ret                                     ;[0008] c9
+

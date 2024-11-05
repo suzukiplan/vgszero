@@ -1,0 +1,56 @@
+                    add       (hl)                          ;[0000] 86
+                    add       (ix+$00)                      ;[0001] dd 86 00
+                    add       (iy+$00)                      ;[0004] fd 86 00
+                    add       (ix-$80)                      ;[0007] dd 86 80
+                    add       (iy-$80)                      ;[000a] fd 86 80
+                    add       (ix+$7f)                      ;[000d] dd 86 7f
+                    add       (iy+$7f)                      ;[0010] fd 86 7f
+                    adc       (hl)                          ;[0013] 8e
+                    adc       (ix+$00)                      ;[0014] dd 8e 00
+                    adc       (iy+$00)                      ;[0017] fd 8e 00
+                    adc       (ix-$80)                      ;[001a] dd 8e 80
+                    adc       (iy-$80)                      ;[001d] fd 8e 80
+                    adc       (ix+$7f)                      ;[0020] dd 8e 7f
+                    adc       (iy+$7f)                      ;[0023] fd 8e 7f
+                    sub       (hl)                          ;[0026] 96
+                    sub       (ix+$00)                      ;[0027] dd 96 00
+                    sub       (iy+$00)                      ;[002a] fd 96 00
+                    sub       (ix-$80)                      ;[002d] dd 96 80
+                    sub       (iy-$80)                      ;[0030] fd 96 80
+                    sub       (ix+$7f)                      ;[0033] dd 96 7f
+                    sub       (iy+$7f)                      ;[0036] fd 96 7f
+                    sbc       (hl)                          ;[0039] 9e
+                    sbc       (ix+$00)                      ;[003a] dd 9e 00
+                    sbc       (iy+$00)                      ;[003d] fd 9e 00
+                    sbc       (ix-$80)                      ;[0040] dd 9e 80
+                    sbc       (iy-$80)                      ;[0043] fd 9e 80
+                    sbc       (ix+$7f)                      ;[0046] dd 9e 7f
+                    sbc       (iy+$7f)                      ;[0049] fd 9e 7f
+                    cp        (hl)                          ;[004c] be
+                    cp        (ix+$00)                      ;[004d] dd be 00
+                    cp        (iy+$00)                      ;[0050] fd be 00
+                    cp        (ix-$80)                      ;[0053] dd be 80
+                    cp        (iy-$80)                      ;[0056] fd be 80
+                    cp        (ix+$7f)                      ;[0059] dd be 7f
+                    cp        (iy+$7f)                      ;[005c] fd be 7f
+                    and       (hl)                          ;[005f] a6
+                    and       (ix+$00)                      ;[0060] dd a6 00
+                    and       (iy+$00)                      ;[0063] fd a6 00
+                    and       (ix-$80)                      ;[0066] dd a6 80
+                    and       (iy-$80)                      ;[0069] fd a6 80
+                    and       (ix+$7f)                      ;[006c] dd a6 7f
+                    and       (iy+$7f)                      ;[006f] fd a6 7f
+                    or        (hl)                          ;[0072] b6
+                    or        (ix+$00)                      ;[0073] dd b6 00
+                    or        (iy+$00)                      ;[0076] fd b6 00
+                    or        (ix-$80)                      ;[0079] dd b6 80
+                    or        (iy-$80)                      ;[007c] fd b6 80
+                    or        (ix+$7f)                      ;[007f] dd b6 7f
+                    or        (iy+$7f)                      ;[0082] fd b6 7f
+                    xor       (hl)                          ;[0085] ae
+                    xor       (ix+$00)                      ;[0086] dd ae 00
+                    xor       (iy+$00)                      ;[0089] fd ae 00
+                    xor       (ix-$80)                      ;[008c] dd ae 80
+                    xor       (iy-$80)                      ;[008f] fd ae 80
+                    xor       (ix+$7f)                      ;[0092] dd ae 7f
+                    xor       (iy+$7f)                      ;[0095] fd ae 7f

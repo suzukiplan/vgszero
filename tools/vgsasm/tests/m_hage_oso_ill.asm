@@ -1,0 +1,2 @@
+MUL SP, IX
+

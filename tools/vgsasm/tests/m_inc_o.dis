@@ -1,0 +1,17 @@
+                    inc       a                             ;[0000] 3c
+                    inc       b                             ;[0001] 04
+                    inc       c                             ;[0002] 0c
+                    inc       d                             ;[0003] 14
+                    inc       e                             ;[0004] 1c
+                    inc       h                             ;[0005] 24
+                    inc       l                             ;[0006] 2c
+                    inc       ixh                           ;[0007] dd 24
+                    inc       ixl                           ;[0009] dd 2c
+                    inc       iyh                           ;[000b] fd 24
+                    inc       iyl                           ;[000d] fd 2c
+                    inc       bc                            ;[000f] 03
+                    inc       de                            ;[0010] 13
+                    inc       hl                            ;[0011] 23
+                    inc       sp                            ;[0012] 33
+                    inc       ix                            ;[0013] dd 23
+                    inc       iy                            ;[0015] fd 23

@@ -1,0 +1,6 @@
+#macro foo() {
+}
+
+#macro foo()
+{
+}

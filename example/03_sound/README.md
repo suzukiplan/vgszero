@@ -40,6 +40,7 @@ make
 - BGM 0: [./song1.mml](./song1.mml)
 - BGM 1: [./song2.mml](./song2.mml)
 - BGM 2: [./song3.mml](./song3.mml)
+- BGM 4: [./song4.nsf](./song4.nsf)
 
 ## Sound Effect structure
 

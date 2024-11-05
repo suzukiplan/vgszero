@@ -1,0 +1,50 @@
+                    push      de                            ;[0000] d5
+                    ld        e,(ix-$80)                    ;[0001] dd 5e 80
+                    ld        d,(ix-$7f)                    ;[0004] dd 56 81
+                    add       hl,de                         ;[0007] 19
+                    pop       de                            ;[0008] d1
+                    push      de                            ;[0009] d5
+                    ld        e,(ix-$01)                    ;[000a] dd 5e ff
+                    ld        d,(ix+$00)                    ;[000d] dd 56 00
+                    add       hl,de                         ;[0010] 19
+                    pop       de                            ;[0011] d1
+                    push      de                            ;[0012] d5
+                    ld        e,(ix+$00)                    ;[0013] dd 5e 00
+                    ld        d,(ix+$01)                    ;[0016] dd 56 01
+                    add       hl,de                         ;[0019] 19
+                    pop       de                            ;[001a] d1
+                    push      de                            ;[001b] d5
+                    ld        e,(ix+$01)                    ;[001c] dd 5e 01
+                    ld        d,(ix+$02)                    ;[001f] dd 56 02
+                    add       hl,de                         ;[0022] 19
+                    pop       de                            ;[0023] d1
+                    push      de                            ;[0024] d5
+                    ld        e,(ix+$7e)                    ;[0025] dd 5e 7e
+                    ld        d,(ix+$7f)                    ;[0028] dd 56 7f
+                    add       hl,de                         ;[002b] 19
+                    pop       de                            ;[002c] d1
+                    push      de                            ;[002d] d5
+                    ld        e,(iy-$80)                    ;[002e] fd 5e 80
+                    ld        d,(iy-$7f)                    ;[0031] fd 56 81
+                    add       hl,de                         ;[0034] 19
+                    pop       de                            ;[0035] d1
+                    push      de                            ;[0036] d5
+                    ld        e,(iy-$01)                    ;[0037] fd 5e ff
+                    ld        d,(iy+$00)                    ;[003a] fd 56 00
+                    add       hl,de                         ;[003d] 19
+                    pop       de                            ;[003e] d1
+                    push      de                            ;[003f] d5
+                    ld        e,(iy+$00)                    ;[0040] fd 5e 00
+                    ld        d,(iy+$01)                    ;[0043] fd 56 01
+                    add       hl,de                         ;[0046] 19
+                    pop       de                            ;[0047] d1
+                    push      de                            ;[0048] d5
+                    ld        e,(iy+$01)                    ;[0049] fd 5e 01
+                    ld        d,(iy+$02)                    ;[004c] fd 56 02
+                    add       hl,de                         ;[004f] 19
+                    pop       de                            ;[0050] d1
+                    push      de                            ;[0051] d5
+                    ld        e,(iy+$7e)                    ;[0052] fd 5e 7e
+                    ld        d,(iy+$7f)                    ;[0055] fd 56 7f
+                    add       hl,de                         ;[0058] 19
+                    pop       de                            ;[0059] d1

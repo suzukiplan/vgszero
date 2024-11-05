@@ -1,0 +1,4 @@
+                    bit       0,(ix-$80)                    ;[0000] dd cb 80 46
+                    bit       7,(ix+$7f)                    ;[0004] dd cb 7f 7e
+                    bit       4,(iy+$00)                    ;[0008] fd cb 00 66
+                    bit       5,(iy-$01)                    ;[000c] fd cb ff 6e

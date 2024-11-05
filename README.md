@@ -89,10 +89,7 @@ VGS-Zero ならゲームを開発するのに強い PC は必須ではありま�
 ```bash
 # ツールチェインのビルドに必要なミドルウェアをインストール
 sudo apt update
-sudo apt install build-essential libsdl2-dev libasound2 libasound2-dev snapd
-
-# z88dk をインストール
-sudo snap install z88dk --beta
+sudo apt install build-essential libsdl2-dev libasound2 libasound2-dev
 
 # VGS-Zeroのリポジトリをダウンロード
 git clone https://github.com/suzukiplan/vgszero
@@ -119,17 +116,10 @@ VGS-Zero で扱えるグラフィックスの描画、効果音の作成、音�
 以下のハードウェアが必要です。
 
 - RaspberryPi Zero 2W
-  - [https://www.switch-science.com/products/7600](https://www.switch-science.com/products/7600)
-  - [https://www.amazon.co.jp/dp/B0B55MFH1D/](https://www.amazon.co.jp/dp/B0B55MFH1D/)
 - HDMI ケーブル (mini HDMI Type C → HDMI Type A)
-  - [https://www.amazon.co.jp/dp/B08R7BVL7T/](https://www.amazon.co.jp/dp/B08R7BVL7T/)
 - USB ジョイパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
-  - [https://www.amazon.co.jp/dp/B07M7SYX11/](https://www.amazon.co.jp/dp/B07M7SYX11/)
-  - [https://www.amazon.co.jp/dp/B08BNFKCYM/](https://www.amazon.co.jp/dp/B08BNFKCYM/)
 - USB 電源
-  - [https://www.amazon.co.jp/dp/B09T3C758Q/](https://www.amazon.co.jp/dp/B09T3C758Q/)
 - micro SD カード
-  - [https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/](https://www.amazon.co.jp/gp/aw/d/B08PTP6KKS/)
   - 最大 20MB 程度の空き容量が必要です（ゲーム本体: 最大16MB、ファームウェア: 約4MB）
 - テレビなど（以下の条件のもの）
   - HDMI入力対応
@@ -364,9 +354,8 @@ VGS-Zero のゲーム開発に必要なツールの情報を記します。
 | Name | Type | Information |
 |:-----|:-----|:------------|
 | [Ubuntu Desktop](https://jp.ubuntu.com/download)| OS | この表で示すツールは全て Ubuntu でも動作可能 |
-| [Visual Studio Code](https://code.visualstudio.com/download) | コーディング | プログラムやMMLの記述 |
+| [Visual Studio Code](https://code.visualstudio.com/download) | コーディング | プログラムやMMLの記述<br>`vgsasm` 用の [拡張機能](https://github.com/suzukiplan/vgsasm) が利用可能 |
 | [SDCC](https://sdcc.sourceforge.net/) | C コンパイラ | C 言語でゲームを開発する場合に利用を推奨<br>（だたし動作できるのはバージョン 4.1.0 のみ）|
-| [Z88DK](https://z88dk.org/site/) の z80asm | アセンブラ | Z80 アセンブリ言語でゲームを開発する場合に利用を推奨 |
 | [aseprite](https://aseprite.org/) | 画像エディタ | 256 色 Bitmap 形式に対応した画像エディタ |
 | [Tiled Map Editor](https://www.mapeditor.org) | マップエディタ | 利用例: [example/08_map-scroll](./example/08_map-scroll/) |
 | [Jfxr](https://github.com/ttencate/jfxr) | 効果音エディタ | ブラウザ上でゲームの効果音を制作 |
@@ -383,6 +372,7 @@ VGS-Zero のゲーム開発に必要なツールの情報を記します。
 | Name | Path | Type | Information |
 |:-----|:-----|:-----|:------------|
 | vgs0 | [./src/sdl2](./src/sdl2/) | Emulator | VGS-Zero PC エミュレータ & デバッガ (Linux, macOS) |
+| vgsasm | [./tools/vgsasm](./tools/vgsasm) | CLI | Z80 アセンブラ |
 | bmp2chr | [./tools/bmp2chr](./tools/bmp2chr/) | CLI | 256 色 Bitmap ファイルを [キャラクタパターン形式](#character-pattern-table) に変換 |
 | csv2bin | [./tools/csv2bin](./tools/csv2bin/) | CLI | [Tiled Map Editor](https://www.mapeditor.org) の csv をバイナリ形式に変換 |
 | makepkg | [./tools/makepkg](./tools/makepkg/) | CLI | [game.pkg](#gamepkg) を生成 |
@@ -395,39 +385,23 @@ VGS-Zero のゲーム開発に必要なツールの情報を記します。
 
 ## Programming Guide
 
-ゲームを開発する時の初期プロジェクトについては次のリポジトリを参考にしてください。
-
-[https://github.com/suzukiplan/vgszero-empty-project](https://github.com/suzukiplan/vgszero-empty-project)
-
 ### Programming Language
 
 - VGS-Zero のゲームは Z80 アセンブリ言語 または C言語 で記述することができます
-  - Z80 アセンブリ言語: [./example/01_hello-asm](./example/01_hello-asm)
+  - Z80: [./example/01_hello-asm](./example/01_hello-asm)
   - C言語: [./example/01_hello](./example/01_hello)
+- アセンブリ言語で記述する場合:
+  - 推奨アセンブラ: [vgsasm](./tools/vgsasm/)
+  - _もちろん、その他の Z80 アセンブラも使用することができます_
 - C言語で記述する場合:
-  - クロスコンパイラに [SDCC (Small Device C Compiler)](https://sdcc.sourceforge.net/) が使用できます
-  - VGS-Zero が対応している SDCC は **バージョン 4.1.0 のみ** です
-    - `brew`, `apt` 等でのデフォルトインストールバージョンとは異なります
-    - [公式ダウンロードサイト](https://sourceforge.net/projects/sdcc/files/) からお使いの PC の機種の sdcc-4.1.0 をダウンロード＆展開して環境変数 `PATH` を切ってご使用ください
-    - macOS(x64): [https://sourceforge.net/projects/sdcc/files/sdcc-macos-amd64/4.1.0/](https://sourceforge.net/projects/sdcc/files/sdcc-macos-amd64/4.1.0/)
-    - Linux(x64): [https://sourceforge.net/projects/sdcc/files/sdcc-linux-amd64/4.1.0/](https://sourceforge.net/projects/sdcc/files/sdcc-linux-amd64/4.1.0/)
-    - バージョン 4.2 〜 4.4 では [致命的な不具合](https://github.com/suzukiplan/vgszero/issues/8) が発生するので利用しないでください
+  - クロスコンパイラに [SDCC (Small Device C Compiler)](https://sdcc.sourceforge.net/) を使用できます
+  - 使用できる SDCC は **バージョン 4.1.0 のみ** です
   - 標準ライブラリは使用できません
   - [vgs0.lib](./lib/sdcc/) を使用することができます
 
-### API Manual for Programming Language C
+**[vgsasm](./tools/vgsasm/) を用いた Z80 アセンブリ言語でのプログラミングを推奨します。**
 
-[vgs0lib.h](./lib/sdcc/vgs0lib.h) の実装を参照してください。
-
-実装を見た方が手っ取り早いと思われるので非推奨ですが、以下のコマンドを実行すれば HTML 形式のマニュアルを閲覧できます。
-
-```
-sudo apt install doxygen build-essential
-git clone https://github.com/suzukiplan/vgszero
-cd vgszero/lib/sdcc
-make doc
-open doc/html/index.html
-```
+Z80 アセンブリ言語でプログラミングする場合、VSCode (Visual Studio Code) の [Extension `vgsasm`](https://marketplace.visualstudio.com/items?itemName=suzukiplan.vgsasm) を用いることで快適なプログラミングができるようになります。
 
 ### Create Sound Data
 
@@ -1091,7 +1065,7 @@ OUT (0xF1), A   # 効果音を停止
 
 ```z80
 LD A, 0x03      # チェックする効果音の番号を指定
-OUT (0xF1), A   # 効果音をチェック (A=0: Stopped, A=1: Playing)
+OUT (0xF2), A   # 効果音をチェック (A=0: Stopped, A=1: Playing)
 AND 0x01
 JNZ EFF03_IS_PILAYING
 JZ  EFF03_IS_NOT_PLAYING
@@ -1108,7 +1082,7 @@ JZ  EFF03_IS_NOT_PLAYING
 3. [game.pkg](#gamepkg) を差し替え
 4. [README](./image/README) を削除
 5. README.txt（ゲームの遊び方を記載したテキスト）を格納
-6. micro-SD カードを[ケース](https://www.amazon.co.jp/dp/B08TWR47LV/)などに格納
+6. micro-SD カードをケースなどに格納
 7. ケースにゲームのラベルを塗布
 
 といった形で媒体を準備して販売するのが良いかと思われます。（ダウンロード販売の場合は SD カードに格納するものと同等のものを ZIP で固めて販売）
@@ -1127,15 +1101,9 @@ README.txtの記載凡例:
 
 【必要なハードウェア】
 ・RaspberryPi Zero 2W
-  - https://www.switch-science.com/products/7600
-  - https://www.amazon.co.jp/dp/B0B55MFH1D/
 ・HDMI ケーブル (mini HDMI Type C → HDMI Type A)
-  - https://www.amazon.co.jp/dp/B08R7BVL7T/
 ・USB ジョイパッド（D-Pad+A/B+Start/Select）+ 変換アダプタ
-  - https://www.amazon.co.jp/dp/B07M7SYX11/
-  - https://www.amazon.co.jp/dp/B08BNFKCYM/
 ・USB 電源
-  - https://www.amazon.co.jp/dp/B09T3C758Q/
 ・テレビなど（以下の条件のもの）
   - HDMI入力対応
   - リフレッシュレート60Hz
@@ -1178,26 +1146,25 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 
 ## Examples
 
-| Directory | Language | Description |
-| :-------- | :------- | :---------- |
-| [example/01_hello-asm](./example/01_hello-asm/) | Z80 | `HELLO,WORLD!` を表示 |
-| [example/01_hello](./example/01_hello/) | C言語 | `HELLO,WORLD!` を表示 |
-| [example/02_global](./example/02_global/) | C言語 | グローバル変数の使用例 |
-| [example/03_sound](./example/03_sound/) | C言語 | BGM と効果音の使用例 |
-| [example/04_heavy](./example/04_heavy/) | C言語 | エミュレータ側の負荷を最大化する検査用プログラム |
-| [example/05_sprite256](./example/05_sprite256/) | C言語 | スプライトを256表示して動かす例 |
-| [example/06_save](./example/06_save/) | C言語 | [セーブ機能](#save-data)の例 |
-| [example/07_palette](./example/07_palette/) | C言語 | 16個の[パレット](#palette)を全て使った例 |
-| [example/08_map-scroll](./example/08_map-scroll/) | C言語 | Tiled Map Editor で作ったマップデータのスクロール |
-| [example/09_joypad](./example/09_joypad/) | C言語 | ジョイパッドの入力結果をプレビュー |
-| [example/10_chr720](./example/10_chr720/) | C言語 | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
-| [example/11_bigsprite](./example/11_bigsprite/) | C言語 | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の指定により巨大なスプライトを表示する例 |
-| [example/12_angle](./example/12_angle) | C言語 | [ハードウェア atan2 テーブル](#hardware-atan2-table) を用いて完全な自機狙いを実装する例 |
-| [example/13_perlin](./example/13_perlin) | C言語 | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
-| [example/14_1024ptn](./example/14_1024ptn) | C言語 | [1024 パターンモード](#1024-patterns-mode) の利用例 |
-| [example/15_nsf](./example/15_nsf/) | C言語 | [NSF](#nsf) の利用例 |
-| [example/16_ptn-plus1](./example/16_ptn-plus1/) | C言語 | [Attribute](#attribute) の `ptn` の使用例 |
-| [example/17_clip](./example/17_clip/) | C言語 | [OAM16](#oam16) の使用例 |
+| Name | Language   | Description |
+| :--- | :--------: | :---------- |
+| `01_hello` | [Z80](./example/01_hello-asm/), [C](./example/01_hello/) | `HELLO,WORLD!` を表示 |
+| `02_global` | [Z80](./example/02_global-asm/), [C](./example/02_global/) | グローバル変数の使用例 |
+| `03_sound` | [Z80](./example/03_sound-asm/), [C](./example/03_sound/) | BGM と効果音の使用例 |
+| `04_heavy` | [C](./example/04_heavy/) | エミュレータ側の負荷を最大化する検査用プログラム |
+| `05_sprite256` | [Z80](./example/05_sprite256-asm/), [C](./example/05_sprite256/) | スプライトを256表示して動かす例 |
+| `06_save` | [Z80](./example/06_save-asm/), [C](./example/06_save/) | [セーブ機能](#save-data)の例 |
+| `07_palette` | [Z80](./example/07_palette-asm/), [C](./example/07_palette/) | 16個の[パレット](#palette)を全て使った例 |
+| `08_map-scroll` | [Z80](./example/08_map-scroll-asm/), [C](./example/08_map-scroll/) | Tiled Map Editor で作ったマップデータのスクロール |
+| `09_joypad` | [Z80](./example/09_joypad-asm/), [C](./example/09_joypad/) | ジョイパッドの入力結果をプレビュー |
+| `10_chr720` | [Z80](./example/10_chr720-asm/), [C](./example/10_chr720/) | [Direct Pattern Mapping](#direct-pattern-mapping) で 1 枚絵を表示する例 |
+| `11_bigsprite` | [Z80](./example/11_bigsprite-asm/), [C](./example/11_bigsprite/) | [OAM](#oam) の `widthMinus1`, `heightMinus1`, `bank` の使用例 |
+| `12_angle` | [Z80](./example/12_angle-asm), [C](./example/12_angle) | [atan2](#hardware-atan2-table) を用いた自機狙いの実装例 |
+| `13_perlin` | [Z80](./example/13_perlin-asm), [C](./example/13_perlin) | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
+| `14_1024ptn` | [Z80](./example/14_1024ptn-asm), [C](./example/14_1024ptn) | [1024 パターンモード](#1024-patterns-mode) の利用例 |
+| `15_nsf` | [Z80](./example/15_nsf-asm/), [C](./example/15_nsf/) | [NSF](#nsf) の利用例 |
+| `16_ptn-plus1` | [Z80](./example/16_ptn-plus1-asm/), [C](./example/16_ptn-plus1/) | [Attribute](#attribute) の `ptn` の使用例 |
+| `17_clip` | [Z80](./example/17_clip-asm/), [C](./example/17_clip/) | [OAM16](#oam16) の使用例 |
 
 ## License
 

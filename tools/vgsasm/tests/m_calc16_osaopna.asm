@@ -1,0 +1,11 @@
+add hl,(ix-128)
+add hl,(ix-1)
+add hl,(ix+0)
+add hl,(ix+1)
+add hl,(ix+126)
+
+add hl,(iy-128)
+add hl,(iy-1)
+add hl,(iy+0)
+add hl,(iy+1)
+add hl,(iy+126)

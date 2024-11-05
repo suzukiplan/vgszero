@@ -89,10 +89,7 @@ Below is a step-by-step guide to running VGS-Zero's [Hello, World! (Z80)](./exam
 ```bash
 # Install middleware needed to build toolchain
 sudo apt update
-sudo apt install build-essential libsdl2-dev libasound2 libasound2-dev snapd
-
-# Install the z88dk
-sudo snap install z88dk --beta
+sudo apt install build-essential libsdl2-dev libasound2 libasound2-dev
 
 # Download the VGS-Zero repository
 git clone https://github.com/suzukiplan/vgszero
@@ -360,9 +357,8 @@ The table below lists recommended development tools:
 | Name | Type | Information |
 |:-----|:-----|:------------|
 | [Ubuntu Desktop](https://jp.ubuntu.com/download)| OS | All tools listed in this table can also run on Ubuntu |
-| [Visual Studio Code](https://code.visualstudio.com/download) | Coding | Writing programs, MMLs, scripts, etc. |
+| [Visual Studio Code](https://code.visualstudio.com/download) | Coding | Writing programs, MMLs, scripts, etc.<br>An [extension](https://github.com/suzukiplan/vgsasm) for `vgsasm` is available. |
 | [SDCC](https://sdcc.sourceforge.net/) | C compiler | Recommended for use when developing games in C<br>(but only version 4.1.0 can work) |
-| [Z88DK](https://z88dk.org/site/) z80asm | Assembler | Recommended for use when developing games in Z80 assembly language |
 | [aseprite](https://aseprite.org/) | Graphics Editor | Graphics editor supporting 256-color Bitmap format |
 | [Tiled Map Editor](https://www.mapeditor.org) | Map Editor | Examples of Use: [example/08_map-scroll](./example/08_map-scroll/) |
 | [Jfxr](https://github.com/ttencate/jfxr) | Sound Effects Editor | Creating game sound effects in the browser |
@@ -379,6 +375,7 @@ The tools provided in this repository are as follows:
 | Name | Path | Type | Information |
 |:-----|:-----|:-----|:------------|
 | vgs0 | [./src/sdl2](./src/sdl2/) | Emulator | VGS-Zero emulator & debugger for PC (Linux, macOS) |
+| vgsasm | [./tools/vgsasm](./tools/vgsasm/) | CLI | Z80 Assembler |
 | bmp2chr | [./tools/bmp2chr](./tools/bmp2chr/) | CLI | Convert 256-color Bitmap file to [character-pattern format](#character-pattern-table) |
 | csv2bin | [./tools/csv2bin](./tools/csv2bin/) | CLI | [Tiled Map Editor](https://www.mapeditor.org) csv to binary format |
 | makepkg | [./tools/makepkg](./tools/makepkg/) | CLI | Generate [game.pkg](#gamepkg) |
@@ -392,25 +389,23 @@ The tools provided in this repository are as follows:
 
 ## Programming Guide
 
-Please refer to the following repository for initial projects when developing a game.
-
-[https://github.com/suzukiplan/vgszero-empty-project](https://github.com/suzukiplan/vgszero-empty-project)
-
 ### Programming Language
 
 - VGS-Zero games can be written in Z80 assembly language or C.
   - Z80: [./example/01_hello-asm](./example/01_hello-asm)
   - C: [./example/01_hello](./example/01_hello)
+- If written in Z80:
+  - Recommended assembler: [vgsasm](./tools/vgsasm/)
+  - Any Z80-compatible assembler can be used.
 - If written in C:
   - [SDCC (Small Device C Compiler)](https://sdcc.sourceforge.net/) can be used as a cross-compiler
   - VGS-Zero supports SDCC **version 4.1.0 only**.
-    - This is different from the default installation version in `brew`, `apt`, etc.
-    - Download and extract sdcc-4.1.0 from [official download site](https://sourceforge.net/projects/sdcc/files/) for your PC model and cut the `PATH` environment variable.
-    - macOS(x64): [https://sourceforge.net/projects/sdcc/files/sdcc-macos-amd64/4.1.0/](https://sourceforge.net/projects/sdcc/files/sdcc-macos-amd64/4.1.0/)
-    - Linux(x64): [https://sourceforge.net/projects/sdcc/files/sdcc-linux-amd64/4.1.0/](https://sourceforge.net/projects/sdcc/files/sdcc-linux-amd64/4.1.0/)
-    - Do not use [fatal bug](https://github.com/suzukiplan/vgszero/issues/8) in versions 4.2 - 4.4.
   - Standard libraries are not available.
   - [vgs0.lib](./lib/sdcc/) can be used.
+
+**[vgsasm](./tools/vgsasm/) is recommended for programming.**
+
+You can program comfortably by using the [“vgsasm” extension](https://marketplace.visualstudio.com/items?itemName=suzukiplan.vgsasm) for **Visual Studio Code**.
 
 ### API Manual for Programming Language C
 
@@ -1092,7 +1087,7 @@ OUT (0xF1), A   # Execute
 
 ```z80
 LD A, 0x03      # Specify the number of the sound effect to be checked if it is playing.
-OUT (0xF1), A   # Execute (A=0: Stopped, A=1: Playing)
+OUT (0xF2), A   # Execute (A=0: Stopped, A=1: Playing)
 AND 0x01
 JNZ EFF03_IS_PILAYING
 JZ  EFF03_IS_NOT_PLAYING
@@ -1109,7 +1104,7 @@ When selling games for VGS-Zero at comic markets (events) or by mail order, the 
 3. Replace [game.pkg](#gamepkg)
 4. Delete [README](/image/README)
 5. Store README.txt (text describing how to play the game)
-6. Store micro-SD card in [case](https://www.amazon.co.jp/dp/B08TWR47LV/) etc.
+6. Store micro-SD card in case etc.
 7. Apply game label to the case
 
 Legend of README.txt description:
@@ -1174,26 +1169,25 @@ _We hope to address this in the future._
 
 ## Examples
 
-| Directory | Language | Description |
-| :-------- | :------- | :---------- |
-| [example/01_hello-asm](./example/01_hello-asm/) | Z80 | Show `HELLO,WORLD!` |
-| [example/01_hello](./example/01_hello/) | C | Show `HELLO,WORLD!` |
-| [example/02_global](./example/02_global/) | C | Example of Global Variable Usage |
-| [example/03_sound](./example/03_sound/) | C | Examples of background music and sound effects |
-| [example/04_heavy](./example/04_heavy/) | C | Inspection program to maximize the load on the emulator side |
-| [example/05_sprite256](./example/05_sprite256/) | C | Example of displaying and moving 256 sprites |
-| [example/06_save](./example/06_save/) | C | Example of [Save Function](#save-data) Usage |
-| [example/07_palette](./example/07_palette/) | C | Example using all 16 [palettes](#palette) |
-| [example/08_map-scroll](./example/08_map-scroll/) | C | Scrolling map data created with the Tiled Map Editor |
-| [example/09_joypad](./example/09_joypad/) | C | Preview joypad input results |
-| [example/10_chr720](./example/10_chr720/) | C | Example of displaying a single picture in [Direct Pattern Mapping](#direct-pattern-mapping) |
-| [example/11_bigsprite](./example/11_bigsprite/) | C | Example of displaying a huge sprite by specifying `widthMinus1`, `heightMinus1`, and `bank` in [OAM](#oam) |
-| [example/12_angle](./example/12_angle) | C | Example of implementing complete self-targeting using [atan2](#hardware-atan2-table) |
-| [example/13_perlin](./example/13_perlin) | C | Example usage of [Perlin Noise](#hardware-perlin-noise) |
-| [example/14_1024ptn](./example/14_1024ptn) | C | [1024-patterns-mode] (#1024-patterns-mode) usage example |
-| [example/15_nsf](./example/15_nsf/) | C | Example usage of [NSF](#nsf) |
-| [example/16_ptn-plus1](./example/16_ptn-plus1/) | C | Example usage of `ptn` in [Attribute](#attribute) |
-| [example/17_clip](./example/17_clip/) | C| Example usage of [OAM16](#oam16) |
+| Name | Language   | Description |
+| :--- | :--------: | :---------- |
+| `01_hello` | [Z80](./example/01_hello-asm/), [C](./example/01_hello/) | Show `HELLO,WORLD!` |
+| `02_global` | [Z80](./example/02_global-asm/), [C](./example/02_global/) | Example of Global Variable Usage |
+| `03_sound` | [Z80](./example/03_sound-asm/), [C](./example/03_sound/) | Examples of background music and sound effects |
+| `04_heavy` | [C](./example/04_heavy/) | Examples of background music and sound effects |
+| `05_sprite256` | [Z80](./example/05_sprite256-asm/), [C](./example/05_sprite256/) | Example of displaying and moving 256 sprites |
+| `06_save` | [Z80](./example/06_save-asm/), [C](./example/06_save/) | Example of [Save Function](#save-data) Usage |
+| `07_palette` | [Z80](./example/07_palette-asm/), [C](./example/07_palette/) | Example using all 16 [palettes](#palette) |
+| `08_map-scroll` | [Z80](./example/08_map-scroll-asm/), [C](./example/08_map-scroll/) | Scrolling map data created with the Tiled Map Editor |
+| `09_joypad` | [Z80](./example/09_joypad-asm/), [C](./example/09_joypad/) | Preview joypad input results |
+| `10_chr720` | [Z80](./example/10_chr720-asm/), [C](./example/10_chr720/) | Example of displaying a single picture in [Direct Pattern Mapping](#direct-pattern-mapping) |
+| `11_bigsprite` | [Z80](./example/11_bigsprite-asm/), [C](./example/11_bigsprite/) | Example of displaying a huge sprite by specifying `widthMinus1`, `heightMinus1`, and `bank` in [OAM](#oam) |
+| `12_angle` | [Z80](./example/12_angle-asm), [C](./example/12_angle) | Example of implementing complete self-targeting using [atan2](#hardware-atan2-table) |
+| `13_perlin` | [Z80](./example/13_perlin-asm), [C](./example/13_perlin) | Example usage of [Perlin Noise](#hardware-perlin-noise) |
+| `14_1024ptn` | [Z80](./example/14_1024ptn-asm), [C](./example/14_1024ptn) | [1024-patterns-mode](#1024-patterns-mode) usage example |
+| `15_nsf` | [Z80](./example/15_nsf-asm/), [C](./example/15_nsf/) | Example usage of [NSF](#nsf) |
+| `16_ptn-plus1` | [Z80](./example/16_ptn-plus1-asm/), [C](./example/16_ptn-plus1/) | Example usage of `ptn` in [Attribute](#attribute) |
+| `17_clip` | [Z80](./example/17_clip-asm/), [C](./example/17_clip/) | Example usage of [OAM16](#oam16) |
 
 ## License
 
@@ -1204,7 +1198,7 @@ _We hope to address this in the future._
 - VGS-Zero itself includes NEZplug (Free Software): [LICENSE-NEZplug.txt](./LICENSE-NEZplug.txt)
 - VGS-Zero itself includes Modified NSFPlay (GPLv3): [LICENSE-NSFPlay-alter.txt](./LICENSE-NSFPlay-alter.txt)
 - VGS-Zero itself includes KM6502 (Free Software): [LICENSE-km6502.txt](./LICENSE-km6502.txt)
-- VGS-Zero Library for Z80 is MIT licensed OSS:　[LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
+- VGS-Zero Library for Z80 is MIT licensed OSS: [LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
 
 > The copyright of [game.pkg](#gamepkg) developed by you belongs to you and you are free to use it, including commercial use.
 >

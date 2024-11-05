@@ -1,0 +1,88 @@
+                    add       a                             ;[0000] 87
+                    add       b                             ;[0001] 80
+                    add       c                             ;[0002] 81
+                    add       d                             ;[0003] 82
+                    add       e                             ;[0004] 83
+                    add       h                             ;[0005] 84
+                    add       l                             ;[0006] 85
+                    add       ixh                           ;[0007] dd 84
+                    add       ixl                           ;[0009] dd 85
+                    add       iyh                           ;[000b] fd 84
+                    add       iyl                           ;[000d] fd 85
+                    adc       a                             ;[000f] 8f
+                    adc       b                             ;[0010] 88
+                    adc       c                             ;[0011] 89
+                    adc       d                             ;[0012] 8a
+                    adc       e                             ;[0013] 8b
+                    adc       h                             ;[0014] 8c
+                    adc       l                             ;[0015] 8d
+                    adc       ixh                           ;[0016] dd 8c
+                    adc       ixl                           ;[0018] dd 8d
+                    adc       iyh                           ;[001a] fd 8c
+                    adc       iyl                           ;[001c] fd 8d
+                    sub       a                             ;[001e] 97
+                    sub       b                             ;[001f] 90
+                    sub       c                             ;[0020] 91
+                    sub       d                             ;[0021] 92
+                    sub       e                             ;[0022] 93
+                    sub       h                             ;[0023] 94
+                    sub       l                             ;[0024] 95
+                    sub       ixh                           ;[0025] dd 94
+                    sub       ixl                           ;[0027] dd 95
+                    sub       iyh                           ;[0029] fd 94
+                    sub       iyl                           ;[002b] fd 95
+                    sbc       a                             ;[002d] 9f
+                    sbc       b                             ;[002e] 98
+                    sbc       c                             ;[002f] 99
+                    sbc       d                             ;[0030] 9a
+                    sbc       e                             ;[0031] 9b
+                    sbc       h                             ;[0032] 9c
+                    sbc       l                             ;[0033] 9d
+                    sbc       ixh                           ;[0034] dd 9c
+                    sbc       ixl                           ;[0036] dd 9d
+                    sbc       iyh                           ;[0038] fd 9c
+                    sbc       iyl                           ;[003a] fd 9d
+                    cp        a                             ;[003c] bf
+                    cp        b                             ;[003d] b8
+                    cp        c                             ;[003e] b9
+                    cp        d                             ;[003f] ba
+                    cp        e                             ;[0040] bb
+                    cp        h                             ;[0041] bc
+                    cp        l                             ;[0042] bd
+                    cp        ixh                           ;[0043] dd bc
+                    cp        ixl                           ;[0045] dd bd
+                    cp        iyh                           ;[0047] fd bc
+                    cp        iyl                           ;[0049] fd bd
+                    and       a                             ;[004b] a7
+                    and       b                             ;[004c] a0
+                    and       c                             ;[004d] a1
+                    and       d                             ;[004e] a2
+                    and       e                             ;[004f] a3
+                    and       h                             ;[0050] a4
+                    and       l                             ;[0051] a5
+                    and       ixh                           ;[0052] dd a4
+                    and       ixl                           ;[0054] dd a5
+                    and       iyh                           ;[0056] fd a4
+                    and       iyl                           ;[0058] fd a5
+                    or        a                             ;[005a] b7
+                    or        b                             ;[005b] b0
+                    or        c                             ;[005c] b1
+                    or        d                             ;[005d] b2
+                    or        e                             ;[005e] b3
+                    or        h                             ;[005f] b4
+                    or        l                             ;[0060] b5
+                    or        ixh                           ;[0061] dd b4
+                    or        ixl                           ;[0063] dd b5
+                    or        iyh                           ;[0065] fd b4
+                    or        iyl                           ;[0067] fd b5
+                    xor       a                             ;[0069] af
+                    xor       b                             ;[006a] a8
+                    xor       c                             ;[006b] a9
+                    xor       d                             ;[006c] aa
+                    xor       e                             ;[006d] ab
+                    xor       h                             ;[006e] ac
+                    xor       l                             ;[006f] ad
+                    xor       ixh                           ;[0070] dd ac
+                    xor       ixl                           ;[0072] dd ad
+                    xor       iyh                           ;[0074] fd ac
+                    xor       iyl                           ;[0076] fd ad

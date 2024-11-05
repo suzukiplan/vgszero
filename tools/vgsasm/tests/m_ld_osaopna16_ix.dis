@@ -1,0 +1,6 @@
+                    ld        c,(ix-$80)                    ;[0000] dd 4e 80
+                    ld        b,(ix-$7f)                    ;[0003] dd 46 81
+                    ld        e,(ix-$01)                    ;[0006] dd 5e ff
+                    ld        d,(ix+$00)                    ;[0009] dd 56 00
+                    ld        l,(ix+$7f)                    ;[000c] dd 6e 7f
+                    ld        h,(ix-$80)                    ;[000f] dd 66 80

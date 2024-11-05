@@ -1,0 +1,10 @@
+*.bin
+*.chr
+*.bgm
+*.o
+*.rom
+se.dat
+bgm.dat
+screen*.bmp
+
+game.pkg

@@ -1,0 +1,6 @@
+                    push      af                            ;[0000] f5
+                    push      bc                            ;[0001] c5
+                    push      de                            ;[0002] d5
+                    push      hl                            ;[0003] e5
+                    push      ix                            ;[0004] dd e5
+                    push      iy                            ;[0006] fd e5

@@ -2,7 +2,6 @@ all:
 	@echo make format .............	execute clang-format
 	@echo make build .............. Build API, SDL2, RPI, Hello
 	@echo make clean .............. Clean API, SDL2, RPI, Hello
-	@echo make tests .............. execute all tests
 
 format:
 	make execute-format FILENAME=./src/core/vgs0.hpp
@@ -50,6 +49,53 @@ format:
 	make execute-format FILENAME=./example/16_ptn-plus1/program.c
 	make execute-format FILENAME=./example/17_clip/program.c
 	make execute-format FILENAME=./lib/sdcc/vgs0lib.h
+	make execute-format FILENAME=./tools/vgsasm/src/assignment.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/binary.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/bracket.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/clear.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/common.h
+	make execute-format FILENAME=./tools/vgsasm/src/decimal.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/define.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/enum.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/file.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/formulas.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/ifdef.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/increment.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/label.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/literal.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/macro.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/nametable.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/numeric.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/offset.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/operand.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/org.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/sha1.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/sizeof.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/string.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/struct.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/tables.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/vgsasm.cpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic.h
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_djnz.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_inc.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_load.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_dec.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_calc.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_shift.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_data.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_bit.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_out.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_ml.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_jp.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_in.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_ex.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_sub.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_vgs.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_stack.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_rst.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_im.hpp
+	make execute-format FILENAME=./tools/vgsasm/src/mnemonic_jr.hpp
 
 execute-format:
 	clang-format -style=file < ${FILENAME} > ${FILENAME}.bak
@@ -60,15 +106,13 @@ build:
 	cd lib/sdcc && make
 	cd src/sdl2 && make
 	cd src/rpizero2 && make
-	cd example && make
-	cd example/01_hello && make
-	cp -p example/01_hello/game.pkg image
+	cd example/01_hello-asm && make clean build
+	cp -p example/01_hello-asm/game.pkg image
 
 clean:
 	cd lib/sdcc && make clean
 	cd src/sdl2 && make clean
 	cd src/rpizero2 && make clean
-	cd example/01_hello && make clean
 
 ci:
 	make sdcc-4.1.0-amd64-unknown-linux2.5.tar.bz2

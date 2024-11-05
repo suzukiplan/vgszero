@@ -1,0 +1,102 @@
+/**
+ * Z80 Assembler for VGS-Zero
+ * Copyright (c) 2024, Yoji Suzuki.
+ * License under GPLv3: https://github.com/suzukiplan/vgsasm/blob/master/LICENSE.txt
+ */
+#include "common.hpp"
+#include "../src/label.hpp"
+#include "../src/literal.hpp"
+
+std::vector<LineData*> lines;
+
+void test_normal(const char* text, int n, ...)
+{
+    lines.clear();
+    lines.push_back(new LineData("", -1, text));
+    string_literal_extract(&lines);
+    printf("N: %-12s ---> ", text);
+    int tokenSize = 0;
+    bool first = true;
+    for (auto line : lines) {
+        if (!first) {
+            printf("               ");
+        }
+        first = false;
+        line->printDebug();
+        if (line->error) {
+            puts(("Unexpected error: " + line->errmsg).c_str());
+            throw -1;
+        }
+        tokenSize += (int)line->token.size();
+    }
+
+    if (n != tokenSize) {
+        printf("Unexpected token number: %d, %d\n", n, tokenSize);
+        throw -1;
+    }
+    va_list arg;
+    va_start(arg, n);
+    auto line = lines.begin();
+    for (int i = 0, ii = 0; i < n; i++, ii++) {
+        if ((*line)->token.size() == ii) {
+            ii = 0;
+            line++;
+        }
+        auto first = va_arg(arg, TokenType);
+        auto second = va_arg(arg, const char*);
+        if ((*line)->token[ii].first != first) {
+            printf("Unexpected TokenType #%d\n", i + 1);
+            throw -1;
+        }
+        if ((*line)->token[ii].second != second) {
+            printf("Unexpected Token#%d: %s != %s\n", i + 1, (*line)->token[ii].second.c_str(), second);
+            throw -1;
+        }
+    }
+}
+
+void test_error(const char* text, const char* errmsg)
+{
+    lines.clear();
+    lines.push_back(new LineData("", -1, text));
+    string_literal_extract(&lines);
+    printf("E: %-12s ---> ", text);
+    for (auto line : lines) {
+        if (line->error) {
+            if (line->errmsg != errmsg) {
+                puts(("Unexpected error: " + line->errmsg).c_str());
+                throw -1;
+            } else {
+                printf(" %s\n", errmsg);
+                return;
+            }
+        }
+    }
+    puts("Error not found!");
+    throw -1;
+}
+
+int main()
+{
+    try {
+        test_normal("LD A, \"HOGE\"", 15,
+                    TokenType::Other, "LD",
+                    TokenType::Other, "A",
+                    TokenType::Split, ",",
+                    TokenType::LabelJump, "$0",
+                    TokenType::Label, "$0",
+                    TokenType::Mnemonic, "DB",
+                    TokenType::Numeric, std::to_string((int)'H').c_str(),
+                    TokenType::Split, ",",
+                    TokenType::Numeric, std::to_string((int)'O').c_str(),
+                    TokenType::Split, ",",
+                    TokenType::Numeric, std::to_string((int)'G').c_str(),
+                    TokenType::Split, ",",
+                    TokenType::Numeric, std::to_string((int)'E').c_str(),
+                    TokenType::Split, ",",
+                    TokenType::Numeric, "0");
+    } catch (...) {
+        return -1;
+    }
+    return 0;
+}

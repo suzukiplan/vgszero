@@ -1,0 +1,12 @@
+ld a, (iy-128)
+ld b, (iy-1)
+ld c, (iy-0)
+ld d, (iy+1)
+ld e, (iy+127)
+ld h, (iy+63)
+ld l, (iy-64)
+;ld ixh, (iy+16)
+;ld ixl, (iy+32)
+;ld iyh, (iy+48)
+;ld iyl, (iy+64)
+

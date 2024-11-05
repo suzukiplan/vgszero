@@ -1,0 +1,11 @@
+                    ld        d,a                           ;[0000] 57
+                    ld        d,b                           ;[0001] 50
+                    ld        d,c                           ;[0002] 51
+                    ld        d,d                           ;[0003] 52
+                    ld        d,e                           ;[0004] 53
+                    ld        d,h                           ;[0005] 54
+                    ld        d,l                           ;[0006] 55
+                    ld        d,ixh                         ;[0007] dd 54
+                    ld        d,ixl                         ;[0009] dd 55
+                    ld        d,iyh                         ;[000b] fd 54
+                    ld        d,iyl                         ;[000d] fd 55

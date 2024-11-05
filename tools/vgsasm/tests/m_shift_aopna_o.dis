@@ -1,0 +1,15 @@
+                    ld        a,rlc (ix+$00)                ;[0000] dd cb 00 07
+                    ld        b,rlc (ix+$00)                ;[0004] dd cb 00 00
+                    ld        c,rlc (ix+$00)                ;[0008] dd cb 00 01
+                    ld        d,rlc (ix+$00)                ;[000c] dd cb 00 02
+                    ld        e,rlc (ix+$00)                ;[0010] dd cb 00 03
+                    rlc       (ix+$00)                      ;[0014] dd cb 00 06
+                    ld        h,rlc (ix+$00)                ;[0018] dd cb 00 04
+                    ld        l,rlc (ix+$00)                ;[001c] dd cb 00 05
+                    ld        b,rrc (ix+$01)                ;[0020] dd cb 01 08
+                    ld        b,rl (ix+$01)                 ;[0024] dd cb 01 10
+                    ld        b,rr (ix+$01)                 ;[0028] dd cb 01 18
+                    ld        b,sla (ix+$01)                ;[002c] dd cb 01 20
+                    ld        b,sra (ix+$01)                ;[0030] dd cb 01 28
+                    ld        b,sll (ix+$01)                ;[0034] dd cb 01 30
+                    ld        b,srl (ix+$01)                ;[0038] dd cb 01 38

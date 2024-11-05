@@ -12,7 +12,7 @@ SDCC_FLAGS += -Wl../../lib/sdcc/vgs0.lib
 
 all: build
 	cd ../../src/sdl2 && make
-	../../src/sdl2/vgs0 game.pkg
+	../../src/sdl2/vgs0 -d game.pkg
 
 build: tools game.pkg
 

@@ -1,0 +1,9 @@
+                    bit       0,a                           ;[0000] cb 47
+                    bit       1,b                           ;[0002] cb 48
+                    bit       2,c                           ;[0004] cb 51
+                    bit       3,d                           ;[0006] cb 5a
+                    bit       4,e                           ;[0008] cb 63
+                    bit       5,h                           ;[000a] cb 6c
+                    bit       6,l                           ;[000c] cb 75
+                    set       7,a                           ;[000e] cb ff
+                    res       0,b                           ;[0010] cb 80

@@ -1,0 +1,40 @@
+                    push      hl                            ;[0000] e5
+                    ld        l,$00                         ;[0001] 2e 00
+                    ld        h,$00                         ;[0003] 26 00
+                    add       (hl)                          ;[0005] 86
+                    pop       hl                            ;[0006] e1
+                    push      hl                            ;[0007] e5
+                    ld        l,$ff                         ;[0008] 2e ff
+                    ld        h,$ff                         ;[000a] 26 ff
+                    add       (hl)                          ;[000c] 86
+                    pop       hl                            ;[000d] e1
+                    push      hl                            ;[000e] e5
+                    ld        l,$00                         ;[000f] 2e 00
+                    ld        h,$00                         ;[0011] 26 00
+                    adc       (hl)                          ;[0013] 8e
+                    pop       hl                            ;[0014] e1
+                    push      hl                            ;[0015] e5
+                    ld        l,$ff                         ;[0016] 2e ff
+                    ld        h,$ff                         ;[0018] 26 ff
+                    adc       (hl)                          ;[001a] 8e
+                    pop       hl                            ;[001b] e1
+                    push      hl                            ;[001c] e5
+                    ld        l,$00                         ;[001d] 2e 00
+                    ld        h,$00                         ;[001f] 26 00
+                    sub       (hl)                          ;[0021] 96
+                    pop       hl                            ;[0022] e1
+                    push      hl                            ;[0023] e5
+                    ld        l,$ff                         ;[0024] 2e ff
+                    ld        h,$ff                         ;[0026] 26 ff
+                    sub       (hl)                          ;[0028] 96
+                    pop       hl                            ;[0029] e1
+                    push      hl                            ;[002a] e5
+                    ld        l,$00                         ;[002b] 2e 00
+                    ld        h,$00                         ;[002d] 26 00
+                    sbc       (hl)                          ;[002f] 9e
+                    pop       hl                            ;[0030] e1
+                    push      hl                            ;[0031] e5
+                    ld        l,$ff                         ;[0032] 2e ff
+                    ld        h,$ff                         ;[0034] 26 ff
+                    sbc       (hl)                          ;[0036] 9e
+                    pop       hl                            ;[0037] e1

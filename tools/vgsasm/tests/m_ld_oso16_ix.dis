@@ -1,0 +1,10 @@
+                    ld        ixh,b                         ;[0000] dd 60
+                    ld        ixl,c                         ;[0002] dd 69
+                    ld        ixh,d                         ;[0004] dd 62
+                    ld        ixl,e                         ;[0006] dd 6b
+                    push      hl                            ;[0008] e5
+                    pop       ix                            ;[0009] dd e1
+                    ld        ixh,ixh                       ;[000b] dd 64
+                    ld        ixl,ixl                       ;[000d] dd 6d
+                    push      iy                            ;[000f] fd e5
+                    pop       ix                            ;[0011] dd e1

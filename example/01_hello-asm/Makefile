@@ -2,6 +2,7 @@ PROJECT = hello
 BMP2CHR = ../../tools/bmp2chr/bmp2chr
 MAKEROM = ../../tools/makerom/makerom
 MAKEPKG = ../../tools/makepkg/makepkg
+ASM = ../../tools/vgsasm/vgsasm
 
 all: build
 	cd ../../src/sdl2 && make
@@ -29,7 +30,7 @@ font.chr: font.bmp
 	${BMP2CHR} font.bmp font.chr palette.h
 
 program.bin: program.asm
-	z80asm -b program.asm
+	${ASM} program.asm
 
 font.chr: font.bmp
 	${BMP2CHR} font.bmp font.chr

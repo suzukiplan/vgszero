@@ -1,0 +1,8 @@
+                    call      nz,$0000                      ;[0000] c4 00 00
+                    call      z,$0001                       ;[0003] cc 01 00
+                    call      nc,$7fff                      ;[0006] d4 ff 7f
+                    call      c,$8000                       ;[0009] dc 00 80
+                    call      po,$ffff                      ;[000c] e4 ff ff
+                    call      pe,$0000                      ;[000f] ec 00 00
+                    call      m,$0064                       ;[0012] fc 64 00
+                    call      p,$00c8                       ;[0015] f4 c8 00

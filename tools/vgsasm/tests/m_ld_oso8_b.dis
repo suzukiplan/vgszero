@@ -1,0 +1,11 @@
+                    ld        b,a                           ;[0000] 47
+                    ld        b,b                           ;[0001] 40
+                    ld        b,c                           ;[0002] 41
+                    ld        b,d                           ;[0003] 42
+                    ld        b,e                           ;[0004] 43
+                    ld        b,h                           ;[0005] 44
+                    ld        b,l                           ;[0006] 45
+                    ld        b,ixh                         ;[0007] dd 44
+                    ld        b,ixl                         ;[0009] dd 45
+                    ld        b,iyh                         ;[000b] fd 44
+                    ld        b,iyl                         ;[000d] fd 45

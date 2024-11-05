@@ -1,0 +1,12 @@
+                    add       hl,bc                         ;[0000] 09
+                    add       hl,de                         ;[0001] 19
+                    add       hl,hl                         ;[0002] 29
+                    add       hl,sp                         ;[0003] 39
+                    adc       hl,bc                         ;[0004] ed 4a
+                    adc       hl,de                         ;[0006] ed 5a
+                    adc       hl,hl                         ;[0008] ed 6a
+                    adc       hl,sp                         ;[000a] ed 7a
+                    sbc       hl,bc                         ;[000c] ed 42
+                    sbc       hl,de                         ;[000e] ed 52
+                    sbc       hl,hl                         ;[0010] ed 62
+                    sbc       hl,sp                         ;[0012] ed 72

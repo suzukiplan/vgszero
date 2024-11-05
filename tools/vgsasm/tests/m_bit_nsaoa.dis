@@ -1,0 +1,5 @@
+                    bit       0,(hl)                        ;[0000] cb 46
+                    bit       7,(ix+$00)                    ;[0002] dd cb 00 7e
+                    bit       1,(iy+$00)                    ;[0006] fd cb 00 4e
+                    set       6,(ix+$00)                    ;[000a] dd cb 00 f6
+                    res       4,(iy+$00)                    ;[000e] fd cb 00 a6
