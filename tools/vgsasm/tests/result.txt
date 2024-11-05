@@ -1,3 +1,1302 @@
+N: all
+../vgsasm all.asm -v
+         all.asm:0003 $0000 MAIN:
+         all.asm:0005 $0000 INTERRUPT@MAIN:
+         all.asm:0006 $0000 <IM> 0x0
+         all.asm:0007 $0002 <IM> 0x1
+         all.asm:0008 $0004 <IM> 0x2
+         all.asm:0009 $0006 <DI>
+         all.asm:0010 $0007 <EI>
+         all.asm:0011 $0008 <HALT>
+         all.asm:0013 $0009 STACK@MAIN:
+         all.asm:0014 $0009 <PUSH> <AF>
+         all.asm:0015 $000A <PUSH> <BC>
+         all.asm:0016 $000B <PUSH> <DE>
+         all.asm:0017 $000C <PUSH> <HL>
+         all.asm:0018 $000D <PUSH> <IX>
+         all.asm:0019 $000F <PUSH> <IY>
+         all.asm:0020 $0011 <POP> <AF>
+         all.asm:0021 $0012 <POP> <BC>
+         all.asm:0022 $0013 <POP> <DE>
+         all.asm:0023 $0014 <POP> <HL>
+         all.asm:0024 $0015 <POP> <IX>
+         all.asm:0025 $0017 <POP> <IY>
+         all.asm:0027 $0019 EXCHANGE@MAIN:
+         all.asm:0028 $0019 <EX> <DE> `,` <HL>
+         all.asm:0029 $001A <EX> <AF> `,` <AF'>
+         all.asm:0030 $001B <EX> _( <SP> )_ `,` <HL>
+         all.asm:0031 $001C <EX> _( <SP> )_ `,` <IX>
+         all.asm:0032 $001E <EX> _( <SP> )_ `,` <IY>
+         all.asm:0033 $0020 <EXX>
+         all.asm:0035 $0021 REPEART@MAIN:
+         all.asm:0036 $0021 <LDI>
+         all.asm:0037 $0023 <LDIR>
+         all.asm:0038 $0025 <LDD>
+         all.asm:0039 $0027 <LDDR>
+         all.asm:0040 $0029 <CPI>
+         all.asm:0041 $002B <CPIR>
+         all.asm:0042 $002D <CPD>
+         all.asm:0043 $002F <CPDR>
+         all.asm:0044 $0031 <OUTI>
+         all.asm:0045 $0033 <OTIR>
+         all.asm:0046 $0035 <OUTIR>
+         all.asm:0047 $0037 <OUTD>
+         all.asm:0048 $0039 <OTDR>
+         all.asm:0049 $003B <OUTDR>
+         all.asm:0051 $003D OTHER@MAIN:
+         all.asm:0052 $003D <NOP>
+         all.asm:0053 $003E <DAA>
+         all.asm:0054 $003F <CPL>
+         all.asm:0055 $0040 <CCF>
+         all.asm:0056 $0041 <SCF>
+         all.asm:0057 $0042 <NEG>
+         all.asm:0059 $0044 CALCULATION:
+         all.asm:0060 $0044 AND@CALCULATION:
+         all.asm:0061 $0044 <AND> <A>
+         all.asm:0062 $0045 <AND> <B>
+         all.asm:0063 $0046 <AND> <C>
+         all.asm:0064 $0047 <AND> <D>
+         all.asm:0065 $0048 <AND> <E>
+         all.asm:0066 $0049 <AND> <H>
+         all.asm:0067 $004A <AND> <L>
+         all.asm:0068 $004B <AND> <IXH>
+         all.asm:0069 $004D <AND> <IXL>
+         all.asm:0070 $004F <AND> <IYH>
+         all.asm:0071 $0051 <AND> <IYL>
+         all.asm:0072 $0053 <AND> 0xFF
+         all.asm:0073 $0055 <AND> _( <HL> )_
+         all.asm:0074 $0056 <AND> _( <IX> )_
+         all.asm:0075 $0059 <AND> _( <IX> `-` 0x80 )_
+         all.asm:0076 $005C <AND> _( <IX> `+` 0x7F )_
+         all.asm:0077 $005F <AND> _( <IY> )_
+         all.asm:0078 $0062 <AND> _( <IY> `-` 0x80 )_
+         all.asm:0079 $0065 <AND> _( <IY> `+` 0x7F )_
+         all.asm:0081 $0068 AND_WITH_A@CALCULATION:
+         all.asm:0082 $0068 <AND> <A>
+         all.asm:0083 $0069 <AND> <B>
+         all.asm:0084 $006A <AND> <C>
+         all.asm:0085 $006B <AND> <D>
+         all.asm:0086 $006C <AND> <E>
+         all.asm:0087 $006D <AND> <H>
+         all.asm:0088 $006E <AND> <L>
+         all.asm:0089 $006F <AND> <IXH>
+         all.asm:0090 $0071 <AND> <IXL>
+         all.asm:0091 $0073 <AND> <IYH>
+         all.asm:0092 $0075 <AND> <IYL>
+         all.asm:0093 $0077 <AND> 0xFF
+         all.asm:0094 $0079 <AND> _( <HL> )_
+         all.asm:0095 $007A <AND> _( <IX> )_
+         all.asm:0096 $007D <AND> _( <IX> `-` 0x80 )_
+         all.asm:0097 $0080 <AND> _( <IX> `+` 0x7F )_
+         all.asm:0098 $0083 <AND> _( <IY> )_
+         all.asm:0099 $0086 <AND> _( <IY> `-` 0x80 )_
+         all.asm:0100 $0089 <AND> _( <IY> `+` 0x7F )_
+         all.asm:0102 $008C OR@CALCULATION:
+         all.asm:0103 $008C <OR> <A>
+         all.asm:0104 $008D <OR> <B>
+         all.asm:0105 $008E <OR> <C>
+         all.asm:0106 $008F <OR> <D>
+         all.asm:0107 $0090 <OR> <E>
+         all.asm:0108 $0091 <OR> <H>
+         all.asm:0109 $0092 <OR> <L>
+         all.asm:0110 $0093 <OR> <IXH>
+         all.asm:0111 $0095 <OR> <IXL>
+         all.asm:0112 $0097 <OR> <IYH>
+         all.asm:0113 $0099 <OR> <IYL>
+         all.asm:0114 $009B <OR> 0xFF
+         all.asm:0115 $009D <OR> _( <HL> )_
+         all.asm:0116 $009E <OR> _( <IX> )_
+         all.asm:0117 $00A1 <OR> _( <IX> `-` 0x80 )_
+         all.asm:0118 $00A4 <OR> _( <IX> `+` 0x7F )_
+         all.asm:0119 $00A7 <OR> _( <IY> )_
+         all.asm:0120 $00AA <OR> _( <IY> `-` 0x80 )_
+         all.asm:0121 $00AD <OR> _( <IY> `+` 0x7F )_
+         all.asm:0123 $00B0 OR_WITH_A@CALCULATION:
+         all.asm:0124 $00B0 <OR> <A>
+         all.asm:0125 $00B1 <OR> <B>
+         all.asm:0126 $00B2 <OR> <C>
+         all.asm:0127 $00B3 <OR> <D>
+         all.asm:0128 $00B4 <OR> <E>
+         all.asm:0129 $00B5 <OR> <H>
+         all.asm:0130 $00B6 <OR> <L>
+         all.asm:0131 $00B7 <OR> <IXH>
+         all.asm:0132 $00B9 <OR> <IXL>
+         all.asm:0133 $00BB <OR> <IYH>
+         all.asm:0134 $00BD <OR> <IYL>
+         all.asm:0135 $00BF <OR> 0xFF
+         all.asm:0136 $00C1 <OR> _( <HL> )_
+         all.asm:0137 $00C2 <OR> _( <IX> )_
+         all.asm:0138 $00C5 <OR> _( <IX> `-` 0x80 )_
+         all.asm:0139 $00C8 <OR> _( <IX> `+` 0x7F )_
+         all.asm:0140 $00CB <OR> _( <IY> )_
+         all.asm:0141 $00CE <OR> _( <IY> `-` 0x80 )_
+         all.asm:0142 $00D1 <OR> _( <IY> `+` 0x7F )_
+         all.asm:0144 $00D4 XOR@CALCULATION:
+         all.asm:0145 $00D4 <XOR> <A>
+         all.asm:0146 $00D5 <XOR> <B>
+         all.asm:0147 $00D6 <XOR> <C>
+         all.asm:0148 $00D7 <XOR> <D>
+         all.asm:0149 $00D8 <XOR> <E>
+         all.asm:0150 $00D9 <XOR> <H>
+         all.asm:0151 $00DA <XOR> <L>
+         all.asm:0152 $00DB <XOR> <IXH>
+         all.asm:0153 $00DD <XOR> <IXL>
+         all.asm:0154 $00DF <XOR> <IYH>
+         all.asm:0155 $00E1 <XOR> <IYL>
+         all.asm:0156 $00E3 <XOR> 0xFF
+         all.asm:0157 $00E5 <XOR> _( <HL> )_
+         all.asm:0158 $00E6 <XOR> _( <IX> )_
+         all.asm:0159 $00E9 <XOR> _( <IX> `-` 0x80 )_
+         all.asm:0160 $00EC <XOR> _( <IX> `+` 0x7F )_
+         all.asm:0161 $00EF <XOR> _( <IY> )_
+         all.asm:0162 $00F2 <XOR> _( <IY> `-` 0x80 )_
+         all.asm:0163 $00F5 <XOR> _( <IY> `+` 0x7F )_
+         all.asm:0165 $00F8 XOR_WITH_A@CALCULATION:
+         all.asm:0166 $00F8 <XOR> <A>
+         all.asm:0167 $00F9 <XOR> <B>
+         all.asm:0168 $00FA <XOR> <C>
+         all.asm:0169 $00FB <XOR> <D>
+         all.asm:0170 $00FC <XOR> <E>
+         all.asm:0171 $00FD <XOR> <H>
+         all.asm:0172 $00FE <XOR> <L>
+         all.asm:0173 $00FF <XOR> <IXH>
+         all.asm:0174 $0101 <XOR> <IXL>
+         all.asm:0175 $0103 <XOR> <IYH>
+         all.asm:0176 $0105 <XOR> <IYL>
+         all.asm:0177 $0107 <XOR> 0xFF
+         all.asm:0178 $0109 <XOR> _( <HL> )_
+         all.asm:0179 $010A <XOR> _( <IX> )_
+         all.asm:0180 $010D <XOR> _( <IX> `-` 0x80 )_
+         all.asm:0181 $0110 <XOR> _( <IX> `+` 0x7F )_
+         all.asm:0182 $0113 <XOR> _( <IY> )_
+         all.asm:0183 $0116 <XOR> _( <IY> `-` 0x80 )_
+         all.asm:0184 $0119 <XOR> _( <IY> `+` 0x7F )_
+         all.asm:0186 $011C COMPARE@CALCULATION:
+         all.asm:0187 $011C <CP> <A>
+         all.asm:0188 $011D <CP> <B>
+         all.asm:0189 $011E <CP> <C>
+         all.asm:0190 $011F <CP> <D>
+         all.asm:0191 $0120 <CP> <E>
+         all.asm:0192 $0121 <CP> <H>
+         all.asm:0193 $0122 <CP> <L>
+         all.asm:0194 $0123 <CP> <IXH>
+         all.asm:0195 $0125 <CP> <IXL>
+         all.asm:0196 $0127 <CP> <IYH>
+         all.asm:0197 $0129 <CP> <IYL>
+         all.asm:0198 $012B <CP> 0xFF
+         all.asm:0199 $012D <CP> _( <HL> )_
+         all.asm:0200 $012E <CP> _( <IX> )_
+         all.asm:0201 $0131 <CP> _( <IX> `-` 0x80 )_
+         all.asm:0202 $0134 <CP> _( <IX> `+` 0x7F )_
+         all.asm:0203 $0137 <CP> _( <IY> )_
+         all.asm:0204 $013A <CP> _( <IY> `-` 0x80 )_
+         all.asm:0205 $013D <CP> _( <IY> `+` 0x7F )_
+         all.asm:0207 $0140 COMPARE_WITH_A@CALCULATION:
+         all.asm:0208 $0140 <CP> <A>
+         all.asm:0209 $0141 <CP> <B>
+         all.asm:0210 $0142 <CP> <C>
+         all.asm:0211 $0143 <CP> <D>
+         all.asm:0212 $0144 <CP> <E>
+         all.asm:0213 $0145 <CP> <H>
+         all.asm:0214 $0146 <CP> <L>
+         all.asm:0215 $0147 <CP> <IXH>
+         all.asm:0216 $0149 <CP> <IXL>
+         all.asm:0217 $014B <CP> <IYH>
+         all.asm:0218 $014D <CP> <IYL>
+         all.asm:0219 $014F <CP> 0xFF
+         all.asm:0220 $0151 <CP> _( <HL> )_
+         all.asm:0221 $0152 <CP> _( <IX> )_
+         all.asm:0222 $0155 <CP> _( <IX> `-` 0x80 )_
+         all.asm:0223 $0158 <CP> _( <IX> `+` 0x7F )_
+         all.asm:0224 $015B <CP> _( <IY> )_
+         all.asm:0225 $015E <CP> _( <IY> `-` 0x80 )_
+         all.asm:0226 $0161 <CP> _( <IY> `+` 0x7F )_
+         all.asm:0228 $0164 ADD@CALCULATION:
+         all.asm:0229 $0164 <ADD> <A>
+         all.asm:0230 $0165 <ADD> <B>
+         all.asm:0231 $0166 <ADD> <C>
+         all.asm:0232 $0167 <ADD> <D>
+         all.asm:0233 $0168 <ADD> <E>
+         all.asm:0234 $0169 <ADD> <H>
+         all.asm:0235 $016A <ADD> <L>
+         all.asm:0236 $016B <ADD> <IXH>
+         all.asm:0237 $016D <ADD> <IXL>
+         all.asm:0238 $016F <ADD> <IYH>
+         all.asm:0239 $0171 <ADD> <IYL>
+         all.asm:0240 $0173 <ADD> 0xFF
+         all.asm:0241 $0175 <ADD> _( <HL> )_
+         all.asm:0242 $0176 <ADD> _( <IX> )_
+         all.asm:0243 $0179 <ADD> _( <IX> `-` 0x80 )_
+         all.asm:0244 $017C <ADD> _( <IX> `+` 0x7F )_
+         all.asm:0245 $017F <ADD> _( <IY> )_
+         all.asm:0246 $0182 <ADD> _( <IY> `-` 0x80 )_
+         all.asm:0247 $0185 <ADD> _( <IY> `+` 0x7F )_
+         all.asm:0249 $0188 ADD_OMIT_A@CALCULATION:
+         all.asm:0250 $0188 <ADD> <A>
+         all.asm:0251 $0189 <ADD> <B>
+         all.asm:0252 $018A <ADD> <C>
+         all.asm:0253 $018B <ADD> <D>
+         all.asm:0254 $018C <ADD> <E>
+         all.asm:0255 $018D <ADD> <H>
+         all.asm:0256 $018E <ADD> <L>
+         all.asm:0257 $018F <ADD> <IXH>
+         all.asm:0258 $0191 <ADD> <IXL>
+         all.asm:0259 $0193 <ADD> <IYH>
+         all.asm:0260 $0195 <ADD> <IYL>
+         all.asm:0261 $0197 <ADD> 0xFF
+         all.asm:0262 $0199 <ADD> _( <HL> )_
+         all.asm:0263 $019A <ADD> _( <IX> )_
+         all.asm:0264 $019D <ADD> _( <IX> `-` 0x80 )_
+         all.asm:0265 $01A0 <ADD> _( <IX> `+` 0x7F )_
+         all.asm:0266 $01A3 <ADD> _( <IY> )_
+         all.asm:0267 $01A6 <ADD> _( <IY> `-` 0x80 )_
+         all.asm:0268 $01A9 <ADD> _( <IY> `+` 0x7F )_
+         all.asm:0269 $01AC <ADD> _( 0x1234 )_
+         all.asm:0271 $01B3 ADD16@CALCULATION:
+         all.asm:0272 $01B3 <ADD> <HL> `,` <BC>
+         all.asm:0273 $01B4 <ADD> <HL> `,` <DE>
+         all.asm:0274 $01B5 <ADD> <HL> `,` <HL>
+         all.asm:0275 $01B6 <ADD> <HL> `,` <SP>
+         all.asm:0276 $01B7 <ADD> <IX> `,` <BC>
+         all.asm:0277 $01B9 <ADD> <IX> `,` <DE>
+         all.asm:0278 $01BB <ADD> <IX> `,` <IX>
+         all.asm:0279 $01BD <ADD> <IX> `,` <SP>
+         all.asm:0280 $01BF <ADD> <IY> `,` <BC>
+         all.asm:0281 $01C1 <ADD> <IY> `,` <DE>
+         all.asm:0282 $01C3 <ADD> <IY> `,` <IY>
+         all.asm:0283 $01C5 <ADD> <IY> `,` <SP>
+         all.asm:0285 $01C7 ADD16_A@CALCULATION:
+         all.asm:0286 $01C7 <ADD> <BC> `,` <A>
+         all.asm:0287 $01CC <ADD> <DE> `,` <A>
+         all.asm:0288 $01D1 <ADD> <HL> `,` <A>
+         all.asm:0290 $01D6 ADD16_NN@CALCULATION:
+         all.asm:0291 $01D6 <ADD> <HL> `,` 0x1234
+         all.asm:0292 $01DD <ADD> <IX> `,` 0x5678
+         all.asm:0293 $01E5 <ADD> <IY> `,` 0x9ABC
+         all.asm:0295 $01ED ADC@CALCULATION:
+         all.asm:0296 $01ED <ADC> <A>
+         all.asm:0297 $01EE <ADC> <B>
+         all.asm:0298 $01EF <ADC> <C>
+         all.asm:0299 $01F0 <ADC> <D>
+         all.asm:0300 $01F1 <ADC> <E>
+         all.asm:0301 $01F2 <ADC> <H>
+         all.asm:0302 $01F3 <ADC> <L>
+         all.asm:0303 $01F4 <ADC> <IXH>
+         all.asm:0304 $01F6 <ADC> <IXL>
+         all.asm:0305 $01F8 <ADC> <IYH>
+         all.asm:0306 $01FA <ADC> <IYL>
+         all.asm:0307 $01FC <ADC> 0xFF
+         all.asm:0308 $01FE <ADC> _( <HL> )_
+         all.asm:0309 $01FF <ADC> _( <IX> )_
+         all.asm:0310 $0202 <ADC> _( <IX> `-` 0x80 )_
+         all.asm:0311 $0205 <ADC> _( <IX> `+` 0x7F )_
+         all.asm:0312 $0208 <ADC> _( <IY> )_
+         all.asm:0313 $020B <ADC> _( <IY> `-` 0x80 )_
+         all.asm:0314 $020E <ADC> _( <IY> `+` 0x7F )_
+         all.asm:0316 $0211 ADC_OMIT_A@CALCULATION:
+         all.asm:0317 $0211 <ADC> <A>
+         all.asm:0318 $0212 <ADC> <B>
+         all.asm:0319 $0213 <ADC> <C>
+         all.asm:0320 $0214 <ADC> <D>
+         all.asm:0321 $0215 <ADC> <E>
+         all.asm:0322 $0216 <ADC> <H>
+         all.asm:0323 $0217 <ADC> <L>
+         all.asm:0324 $0218 <ADC> <IXH>
+         all.asm:0325 $021A <ADC> <IXL>
+         all.asm:0326 $021C <ADC> <IYH>
+         all.asm:0327 $021E <ADC> <IYL>
+         all.asm:0328 $0220 <ADC> 0xFF
+         all.asm:0329 $0222 <ADC> _( <HL> )_
+         all.asm:0330 $0223 <ADC> _( <IX> )_
+         all.asm:0331 $0226 <ADC> _( <IX> `-` 0x80 )_
+         all.asm:0332 $0229 <ADC> _( <IX> `+` 0x7F )_
+         all.asm:0333 $022C <ADC> _( <IY> )_
+         all.asm:0334 $022F <ADC> _( <IY> `-` 0x80 )_
+         all.asm:0335 $0232 <ADC> _( <IY> `+` 0x7F )_
+         all.asm:0336 $0235 <ADC> _( 0x1234 )_
+         all.asm:0338 $023C ADC16@CALCULATION:
+         all.asm:0339 $023C <ADC> <HL> `,` <BC>
+         all.asm:0340 $023E <ADC> <HL> `,` <DE>
+         all.asm:0341 $0240 <ADC> <HL> `,` <HL>
+         all.asm:0342 $0242 <ADC> <HL> `,` <SP>
+         all.asm:0352 $0244 ADC16_NN@CALCULATION:
+         all.asm:0357 $0244 SUB@CALCULATION:
+         all.asm:0358 $0244 <SUB> <A>
+         all.asm:0359 $0245 <SUB> <B>
+         all.asm:0360 $0246 <SUB> <C>
+         all.asm:0361 $0247 <SUB> <D>
+         all.asm:0362 $0248 <SUB> <E>
+         all.asm:0363 $0249 <SUB> <H>
+         all.asm:0364 $024A <SUB> <L>
+         all.asm:0365 $024B <SUB> <IXH>
+         all.asm:0366 $024D <SUB> <IXL>
+         all.asm:0367 $024F <SUB> <IYH>
+         all.asm:0368 $0251 <SUB> <IYL>
+         all.asm:0369 $0253 <SUB> 0xFF
+         all.asm:0370 $0255 <SUB> _( <HL> )_
+         all.asm:0371 $0256 <SUB> _( <IX> )_
+         all.asm:0372 $0259 <SUB> _( <IX> `-` 0x80 )_
+         all.asm:0373 $025C <SUB> _( <IX> `+` 0x7F )_
+         all.asm:0374 $025F <SUB> _( <IY> )_
+         all.asm:0375 $0262 <SUB> _( <IY> `-` 0x80 )_
+         all.asm:0376 $0265 <SUB> _( <IY> `+` 0x7F )_
+         all.asm:0377 $0268 <SUB> _( 0x1234 )_
+         all.asm:0379 $026F SUB_WITH_A@CALCULATION:
+         all.asm:0380 $026F <SUB> <A>
+         all.asm:0381 $0270 <SUB> <B>
+         all.asm:0382 $0271 <SUB> <C>
+         all.asm:0383 $0272 <SUB> <D>
+         all.asm:0384 $0273 <SUB> <E>
+         all.asm:0385 $0274 <SUB> <H>
+         all.asm:0386 $0275 <SUB> <L>
+         all.asm:0387 $0276 <SUB> <IXH>
+         all.asm:0388 $0278 <SUB> <IXL>
+         all.asm:0389 $027A <SUB> <IYH>
+         all.asm:0390 $027C <SUB> <IYL>
+         all.asm:0391 $027E <SUB> 0xFF
+         all.asm:0392 $0280 <SUB> _( <HL> )_
+         all.asm:0393 $0281 <SUB> _( <IX> )_
+         all.asm:0394 $0284 <SUB> _( <IX> `-` 0x80 )_
+         all.asm:0395 $0287 <SUB> _( <IX> `+` 0x7F )_
+         all.asm:0396 $028A <SUB> _( <IY> )_
+         all.asm:0397 $028D <SUB> _( <IY> `-` 0x80 )_
+         all.asm:0398 $0290 <SUB> _( <IY> `+` 0x7F )_
+         all.asm:0400 $0293 SBC@CALCULATION:
+         all.asm:0401 $0293 <SBC> <A>
+         all.asm:0402 $0294 <SBC> <B>
+         all.asm:0403 $0295 <SBC> <C>
+         all.asm:0404 $0296 <SBC> <D>
+         all.asm:0405 $0297 <SBC> <E>
+         all.asm:0406 $0298 <SBC> <H>
+         all.asm:0407 $0299 <SBC> <L>
+         all.asm:0408 $029A <SBC> <IXH>
+         all.asm:0409 $029C <SBC> <IXL>
+         all.asm:0410 $029E <SBC> <IYH>
+         all.asm:0411 $02A0 <SBC> <IYL>
+         all.asm:0412 $02A2 <SBC> 0xFF
+         all.asm:0413 $02A4 <SBC> _( <HL> )_
+         all.asm:0414 $02A5 <SBC> _( <IX> )_
+         all.asm:0415 $02A8 <SBC> _( <IX> `-` 0x80 )_
+         all.asm:0416 $02AB <SBC> _( <IX> `+` 0x7F )_
+         all.asm:0417 $02AE <SBC> _( <IY> )_
+         all.asm:0418 $02B1 <SBC> _( <IY> `-` 0x80 )_
+         all.asm:0419 $02B4 <SBC> _( <IY> `+` 0x7F )_
+         all.asm:0421 $02B7 SBC_OMIT_A@CALCULATION:
+         all.asm:0422 $02B7 <SBC> <A>
+         all.asm:0423 $02B8 <SBC> <B>
+         all.asm:0424 $02B9 <SBC> <C>
+         all.asm:0425 $02BA <SBC> <D>
+         all.asm:0426 $02BB <SBC> <E>
+         all.asm:0427 $02BC <SBC> <H>
+         all.asm:0428 $02BD <SBC> <L>
+         all.asm:0429 $02BE <SBC> <IXH>
+         all.asm:0430 $02C0 <SBC> <IXL>
+         all.asm:0431 $02C2 <SBC> <IYH>
+         all.asm:0432 $02C4 <SBC> <IYL>
+         all.asm:0433 $02C6 <SBC> 0xFF
+         all.asm:0434 $02C8 <SBC> _( <HL> )_
+         all.asm:0435 $02C9 <SBC> _( <IX> )_
+         all.asm:0436 $02CC <SBC> _( <IX> `-` 0x80 )_
+         all.asm:0437 $02CF <SBC> _( <IX> `+` 0x7F )_
+         all.asm:0438 $02D2 <SBC> _( <IY> )_
+         all.asm:0439 $02D5 <SBC> _( <IY> `-` 0x80 )_
+         all.asm:0440 $02D8 <SBC> _( <IY> `+` 0x7F )_
+         all.asm:0441 $02DB <SBC> _( 0x1234 )_
+         all.asm:0443 $02E2 SBC16@CALCULATION:
+         all.asm:0444 $02E2 <SBC> <HL> `,` <BC>
+         all.asm:0445 $02E4 <SBC> <HL> `,` <DE>
+         all.asm:0446 $02E6 <SBC> <HL> `,` <HL>
+         all.asm:0447 $02E8 <SBC> <HL> `,` <SP>
+         all.asm:0457 $02EA SBC16_NN@CALCULATION:
+         all.asm:0462 $02EA BITOPERATION:
+         all.asm:0463 $02EA REGISTER@BITOPERATION:
+         all.asm:0464 $02EA <BIT> 0x0 `,` <A>
+         all.asm:0465 $02EC <BIT> 0x1 `,` <B>
+         all.asm:0466 $02EE <BIT> 0x2 `,` <C>
+         all.asm:0467 $02F0 <BIT> 0x3 `,` <D>
+         all.asm:0468 $02F2 <BIT> 0x4 `,` <E>
+         all.asm:0469 $02F4 <BIT> 0x5 `,` <H>
+         all.asm:0470 $02F6 <BIT> 0x6 `,` <L>
+         all.asm:0472 $02F8 <SET> 0x7 `,` <A>
+         all.asm:0473 $02FA <SET> 0x0 `,` <B>
+         all.asm:0474 $02FC <SET> 0x1 `,` <C>
+         all.asm:0475 $02FE <SET> 0x2 `,` <D>
+         all.asm:0476 $0300 <SET> 0x3 `,` <E>
+         all.asm:0477 $0302 <SET> 0x4 `,` <H>
+         all.asm:0478 $0304 <SET> 0x5 `,` <L>
+         all.asm:0480 $0306 <RES> 0x6 `,` <A>
+         all.asm:0481 $0308 <RES> 0x7 `,` <B>
+         all.asm:0482 $030A <RES> 0x0 `,` <C>
+         all.asm:0483 $030C <RES> 0x1 `,` <D>
+         all.asm:0484 $030E <RES> 0x2 `,` <E>
+         all.asm:0485 $0310 <RES> 0x3 `,` <H>
+         all.asm:0486 $0312 <RES> 0x4 `,` <L>
+         all.asm:0488 $0314 ADDRESSHL@BITOPERATION:
+         all.asm:0489 $0314 <BIT> 0x0 `,` _( <HL> )_
+         all.asm:0490 $0316 <SET> 0x1 `,` _( <HL> )_
+         all.asm:0491 $0318 <RES> 0x2 `,` _( <HL> )_
+         all.asm:0493 $031A ADDRESSIXY_WITHOUT_D@BITOPERATION:
+         all.asm:0494 $031A <BIT> 0x0 `,` _( <IX> )_
+         all.asm:0495 $031E <SET> 0x1 `,` _( <IX> )_
+         all.asm:0496 $0322 <RES> 0x2 `,` _( <IX> )_
+         all.asm:0497 $0326 <BIT> 0x0 `,` _( <IY> )_
+         all.asm:0498 $032A <SET> 0x1 `,` _( <IY> )_
+         all.asm:0499 $032E <RES> 0x2 `,` _( <IY> )_
+         all.asm:0501 $0332 ADDRESSIXY@BITOPERATION:
+         all.asm:0502 $0332 <BIT> 0x0 `,` _( <IX> `+` 0x7F )_
+         all.asm:0503 $0336 <SET> 0x1 `,` _( <IX> `+` 0x0 )_
+         all.asm:0504 $033A <RES> 0x2 `,` _( <IX> `-` 0x80 )_
+         all.asm:0505 $033E <BIT> 0x0 `,` _( <IY> `-` 0x1 )_
+         all.asm:0506 $0342 <SET> 0x1 `,` _( <IY> `+` 0x40 )_
+         all.asm:0507 $0346 <RES> 0x2 `,` _( <IY> `-` 0x40 )_
+         all.asm:0509 $034A INCREMENT:
+         all.asm:0510 $034A REGISTER@INCREMENT:
+         all.asm:0511 $034A <INC> <A>
+         all.asm:0512 $034B <INC> <B>
+         all.asm:0513 $034C <INC> <C>
+         all.asm:0514 $034D <INC> <D>
+         all.asm:0515 $034E <INC> <E>
+         all.asm:0516 $034F <INC> <H>
+         all.asm:0517 $0350 <INC> <L>
+         all.asm:0518 $0351 <INC> <IXH>
+         all.asm:0519 $0353 <INC> <IXL>
+         all.asm:0520 $0355 <INC> <IYH>
+         all.asm:0521 $0357 <INC> <IYL>
+         all.asm:0522 $0359 <INC> <BC>
+         all.asm:0523 $035A <INC> <DE>
+         all.asm:0524 $035B <INC> <HL>
+         all.asm:0525 $035C <INC> <SP>
+         all.asm:0526 $035D <INC> <IX>
+         all.asm:0527 $035F <INC> <IY>
+         all.asm:0529 $0361 ADDRESS@INCREMENT:
+         all.asm:0530 $0361 <INC> _( <HL> )_
+         all.asm:0531 $0362 <INC> _( <IX> )_
+         all.asm:0532 $0365 <INC> _( <IY> )_
+         all.asm:0533 $0368 <INC> _( <IX> `-` 0x80 )_
+         all.asm:0534 $036B <INC> _( <IY> `-` 0x1 )_
+         all.asm:0535 $036E <INC> _( <IX> `+` 0x1 )_
+         all.asm:0536 $0371 <INC> _( <IY> `+` 0x7F )_
+         all.asm:0537 $0374 <INC> _( 0x1234 )_
+         all.asm:0539 $037B DECREMENT:
+         all.asm:0540 $037B REGISTER@DECREMENT:
+         all.asm:0541 $037B <DEC> <A>
+         all.asm:0542 $037C <DEC> <B>
+         all.asm:0543 $037D <DEC> <C>
+         all.asm:0544 $037E <DEC> <D>
+         all.asm:0545 $037F <DEC> <E>
+         all.asm:0546 $0380 <DEC> <H>
+         all.asm:0547 $0381 <DEC> <L>
+         all.asm:0548 $0382 <DEC> <IXH>
+         all.asm:0549 $0384 <DEC> <IXL>
+         all.asm:0550 $0386 <DEC> <IYH>
+         all.asm:0551 $0388 <DEC> <IYL>
+         all.asm:0552 $038A <DEC> <BC>
+         all.asm:0553 $038B <DEC> <DE>
+         all.asm:0554 $038C <DEC> <HL>
+         all.asm:0555 $038D <DEC> <SP>
+         all.asm:0556 $038E <DEC> <IX>
+         all.asm:0557 $0390 <DEC> <IY>
+         all.asm:0559 $0392 ADDRESS@DECREMENT:
+         all.asm:0560 $0392 <DEC> _( <HL> )_
+         all.asm:0561 $0393 <DEC> _( <IX> )_
+         all.asm:0562 $0396 <DEC> _( <IY> )_
+         all.asm:0563 $0399 <DEC> _( <IX> `-` 0x80 )_
+         all.asm:0564 $039C <DEC> _( <IY> `-` 0x1 )_
+         all.asm:0565 $039F <DEC> _( <IX> `+` 0x1 )_
+         all.asm:0566 $03A2 <DEC> _( <IY> `+` 0x7F )_
+         all.asm:0567 $03A5 <DEC> _( 0x1234 )_
+         all.asm:0569 $03AC ROTATE:
+         all.asm:0570 $03AC <RLCA>
+         all.asm:0571 $03AD <RLA>
+         all.asm:0572 $03AE <RRCA>
+         all.asm:0573 $03AF <RRA>
+         all.asm:0575 $03B0 <RLC> <A>
+         all.asm:0576 $03B2 <RLC> <B>
+         all.asm:0577 $03B4 <RLC> <C>
+         all.asm:0578 $03B6 <RLC> <D>
+         all.asm:0579 $03B8 <RLC> <E>
+         all.asm:0580 $03BA <RLC> <H>
+         all.asm:0581 $03BC <RLC> <L>
+         all.asm:0582 $03BE <RLC> _( <HL> )_
+         all.asm:0583 $03C0 <RLC> _( <IX> )_
+         all.asm:0584 $03C4 <RLC> _( <IY> )_
+         all.asm:0585 $03C8 <RLC> _( <IX> `-` 0x80 )_
+         all.asm:0586 $03CC <RLC> _( <IY> `-` 0x1 )_
+         all.asm:0587 $03D0 <RLC> _( <IX> `+` 0x1 )_
+         all.asm:0588 $03D4 <RLC> _( <IY> `+` 0x7F )_
+         all.asm:0590 $03D8 <RL> <A>
+         all.asm:0591 $03DA <RL> <B>
+         all.asm:0592 $03DC <RL> <C>
+         all.asm:0593 $03DE <RL> <D>
+         all.asm:0594 $03E0 <RL> <E>
+         all.asm:0595 $03E2 <RL> <H>
+         all.asm:0596 $03E4 <RL> <L>
+         all.asm:0597 $03E6 <RL> _( <HL> )_
+         all.asm:0598 $03E8 <RL> _( <IX> )_
+         all.asm:0599 $03EC <RL> _( <IY> )_
+         all.asm:0600 $03F0 <RL> _( <IX> `-` 0x80 )_
+         all.asm:0601 $03F4 <RL> _( <IY> `-` 0x1 )_
+         all.asm:0602 $03F8 <RL> _( <IX> `+` 0x1 )_
+         all.asm:0603 $03FC <RL> _( <IY> `+` 0x7F )_
+         all.asm:0605 $0400 <RRC> <A>
+         all.asm:0606 $0402 <RRC> <B>
+         all.asm:0607 $0404 <RRC> <C>
+         all.asm:0608 $0406 <RRC> <D>
+         all.asm:0609 $0408 <RRC> <E>
+         all.asm:0610 $040A <RRC> <H>
+         all.asm:0611 $040C <RRC> <L>
+         all.asm:0612 $040E <RRC> _( <HL> )_
+         all.asm:0613 $0410 <RRC> _( <IX> )_
+         all.asm:0614 $0414 <RRC> _( <IY> )_
+         all.asm:0615 $0418 <RRC> _( <IX> `-` 0x80 )_
+         all.asm:0616 $041C <RRC> _( <IY> `-` 0x1 )_
+         all.asm:0617 $0420 <RRC> _( <IX> `+` 0x1 )_
+         all.asm:0618 $0424 <RRC> _( <IY> `+` 0x7F )_
+         all.asm:0620 $0428 <RR> <A>
+         all.asm:0621 $042A <RR> <B>
+         all.asm:0622 $042C <RR> <C>
+         all.asm:0623 $042E <RR> <D>
+         all.asm:0624 $0430 <RR> <E>
+         all.asm:0625 $0432 <RR> <H>
+         all.asm:0626 $0434 <RR> <L>
+         all.asm:0627 $0436 <RR> _( <HL> )_
+         all.asm:0628 $0438 <RR> _( <IX> )_
+         all.asm:0629 $043C <RR> _( <IY> )_
+         all.asm:0630 $0440 <RR> _( <IX> `-` 0x80 )_
+         all.asm:0631 $0444 <RR> _( <IY> `-` 0x1 )_
+         all.asm:0632 $0448 <RR> _( <IX> `+` 0x1 )_
+         all.asm:0633 $044C <RR> _( <IY> `+` 0x7F )_
+         all.asm:0635 $0450 SHIFT:
+         all.asm:0636 $0450 <SLA> <A>
+         all.asm:0637 $0452 <SLA> <B>
+         all.asm:0638 $0454 <SLA> <C>
+         all.asm:0639 $0456 <SLA> <D>
+         all.asm:0640 $0458 <SLA> <E>
+         all.asm:0641 $045A <SLA> <H>
+         all.asm:0642 $045C <SLA> <L>
+         all.asm:0643 $045E <SLA> _( <HL> )_
+         all.asm:0644 $0460 <SLA> _( <IX> )_
+         all.asm:0645 $0464 <SLA> _( <IY> )_
+         all.asm:0646 $0468 <SLA> _( <IX> `-` 0x80 )_
+         all.asm:0647 $046C <SLA> _( <IY> `-` 0x1 )_
+         all.asm:0648 $0470 <SLA> _( <IX> `+` 0x1 )_
+         all.asm:0649 $0474 <SLA> _( <IY> `+` 0x7F )_
+         all.asm:0651 $0478 <SL> <A>
+         all.asm:0652 $047A <SL> <B>
+         all.asm:0653 $047C <SL> <C>
+         all.asm:0654 $047E <SL> <D>
+         all.asm:0655 $0480 <SL> <E>
+         all.asm:0656 $0482 <SL> <H>
+         all.asm:0657 $0484 <SL> <L>
+         all.asm:0658 $0486 <SL> _( <HL> )_
+         all.asm:0659 $0488 <SL> _( <IX> )_
+         all.asm:0660 $048C <SL> _( <IY> )_
+         all.asm:0661 $0490 <SL> _( <IX> `-` 0x80 )_
+         all.asm:0662 $0494 <SL> _( <IY> `-` 0x1 )_
+         all.asm:0663 $0498 <SL> _( <IX> `+` 0x1 )_
+         all.asm:0664 $049C <SL> _( <IY> `+` 0x7F )_
+         all.asm:0666 $04A0 <SLL> <A>
+         all.asm:0667 $04A2 <SLL> <B>
+         all.asm:0668 $04A4 <SLL> <C>
+         all.asm:0669 $04A6 <SLL> <D>
+         all.asm:0670 $04A8 <SLL> <E>
+         all.asm:0671 $04AA <SLL> <H>
+         all.asm:0672 $04AC <SLL> <L>
+         all.asm:0673 $04AE <SLL> _( <HL> )_
+         all.asm:0674 $04B0 <SLL> _( <IX> )_
+         all.asm:0675 $04B4 <SLL> _( <IY> )_
+         all.asm:0676 $04B8 <SLL> _( <IX> `-` 0x80 )_
+         all.asm:0677 $04BC <SLL> _( <IY> `-` 0x1 )_
+         all.asm:0678 $04C0 <SLL> _( <IX> `+` 0x1 )_
+         all.asm:0679 $04C4 <SLL> _( <IY> `+` 0x7F )_
+         all.asm:0681 $04C8 <SRA> <A>
+         all.asm:0682 $04CA <SRA> <B>
+         all.asm:0683 $04CC <SRA> <C>
+         all.asm:0684 $04CE <SRA> <D>
+         all.asm:0685 $04D0 <SRA> <E>
+         all.asm:0686 $04D2 <SRA> <H>
+         all.asm:0687 $04D4 <SRA> <L>
+         all.asm:0688 $04D6 <SRA> _( <HL> )_
+         all.asm:0689 $04D8 <SRA> _( <IX> )_
+         all.asm:0690 $04DC <SRA> _( <IY> )_
+         all.asm:0691 $04E0 <SRA> _( <IX> `-` 0x80 )_
+         all.asm:0692 $04E4 <SRA> _( <IY> `-` 0x1 )_
+         all.asm:0693 $04E8 <SRA> _( <IX> `+` 0x1 )_
+         all.asm:0694 $04EC <SRA> _( <IY> `+` 0x7F )_
+         all.asm:0696 $04F0 <SRL> <A>
+         all.asm:0697 $04F2 <SRL> <B>
+         all.asm:0698 $04F4 <SRL> <C>
+         all.asm:0699 $04F6 <SRL> <D>
+         all.asm:0700 $04F8 <SRL> <E>
+         all.asm:0701 $04FA <SRL> <H>
+         all.asm:0702 $04FC <SRL> <L>
+         all.asm:0703 $04FE <SRL> _( <HL> )_
+         all.asm:0704 $0500 <SRL> _( <IX> )_
+         all.asm:0705 $0504 <SRL> _( <IY> )_
+         all.asm:0706 $0508 <SRL> _( <IX> `-` 0x80 )_
+         all.asm:0707 $050C <SRL> _( <IY> `-` 0x1 )_
+         all.asm:0708 $0510 <SRL> _( <IX> `+` 0x1 )_
+         all.asm:0709 $0514 <SRL> _( <IY> `+` 0x7F )_
+         all.asm:0711 $0518 <SR> <A>
+         all.asm:0712 $051A <SR> <B>
+         all.asm:0713 $051C <SR> <C>
+         all.asm:0714 $051E <SR> <D>
+         all.asm:0715 $0520 <SR> <E>
+         all.asm:0716 $0522 <SR> <H>
+         all.asm:0717 $0524 <SR> <L>
+         all.asm:0718 $0526 <SR> _( <HL> )_
+         all.asm:0719 $0528 <SR> _( <IX> )_
+         all.asm:0720 $052C <SR> _( <IY> )_
+         all.asm:0721 $0530 <SR> _( <IX> `-` 0x80 )_
+         all.asm:0722 $0534 <SR> _( <IY> `-` 0x1 )_
+         all.asm:0723 $0538 <SR> _( <IX> `+` 0x1 )_
+         all.asm:0724 $053C <SR> _( <IY> `+` 0x7F )_
+         all.asm:0726 $0540 <RLD>
+         all.asm:0727 $0542 <RRD>
+         all.asm:0729 $0544 UNDOCUMENTED@SHIFT:
+         all.asm:0730 $0544 <RLC> _( <IX> `+` 0xA )_ `&` <A>
+         all.asm:0731 $0548 <RLC> _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0732 $054C <RLC> _( <IX> `+` 0xA )_ `&` <C>
+         all.asm:0733 $0550 <RLC> _( <IX> `+` 0xA )_ `&` <D>
+         all.asm:0734 $0554 <RLC> _( <IX> `+` 0xA )_ `&` <E>
+         all.asm:0735 $0558 <RLC> _( <IX> `+` 0xA )_ `&` <F>
+         all.asm:0736 $055C <RLC> _( <IX> `+` 0xA )_ `&` <H>
+         all.asm:0737 $0560 <RLC> _( <IX> `+` 0xA )_ `&` <L>
+         all.asm:0739 $0564 <RRC> _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0740 $0568 <RL> _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0741 $056C <RR> _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0742 $0570 <SLA> _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0743 $0574 <SRA> _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0744 $0578 <SLL> _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0745 $057C <SRL> _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0747 $0580 <RES> 0x0 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0748 $0584 <RES> 0x1 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0749 $0588 <RES> 0x2 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0750 $058C <RES> 0x3 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0751 $0590 <RES> 0x4 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0752 $0594 <RES> 0x5 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0753 $0598 <RES> 0x6 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0754 $059C <RES> 0x7 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0756 $05A0 <SET> 0x0 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0757 $05A4 <SET> 0x1 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0758 $05A8 <SET> 0x2 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0759 $05AC <SET> 0x3 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0760 $05B0 <SET> 0x4 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0761 $05B4 <SET> 0x5 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0762 $05B8 <SET> 0x6 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0763 $05BC <SET> 0x7 `,` _( <IX> `+` 0xA )_ `&` <B>
+         all.asm:0765 $05C0 IO:
+         all.asm:0766 $05C0 IN@IO:
+         all.asm:0767 $05C0 <IN> <A> `,` _( 0x80 )_
+         all.asm:0768 $05C2 <IN> <A> `,` _( <C> )_
+         all.asm:0769 $05C4 <IN> <B> `,` _( <C> )_
+         all.asm:0770 $05C6 <IN> <C> `,` _( <C> )_
+         all.asm:0771 $05C8 <IN> <D> `,` _( <C> )_
+         all.asm:0772 $05CA <IN> <E> `,` _( <C> )_
+         all.asm:0773 $05CC <IN> <F> `,` _( <C> )_
+         all.asm:0774 $05CE <IN> <H> `,` _( <C> )_
+         all.asm:0775 $05D0 <IN> <L> `,` _( <C> )_
+         all.asm:0777 $05D2 OUT@IO:
+         all.asm:0778 $05D2 <OUT> _( 0xFF )_ `,` <A>
+         all.asm:0779 $05D4 <OUT> _( <C> )_ `,` <A>
+         all.asm:0780 $05D6 <OUT> _( <C> )_ `,` <B>
+         all.asm:0781 $05D8 <OUT> _( <C> )_ `,` <C>
+         all.asm:0782 $05DA <OUT> _( <C> )_ `,` <D>
+         all.asm:0783 $05DC <OUT> _( <C> )_ `,` <E>
+         all.asm:0784 $05DE <OUT> _( <C> )_
+         all.asm:0785 $05E0 <OUT> <F> `,` _( <C> )_
+         all.asm:0786 $05E2 <OUT> _( <C> )_ `,` <H>
+         all.asm:0787 $05E4 <OUT> _( <C> )_ `,` <L>
+         all.asm:0789 $05E6 REPEAT_IN@IO:
+         all.asm:0790 $05E6 <INI>
+         all.asm:0791 $05E8 <INIR>
+         all.asm:0792 $05EA <IND>
+         all.asm:0793 $05EC <INDR>
+         all.asm:0795 $05EE REPEAT_OUT@IO:
+         all.asm:0796 $05EE <OUTI>
+         all.asm:0797 $05F0 <OTIR>
+         all.asm:0798 $05F2 <OUTIR>
+         all.asm:0799 $05F4 <OUTD>
+         all.asm:0800 $05F6 <OTDR>
+         all.asm:0801 $05F8 <OUTDR>
+         all.asm:0803 $05FA TRANSFER_LOAD_STORE:
+         all.asm:0805 $05FA LD_A_R@TRANSFER_LOAD_STORE:
+         all.asm:0806 $05FA <LD> <A> `,` <A>
+         all.asm:0807 $05FB <LD> <A> `,` <B>
+         all.asm:0808 $05FC <LD> <A> `,` <C>
+         all.asm:0809 $05FD <LD> <A> `,` <D>
+         all.asm:0810 $05FE <LD> <A> `,` <E>
+         all.asm:0811 $05FF <LD> <A> `,` <H>
+         all.asm:0812 $0600 <LD> <A> `,` <L>
+         all.asm:0813 $0601 <LD> <A> `,` <IXH>
+         all.asm:0814 $0603 <LD> <A> `,` <IXL>
+         all.asm:0815 $0605 <LD> <A> `,` <IYH>
+         all.asm:0816 $0607 <LD> <A> `,` <IYL>
+         all.asm:0818 $0609 LD_B_R@TRANSFER_LOAD_STORE:
+         all.asm:0819 $0609 <LD> <B> `,` <A>
+         all.asm:0820 $060A <LD> <B> `,` <B>
+         all.asm:0821 $060B <LD> <B> `,` <C>
+         all.asm:0822 $060C <LD> <B> `,` <D>
+         all.asm:0823 $060D <LD> <B> `,` <E>
+         all.asm:0824 $060E <LD> <B> `,` <H>
+         all.asm:0825 $060F <LD> <B> `,` <L>
+         all.asm:0826 $0610 <LD> <B> `,` <IXH>
+         all.asm:0827 $0612 <LD> <B> `,` <IXL>
+         all.asm:0828 $0614 <LD> <B> `,` <IYH>
+         all.asm:0829 $0616 <LD> <B> `,` <IYL>
+         all.asm:0831 $0618 LD_C_R@TRANSFER_LOAD_STORE:
+         all.asm:0832 $0618 <LD> <C> `,` <A>
+         all.asm:0833 $0619 <LD> <C> `,` <B>
+         all.asm:0834 $061A <LD> <C> `,` <C>
+         all.asm:0835 $061B <LD> <C> `,` <D>
+         all.asm:0836 $061C <LD> <C> `,` <E>
+         all.asm:0837 $061D <LD> <C> `,` <H>
+         all.asm:0838 $061E <LD> <C> `,` <L>
+         all.asm:0839 $061F <LD> <C> `,` <IXH>
+         all.asm:0840 $0621 <LD> <C> `,` <IXL>
+         all.asm:0841 $0623 <LD> <C> `,` <IYH>
+         all.asm:0842 $0625 <LD> <C> `,` <IYL>
+         all.asm:0844 $0627 LD_D_R@TRANSFER_LOAD_STORE:
+         all.asm:0845 $0627 <LD> <D> `,` <A>
+         all.asm:0846 $0628 <LD> <D> `,` <B>
+         all.asm:0847 $0629 <LD> <D> `,` <C>
+         all.asm:0848 $062A <LD> <D> `,` <D>
+         all.asm:0849 $062B <LD> <D> `,` <E>
+         all.asm:0850 $062C <LD> <D> `,` <H>
+         all.asm:0851 $062D <LD> <D> `,` <L>
+         all.asm:0852 $062E <LD> <D> `,` <IXH>
+         all.asm:0853 $0630 <LD> <D> `,` <IXL>
+         all.asm:0854 $0632 <LD> <D> `,` <IYH>
+         all.asm:0855 $0634 <LD> <D> `,` <IYL>
+         all.asm:0857 $0636 LD_E_R@TRANSFER_LOAD_STORE:
+         all.asm:0858 $0636 <LD> <E> `,` <A>
+         all.asm:0859 $0637 <LD> <E> `,` <B>
+         all.asm:0860 $0638 <LD> <E> `,` <C>
+         all.asm:0861 $0639 <LD> <E> `,` <D>
+         all.asm:0862 $063A <LD> <E> `,` <E>
+         all.asm:0863 $063B <LD> <E> `,` <H>
+         all.asm:0864 $063C <LD> <E> `,` <L>
+         all.asm:0865 $063D <LD> <E> `,` <IXH>
+         all.asm:0866 $063F <LD> <E> `,` <IXL>
+         all.asm:0867 $0641 <LD> <E> `,` <IYH>
+         all.asm:0868 $0643 <LD> <E> `,` <IYL>
+         all.asm:0870 $0645 LD_H_R@TRANSFER_LOAD_STORE:
+         all.asm:0871 $0645 <LD> <H> `,` <A>
+         all.asm:0872 $0646 <LD> <H> `,` <B>
+         all.asm:0873 $0647 <LD> <H> `,` <C>
+         all.asm:0874 $0648 <LD> <H> `,` <D>
+         all.asm:0875 $0649 <LD> <H> `,` <E>
+         all.asm:0876 $064A <LD> <H> `,` <H>
+         all.asm:0877 $064B <LD> <H> `,` <L>
+         all.asm:0883 $064C LD_L_R@TRANSFER_LOAD_STORE:
+         all.asm:0884 $064C <LD> <L> `,` <A>
+         all.asm:0885 $064D <LD> <L> `,` <B>
+         all.asm:0886 $064E <LD> <L> `,` <C>
+         all.asm:0887 $064F <LD> <L> `,` <D>
+         all.asm:0888 $0650 <LD> <L> `,` <E>
+         all.asm:0889 $0651 <LD> <L> `,` <H>
+         all.asm:0890 $0652 <LD> <L> `,` <L>
+         all.asm:0896 $0653 LD_IXH_R@TRANSFER_LOAD_STORE:
+         all.asm:0897 $0653 <LD> <IXH> `,` <A>
+         all.asm:0898 $0655 <LD> <IXH> `,` <B>
+         all.asm:0899 $0657 <LD> <IXH> `,` <C>
+         all.asm:0900 $0659 <LD> <IXH> `,` <D>
+         all.asm:0901 $065B <LD> <IXH> `,` <E>
+         all.asm:0904 $065D <LD> <IXH> `,` <IXH>
+         all.asm:0905 $065F <LD> <IXH> `,` <IXL>
+         all.asm:0909 $0661 LD_IXL_R@TRANSFER_LOAD_STORE:
+         all.asm:0910 $0661 <LD> <IXL> `,` <A>
+         all.asm:0911 $0663 <LD> <IXL> `,` <B>
+         all.asm:0912 $0665 <LD> <IXL> `,` <C>
+         all.asm:0913 $0667 <LD> <IXL> `,` <D>
+         all.asm:0914 $0669 <LD> <IXL> `,` <E>
+         all.asm:0917 $066B <LD> <IXL> `,` <IXH>
+         all.asm:0918 $066D <LD> <IXL> `,` <IXL>
+         all.asm:0922 $066F LD_IYH_R@TRANSFER_LOAD_STORE:
+         all.asm:0923 $066F <LD> <IYH> `,` <A>
+         all.asm:0924 $0671 <LD> <IYH> `,` <B>
+         all.asm:0925 $0673 <LD> <IYH> `,` <C>
+         all.asm:0926 $0675 <LD> <IYH> `,` <D>
+         all.asm:0927 $0677 <LD> <IYH> `,` <E>
+         all.asm:0932 $0679 <LD> <IYH> `,` <IYH>
+         all.asm:0933 $067B <LD> <IYH> `,` <IYL>
+         all.asm:0935 $067D LD_IYL_R@TRANSFER_LOAD_STORE:
+         all.asm:0936 $067D <LD> <IYL> `,` <A>
+         all.asm:0937 $067F <LD> <IYL> `,` <B>
+         all.asm:0938 $0681 <LD> <IYL> `,` <C>
+         all.asm:0939 $0683 <LD> <IYL> `,` <D>
+         all.asm:0940 $0685 <LD> <IYL> `,` <E>
+         all.asm:0945 $0687 <LD> <IYL> `,` <IYH>
+         all.asm:0946 $0689 <LD> <IYL> `,` <IYL>
+         all.asm:0948 $068B LD_RR_RR@TRANSFER_LOAD_STORE:
+         all.asm:0949 $068B <LD> <BC> `,` <BC>
+         all.asm:0950 $068D <LD> <BC> `,` <DE>
+         all.asm:0951 $068F <LD> <BC> `,` <HL>
+         all.asm:0952 $0691 <LD> <BC> `,` <IX>
+         all.asm:0953 $0695 <LD> <BC> `,` <IY>
+         all.asm:0955 $0699 <LD> <DE> `,` <BC>
+         all.asm:0956 $069B <LD> <DE> `,` <DE>
+         all.asm:0957 $069D <LD> <DE> `,` <HL>
+         all.asm:0958 $069F <LD> <DE> `,` <IX>
+         all.asm:0959 $06A3 <LD> <DE> `,` <IY>
+         all.asm:0961 $06A7 <LD> <HL> `,` <BC>
+         all.asm:0962 $06A9 <LD> <HL> `,` <DE>
+         all.asm:0963 $06AB <LD> <HL> `,` <HL>
+         all.asm:0964 $06AD <LD> <HL> `,` <IX>
+         all.asm:0965 $06B0 <LD> <HL> `,` <IY>
+         all.asm:0967 $06B3 <LD> <IX> `,` <BC>
+         all.asm:0968 $06B7 <LD> <IX> `,` <DE>
+         all.asm:0969 $06BB <LD> <IX> `,` <HL>
+         all.asm:0970 $06BE <LD> <IX> `,` <IX>
+         all.asm:0971 $06C2 <LD> <IX> `,` <IY>
+         all.asm:0973 $06C6 <LD> <IY> `,` <BC>
+         all.asm:0974 $06CA <LD> <IY> `,` <DE>
+         all.asm:0975 $06CE <LD> <IY> `,` <HL>
+         all.asm:0976 $06D1 <LD> <IY> `,` <IX>
+         all.asm:0977 $06D5 <LD> <IY> `,` <IY>
+         all.asm:0979 $06D9 LD_SP_RR@TRANSFER_LOAD_STORE:
+         all.asm:0980 $06D9 <LD> <SP> `,` <HL>
+         all.asm:0981 $06DA <LD> <SP> `,` <IX>
+         all.asm:0982 $06DC <LD> <SP> `,` <IY>
+         all.asm:0984 $06DE LOAD_REGISTER_FROM_HL@TRANSFER_LOAD_STORE:
+         all.asm:0985 $06DE <LD> <A> `,` _( <HL> )_
+         all.asm:0986 $06DF <LD> <B> `,` _( <HL> )_
+         all.asm:0987 $06E0 <LD> <C> `,` _( <HL> )_
+         all.asm:0988 $06E1 <LD> <D> `,` _( <HL> )_
+         all.asm:0989 $06E2 <LD> <E> `,` _( <HL> )_
+         all.asm:0990 $06E3 <LD> <H> `,` _( <HL> )_
+         all.asm:0991 $06E4 <LD> <L> `,` _( <HL> )_
+         all.asm:0992 $06E5 <LD> <IXH> `,` _( <HL> )_
+         all.asm:0993 $06EA <LD> <IXL> `,` _( <HL> )_
+         all.asm:0994 $06EF <LD> <IYH> `,` _( <HL> )_
+         all.asm:0995 $06F4 <LD> <IYL> `,` _( <HL> )_
+         all.asm:0997 $06F9 LOAD_PAIR_REGISTER_FROM_HL@TRANSFER_LOAD_STORE:
+         all.asm:0998 $06F9 <LD> <BC> `,` _( <HL> )_
+         all.asm:0999 $06FD <LD> <DE> `,` _( <HL> )_
+         all.asm:1000 $0701 <LD> <IX> `,` _( <HL> )_
+         all.asm:1001 $070B <LD> <IY> `,` _( <HL> )_
+         all.asm:1003 $0715 STORE_REGISTER_TO_HL@TRANSFER_LOAD_STORE:
+         all.asm:1004 $0715 <LD> _( <HL> )_ `,` <A>
+         all.asm:1005 $0716 <LD> _( <HL> )_ `,` <B>
+         all.asm:1006 $0717 <LD> _( <HL> )_ `,` <C>
+         all.asm:1007 $0718 <LD> _( <HL> )_ `,` <D>
+         all.asm:1008 $0719 <LD> _( <HL> )_ `,` <E>
+         all.asm:1009 $071A <LD> _( <HL> )_ `,` <H>
+         all.asm:1010 $071B <LD> _( <HL> )_ `,` <L>
+         all.asm:1011 $071C <LD> _( <HL> )_ `,` <IXH>
+         all.asm:1012 $0721 <LD> _( <HL> )_ `,` <IXL>
+         all.asm:1013 $0726 <LD> _( <HL> )_ `,` <IYH>
+         all.asm:1014 $072B <LD> _( <HL> )_ `,` <IYL>
+         all.asm:1016 $0730 STORE_REGISTER_TO_ADDR@TRANSFER_LOAD_STORE:
+         all.asm:1017 $0730 <LD> _( 0x1234 )_ `,` <A>
+         all.asm:1018 $0733 <LD> _( 0x1234 )_ `,` <BC>
+         all.asm:1019 $0737 <LD> _( 0x1234 )_ `,` <DE>
+         all.asm:1020 $073B <LD> _( 0x1234 )_ `,` <HL>
+         all.asm:1021 $073E <LD> _( 0x1234 )_ `,` <SP>
+         all.asm:1022 $0742 <LD> _( 0x1234 )_ `,` <IX>
+         all.asm:1023 $0746 <LD> _( 0x1234 )_ `,` <IY>
+         all.asm:1025 $074A STORE_IMMEDIATE_TO_ADDR@TRANSFER_LOAD_STORE:
+         all.asm:1026 $074A <LD> _( 0x1234 )_ `,` 0x56
+         all.asm:1028 $0751 LOAD_IMMEDIATE@TRANSFER_LOAD_STORE:
+         all.asm:1029 $0751 <LD> <A> `,` 0xFFFFFF80
+         all.asm:1030 $0753 <LD> <B> `,` 0xFFFFFFFF
+         all.asm:1031 $0755 <LD> <C> `,` 0x0
+         all.asm:1032 $0757 <LD> <D> `,` 0x1
+         all.asm:1033 $0759 <LD> <E> `,` 0x7F
+         all.asm:1034 $075B <LD> <H> `,` 0x80
+         all.asm:1035 $075D <LD> <L> `,` 0xFF
+         all.asm:1036 $075F <LD> <IXH> `,` 0x11
+         all.asm:1037 $0762 <LD> <IXL> `,` 0x22
+         all.asm:1038 $0765 <LD> <IYH> `,` 0x88
+         all.asm:1039 $0768 <LD> <IYL> `,` 0x99
+         all.asm:1040 $076B <LD> <BC> `,` 0xFFFF8000
+         all.asm:1041 $076E <LD> <DE> `,` 0xFFFFFFFF
+         all.asm:1042 $0771 <LD> <HL> `,` 0x1234
+         all.asm:1043 $0774 <LD> <IX> `,` 0x7FFF
+         all.asm:1044 $0778 <LD> <IY> `,` 0xFFFF
+         all.asm:1046 $077C LOAD_IMMEDIATE_LABEL@TRANSFER_LOAD_STORE:
+         all.asm:1047 $077C <LD> <BC> `,` `LOAD_IMMEDIATE_LABEL_END@TRANSFER_LOAD_STORE`
+         all.asm:1048 $077F <LD> <DE> `,` `TRANSFER_LOAD_STORE`
+         all.asm:1049 $0782 <LD> <HL> `,` `STACK@MAIN`
+         all.asm:1050 $0785 <LD> <IX> `,` `LOAD_IMMEDIATE@TRANSFER_LOAD_STORE`
+         all.asm:1051 $0789 <LD> <IY> `,` `MAIN`
+         all.asm:1053 $078D LOAD_IMMEDIATE_LABEL_END@TRANSFER_LOAD_STORE:
+         all.asm:1054 $078D <NOP>
+         all.asm:1056 $078E LOAD_IMMEDIATE_ADDRESS@TRANSFER_LOAD_STORE:
+         all.asm:1057 $078E <LD> <A> `,` _( 0x1234 )_
+         all.asm:1058 $0791 <LD> <BC> `,` _( 0x5678 )_
+         all.asm:1059 $0795 <LD> <DE> `,` _( 0x9ABC )_
+         all.asm:1060 $0799 <LD> <HL> `,` _( 0xDEF0 )_
+         all.asm:1061 $079C <LD> <SP> `,` _( 0x2525 )_
+         all.asm:1062 $07A0 <LD> <IX> `,` _( 0x831 )_
+         all.asm:1063 $07A4 <LD> <IY> `,` _( 0x8931 )_
+         all.asm:1065 $07A8 LOAD_IMMEDIATE_ADDRESS_LABEL@TRANSFER_LOAD_STORE:
+         all.asm:1066 $07A8 <LD> <A> `,` _( `OR@CALCULATION` )_
+         all.asm:1067 $07AB <LD> <BC> `,` _( `LOAD_IMMEDIATE_ADDRESS_LABEL@TRANSFER_LOAD_STORE` )_
+         all.asm:1068 $07AF <LD> <DE> `,` _( `LOAD_IMMEDIATE_ADDRESS_LABEL_END@TRANSFER_LOAD_STORE` )_
+         all.asm:1069 $07B3 <LD> <HL> `,` _( `LOAD_IMMEDIATE_LABEL_END@TRANSFER_LOAD_STORE` )_
+         all.asm:1070 $07B6 <LD> <SP> `,` _( `LOAD_IMMEDIATE_LABEL@TRANSFER_LOAD_STORE` )_
+         all.asm:1071 $07BA <LD> <IX> `,` _( `LOAD_PAIR_REGISTER_FROM_HL@TRANSFER_LOAD_STORE` )_
+         all.asm:1072 $07BE <LD> <IY> `,` _( `LD_SP_RR@TRANSFER_LOAD_STORE` )_
+         all.asm:1073 $07C2 LOAD_IMMEDIATE_ADDRESS_LABEL_END@TRANSFER_LOAD_STORE:
+         all.asm:1074 $07C2 <NOP>
+         all.asm:1076 $07C3 LOAD_STORE_BC_DE@TRANSFER_LOAD_STORE:
+         all.asm:1077 $07C3 <LD> <A> `,` _( <BC> )_
+         all.asm:1078 $07C4 <LD> <A> `,` _( <DE> )_
+         all.asm:1079 $07C5 <LD> _( <BC> )_ `,` <A>
+         all.asm:1080 $07C6 <LD> _( <DE> )_ `,` <A>
+         all.asm:1082 $07C7 LOAD_FROM_IX@TRANSFER_LOAD_STORE:
+         all.asm:1083 $07C7 <LD> <A> `,` _( <IX> `-` 0x80 )_
+         all.asm:1084 $07CA <LD> <B> `,` _( <IX> `-` 0x1 )_
+         all.asm:1085 $07CD <LD> <C> `,` _( <IX> )_
+         all.asm:1086 $07D0 <LD> <D> `,` _( <IX> `+` 0x0 )_
+         all.asm:1087 $07D3 <LD> <E> `,` _( <IX> `+` 0x1 )_
+         all.asm:1088 $07D6 <LD> <H> `,` _( <IX> `+` 0x7F )_
+         all.asm:1089 $07D9 <LD> <L> `,` _( <IX> `+` 0x40 )_
+         all.asm:1091 $07DC LOAD_FROM_IY@TRANSFER_LOAD_STORE:
+         all.asm:1092 $07DC <LD> <A> `,` _( <IY> `-` 0x80 )_
+         all.asm:1093 $07DF <LD> <B> `,` _( <IY> `-` 0x1 )_
+         all.asm:1094 $07E2 <LD> <C> `,` _( <IY> )_
+         all.asm:1095 $07E5 <LD> <D> `,` _( <IY> `+` 0x0 )_
+         all.asm:1096 $07E8 <LD> <E> `,` _( <IY> `+` 0x1 )_
+         all.asm:1097 $07EB <LD> <H> `,` _( <IY> `+` 0x7F )_
+         all.asm:1098 $07EE <LD> <L> `,` _( <IY> `+` 0x40 )_
+         all.asm:1100 $07F1 STORE_TO_IX@TRANSFER_LOAD_STORE:
+         all.asm:1101 $07F1 <LD> _( <IX> `-` 0x80 )_ `,` <A>
+         all.asm:1102 $07F4 <LD> _( <IX> `-` 0x1 )_ `,` <B>
+         all.asm:1103 $07F7 <LD> _( <IX> )_ `,` <C>
+         all.asm:1104 $07FA <LD> _( <IX> `+` 0x0 )_ `,` <D>
+         all.asm:1105 $07FD <LD> _( <IX> `+` 0x1 )_ `,` <E>
+         all.asm:1106 $0800 <LD> _( <IX> `+` 0x7F )_ `,` <H>
+         all.asm:1107 $0803 <LD> _( <IX> `+` 0x40 )_ `,` <L>
+         all.asm:1109 $0806 STORE_TO_IY@TRANSFER_LOAD_STORE:
+         all.asm:1110 $0806 <LD> _( <IY> `-` 0x80 )_ `,` <A>
+         all.asm:1111 $0809 <LD> _( <IY> `-` 0x1 )_ `,` <B>
+         all.asm:1112 $080C <LD> _( <IY> )_ `,` <C>
+         all.asm:1113 $080F <LD> _( <IY> `+` 0x0 )_ `,` <D>
+         all.asm:1114 $0812 <LD> _( <IY> `+` 0x1 )_ `,` <E>
+         all.asm:1115 $0815 <LD> _( <IY> `+` 0x7F )_ `,` <H>
+         all.asm:1116 $0818 <LD> _( <IY> `+` 0x40 )_ `,` <L>
+         all.asm:1118 $081B STORE_TO_IXY_IMMEDIATE@TRANSFER_LOAD_STORE:
+         all.asm:1119 $081B <LD> _( <IX> `-` 0x80 )_ `,` 0xFFFFFF80
+         all.asm:1120 $081F <LD> _( <IX> `-` 0x80 )_ `,` 0xFFFFFFFF
+         all.asm:1121 $0823 <LD> _( <IX> `-` 0x80 )_ `,` 0x0
+         all.asm:1122 $0827 <LD> _( <IY> `+` 0x7F )_ `,` 0x1
+         all.asm:1123 $082B <LD> _( <IY> `+` 0x7F )_ `,` 0x7F
+         all.asm:1124 $082F <LD> _( <IY> `+` 0x7F )_ `,` 0xFF
+         all.asm:1125 $0833 <LD> _( <IX> )_ `,` 0xFFFFFF80
+         all.asm:1126 $0837 <LD> _( <IX> )_ `,` 0xFFFFFFFF
+         all.asm:1127 $083B <LD> _( <IX> )_ `,` 0x0
+         all.asm:1128 $083F <LD> _( <IY> )_ `,` 0x1
+         all.asm:1129 $0843 <LD> _( <IY> )_ `,` 0x7F
+         all.asm:1130 $0847 <LD> _( <IY> )_ `,` 0xFF
+         all.asm:1132 $084B BRANCH:
+         all.asm:1134 $084B JP_IMMEDIATE@BRANCH:
+         all.asm:1135 $084B <JP> 0x0
+         all.asm:1136 $084E <JP> 0x1234
+         all.asm:1137 $0851 <JP> 0xFFFF
+         all.asm:1139 $0854 JP_LABEL@BRANCH:
+         all.asm:1140 $0854 <JP> `BRANCH`
+         all.asm:1141 $0857 <JP> `JP_LABEL@BRANCH`
+         all.asm:1142 $085A <JP> `STACK@MAIN`
+         all.asm:1144 $085D JR_IMMEDIATE@BRANCH:
+         all.asm:1145 $085D <JR> 0xFFFFFF80
+         all.asm:1146 $085F <JR> 0x7F
+         all.asm:1147 $0861 <JR> 0x40
+         all.asm:1149 $0863 JR_LABEL@BRANCH:
+         all.asm:1150 $0863 <JR> `JR_IMMEDIATE@BRANCH`
+         all.asm:1151 $0865 <JR> `BRANCH`
+         all.asm:1152 $0867 <JR> `STORE_TO_IX@TRANSFER_LOAD_STORE`
+         all.asm:1154 $0869 JP_COND_IMMEDIATE@BRANCH:
+         all.asm:1155 $0869 <JP> <Z> `,` 0x1234
+         all.asm:1156 $086C <JP> <NZ> `,` 0x1234
+         all.asm:1157 $086F <JP> <C> `,` 0x1234
+         all.asm:1158 $0872 <JP> <NC> `,` 0x1234
+         all.asm:1159 $0875 <JP> <PE> `,` 0x1234
+         all.asm:1160 $0878 <JP> <PO> `,` 0x1234
+         all.asm:1161 $087B <JP> <P> `,` 0x1234
+         all.asm:1162 $087E <JP> <M> `,` 0x1234
+         all.asm:1164 $0881 JP_COND_LABEL@BRANCH:
+         all.asm:1165 $0881 <JP> <Z> `,` `JP_COND_IMMEDIATE@BRANCH`
+         all.asm:1166 $0884 <JP> <NZ> `,` `JP_IMMEDIATE@BRANCH`
+         all.asm:1167 $0887 <JP> <C> `,` `JP_IMMEDIATE@BRANCH`
+         all.asm:1168 $088A <JP> <NC> `,` `MAIN`
+         all.asm:1169 $088D <JP> <PE> `,` `STACK@MAIN`
+         all.asm:1170 $0890 <JP> <PO> `,` `BRANCH`
+         all.asm:1171 $0893 <JP> <P> `,` `JR_LABEL@BRANCH`
+         all.asm:1172 $0896 <JP> <M> `,` `JR_IMMEDIATE@BRANCH`
+         all.asm:1174 $0899 JR_COND_IMMEDIATE@BRANCH:
+         all.asm:1175 $0899 <JR> <Z> `,` 0xFFFFFF80
+         all.asm:1176 $089B <JR> <NZ> `,` 0xFFFFFFFF
+         all.asm:1177 $089D <JR> <C> `,` 0x1
+         all.asm:1178 $089F <JR> <NC> `,` 0x7F
+         all.asm:1184 $08A1 JR_COND_LABEL@BRANCH:
+         all.asm:1185 $08A1 <JR> <Z> `,` `JP_COND_IMMEDIATE@BRANCH`
+         all.asm:1186 $08A3 <JR> <NZ> `,` `JP_IMMEDIATE@BRANCH`
+         all.asm:1187 $08A5 <JR> <C> `,` `JP_IMMEDIATE@BRANCH`
+         all.asm:1188 $08A7 <JR> <NC> `,` `JR_COND_LABEL@BRANCH`
+         all.asm:1194 $08A9 JP_COND_IMMEDIATE_ALIES@BRANCH:
+         all.asm:1195 $08A9 <JP> <Z> `,` 0x1234
+         all.asm:1196 $08AC <JP> <NZ> `,` 0x1234
+         all.asm:1197 $08AF <JP> <C> `,` 0x1234
+         all.asm:1198 $08B2 <JP> <NC> `,` 0x1234
+         all.asm:1199 $08B5 <JP> <PE> `,` 0x1234
+         all.asm:1200 $08B8 <JP> <PO> `,` 0x1234
+         all.asm:1201 $08BB <JP> <P> `,` 0x1234
+         all.asm:1202 $08BE <JP> <M> `,` 0x1234
+         all.asm:1203 $08C1 <JP> <M> `,` 0x1234
+         all.asm:1205 $08C4 BRANCH_DECB:
+         all.asm:1207 $08C4 DJNZ_IMMEDIATE@BRANCH_DECB:
+         all.asm:1208 $08C4 <DJNZ> 0xFFFFFF80
+         all.asm:1209 $08C6 <DJNZ> 0xFFFFFFFF
+         all.asm:1210 $08C8 <DJNZ> 0x1
+         all.asm:1211 $08CA <DJNZ> 0x7F
+         all.asm:1213 $08CC DJNZ_LABEL@BRANCH_DECB:
+         all.asm:1214 $08CC <DJNZ> `JR_IMMEDIATE@BRANCH`
+         all.asm:1215 $08CE <DJNZ> `DJNZ_IMMEDIATE@BRANCH_DECB`
+         all.asm:1216 $08D0 <DJNZ> `BRANCH_DECB`
+         all.asm:1218 $08D2 JUMP_WITH_REGISTER:
+         all.asm:1219 $08D2 <JP> _( <BC> )_
+         all.asm:1220 $08D4 <JP> _( <DE> )_
+         all.asm:1221 $08D6 <JP> _( <HL> )_
+         all.asm:1222 $08D7 <JP> _( <IX> )_
+         all.asm:1223 $08D9 <JP> _( <IY> )_
+         all.asm:1224 $08DB <JP> <BC>
+         all.asm:1225 $08DD <JP> <DE>
+         all.asm:1226 $08DF <JP> <HL>
+         all.asm:1227 $08E0 <JP> <IX>
+         all.asm:1228 $08E2 <JP> <IY>
+         all.asm:1230 $08E4 SUBROUTINE:
+         all.asm:1232 $08E4 CALL_IMMEDIATE@SUBROUTINE:
+         all.asm:1233 $08E4 <CALL> 0x0
+         all.asm:1234 $08E7 <CALL> 0x1234
+         all.asm:1235 $08EA <CALL> 0xFFFF
+         all.asm:1237 $08ED CALL_LABEL@SUBROUTINE:
+         all.asm:1238 $08ED <CALL> `CALL_IMMEDIATE@SUBROUTINE`
+         all.asm:1239 $08F0 <CALL> `MAIN`
+         all.asm:1240 $08F3 <CALL> `STACK@MAIN`
+         all.asm:1242 $08F6 CALL_CONDITION_IMMEDIATE@SUBROUTINE:
+         all.asm:1243 $08F6 <CALL> <NZ> `,` 0x1234
+         all.asm:1244 $08F9 <CALL> <Z> `,` 0x1234
+         all.asm:1245 $08FC <CALL> <NC> `,` 0x1234
+         all.asm:1246 $08FF <CALL> <C> `,` 0x1234
+         all.asm:1247 $0902 <CALL> <PO> `,` 0x1234
+         all.asm:1248 $0905 <CALL> <PE> `,` 0x1234
+         all.asm:1249 $0908 <CALL> <P> `,` 0x1234
+         all.asm:1250 $090B <CALL> <M> `,` 0x1234
+         all.asm:1252 $090E CALL_CONDITION_LABEL@SUBROUTINE:
+         all.asm:1253 $090E <CALL> <NZ> `,` `CALL_CONDITION_LABEL@SUBROUTINE`
+         all.asm:1254 $0911 <CALL> <Z> `,` `CALL_CONDITION_IMMEDIATE@SUBROUTINE`
+         all.asm:1255 $0914 <CALL> <NC> `,` `SUBROUTINE`
+         all.asm:1256 $0917 <CALL> <C> `,` `CALL_IMMEDIATE@SUBROUTINE`
+         all.asm:1257 $091A <CALL> <PO> `,` `STACK@MAIN`
+         all.asm:1258 $091D <CALL> <PE> `,` `MAIN`
+         all.asm:1259 $0920 <CALL> <P> `,` `STACK@MAIN`
+         all.asm:1260 $0923 <CALL> <M> `,` `INTERRUPT@MAIN`
+         all.asm:1262 $0926 RETURN@SUBROUTINE:
+         all.asm:1263 $0926 <RET>
+         all.asm:1264 $0927 <RETI>
+         all.asm:1265 $0929 <RETN>
+         all.asm:1267 $092B RETURN_WITH_CONDITION@SUBROUTINE:
+         all.asm:1268 $092B <RET> <NZ>
+         all.asm:1269 $092C <RET> <Z>
+         all.asm:1270 $092D <RET> <NC>
+         all.asm:1271 $092E <RET> <C>
+         all.asm:1272 $092F <RET> <PO>
+         all.asm:1273 $0930 <RET> <PE>
+         all.asm:1274 $0931 <RET> <P>
+         all.asm:1275 $0932 <RET> <M>
+         all.asm:1277 $0933 RST@SUBROUTINE:
+         all.asm:1278 $0933 <RST> 0x0
+         all.asm:1279 $0934 <RST> 0x0
+         all.asm:1280 $0935 <RST> 0x0
+         all.asm:1282 $0936 <RST> 0x1
+         all.asm:1283 $0937 <RST> 0x8
+         all.asm:1284 $0938 <RST> 0x8
+         all.asm:1286 $0939 <RST> 0x2
+         all.asm:1287 $093A <RST> 0x10
+         all.asm:1288 $093B <RST> 0x10
+         all.asm:1290 $093C <RST> 0x3
+         all.asm:1291 $093D <RST> 0x18
+         all.asm:1292 $093E <RST> 0x18
+         all.asm:1294 $093F <RST> 0x4
+         all.asm:1295 $0940 <RST> 0x20
+         all.asm:1296 $0941 <RST> 0x20
+         all.asm:1298 $0942 <RST> 0x5
+         all.asm:1299 $0943 <RST> 0x28
+         all.asm:1300 $0944 <RST> 0x28
+         all.asm:1302 $0945 <RST> 0x6
+         all.asm:1303 $0946 <RST> 0x30
+         all.asm:1304 $0947 <RST> 0x30
+         all.asm:1306 $0948 <RST> 0x7
+         all.asm:1307 $0949 <RST> 0x38
+         all.asm:1308 $094A <RST> 0x38
+         all.asm:1310 $094B DATA:
+         all.asm:1311 $094B TEXT8@DATA:
+         all.asm:1311 $094B <DB> `Hello` `,` `,` `,` `World!` `,` 0x0
+         all.asm:1312 $0958 NUM8@DATA:
+         all.asm:1312 $0958 <DB> 0xFFFFFF80 `,` 0xFFFFFFFF `,` 0x0 `,` 0x1 `,` 0x7F `,` 0xFF
+         all.asm:1313 $095E HEX8@DATA:
+         all.asm:1313 $095E <DEFB> 0x0 `,` 0x10 `,` 0x20 `,` 0x30 `,` 0x40 `,` 0x50 `,` 0x60 `,` 0x70 `,` 0x80 `,` 0x90 `,` 0xA0 `,` 0xB0 `,` 0xC0 `,` 0xD0 `,` 0xE0 `,` 0xF0
+         all.asm:1315 $096E TEXT16@DATA:
+         all.asm:1315 $096E <DW> `Hello` `,` `,` `,` `World!` `,` 0x0
+         all.asm:1316 $0988 NUM16@DATA:
+         all.asm:1316 $0988 <DW> 0xFFFF8000 `,` 0xFFFFFFFF `,` 0x0 `,` 0x1 `,` 0x7FFF `,` 0xFFFF
+         all.asm:1317 $0994 HEX16@DATA:
+         all.asm:1317 $0994 <DEFW> 0x123 `,` 0x1234 `,` 0x2345 `,` 0x3456 `,` 0x4567 `,` 0x5678 `,` 0x6789 `,` 0x789A `,` 0x89AB `,` 0x9ABC `,` 0xABCD
+         all.asm:1318 $09AA LABELS@DATA:
+         all.asm:1318 $09AA <DW> `MAIN` `,` `DATA` `,` `STACK@MAIN` `,` `TEXT8@DATA`
+         all.asm:1321 $09B2 VGSZERO:
+         all.asm:1323 $09B2 MULTIPLICATION_UNSIGNED@VGSZERO:
+         all.asm:1324 $09B2 <MUL> <B> `,` <C>
+         all.asm:1325 $09BD <MUL> <D> `,` <E>
+         all.asm:1326 $09C8 <MUL> <H> `,` <L>
+         all.asm:1327 $09D2 <MUL> <HL> `,` <A>
+         all.asm:1328 $09DB <MUL> <HL> `,` <B>
+         all.asm:1329 $09E4 <MUL> <HL> `,` <C>
+         all.asm:1330 $09EA <MUL> <HL> `,` <D>
+         all.asm:1331 $09F3 <MUL> <HL> `,` <E>
+         all.asm:1333 $09FC MULTIPLICATION_SIGNED@VGSZERO:
+         all.asm:1334 $09FC <MULS> <B> `,` <C>
+         all.asm:1335 $0A07 <MULS> <D> `,` <E>
+         all.asm:1336 $0A12 <MULS> <H> `,` <L>
+         all.asm:1337 $0A1C <MULS> <HL> `,` <A>
+         all.asm:1338 $0A25 <MULS> <HL> `,` <B>
+         all.asm:1339 $0A2E <MULS> <HL> `,` <C>
+         all.asm:1340 $0A34 <MULS> <HL> `,` <D>
+         all.asm:1341 $0A3D <MULS> <HL> `,` <E>
+         all.asm:1343 $0A46 DIVISION_UNSIGNED@VGSZERO:
+         all.asm:1344 $0A46 <DIV> <B> `,` <C>
+         all.asm:1345 $0A51 <DIV> <D> `,` <E>
+         all.asm:1346 $0A5C <DIV> <H> `,` <L>
+         all.asm:1347 $0A66 <DIV> <HL> `,` <A>
+         all.asm:1348 $0A6F <DIV> <HL> `,` <B>
+         all.asm:1349 $0A78 <DIV> <HL> `,` <C>
+         all.asm:1350 $0A7E <DIV> <HL> `,` <D>
+         all.asm:1351 $0A87 <DIV> <HL> `,` <E>
+         all.asm:1353 $0A90 DIVISION_SIGNED@VGSZERO:
+         all.asm:1354 $0A90 <DIVS> <B> `,` <C>
+         all.asm:1355 $0A9B <DIVS> <D> `,` <E>
+         all.asm:1356 $0AA6 <DIVS> <H> `,` <L>
+         all.asm:1357 $0AB0 <DIVS> <HL> `,` <A>
+         all.asm:1358 $0AB9 <DIVS> <HL> `,` <B>
+         all.asm:1359 $0AC2 <DIVS> <HL> `,` <C>
+         all.asm:1360 $0AC8 <DIVS> <HL> `,` <D>
+         all.asm:1361 $0AD1 <DIVS> <HL> `,` <E>
+         all.asm:1363 $0ADA MODULO@VGSZERO:
+         all.asm:1364 $0ADA <MOD> <B> `,` <C>
+         all.asm:1365 $0AE5 <MOD> <D> `,` <E>
+         all.asm:1366 $0AF0 <MOD> <H> `,` <L>
+         all.asm:1367 $0AFA <MOD> <HL> `,` <A>
+         all.asm:1368 $0B03 <MOD> <HL> `,` <B>
+         all.asm:1369 $0B0C <MOD> <HL> `,` <C>
+         all.asm:1370 $0B12 <MOD> <HL> `,` <D>
+         all.asm:1371 $0B1B <MOD> <HL> `,` <E>
+         all.asm:1373 $0B24 ATAN2@VGSZERO:
+         all.asm:1374 $0B24 <ATN2> <A> `,` <BC>
+         all.asm:1375 $0B2A <ATN2> <A> `,` <DE>
+         all.asm:1376 $0B30 <ATN2> <A> `,` <HL>
+         all.asm:1378 $0B32 SIN@VGSZERO:
+         all.asm:1379 $0B32 <SIN> <A> `,` <A>
+         all.asm:1380 $0B34 <SIN> <A> `,` <B>
+         all.asm:1381 $0B37 <SIN> <A> `,` <C>
+         all.asm:1382 $0B3A <SIN> <A> `,` <D>
+         all.asm:1383 $0B3D <SIN> <A> `,` <E>
+         all.asm:1384 $0B40 <SIN> <A> `,` <H>
+         all.asm:1385 $0B43 <SIN> <A> `,` <L>
+         all.asm:1387 $0B46 SIN_OMIT_A@VGSZERO:
+         all.asm:1388 $0B46 <SIN> <A>
+         all.asm:1389 $0B48 <SIN> <B>
+         all.asm:1390 $0B4B <SIN> <C>
+         all.asm:1391 $0B4E <SIN> <D>
+         all.asm:1392 $0B51 <SIN> <E>
+         all.asm:1393 $0B54 <SIN> <H>
+         all.asm:1394 $0B57 <SIN> <L>
+         all.asm:1396 $0B5A COS@VGSZERO:
+         all.asm:1397 $0B5A <COS> <A> `,` <A>
+         all.asm:1398 $0B5C <COS> <A> `,` <B>
+         all.asm:1399 $0B5F <COS> <A> `,` <C>
+         all.asm:1400 $0B62 <COS> <A> `,` <D>
+         all.asm:1401 $0B65 <COS> <A> `,` <E>
+         all.asm:1402 $0B68 <COS> <A> `,` <H>
+         all.asm:1403 $0B6B <COS> <A> `,` <L>
+         all.asm:1405 $0B6E COS_OMIT_A@VGSZERO:
+         all.asm:1406 $0B6E <COS> <A>
+         all.asm:1407 $0B70 <COS> <B>
+         all.asm:1408 $0B73 <COS> <C>
+         all.asm:1409 $0B76 <COS> <D>
+         all.asm:1410 $0B79 <COS> <E>
+         all.asm:1411 $0B7C <COS> <H>
+         all.asm:1412 $0B7F <COS> <L>
+         all.asm:1417 $0B82 ISSUE18:
+         all.asm:1418 $0B82 <LD> _( <HL> )_ `,` 0x1
+         all.asm:1419 $0B84 <LD> _( <BC> )_ `,` 0x2
+         all.asm:1420 $0B8A <LD> _( <DE> )_ `,` 0x3
+         all.asm:1423 $0B90 ISSUE20:
+         all.asm:1424 $0B90 <LD> <BC> `,` _( <HL> )_
+         all.asm:1425 $0B94 <LD> <DE> `,` _( <HL> )_
+         all.asm:1426 $0B98 <LD> <IX> `,` _( <HL> )_
+         all.asm:1427 $0BA2 <LD> <IY> `,` _( <HL> )_
+         all.asm:1429 $0BAC <LD> _( <HL> )_ `,` <BC>
+         all.asm:1430 $0BB0 <LD> _( <HL> )_ `,` <DE>
+         all.asm:1431 $0BB4 <LD> _( <HL> )_ `,` <IX>
+         all.asm:1432 $0BBE <LD> _( <HL> )_ `,` <IY>
+         all.asm:1434 $0BC8 <LD> <BC> `,` _( <IX> )_
+         all.asm:1435 $0BCE <LD> <DE> `,` _( <IX> )_
+         all.asm:1436 $0BD4 <LD> <HL> `,` _( <IX> )_
+         all.asm:1437 $0BDA <LD> <BC> `,` _( <IX> `+` 0x1 )_
+         all.asm:1438 $0BE0 <LD> <DE> `,` _( <IX> `+` 0x2 )_
+         all.asm:1439 $0BE6 <LD> <HL> `,` _( <IX> `+` 0x3 )_
+         all.asm:1441 $0BEC <LD> _( <IX> )_ `,` <BC>
+         all.asm:1442 $0BF2 <LD> _( <IX> )_ `,` <DE>
+         all.asm:1443 $0BF8 <LD> _( <IX> )_ `,` <HL>
+         all.asm:1444 $0BFE <LD> _( <IX> `+` 0x1 )_ `,` <BC>
+         all.asm:1445 $0C04 <LD> _( <IX> `+` 0x2 )_ `,` <DE>
+         all.asm:1446 $0C0A <LD> _( <IX> `+` 0x3 )_ `,` <HL>
+         all.asm:1448 $0C10 <LD> <BC> `,` _( <IY> )_
+         all.asm:1449 $0C16 <LD> <DE> `,` _( <IY> )_
+         all.asm:1450 $0C1C <LD> <HL> `,` _( <IY> )_
+         all.asm:1451 $0C22 <LD> <BC> `,` _( <IY> `+` 0x1 )_
+         all.asm:1452 $0C28 <LD> <DE> `,` _( <IY> `+` 0x2 )_
+         all.asm:1453 $0C2E <LD> <HL> `,` _( <IY> `+` 0x3 )_
+         all.asm:1455 $0C34 <LD> _( <IY> )_ `,` <BC>
+         all.asm:1456 $0C3A <LD> _( <IY> )_ `,` <DE>
+         all.asm:1457 $0C40 <LD> _( <IY> )_ `,` <HL>
+         all.asm:1458 $0C46 <LD> _( <IY> `+` 0x1 )_ `,` <BC>
+         all.asm:1459 $0C4C <LD> _( <IY> `+` 0x2 )_ `,` <DE>
+         all.asm:1460 $0C52 <LD> _( <IY> `+` 0x3 )_ `,` <HL>
+         all.asm:1463 $0C58 ISSUE23:
+         all.asm:1464 $0C58 <SLA> <A> `,` 0x3
+         all.asm:1465 $0C5E <SRL> _( <HL> )_ `,` 0x3
+         all.asm:1466 $0C64 <SRA> _( <IX> `+` 0x3 )_ `,` 0x3
+         all.asm:1469 $0C70 <ADD> <HL> `,` _( <IX> )_
+         all.asm:1470 $0C79 <ADD> <HL> `,` _( <IX> `+` 0x8 )_
+         all.asm:1471 $0C82 <ADD> <HL> `,` _( <IY> )_
+         all.asm:1472 $0C8B <ADD> <HL> `,` _( <IY> `+` 0x7E )_
+         all.asm:1475 $0C94 ISSUE31:
+         all.asm:1476 $0C94 <LD> _( 0xC000 )_ `,` <A>
+         all.asm:1477 $0C97 <LD> _( 0xC000 )_ `,` <B>
+         all.asm:1478 $0C9D <LD> _( 0xC000 )_ `,` <C>
+         all.asm:1479 $0CA3 <LD> _( 0xC000 )_ `,` <D>
+         all.asm:1480 $0CA9 <LD> _( 0xC000 )_ `,` <E>
+         all.asm:1481 $0CAF <LD> _( 0xC000 )_ `,` <H>
+         all.asm:1482 $0CB5 <LD> _( 0xC000 )_ `,` <L>
+         all.asm:1483 $0CBB <LD> _( 0xC000 )_ `,` <IXH>
+         all.asm:1484 $0CC2 <LD> _( 0xC000 )_ `,` <IXL>
+         all.asm:1485 $0CC9 <LD> _( 0xC000 )_ `,` <IYH>
+         all.asm:1486 $0CD0 <LD> _( 0xC000 )_ `,` <IYL>
+         all.asm:1487 $0CD7 <LD> <A> `,` _( 0xC000 )_
+         all.asm:1488 $0CDA <LD> <B> `,` _( 0xC000 )_
+         all.asm:1489 $0CE0 <LD> <C> `,` _( 0xC000 )_
+         all.asm:1490 $0CE6 <LD> <D> `,` _( 0xC000 )_
+         all.asm:1491 $0CEC <LD> <E> `,` _( 0xC000 )_
+         all.asm:1492 $0CF2 <LD> <H> `,` _( 0xC000 )_
+         all.asm:1493 $0CF8 <LD> <L> `,` _( 0xC000 )_
+         all.asm:1494 $0CFE <LD> <IXH> `,` _( 0xC000 )_
+         all.asm:1495 $0D05 <LD> <IXL> `,` _( 0xC000 )_
+         all.asm:1496 $0D0C <LD> <IYH> `,` _( 0xC000 )_
+         all.asm:1497 $0D13 <LD> <IYL> `,` _( 0xC000 )_
+diff all.bin all.exp
 ./assignment
 N: A = B        --->  `LD` `A` `,` `B`
 N: A += B       --->  `ADD` `A` `,` `B`
@@ -451,26 +1750,26 @@ N: macro_normal
 macro_normal.asm:0004 $0000 <LD> <BC> `,` 0x1
 macro_normal.asm:0005 $0003 <LD> <DE> `,` 0x5
 macro_normal.asm:0006 $0006 <LD> <HL> `,` 0xF
-../lib/vgszero.inc:0102 $0009 <PUSH> <BC>
-../lib/vgszero.inc:0103 $000A <PUSH> <DE>
-../lib/vgszero.inc:0104 $000B <PUSH> <HL>
-../lib/vgszero.inc:0105 $000C <LD> <BC> `,` 0xC000
-../lib/vgszero.inc:0106 $000F <LD> <DE> `,` `$0`
-../lib/vgszero.inc:0107 $0012 <LD> <HL> `,` 0x7
-../lib/vgszero.inc:0108 $0015 <OUT> _( 0xC3 )_ `,` <A>
-../lib/vgszero.inc:0109 $0017 <POP> <HL>
-../lib/vgszero.inc:0110 $0018 <POP> <DE>
-../lib/vgszero.inc:0111 $0019 <POP> <BC>
-../lib/vgszero.inc:0116 $001A <PUSH> <AF>
-../lib/vgszero.inc:0117 $001B <PUSH> <BC>
-../lib/vgszero.inc:0118 $001C <PUSH> <HL>
-../lib/vgszero.inc:0119 $001D <LD> <BC> `,` 0xC020
-../lib/vgszero.inc:0120 $0020 <LD> <A> `,` 0x20
-../lib/vgszero.inc:0121 $0022 <LD> <HL> `,` 0x400
-../lib/vgszero.inc:0122 $0025 <OUT> _( 0xC2 )_ `,` <A>
-../lib/vgszero.inc:0123 $0027 <POP> <HL>
-../lib/vgszero.inc:0124 $0028 <POP> <BC>
-../lib/vgszero.inc:0125 $0029 <POP> <AF>
+     vgszero.inc:0104 $0009 <PUSH> <BC>
+     vgszero.inc:0105 $000A <PUSH> <DE>
+     vgszero.inc:0106 $000B <PUSH> <HL>
+     vgszero.inc:0107 $000C <LD> <BC> `,` 0xC000
+     vgszero.inc:0108 $000F <LD> <DE> `,` `$0`
+     vgszero.inc:0109 $0012 <LD> <HL> `,` 0x7
+     vgszero.inc:0110 $0015 <OUT> _( 0xC3 )_ `,` <A>
+     vgszero.inc:0111 $0017 <POP> <HL>
+     vgszero.inc:0112 $0018 <POP> <DE>
+     vgszero.inc:0113 $0019 <POP> <BC>
+     vgszero.inc:0118 $001A <PUSH> <AF>
+     vgszero.inc:0119 $001B <PUSH> <BC>
+     vgszero.inc:0120 $001C <PUSH> <HL>
+     vgszero.inc:0121 $001D <LD> <BC> `,` 0xC020
+     vgszero.inc:0122 $0020 <LD> <A> `,` 0x20
+     vgszero.inc:0123 $0022 <LD> <HL> `,` 0x400
+     vgszero.inc:0124 $0025 <OUT> _( 0xC2 )_ `,` <A>
+     vgszero.inc:0125 $0027 <POP> <HL>
+     vgszero.inc:0126 $0028 <POP> <BC>
+     vgszero.inc:0127 $0029 <POP> <AF>
 macro_normal.asm:0017 $002A <CALL> `HIGE`
 macro_normal.asm:0004 $002D <LD> <BC> `,` 0x1
 macro_normal.asm:0005 $0030 <LD> <DE> `,` 0x2
@@ -2472,42 +3771,42 @@ diff m_far_p127.bin m_far_p127.exp
 E: Relative jump destination address is too far away: 128 ... OK
 N: m_sizeof
 ../vgsasm m_sizeof.asm -v
- ../lib/init.asm:0004 $0000 INIT:
- ../lib/init.asm:0005 $0000 <LD> <SP> `,` 0x0
- ../lib/init.asm:0006 $0003 <JP> `MAIN`
-../lib/stdio.asm:0040 $0006 PRINT_TEXT_SUB:
-../lib/stdio.asm:0043 $0006 <LD> <A> `,` <H>
-../lib/stdio.asm:0044 $0007 <LD> <H> `,` 0x0
-../lib/stdio.asm:0045 $0009 <LD> <C> `,` 0x20
-../lib/stdio.asm:0046 $000B <MUL> <HL> `,` <C>
-../lib/stdio.asm:0047 $0011 <ADD> <HL> `,` <A>
-../lib/stdio.asm:0048 $0016 <ADD> <HL> `,` 0x8800
-../lib/stdio.asm:0050 $001D LOOP@PRINT_TEXT_SUB:
-../lib/stdio.asm:0052 $001D <LD> <A> `,` _( <DE> )_
-../lib/stdio.asm:0053 $001E <AND> <A>
-../lib/stdio.asm:0054 $001F <RET> <Z>
-../lib/stdio.asm:0057 $0020 <LD> _( <HL> )_ `,` <A>
-../lib/stdio.asm:0060 $0021 <PUSH> <DE>
-../lib/stdio.asm:0061 $0022 <LD> <DE> `,` 0x400
-../lib/stdio.asm:0062 $0025 <ADD> <HL> `,` <DE>
-../lib/stdio.asm:0063 $0026 <LD> _( <HL> )_ `,` <B>
-../lib/stdio.asm:0064 $0027 <LD> <DE> `,` 0xFFFFFC01
-../lib/stdio.asm:0065 $002A <ADD> <HL> `,` <DE>
-../lib/stdio.asm:0066 $002B <POP> <DE>
-../lib/stdio.asm:0068 $002C <INC> <DE>
-../lib/stdio.asm:0069 $002D <JR> `LOOP@PRINT_TEXT_SUB`
-../lib/stdio.asm:0070 $002F <RET>
+        init.asm:0004 $0000 INIT:
+        init.asm:0005 $0000 <LD> <SP> `,` 0x0
+        init.asm:0006 $0003 <JP> `MAIN`
+       stdio.asm:0040 $0006 PRINT_TEXT_SUB:
+       stdio.asm:0043 $0006 <LD> <A> `,` <H>
+       stdio.asm:0044 $0007 <LD> <H> `,` 0x0
+       stdio.asm:0045 $0009 <LD> <C> `,` 0x20
+       stdio.asm:0046 $000B <MUL> <HL> `,` <C>
+       stdio.asm:0047 $0011 <ADD> <HL> `,` <A>
+       stdio.asm:0048 $0016 <ADD> <HL> `,` 0x8800
+       stdio.asm:0050 $001D LOOP@PRINT_TEXT_SUB:
+       stdio.asm:0052 $001D <LD> <A> `,` _( <DE> )_
+       stdio.asm:0053 $001E <AND> <A>
+       stdio.asm:0054 $001F <RET> <Z>
+       stdio.asm:0057 $0020 <LD> _( <HL> )_ `,` <A>
+       stdio.asm:0060 $0021 <PUSH> <DE>
+       stdio.asm:0061 $0022 <LD> <DE> `,` 0x400
+       stdio.asm:0062 $0025 <ADD> <HL> `,` <DE>
+       stdio.asm:0063 $0026 <LD> _( <HL> )_ `,` <B>
+       stdio.asm:0064 $0027 <LD> <DE> `,` 0xFFFFFC01
+       stdio.asm:0065 $002A <ADD> <HL> `,` <DE>
+       stdio.asm:0066 $002B <POP> <DE>
+       stdio.asm:0068 $002C <INC> <DE>
+       stdio.asm:0069 $002D <JR> `LOOP@PRINT_TEXT_SUB`
+       stdio.asm:0070 $002F <RET>
     m_sizeof.asm:0003 $0030 MAIN:
-../lib/vgszero.inc:0116 $0030 <PUSH> <AF>
-../lib/vgszero.inc:0117 $0031 <PUSH> <BC>
-../lib/vgszero.inc:0118 $0032 <PUSH> <HL>
-../lib/vgszero.inc:0119 $0033 <LD> <BC> `,` 0x8000
-../lib/vgszero.inc:0120 $0036 <LD> <A> `,` 0x0
-../lib/vgszero.inc:0121 $0038 <LD> <HL> `,` 0x400
-../lib/vgszero.inc:0122 $003B <OUT> _( 0xC2 )_ `,` <A>
-../lib/vgszero.inc:0123 $003D <POP> <HL>
-../lib/vgszero.inc:0124 $003E <POP> <BC>
-../lib/vgszero.inc:0125 $003F <POP> <AF>
+     vgszero.inc:0118 $0030 <PUSH> <AF>
+     vgszero.inc:0119 $0031 <PUSH> <BC>
+     vgszero.inc:0120 $0032 <PUSH> <HL>
+     vgszero.inc:0121 $0033 <LD> <BC> `,` 0x8000
+     vgszero.inc:0122 $0036 <LD> <A> `,` 0x0
+     vgszero.inc:0123 $0038 <LD> <HL> `,` 0x400
+     vgszero.inc:0124 $003B <OUT> _( 0xC2 )_ `,` <A>
+     vgszero.inc:0125 $003D <POP> <HL>
+     vgszero.inc:0126 $003E <POP> <BC>
+     vgszero.inc:0127 $003F <POP> <AF>
 diff m_sizeof.bin m_sizeof.exp
 E: Undefined field XXXX of strcture VRAM is specified in sizeof. ... OK
 E: Undefined structure YYYYY is specified in sizeof. ... OK
@@ -2638,6 +3937,6 @@ N: test60
       test60.asm:0023 $0024 <LD> <HL> `,` _( 0xC009 )_
       test60.asm:0024 $0027 <LD> <HL> `,` _( 0xC006 )_
 diff test60.bin test60.exp
-Normal case: 254
+Normal case: 255
 Error case: 393
-Total: 647
+Total: 648

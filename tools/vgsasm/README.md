@@ -542,7 +542,7 @@ VARS.posX = 123
 
 - Supports all Z80 instructions, including undocumented.
 - Some undocumented instructions are in a slightly special format.
-- All instructions are described in [./test/all.asm](./test/all.asm).
+- All instructions are described in [./tests/all.asm](./tests/all.asm).
 
 ## Support Alias Instructions
 

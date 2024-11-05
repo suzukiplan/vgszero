@@ -1,4 +1,4 @@
-#include "../lib/vgszero.inc"
+#include "vgszero.inc"
 
 #macro hoge(arg1, arg2, arg3) {
     LD BC, arg1

@@ -38,6 +38,7 @@ show_result_count:
 	@echo Total: `cat result.txt | grep -o -c "^[NE]:"`
 
 execute: ${TEST_MODULES}
+	${MAK} all_instructions
 	./assignment
 	./binary
 	./bracket_to_address
@@ -120,6 +121,9 @@ test55: check ../vgsasm
 	${MAK} normal_case src=m_sizeof
 	@./check "`../vgsasm m_sizeof_nofield.asm`" "Undefined field XXXX of strcture VRAM is specified in sizeof."
 	@./check "`../vgsasm m_sizeof_nostr.asm`" "Undefined structure YYYYY is specified in sizeof."
+
+all_instructions: check ../vgsasm
+	${MAK} normal_case src=all
 
 single: sizeof_replace
 	./sizeof_replace
