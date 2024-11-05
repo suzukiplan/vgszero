@@ -107,9 +107,8 @@ build:
 	cd lib/sdcc && make
 	cd src/sdl2 && make
 	cd src/rpizero2 && make
-	cd example && make
-	cd example/01_hello && make
-	cp -p example/01_hello/game.pkg image
+	cd example/01_hello-asm && make clean build
+	cp -p example/01_hello-asm/game.pkg image
 
 clean:
 	cd lib/sdcc && make clean
