@@ -1,6 +1,22 @@
-all: clean build
+all:
+	cd 01_hello-asm && make clean build
+	cd 02_global-asm && make clean build
+	cd 03_sound-asm && make clean build
+	cd 05_sprite256-asm && make clean build
+	cd 06_save-asm && make clean build
+	cd 07_palette-asm && make clean build
+	cd 08_map-scroll-asm && make clean build
+	cd 09_joypad-asm && make clean build
+	cd 10_chr720-asm && make clean build
+	cd 11_bigsprite-asm && make clean build
+	cd 12_angle-asm && make clean build
+	cd 13_perlin-asm && make clean build
+	cd 14_1024ptn-asm && make clean build
+	cd 15_nsf-asm && make clean build
+	cd 16_ptn-plus1-asm && make clean build
+	cd 17_clip-asm && make clean build
 
-build:
+cpp-build:
 	cd 01_hello && make build
 	cd 02_global && make build
 	cd 03_sound && make build
@@ -19,7 +35,7 @@ build:
 	cd 16_ptn-plus1 && make build
 	cd 17_clip && make build
 
-clean:
+cpp-clean:
 	cd 01_hello && make clean
 	cd 02_global && make clean
 	cd 03_sound && make clean
