@@ -314,7 +314,7 @@ void mnemonic_syntax_check(std::vector<LineData*>* lines)
     if (!tempAddrs.empty()) {
         for (auto addr : tempAddrs) {
             auto label = labelTable[addr->label];
-            auto pc = label->programCounter;
+            auto pc = label->programCounter + addr->diff;
             if (!addr->isRelative) {
                 addr->line->machine[addr->midx] = pc & 0x00FF;
                 addr->line->machine[addr->midx + 1] = (pc & 0xFF00) >> 8;

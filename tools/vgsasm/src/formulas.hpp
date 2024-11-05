@@ -94,6 +94,10 @@ std::string formulas_evaluate(std::vector<std::pair<TokenType, std::string>>* to
                     if (token->end() != prev && prev->first == TokenType::Operand) {
                         continue;
                     }
+                    // 直前のトークンが LabelJump の場合は無視
+                    if (token->end() != prev && prev->first == TokenType::LabelJump) {
+                        continue;
+                    }
                     return "Illegal expression with no specification of the number of operations to be performed.";
                 }
                 // 次のトークンが　Numeric 型かチェック

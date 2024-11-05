@@ -4015,6 +4015,46 @@ diff m_add_nsn.bin m_add_nsn.exp
 E: Numerical range incorrect: 65536 ... OK
 E: Numerical range incorrect: -129 ... OK
 E: Numerical range incorrect: 256 ... OK
-Normal case: 258
+N: m_ld_oslpn
+../vgsasm m_ld_oslpn.asm -v
+  m_ld_oslpn.asm:0001 $0000 <LD> <BC> `,` `LABEL` `+` 0x3
+  m_ld_oslpn.asm:0002 $0003 <LD> <DE> `,` `LABEL` `-` 0x3
+  m_ld_oslpn.asm:0004 $0006 LABEL:
+  m_ld_oslpn.asm:0005 $0006 <DB> 0x1 `,` 0x2 `,` 0x3 `,` 0x4 `,` 0x5 `,` 0x6 `,` 0x7 `,` 0x8
+diff m_ld_oslpn.bin m_ld_oslpn.exp
+N: m_ld_osalpna
+../vgsasm m_ld_osalpna.asm -v
+m_ld_osalpna.asm:0001 $0000 <LD> <A> `,` _( `LABEL` `+` 0x3 )_
+m_ld_osalpna.asm:0002 $0003 <LD> <HL> `,` _( `LABEL` `-` 0x3 )_
+m_ld_osalpna.asm:0004 $0006 LABEL:
+diff m_ld_osalpna.bin m_ld_osalpna.exp
+N: m_ld_alpnaso
+../vgsasm m_ld_alpnaso.asm -v
+m_ld_alpnaso.asm:0001 $0000 <LD> _( `LABEL` `+` 0x3 )_ `,` <A>
+m_ld_alpnaso.asm:0002 $0003 <LD> _( `LABEL` `-` 0x3 )_ `,` <B>
+m_ld_alpnaso.asm:0003 $0009 <LD> _( `LABEL` `+` 0x3 )_ `,` <C>
+m_ld_alpnaso.asm:0004 $000F <LD> _( `LABEL` `-` 0x3 )_ `,` <D>
+m_ld_alpnaso.asm:0005 $0015 <LD> _( `LABEL` `+` 0x3 )_ `,` <E>
+m_ld_alpnaso.asm:0006 $001B <LD> _( `LABEL` `-` 0x3 )_ `,` <H>
+m_ld_alpnaso.asm:0007 $0021 <LD> _( `LABEL` `+` 0x3 )_ `,` <L>
+m_ld_alpnaso.asm:0008 $0027 <LD> _( `LABEL` `-` 0x3 )_ `,` <IXH>
+m_ld_alpnaso.asm:0009 $002E <LD> _( `LABEL` `+` 0x3 )_ `,` <IXL>
+m_ld_alpnaso.asm:0010 $0035 <LD> _( `LABEL` `-` 0x3 )_ `,` <IYH>
+m_ld_alpnaso.asm:0011 $003C <LD> _( `LABEL` `+` 0x3 )_ `,` <IYL>
+m_ld_alpnaso.asm:0012 $0043 <LD> _( `LABEL` `-` 0x3 )_ `,` <BC>
+m_ld_alpnaso.asm:0013 $0047 <LD> _( `LABEL` `+` 0x3 )_ `,` <DE>
+m_ld_alpnaso.asm:0014 $004B <LD> _( `LABEL` `-` 0x3 )_ `,` <HL>
+m_ld_alpnaso.asm:0015 $004E <LD> _( `LABEL` `+` 0x3 )_ `,` <SP>
+m_ld_alpnaso.asm:0016 $0052 <LD> _( `LABEL` `-` 0x3 )_ `,` <IX>
+m_ld_alpnaso.asm:0017 $0056 <LD> _( `LABEL` `+` 0x3 )_ `,` <IY>
+m_ld_alpnaso.asm:0019 $005A LABEL:
+diff m_ld_alpnaso.bin m_ld_alpnaso.exp
+N: m_ld_alpnasn
+../vgsasm m_ld_alpnasn.asm -v
+m_ld_alpnasn.asm:0001 $0000 <LD> _( `LABEL` `+` 0x3 )_ `,` 0x64
+m_ld_alpnasn.asm:0002 $0007 <LD> _( `LABEL` `-` 0x3 )_ `,` 0x64
+m_ld_alpnasn.asm:0003 $000E LABEL:
+diff m_ld_alpnasn.bin m_ld_alpnasn.exp
+Normal case: 262
 Error case: 399
-Total: 657
+Total: 661

@@ -1,5 +1,9 @@
 # Change log
 
+## Version 1.1.0
+
+- Support `label+n` expression #62
+
 ## Version 1.0.0
 
 - All system tests finished #7
