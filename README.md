@@ -354,7 +354,7 @@ VGS-Zero のゲーム開発に必要なツールの情報を記します。
 | Name | Type | Information |
 |:-----|:-----|:------------|
 | [Ubuntu Desktop](https://jp.ubuntu.com/download)| OS | この表で示すツールは全て Ubuntu でも動作可能 |
-| [Visual Studio Code](https://code.visualstudio.com/download) | コーディング | プログラムやMMLの記述 |
+| [Visual Studio Code](https://code.visualstudio.com/download) | コーディング | プログラムやMMLの記述<br>`vgsasm` 用の [拡張機能](https://github.com/suzukiplan/vgsasm) が利用可能 |
 | [SDCC](https://sdcc.sourceforge.net/) | C コンパイラ | C 言語でゲームを開発する場合に利用を推奨<br>（だたし動作できるのはバージョン 4.1.0 のみ）|
 | [aseprite](https://aseprite.org/) | 画像エディタ | 256 色 Bitmap 形式に対応した画像エディタ |
 | [Tiled Map Editor](https://www.mapeditor.org) | マップエディタ | 利用例: [example/08_map-scroll](./example/08_map-scroll/) |

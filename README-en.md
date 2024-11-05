@@ -357,7 +357,7 @@ The table below lists recommended development tools:
 | Name | Type | Information |
 |:-----|:-----|:------------|
 | [Ubuntu Desktop](https://jp.ubuntu.com/download)| OS | All tools listed in this table can also run on Ubuntu |
-| [Visual Studio Code](https://code.visualstudio.com/download) | Coding | Writing programs, MMLs, scripts, etc. |
+| [Visual Studio Code](https://code.visualstudio.com/download) | Coding | Writing programs, MMLs, scripts, etc.<br>An [extension](https://github.com/suzukiplan/vgsasm) for `vgsasm` is available. |
 | [SDCC](https://sdcc.sourceforge.net/) | C compiler | Recommended for use when developing games in C<br>(but only version 4.1.0 can work) |
 | [aseprite](https://aseprite.org/) | Graphics Editor | Graphics editor supporting 256-color Bitmap format |
 | [Tiled Map Editor](https://www.mapeditor.org) | Map Editor | Examples of Use: [example/08_map-scroll](./example/08_map-scroll/) |
