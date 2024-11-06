@@ -109,7 +109,7 @@ struct VRAM $8000 {
     LD BC, bank_offset
     LD DE, bank_size
     LD HL, destination
-    OUT (IO.dma2mem), A
+    OUT (IO.rom2ram), A
     POP HL
     POP DE
     POP BC
