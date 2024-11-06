@@ -2,7 +2,7 @@
 
 ## [Version 1.15.0](https://github.com/suzukiplan/vgszero/releases/tag/1.15.0)
 
-- [vgsasm](https://github.com/suzukiplan/vgsasm) を version 1.1.0 に更新
+- [vgsasm](https://github.com/suzukiplan/vgsasm) を version 1.1.1 に更新
 - マクロ `dma2mem` を vgszero.inc へ追加 
 
 ## [Version 1.14.0](https://github.com/suzukiplan/vgszero/releases/tag/1.14.0)
