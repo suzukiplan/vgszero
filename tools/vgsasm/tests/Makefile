@@ -74,6 +74,10 @@ execute: ${TEST_MODULES}
 	${MAK} test60
 	${MAK} test61
 	${MAK} test62
+	${MAK} test64
+
+test64: check ../vgsasm
+	${MAK} normal_case src=test64
 
 test62: check ../vgsasm
 	${MAK} normal_case src=m_ld_oslpn

@@ -4055,6 +4055,10 @@ m_ld_alpnasn.asm:0001 $0000 <LD> _( `LABEL` `+` 0x3 )_ `,` 0x64
 m_ld_alpnasn.asm:0002 $0007 <LD> _( `LABEL` `-` 0x3 )_ `,` 0x64
 m_ld_alpnasn.asm:0003 $000E LABEL:
 diff m_ld_alpnasn.bin m_ld_alpnasn.exp
-Normal case: 262
+N: test64
+../vgsasm test64.asm -v
+      test64.asm:0009 $0000 <LD> _( 0xC003 )_ `,` 0x0
+diff test64.bin test64.exp
+Normal case: 263
 Error case: 399
-Total: 661
+Total: 662

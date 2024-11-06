@@ -1,5 +1,9 @@
 # Change log
 
+## Version 1.1.1
+
+- bugfix: Illegal error if structure field name matches any structure name #64
+
 ## Version 1.1.0
 
 - Support `label+n` expression #62

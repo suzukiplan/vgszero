@@ -226,6 +226,10 @@ void struct_parse_name(LineData* line)
         if (it->first == TokenType::Other) {
             // A.B (ドットあり 2 トークン) または A (ドットなし) ならチェック
             auto token = it->second;
+            if (token.c_str()[0] == '.') {
+                // 構造体ではない or 構造体配列のフィールド指定なので無視
+                continue;
+            }
             auto tokens = split_token(token, '.');
             if (1 == tokens.size()) {
                 // 1 トークンの場合構造体名であればスタートアドレスに置換
