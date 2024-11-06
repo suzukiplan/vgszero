@@ -470,7 +470,7 @@ class VGS0
                 addr += offset;
                 // printf("DMA: BANK=0x%02X, OFFSET=0x%04X, SIZE=%d, DIST=0x%04X\n", this->cpu->reg.pair.A, offset, size, dist);
                 for (int i = 0; i < size; i++) {
-                    if (addr < this->rom.size) {
+                    if (addr < (int)this->rom.size) {
                         this->writeMemory(dist++, this->rom.data[addr++]);
                     } else {
                         this->writeMemory(dist++, 0xFF);
