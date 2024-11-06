@@ -2,6 +2,7 @@
 
 ## [Version 1.15.0](https://github.com/suzukiplan/vgszero/releases/tag/1.15.0)
 
+- ROM to Memory DMA (OUT $C1) が想定通りに動作をしない不具合を修正
 - [vgsasm](https://github.com/suzukiplan/vgsasm) を version 1.1.1 に更新
 - マクロ `dma2mem` を vgszero.inc へ追加 
 
