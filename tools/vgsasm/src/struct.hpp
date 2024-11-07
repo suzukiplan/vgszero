@@ -194,6 +194,7 @@ bool struct_check_size()
             } else if (field->token[0].second == "DS.W") {
                 field->size = 2;
             } else {
+                field->typeName = field->token[0].second;
                 auto ss = structTable.find(field->token[0].second);
                 if (ss == structTable.end()) {
                     field->line->error = true;
@@ -220,123 +221,173 @@ bool struct_check_size()
     return needRetry;
 }
 
-void struct_parse_name(LineData* line)
+int struct_calc_array_size(LineData* line, std::vector<std::pair<TokenType, std::string>>* tokens)
 {
-    for (auto it = line->token.begin(); it != line->token.end(); it++) {
-        if (it->first == TokenType::Other) {
-            // A.B (ドットあり 2 トークン) または A (ドットなし) ならチェック
-            auto token = it->second;
-            if (token.c_str()[0] == '.') {
-                // 構造体ではない or 構造体配列のフィールド指定なので無視
-                continue;
-            }
-            auto tokens = split_token(token, '.');
-            if (1 == tokens.size()) {
-                // 1 トークンの場合構造体名であればスタートアドレスに置換
-                auto str = structTable.find(tokens[0]);
-                if (str != structTable.end()) {
-                    it->first = TokenType::StructName;
-                } else {
-                    // 構造体ではないので無視
-                }
-            } else if (2 == tokens.size()) {
-                // 2 トークンの場合構造体名のフィールド名に該当するアドレスに置換
-                auto str = structTable.find(tokens[0]);
-                if (str != structTable.end()) {
-                    bool found = false;
-                    for (auto field : str->second->fields) {
-                        if (field->name == tokens[1]) {
-                            it->first = TokenType::StructName;
-                            found = true;
-                            break;
-                        }
-                    }
-                    // フィールド名が見つからなかった場合はエラー
-                    if (!found) {
-                        line->error = true;
-                        line->errmsg = "Unknown field name in structure " + tokens[0] + ": " + tokens[1];
-                    }
-                } else {
-                    // 構造体ではないので無視
-                }
-            } else {
-                // 構造体ではないので無視
-            }
-        }
+    if (tokens->empty()) {
+        line->error = true;
+        line->errmsg = "Specify array for elements that are not structures.";
+        return -1;
     }
-}
-
-void struct_parse_array(LineData* line)
-{
-    for (auto it = line->token.begin(); it != line->token.end(); it++) {
-        if (it->first == TokenType::StructName) {
-            auto str = structTable.find(it->second);
-            if (++it == line->token.end()) {
-                return;
-            }
-            if (it->first != TokenType::ArrayBegin) {
-                continue;
-            }
-            (it - 1)->first = TokenType::Delete;
-            it->first = TokenType::Delete;
-            // ArrayBegin があれば同一行内に必ず ArrayEnd がある
-            if ((++it)->first != TokenType::Numeric) {
+    for (auto token = tokens->begin(); token != tokens->end(); token++) {
+        if (token->first == TokenType::Other) {
+            auto names = split_token(token->second, '.');
+            if (names.empty() || names[0].empty()) {
                 line->error = true;
-                line->errmsg = "Illegal array structure element: " + it->second;
-                return;
+                line->errmsg = "Unexpected symbol: " + token->second;
+                return -1;
             }
-            auto arrayNum = atoi(it->second.c_str());
-            it->first = TokenType::Delete;
-            if ((++it)->first != TokenType::ArrayEnd) {
+            // 最初の name が struct かチェック
+            auto str = structTable.find(names[0]);
+            if (str == structTable.end()) {
                 line->error = true;
-                line->errmsg = "Illegal array structure element: " + it->second;
-                return;
+                line->errmsg = "Unexpected symbol: " + token->second;
+                return -1;
             }
-            it->first = TokenType::Numeric;
-            if ((it + 1)->first == TokenType::Other && (it + 1)->second.c_str()[0] == '.') {
-                (it + 1)->first = TokenType::Delete;
-                auto fieldName = (it + 1)->second.substr(1);
+            auto result = str->second->start;
+            // 2番目以降をチェック
+            for (int i = 1; i < names.size(); i++) {
                 bool found = false;
-                int offset = 0;
                 for (auto field : str->second->fields) {
-                    if (field->name == fieldName) {
+                    if (field->name == names[i]) {
                         found = true;
-                        it->second = std::to_string(str->second->start + str->second->size * arrayNum + offset);
+                        if (!field->typeName.empty()) {
+                            str = structTable.find(field->typeName);
+                        }
                         break;
+                    } else {
+                        result += field->size * field->count;
                     }
-                    offset += field->size;
                 }
                 if (!found) {
                     line->error = true;
-                    line->errmsg = "Undefined field name `" + fieldName + "` in struct `" + str->second->name + "` was specified.";
+                    line->errmsg = "Undefined field: " + names[i];
+                    return -1;
+                }
+            }
+            token->first = TokenType::Numeric;
+            token->second = std::to_string(result);
+        }
+    }
+    auto errmsg = formulas_evaluate(tokens);
+    if (!errmsg.empty()) {
+        line->error = true;
+        line->errmsg = errmsg;
+        return -1;
+    }
+    if (tokens->size() != 1) {
+        line->error = true;
+        line->errmsg = "Illegal array structure elements:";
+        for (auto token : *tokens) {
+            line->errmsg = line->errmsg + " " + token.second;
+        }
+        return -1;
+    }
+    return atoi(tokens->at(0).second.c_str());
+}
+
+void struct_array_replace(std::vector<LineData*>* lines)
+{
+    for (auto it = lines->begin(); it != lines->end(); it++) {
+        auto line = *it;
+        for (auto token = line->token.begin(); token != line->token.end(); token++) {
+            if (token->first == TokenType::ArrayBegin) {
+                token->first = TokenType::Delete;
+                std::vector<std::pair<TokenType, std::string>> arrayTokens;
+                for (++token; token->first != TokenType::ArrayEnd; token++) {
+                    arrayTokens.push_back(std::make_pair(token->first, token->second));
+                    token->first = TokenType::Delete;
+                }
+                token->first = TokenType::Array;
+                int size = struct_calc_array_size(line, &arrayTokens);
+                if (size < 0) {
                     return;
                 }
-            } else {
-                it->second = std::to_string(str->second->start + str->second->size * arrayNum);
+                token->second = std::to_string(size);
             }
         }
     }
 }
 
-void struct_replace(LineData* line)
+void struct_replace(std::vector<LineData*>* lines)
 {
-    for (auto it = line->token.begin(); it != line->token.end(); it++) {
-        if (it->first == TokenType::StructName) {
-            auto token = it->second;
-            auto tokens = split_token(token, '.');
-            auto str = structTable.find(tokens[0]);
-            if (tokens.size() == 1) {
-                if (it + 1 != line->token.end() && (it + 1)->first == TokenType::ArrayBegin) {
-                    // skip replace array style
-                } else {
-                    it->first = TokenType::Numeric;
-                    it->second = std::to_string(str->second->start);
-                }
-            } else {
-                it->first = TokenType::Numeric;
-                for (auto field : str->second->fields) {
-                    if (field->name == tokens[1]) {
-                        it->second = std::to_string(field->address);
+    for (auto it = lines->begin(); it != lines->end(); it++) {
+        auto line = *it;
+        for (auto token = line->token.begin(); token != line->token.end(); token++) {
+            if (token->first == TokenType::Other) {
+                int result = 0;
+                bool needCheck = true;
+                bool isTop = true;
+                Struct* str = nullptr;
+                while (needCheck) {
+                    auto names = split_token(token->second, '.');
+                    if (names.empty() || names[0].empty()) {
+                        line->error = true;
+                        line->errmsg = "Unexpected symbol: " + token->second;
+                        return;
+                    }
+                    for (int i = 0; i < names.size(); i++) {
+                        if (str) {
+                            bool found = false;
+                            for (auto field : str->fields) {
+                                if (field->name == names[i]) {
+                                    found = true;
+                                    if (!field->typeName.empty()) {
+                                        str = structTable.find(field->typeName)->second;
+                                    }
+                                    break;
+                                } else {
+                                    result += field->size * field->count;
+                                }
+                            }
+                            if (!found) {
+                                line->error = true;
+                                line->errmsg = "Undefined field: " + names[i];
+                                return;
+                            }
+                        }
+                        if (isTop) {
+                            isTop = false;
+                            auto s = structTable.find(names[i]);
+                            if (s == structTable.end()) {
+                                line->error = true;
+                                line->errmsg = "Unexpected symbol: " + names[i];
+                                return;
+                            }
+                            str = s->second;
+                            result = str->start;
+                        }
+                    }
+                    // 次トークンが配列かチェック
+                    if (token + 1 != line->token.end() && (token + 1)->first == TokenType::Array) {
+                        if (!str) {
+                            line->error = true;
+                            line->errmsg = "Specify array for elements that are not structure: " + names[names.size() - 1];
+                            return;
+                        }
+                        token->first = TokenType::Delete;
+                        token++;
+                        result += atoi(token->second.c_str()) * str->size;
+                        // 次トークンがフィールドかチェック
+                        if (token + 1 != line->token.end() && (token + 1)->first == TokenType::Other) {
+                            token->first = TokenType::Delete;
+                            token++;
+                            // ドットで始まっていなければエラーにする
+                            if (token->second.c_str()[0] != '.') {
+                                line->error = true;
+                                line->errmsg = "Unexpected symbol: " + token->second;
+                                return;
+                            }
+                            // ドットを取り除く
+                            token->second = token->second.substr(1);
+                        } else {
+                            token->first = TokenType::Numeric;
+                            token->second = std::to_string(result);
+                            needCheck = false;
+                        }
+                    } else {
+                        token->first = TokenType::Numeric;
+                        token->second = std::to_string(result);
+                        needCheck = false;
                     }
                 }
             }

@@ -1767,12 +1767,12 @@ E: Invalid field VAR1 in structure HOGE ... OK
 E: Specify non-numeric number of field VAR1 in structure HOGE: AAA ... OK
 E: Unknown structure name FOO specified in field VAR1 of structure HOGE ... OK
 E: Detects circular references between structures ... OK
-E: Unknown field name in structure HOGE: VAR2 ... OK
-E: Illegal array structure element: ] ... OK
-E: Illegal array structure element: FOO ... OK
-E: Illegal array structure element: 2 ... OK
-E: Illegal LD instruction. ... OK
-E: Unknown field name in structure HOGE: VAR2 ... OK
+E: Undefined field: VAR2 ... OK
+E: Specify array for elements that are not structures. ... OK
+E: Unexpected symbol: FOO ... OK
+E: Illegal array structure elements: 1 2 ... OK
+E: Unexpected symbol: VAR1 ... OK
+E: Undefined field: VAR2 ... OK
 N: struct_normal
 ../vgsasm struct_normal.asm -v
 struct_normal.asm:0019 $0000 <LD> <HL> `,` 0xC000
@@ -4059,6 +4059,29 @@ N: test64
 ../vgsasm test64.asm -v
       test64.asm:0009 $0000 <LD> _( 0xC003 )_ `,` 0x0
 diff test64.bin test64.exp
-Normal case: 263
+N: nest
+../vgsasm nest.asm -v
+        nest.asm:0010 $0000 <LD> <HL> `,` 0xC000
+        nest.asm:0011 $0003 <LD> <HL> `,` 0xC001
+        nest.asm:0012 $0006 <LD> <HL> `,` 0xC000
+        nest.asm:0013 $0009 <LD> <HL> `,` 0xC001
+        nest.asm:0014 $000C <LD> <HL> `,` 0xC002
+        nest.asm:0015 $000F <LD> <HL> `,` 0xC003
+        nest.asm:0016 $0012 <LD> <HL> `,` 0xC004
+        nest.asm:0017 $0015 <LD> <HL> `,` 0xC005
+        nest.asm:0020 $0018 <LD> <HL> `,` 0xC006
+        nest.asm:0021 $001B <LD> <HL> `,` 0xC007
+        nest.asm:0022 $001E <LD> <HL> `,` 0xC006
+        nest.asm:0023 $0021 <LD> <HL> `,` 0xC007
+        nest.asm:0024 $0024 <LD> <HL> `,` 0xC008
+        nest.asm:0025 $0027 <LD> <HL> `,` 0xC009
+        nest.asm:0026 $002A <LD> <HL> `,` 0xC00A
+        nest.asm:0027 $002D <LD> <HL> `,` 0xC00B
+diff nest.bin nest.exp
+N: ld_str_macro
+../vgsasm ld_str_macro.asm -v
+ld_str_macro.asm:0006 $0000 <LD> <A> `,` _( 0xC000 )_
+diff ld_str_macro.bin ld_str_macro.exp
+Normal case: 265
 Error case: 399
-Total: 662
+Total: 664
