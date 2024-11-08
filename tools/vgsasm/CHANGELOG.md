@@ -1,5 +1,9 @@
 # Change log
 
+## Version 1.2.2
+
+`LD E, {IXH|IXL|IYH|IYL}` are incorrectly assembled to `LD C, {IXH|IXL|IYH|IYL}`.
+
 ## Version 1.2.1
 
 bugfix: do not extract the `struct` in the `macro` #68

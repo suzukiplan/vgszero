@@ -253,16 +253,16 @@
 #define ML_LD_E_A line->machine.push_back(0x5F)
 #define ML_LD_E_IXH                \
     line->machine.push_back(0xDD); \
-    line->machine.push_back(0x4C)
+    line->machine.push_back(0x5C)
 #define ML_LD_E_IXL                \
     line->machine.push_back(0xDD); \
-    line->machine.push_back(0x4D)
+    line->machine.push_back(0x5D)
 #define ML_LD_E_IYH                \
     line->machine.push_back(0xFD); \
-    line->machine.push_back(0x4C)
+    line->machine.push_back(0x5C)
 #define ML_LD_E_IYL                \
     line->machine.push_back(0xFD); \
-    line->machine.push_back(0x4D)
+    line->machine.push_back(0x5D)
 
 #define ML_LD_H_B line->machine.push_back(0x60)
 #define ML_LD_H_C line->machine.push_back(0x61)
