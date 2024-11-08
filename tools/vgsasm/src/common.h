@@ -41,6 +41,7 @@ enum class TokenType {
     Modulo,          // % 剰余残
     ArrayBegin,      // [ 配列起点
     ArrayEnd,        // ] 配列終点
+    Array,           // サイズ計算済みの []
     BracketBegin,    // ( カッコ
     BracketEnd,      // ) カッコ
     AddressBegin,    // ( カッコ（※特定箇所のみ）
@@ -100,6 +101,7 @@ class StructField
   public:
     LineData* line;
     std::string name;
+    std::string typeName;
     std::vector<std::pair<TokenType, std::string>> token;
     int size;
     int count;
@@ -109,6 +111,7 @@ class StructField
     {
         this->line = line;
         this->name = name;
+        this->typeName = "";
         this->size = 0;
         this->count = 0;
         this->address = 0;

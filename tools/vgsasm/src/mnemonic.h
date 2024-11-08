@@ -14,12 +14,14 @@ class TempAddr
     std::string label;
     int midx;
     bool isRelative;
-    TempAddr(LineData* line, std::string label, int midx, bool isRelative)
+    int diff;
+    TempAddr(LineData* line, std::string label, int midx, bool isRelative, int diff = 0)
     {
         this->line = line;
         this->label = label;
         this->midx = midx;
         this->isRelative = isRelative;
+        this->diff = diff;
     }
 };
 

@@ -469,38 +469,11 @@ class VGS0
                 addr *= 0x2000;
                 addr += offset;
                 // printf("DMA: BANK=0x%02X, OFFSET=0x%04X, SIZE=%d, DIST=0x%04X\n", this->cpu->reg.pair.A, offset, size, dist);
-                if (0xC000 <= dist) {
-                    // copy to RAM
-                    dist &= 0x3FFF;
-                    if (0x4000 < dist + size) {
-                        size = 0x4000 - dist;
-                    }
-                    if (addr + 0x2000 <= (int)this->rom.size) {
-                        memcpy(&this->ctx.ram[dist], &this->rom.data[addr], size);
+                for (int i = 0; i < size; i++) {
+                    if (addr < (int)this->rom.size) {
+                        this->writeMemory(dist++, this->rom.data[addr++]);
                     } else {
-                        memset(&this->ctx.ram[dist], 0xFF, size);
-                    }
-                } else if (0xA000 <= dist) {
-                    // copy to VRAM1
-                    dist &= 0x1FFF;
-                    if (0x2000 < dist + size) {
-                        size = 0x2000 - dist;
-                    }
-                    if (addr + 0x2000 <= (int)this->rom.size) {
-                        memcpy(&this->vdp->ctx.ram1[this->vdp->ctx.bank][dist], &this->rom.data[addr], size);
-                    } else {
-                        memset(&this->vdp->ctx.ram1[this->vdp->ctx.bank][dist], 0xFF, size);
-                    }
-                } else if (0x8000 <= dist) {
-                    // copy to VRAM0
-                    dist &= 0x1FFF;
-                    if (0x2000 < dist + size) {
-                        size = 0x2000 - dist;
-                    }
-                    if (addr + 0x2000 <= (int)this->rom.size) {
-                        memcpy(&this->vdp->ctx.ram0[dist], &this->rom.data[addr], size);
-                    } else {
-                        memset(&this->vdp->ctx.ram0[dist], 0xFF, size);
+                        this->writeMemory(dist++, 0xFF);
                     }
                 }
                 break;

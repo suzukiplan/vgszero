@@ -827,9 +827,9 @@
                     ld        d,h                           ;[069d] 54
                     ld        e,l                           ;[069e] 5d
                     ld        d,ixh                         ;[069f] dd 54
-                    ld        c,ixl                         ;[06a1] dd 4d
+                    ld        e,ixl                         ;[06a1] dd 5d
                     ld        d,iyh                         ;[06a3] fd 54
-                    ld        c,iyl                         ;[06a5] fd 4d
+                    ld        e,iyl                         ;[06a5] fd 5d
                     ld        h,b                           ;[06a7] 60
                     ld        l,c                           ;[06a8] 69
                     ld        h,d                           ;[06a9] 62

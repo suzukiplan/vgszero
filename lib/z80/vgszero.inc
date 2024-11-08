@@ -99,6 +99,23 @@ struct VRAM $8000 {
     POP AF
 }
 
+#macro dma2mem(destination, bank_number, bank_offset, bank_size)
+{
+    PUSH AF
+    PUSH BC
+    PUSH DE
+    PUSH HL
+    LD A, bank_number
+    LD BC, bank_offset
+    LD DE, bank_size
+    LD HL, destination
+    OUT (IO.rom2ram), A
+    POP HL
+    POP DE
+    POP BC
+    POP AF
+}
+
 #macro memcpy(destination, source, size)
 {
     PUSH BC

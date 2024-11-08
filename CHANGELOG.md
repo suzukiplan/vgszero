@@ -1,5 +1,14 @@
 # Change Log
 
+## [Version 1.15.0](https://github.com/suzukiplan/vgszero/releases/tag/1.15.0)
+
+- [vgsasm](https://github.com/suzukiplan/vgsasm) を version 1.0.0 から 1.2.2 に更新
+  - `LD E, {IXH|IXL|IYH|IYL}` are incorrectly assembled to `LD C, {IXH|IXL|IYH|IYL}`.
+  - Support `label+n` expression.
+  - Support nested struct access.
+- ROM to Memory DMA (OUT $C1) が想定通りに動作をしない不具合を修正
+- マクロ `dma2mem` を vgszero.inc へ追加 
+
 ## [Version 1.14.0](https://github.com/suzukiplan/vgszero/releases/tag/1.14.0)
 
 - ツールチェインに [vgsasm](https://github.com/suzukiplan/vgsasm) を追加

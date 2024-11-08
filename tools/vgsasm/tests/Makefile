@@ -73,6 +73,25 @@ execute: ${TEST_MODULES}
 	${MAK} test59
 	${MAK} test60
 	${MAK} test61
+	${MAK} test62
+	${MAK} test64
+	${MAK} test66
+	${MAK} test68
+
+test68: check ../vgsasm
+	${MAK} normal_case src=ld_str_macro
+
+test66: check ../vgsasm
+	${MAK} normal_case src=nest
+
+test64: check ../vgsasm
+	${MAK} normal_case src=test64
+
+test62: check ../vgsasm
+	${MAK} normal_case src=m_ld_oslpn
+	${MAK} normal_case src=m_ld_osalpna
+	${MAK} normal_case src=m_ld_alpnaso
+	${MAK} normal_case src=m_ld_alpnasn
 
 test61: check ../vgsasm
 	${MAK} normal_case src=m_add_anasn
@@ -695,12 +714,12 @@ struct_tests: check ../vgsasm
 	@./check "`../vgsasm struct_field_nnum.asm`" "Specify non-numeric number of field VAR1 in structure HOGE: AAA"
 	@./check "`../vgsasm struct_field_nstr.asm`" "Unknown structure name FOO specified in field VAR1 of structure HOGE"
 	@./check "`../vgsasm struct_field_cir.asm`" "Detects circular references between structures"
-	@./check "`../vgsasm struct_field_uk.asm`" "Unknown field name in structure HOGE: VAR2"
-	@./check "`../vgsasm struct_array_empty.asm`" "Illegal array structure element: ]"
-	@./check "`../vgsasm struct_array_ill.asm`" "Illegal array structure element: FOO"
-	@./check "`../vgsasm struct_array_mul.asm`" "Illegal array structure element: 2"
-	@./check "`../vgsasm struct_array_nd.asm`" "Illegal LD instruction."
-	@./check "`../vgsasm struct_field_nf.asm`" "Unknown field name in structure HOGE: VAR2"
+	@./check "`../vgsasm struct_field_uk.asm`" "Undefined field: VAR2"
+	@./check "`../vgsasm struct_array_empty.asm`" "Specify array for elements that are not structures."
+	@./check "`../vgsasm struct_array_ill.asm`" "Unexpected symbol: FOO"
+	@./check "`../vgsasm struct_array_mul.asm`" "Illegal array structure elements: 1 2"
+	@./check "`../vgsasm struct_array_nd.asm`" "Unexpected symbol: VAR1"
+	@./check "`../vgsasm struct_field_nf.asm`" "Undefined field: VAR2"
 	${MAK} normal_case src=struct_normal
 
 normal_case:

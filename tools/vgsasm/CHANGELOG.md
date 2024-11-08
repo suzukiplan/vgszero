@@ -1,5 +1,25 @@
 # Change log
 
+## Version 1.2.2
+
+`LD E, {IXH|IXL|IYH|IYL}` are incorrectly assembled to `LD C, {IXH|IXL|IYH|IYL}`.
+
+## Version 1.2.1
+
+bugfix: do not extract the `struct` in the `macro` #68
+
+## Version 1.2.0
+
+Support nested struct access #66
+
+## Version 1.1.1
+
+bugfix: Illegal error if structure field name matches any structure name #64
+
+## Version 1.1.0
+
+Support `label+n` expression #62
+
 ## Version 1.0.0
 
 - All system tests finished #7

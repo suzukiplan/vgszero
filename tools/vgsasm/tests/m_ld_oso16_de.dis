@@ -5,6 +5,6 @@
                     ld        d,h                           ;[0004] 54
                     ld        e,l                           ;[0005] 5d
                     ld        d,ixh                         ;[0006] dd 54
-                    ld        c,ixl                         ;[0008] dd 4d
+                    ld        e,ixl                         ;[0008] dd 5d
                     ld        d,iyh                         ;[000a] fd 54
-                    ld        c,iyl                         ;[000c] fd 4d
+                    ld        e,iyl                         ;[000c] fd 5d
