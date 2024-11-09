@@ -78,6 +78,10 @@ execute: ${TEST_MODULES}
 	${MAK} test66
 	${MAK} test68
 	${MAK} test72
+	${MAK} test74
+
+test74: check ../vgsasm
+	${MAK} normal_case src=offset_cnt
 
 test72: check ../vgsasm
 	${MAK} normal_case src=offset_nest

@@ -1,5 +1,9 @@
 # Change log
 
+## Version 1.2.4
+
+`offset` calculation results for multi-count fields are not as expected. #74
+
 ## Version 1.2.3
 
 Cannot specify nested structures with the offset operator #72

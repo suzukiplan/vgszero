@@ -69,7 +69,7 @@ void offset_replace(LineData* line)
                         field = f;
                         break;
                     } else {
-                        offset += f->size;
+                        offset += f->size * f->count;
                     }
                 }
                 if (!field) {

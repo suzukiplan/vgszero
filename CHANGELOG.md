@@ -2,8 +2,9 @@
 
 ## [Version 1.15.1](https://github.com/suzukiplan/vgszero/releases/tag/1.15.1)
 
-- [vgsasm](https://github.com/suzukiplan/vgsasm) を 1.2.2 から 1.2.3 に更新
+- [vgsasm](https://github.com/suzukiplan/vgsasm) を 1.2.2 から 1.2.4 に更新
   - Cannot specify nested structures with the `offset` operator.
+  - `offset` calculation results for multi-count fields are not as expected.
 
 ## [Version 1.15.0](https://github.com/suzukiplan/vgszero/releases/tag/1.15.0)
 
