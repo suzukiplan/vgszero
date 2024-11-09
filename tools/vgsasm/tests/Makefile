@@ -77,6 +77,11 @@ execute: ${TEST_MODULES}
 	${MAK} test64
 	${MAK} test66
 	${MAK} test68
+	${MAK} test72
+
+test72: check ../vgsasm
+	${MAK} normal_case src=offset_nest
+	@./check "`../vgsasm offset_nest_nst.asm`" "Non-structured field \`VAR1\` with period."
 
 test68: check ../vgsasm
 	${MAK} normal_case src=ld_str_macro
