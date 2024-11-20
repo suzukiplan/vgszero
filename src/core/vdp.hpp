@@ -42,6 +42,10 @@ class VDP
     inline int getSpriteDPM() { return ((int)this->ctx.ram0[0x1F0A]) * 0x2000 % this->romSize; }
     inline bool isBG1024() { return this->ctx.ram0[0x1F0B] & 0x01; }
     inline bool isFG1024() { return this->ctx.ram0[0x1F0B] & 0x02; }
+    inline bool isInterlaceBV() { return this->ctx.ram0[0x1F0C] & 0x01; }
+    inline bool isInterlaceBH() { return this->ctx.ram0[0x1F0C] & 0x02; }
+    inline bool isInterlaceFV() { return this->ctx.ram0[0x1F0C] & 0x04; }
+    inline bool isInterlaceFH() { return this->ctx.ram0[0x1F0C] & 0x08; }
     inline unsigned char getRegisterIRQ() { return this->ctx.ram0[0x1F06]; }
     inline unsigned char* getOamAddr() { return &this->ctx.ram0[0x1000]; }
     inline bool isAttrVisible(unsigned char attr) { return attr & 0x80; }
@@ -193,8 +197,14 @@ class VDP
 
     inline void renderBG(int scanline)
     {
-        int y = scanline + this->getRegisterBgScrollY();
         unsigned short* display = &this->display[scanline * 240];
+        if (this->isInterlaceBV() || this->isInterlaceBH()) {
+            memset(display, 0, 240 * 2);
+        }
+        if (this->isInterlaceBH() && (scanline & 1)) {
+            return;
+        }
+        int y = scanline + this->getRegisterBgScrollY();
         int offset = (((y + 8) / 8) & 0x1F) * 32;
         unsigned char* nametbl = this->getBgNameTableAddr() + offset;
         unsigned char* attrtbl = this->getBgAttrTableAddr() + offset;
@@ -213,7 +223,8 @@ class VDP
             ptntbl1 = ptntbl0;
         }
         const unsigned char* ptntbl[2] = {ptntbl0, ptntbl1};
-        for (int x = this->getRegisterBgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
+        int add = this->isInterlaceBV() ? 2 : 1;
+        for (int x = this->getRegisterBgScrollX() + 8, xx = 0; xx < 240; x += add, xx += add, display += add) {
             offset = (x >> 3) & 0x1F;
             unsigned char ptn = nametbl[offset];
             unsigned char attr = attrtbl[offset];
@@ -234,6 +245,9 @@ class VDP
 
     inline void renderFG(int scanline)
     {
+        if (this->isInterlaceFH() && (scanline & 1)) {
+            return;
+        }
         int y = scanline + this->getRegisterFgScrollY();
         unsigned short* display = &this->display[scanline * 240];
         int offset = (((y + 8) / 8) & 0x1F) * 32;
@@ -254,7 +268,8 @@ class VDP
             ptntbl1 = ptntbl0;
         }
         const unsigned char* ptntbl[2] = {ptntbl0, ptntbl1};
-        for (int x = this->getRegisterFgScrollX() + 8, xx = 0; xx < 240; x++, xx++, display++) {
+        int add = this->isInterlaceFV() ? 2 : 1;
+        for (int x = this->getRegisterFgScrollX() + 8, xx = 0; xx < 240; x += add, xx += add, display += add) {
             offset = (x >> 3) & 0x1F;
             unsigned char ptn = nametbl[offset];
             unsigned char attr = attrtbl[offset];

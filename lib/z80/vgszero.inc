@@ -80,6 +80,7 @@ struct VRAM $8000 {
     fgDPM       ds.b    1           ; R9: FG Direct Pattern Maaping
     spDPM       ds.b    1           ; R10: Sprite Direct Pattern Maaping
     mode1024    ds.b    1           ; R11: 1024 pattern mode
+    interlace   ds.b    1           ; R12: Interlace 
 }
 
 #macro wait_vblank()
