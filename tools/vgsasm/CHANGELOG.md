@@ -1,5 +1,13 @@
 # Change log
 
+## Version 1.2.4
+
+`offset` calculation results for multi-count fields are not as expected. #74
+
+## Version 1.2.3
+
+Cannot specify nested structures with the offset operator #72
+
 ## Version 1.2.2
 
 `LD E, {IXH|IXL|IYH|IYL}` are incorrectly assembled to `LD C, {IXH|IXL|IYH|IYL}`.

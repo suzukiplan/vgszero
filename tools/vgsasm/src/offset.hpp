@@ -47,38 +47,47 @@ void offset_replace(LineData* line)
 {
     for (auto it = line->token.begin(); it != line->token.end(); it++) {
         if (it->first == TokenType::Offset) {
-            auto dot = it->second.find(".");
-            if (-1 == dot) {
+            auto tokens = split_token(it->second, '.');
+            if (tokens.size() < 2) {
                 // NOTE: this error case will not pass
                 line->error = true;
                 line->errmsg = "No structure field name specified in `offset`: " + it->second;
                 return;
             }
-            auto name = it->second.substr(0, dot);
-            auto field = it->second.substr(dot + 1);
-            auto s = structTable.find(name);
+            auto s = structTable.find(tokens[0]);
             if (s == structTable.end()) {
                 line->error = true;
-                line->errmsg = "Undefined structure " + name + " is specified in offset.";
+                line->errmsg = "Undefined structure " + tokens[0] + " is specified in offset.";
                 return;
             }
+            Struct* str = s->second;
             int offset = 0;
-            bool found = false;
-            for (auto f : s->second->fields) {
-                if (f->name == field) {
-                    it->first = TokenType::Numeric;
-                    it->second = std::to_string(offset);
-                    found = true;
-                    break;
-                } else {
-                    offset += f->size;
+            for (auto token = tokens.begin() + 1; token != tokens.end(); token++) {
+                StructField* field = nullptr;
+                for (auto f : str->fields) {
+                    if (f->name == *token) {
+                        field = f;
+                        break;
+                    } else {
+                        offset += f->size * f->count;
+                    }
+                }
+                if (!field) {
+                    line->error = true;
+                    line->errmsg = "Field name `" + (*token) + "` is not defined in structure `" + (str->name) + "`.";
+                    return;
+                }
+                if (token + 1 != tokens.end()) {
+                    if (field->typeName.empty()) {
+                        line->error = true;
+                        line->errmsg = "Non-structured field `" + (*token) + "` with period.";
+                        return;
+                    }
+                    str = structTable.find(field->typeName)->second;
                 }
             }
-            if (!found) {
-                line->error = true;
-                line->errmsg = "Field name `" + field + "` is not defined in structure `" + name + "`.";
-                return;
-            }
+            it->first = TokenType::Numeric;
+            it->second = std::to_string(offset);
         }
     }
 }

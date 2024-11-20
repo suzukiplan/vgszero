@@ -4082,6 +4082,15 @@ N: ld_str_macro
 ../vgsasm ld_str_macro.asm -v
 ld_str_macro.asm:0006 $0000 <LD> <A> `,` _( 0xC000 )_
 diff ld_str_macro.bin ld_str_macro.exp
-Normal case: 265
-Error case: 399
-Total: 664
+N: offset_nest
+../vgsasm offset_nest.asm -v
+ offset_nest.asm:0013 $0000 <LD> <A> `,` 0x5
+diff offset_nest.bin offset_nest.exp
+E: Non-structured field `VAR1` with period. ... OK
+N: offset_cnt
+../vgsasm offset_cnt.asm -v
+  offset_cnt.asm:0013 $0000 <LD> <A> `,` 0x10
+diff offset_cnt.bin offset_cnt.exp
+Normal case: 267
+Error case: 400
+Total: 667
