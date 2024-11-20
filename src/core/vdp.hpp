@@ -302,6 +302,11 @@ class VDP
         sp16 += 255 * 2;
         for (int i = 0; i < 256; i++, oam -= 8, sp16 -= 2) {
             if (!this->isAttrVisible(oam[3])) continue;
+            bool isInterlaceV = oam[7] & 0x01 ? true : false;
+            bool isInterlaceH = oam[7] & 0x02 ? true : false;
+            if (isInterlaceH && (scanline & 1)) {
+                continue;
+            }
             int height = (oam[4] & 0x0F) + 1;
             int width = (oam[5] & 0x0F) + 1;
             bool flipH = this->isAttrFlipH(oam[3]);
@@ -333,6 +338,7 @@ class VDP
                         chrtbl += (flipV ? 7 - (dy & 7) : dy & 7) << 2;
                         for (int j = 0; j < 8; j++, x++) {
                             if (x < 8 || 248 <= x) continue;
+                            if (isInterlaceV && (x & 1)) continue;
                             int pal;
                             if (flipH) {
                                 int jj = 7 - j;
@@ -360,6 +366,7 @@ class VDP
                         chrtbl += (flipV ? 7 - (dy & 7) : dy & 7) << 2;
                         for (int j = 0; j < 8; j++, x++) {
                             if (x < 8 || 248 <= x) continue;
+                            if (isInterlaceV && (x & 1)) continue;
                             int pal;
                             if (flipH) {
                                 int jj = 7 - j;
