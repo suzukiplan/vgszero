@@ -494,6 +494,7 @@ VGS-Video では、[DPM; Direct Pattern Mapping](#direct-pattern-mapping) や [O
 | 0x9F09          | 0x1F09          | Register #9: [FG](#fg) の [Direct Pattern Maaping](#direct-pattern-mapping) |
 | 0x9F0A          | 0x1F0A          | Register #10: [スプライト](#sprite) の [Direct Pattern Maaping](#direct-pattern-mapping) |
 | 0x9F0B          | 0x1F0B          | Register #11: [BG/FG の 1024 パターンモード設定](#1024-patterns-mode) |
+| 0x9F0C          | 0x1F0C          | Register #12: [BG/FG の インタレースモード設定](#interlace-mode) |
 | 0xA000 ~ $BFFF  | 0x2000 ~ 0x3FFF | [Character Pattern Table](#character-pattern-table) (32 x 256) |
 
 VRAM へのアクセスは一般的な VDP とは異なり CPU アドレスへのロード・ストア（LD命令等）で簡単に実行できます。
@@ -562,6 +563,7 @@ OAM は次の要素を持つ構造体です。
 3. [属性](#attribute)
 4. [サイズ](#oam-pattern-size)
 5. [OAM別バンク番号](#oam-bank)
+6. [属性2](#attribute2)
 
 ```c
 struct OAM {
@@ -572,7 +574,7 @@ struct OAM {
     unsigned char heightMinus1;
     unsigned char widthMinus1;
     unsigned char bank;
-    unsigned char reserved;
+    unsigned char attribute2;
 } oam[256];
 ```
 
@@ -602,6 +604,17 @@ VGS-Zero では最大 256 枚のスプライトを同時に表示でき、水平
 3. VRAM 上の[キャラクタパターン](#character-pattern-table) **(デフォルト)**
 
 OAM Bank を用いることで、OAM 毎に異なるキャラクタパターンを使用できます。
+
+#### (Attribute2)
+
+アトリビュート2は、スプライト専用のキャラクタパターン表示属性です。
+
+| Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|   -   |   -   |   -   |   -   |   -   |   -   | `IH`  | `IV`  |
+
+- `IH` : 奇数スキャンラインの描画をスキップ（横インタレース）
+- `IV` : 奇数ピクセルの描画をスキップ（縦インタレース）
 
 #### (OAM16)
 
@@ -694,6 +707,19 @@ LD (HL), 0x12   # Sprite = Bank 18
 [bmp2chr](./tools/bmp2chr/) に 256x256 ピクセルの `.bmp` ファイルを入力すれば、本モード用の 4 バンクセットの chr データを簡単に生成することができます。
 
 > 詳細は [./example/14_1024ptn](./example/14_1024ptn/) を参照
+
+#### (Interlace Mode)
+
+0x9F0C の設定により BG/FG の描画をインタレース（奇数行または奇数ピクセルの描画をスキップ）することができます。
+
+| Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|   -   |   -   |   -   |   -   | `FH`  | `FV`  | `BH`  | `BV`  |
+
+- `FH` : FG の奇数スキャンラインの描画をスキップ（横インタレース）
+- `FV` : FG の奇数ピクセルの描画をスキップ（縦インタレース）
+- `BH` : BG の奇数スキャンラインの描画をスキップ（横インタレース）
+- `BV` : BG の奇数ピクセルの描画をスキップ（縦インタレース）
 
 #### (Character Pattern Table)
 
