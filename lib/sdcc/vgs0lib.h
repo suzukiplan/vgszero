@@ -280,8 +280,8 @@ typedef struct {
     uint8_t widthMinus1;
     //! OAM Bank
     uint8_t bank;
-    //! padding
-    uint8_t reserved;
+    //! Attribute2
+    uint8_t attr2;
 } OAM;
 
 /**

@@ -512,6 +512,7 @@ If there is no need to expand character patterns into RAM (VRAM), the Extra RAM 
 | 0x9F09          | 0x1F09          | Register #9: [Direct Pattern Maaping](#direct-pattern-mapping) for [FG](#fg) |
 | 0x9F0A          | 0x1F0A          | Register #10: [Direct Pattern Maaping](#direct-pattern-mapping) for [Sprite](#sprite) |
 | 0x9F0B          | 0x1F0B          | Register #11: [1024 pattern mode setting for BG/FG](#1024-patterns-mode) |
+| 0x9F0C          | 0x1F0C          | Register #12: [Interlace mode setting for BG/FG](#interlace-mode) |
 | 0xA000 ~ $BFFF  | 0x2000 ~ 0x3FFF | [Character Pattern Table](#character-pattern-table) (32 x 256) |
 
 Unlike general VDP, access to VRAM can be easily performed by load/store to CPU address (e.g., LD instruction).
@@ -580,6 +581,7 @@ OAM is a structure with the following elements:
 3. [Attribute](#attribute)
 4. [Size](#oam-pattern-size)
 5. [Bank number by OAM](#oam-bank)
+6. [Attribute 2](#attribute2)
 
 ```c
 struct OAM {
@@ -590,7 +592,7 @@ struct OAM {
     unsigned char heightMinus1;
     unsigned char widthMinus1;
     unsigned char bank;
-    unsigned char reserved;
+    unsigned char attribute2;
 } oam[256];
 ```
 
@@ -624,6 +626,17 @@ Configuration priority:
 3. [Character Pattern](#character-pattern-table) on VRAM
 
 By using OAM Bank, a different bank character pattern can be used for each OAM.
+
+#### (Attribute2)
+
+Attribute 2 is a character pattern display attribute for sprites only.
+
+| Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|   -   |   -   |   -   |   -   |   -   |   -   | `IH`  | `IV`  |
+
+- `IH` : skip drawing odd scan lines (horizontal interlace)
+- `IV` : skip drawing odd-numbered pixels (vertical interlace)
 
 #### (OAM16)
 
@@ -716,6 +729,19 @@ If `B1k` and/or `F1k` are set, then `row÷8 + DPM` in [name-table](#name-table) 
 By entering a 256x256 pixel `.bmp` file into [bmp2chr](./tools/bmp2chr/), you can easily generate 4 banksets of chr data for this mode by entering a 256x256 pixel `.bmp` file.
 
 > For more information, see [./example/14_1024ptn](./example/14_1024ptn/)
+
+#### (Interlace Mode)
+
+The BG/FG drawing can be interlaced (skipping the drawing of odd-numbered rows or odd-numbered pixels) by setting 0x9F0C.
+
+| Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+|   -   |   -   |   -   |   -   | `FH`  | `FV`  | `BH`  | `BV`  |
+
+- `FH` : skip drawing odd scan lines of FG (horizontal interlace)
+- `FV` : skip drawing odd pixels of FG (vertical interlace)
+- `BH` : skip drawing odd scan lines of BG (horizontal interlace)
+- `BV` : skip drawing odd pixels of BG (vertical interlace)
 
 #### (Character Pattern Table)
 
