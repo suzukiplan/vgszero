@@ -497,8 +497,8 @@ class VGS0
                 while (628 < rad) { rad -= 628; }
                 unsigned char angle = (unsigned char)((rad / 628.0) * 256.0);
                 angle += 0x40;
-                signed short s16 = vgs0_sin_table[angle];
-                signed short c16 = vgs0_cos_table[angle];
+                signed short s16 = vgs0_cos_table[angle];
+                signed short c16 = vgs0_sin_table[angle];
                 this->cpu->reg.pair.B = (s16 & 0xFF00) >> 8;
                 this->cpu->reg.pair.C = s16 & 0x00FF;
                 this->cpu->reg.pair.D = (c16 & 0xFF00) >> 8;
