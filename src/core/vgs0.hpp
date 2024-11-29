@@ -492,7 +492,7 @@ class VGS0
                 x2 += w2 / 2;
                 y2 += h2 / 2;
                 auto deg = iatan2(x1 - x2, y1 - y2);
-                int rad = (int)(degree * 3.141592653589793 / 1.80);
+                int rad = (int)(deg * 3.141592653589793 / 1.80);
                 while (rad < 0) { rad += 628; }
                 while (628 < rad) { rad -= 628; }
                 unsigned char angle = (unsigned char)((rad / 628.0) * 256.0);
