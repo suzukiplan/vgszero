@@ -22,6 +22,7 @@ enum IO {
     perlin_y_scale                  ; Perlin Noise Y Scale (OUT only)
     perlin_get                      ; Get Perlin Noise (IN only)
     perlin_get_oct                  ; Get Perlin Noise with Octave (IN only)
+    angle                           ; Get angle (IN only)
     save_load = 0xDA                ; Save (OUT) and Load (IN)
     bgm_play = 0xE0                 ; Play BGM (OUT)
     bgm_ctrl                        ; Pause(0), Resume(1), Fadeout(2) BGM (OUT)

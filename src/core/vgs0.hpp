@@ -330,6 +330,72 @@ class VGS0
         }
     }
 
+    double iatan2(int a, int b)
+    {
+        double u;
+        double ret;
+        double v;
+        double d;
+        int c;
+        if (a == 0x80000000) {
+            a++;
+        } else if (a == 0) {
+            a--;
+        }
+        if (b == 0x80000000) {
+            b++;
+        } else if (b == 0) {
+            b--;
+        }
+        if (a < 0) {
+            if (b < 0) {
+                a = -a;
+                b = -b;
+                return 270 - (90 - iatan2(a, b));
+            } else {
+                return 360 - iatan2(-a, b);
+            }
+        } else if (b < 0) {
+            return 180 - iatan2(a, -b);
+        } else if (a > b) {
+            return 90 - iatan2(b, a);
+        }
+        u = (double)a / b;
+        if (a * 3 >= b * 2) {
+            v = (isqrt(1.0 + u * u) - 1.0) / u;
+            return (double)(2.0 * iatan2((int)(v * 2000 + 0.5), 2000));
+        }
+        ret = 0.0;
+        v = u;
+        d = 99.0;
+        c = 1;
+        while (d >= 0.1 || d <= -0.1) {
+            d = 57.295778965948 * v / c;
+            ret += d;
+            v *= u * u;
+            c = (c < 0 ? 2 : -2) - c;
+        }
+        return ret;
+    }
+
+    double isqrt(double x)
+    {
+        double s, last;
+        if (x <= 0.0) {
+            return 0.0;
+        }
+        if (x > 1) {
+            s = x;
+        } else {
+            s = 1;
+        }
+        do {
+            last = s;
+            s = (x / s + s) * 0.5;
+        } while (s < last);
+        return last;
+    }
+
   public:
     inline unsigned char readMemory(unsigned short addr)
     {
@@ -408,6 +474,35 @@ class VGS0
                 y <<= 8;
                 y |= this->cpu->reg.pair.E;
                 return this->noise->octave(this->cpu->reg.pair.A, x, y);
+            }
+            case 0xD0: {
+                unsigned short addr = this->cpu->reg.pair.H;
+                addr <<= 8;
+                addr |= this->cpu->reg.pair.L;
+                int x1 = this->readMemory(addr++);
+                int y1 = this->readMemory(addr++);
+                int w1 = this->readMemory(addr++);
+                int h1 = this->readMemory(addr++);
+                int x2 = this->readMemory(addr++);
+                int y2 = this->readMemory(addr++);
+                int w2 = this->readMemory(addr++);
+                int h2 = this->readMemory(addr);
+                x1 += w1 / 2;
+                y1 += h1 / 2;
+                x2 += w2 / 2;
+                y2 += h2 / 2;
+                auto deg = iatan2(x1 - x2, y1 - y2);
+                auto rad = degree * 3.141592653589793 / 1.80;
+                while (rad < 0.0) { rad += 628.0; }
+                while (628.0 <= rad) { rad -= 628.0; }
+                unsigned char angle = (unsigned char)((rad / 628.0) * 256.0);
+                signed short s16 = vgs0_sin_table(angle);
+                signed short c16 = vgs0_cos_table(angle);
+                this->cpu->reg.pair.B = (s16 & 0xFF00) >> 8;
+                this->cpu->reg.pair.C = s16 & 0x00FF;
+                this->cpu->reg.pair.D = (c16 & 0xFF00) >> 8;
+                this->cpu->reg.pair.E = c16 & 0x00FF;
+                return angle;
             }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
