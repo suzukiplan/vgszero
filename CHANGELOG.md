@@ -1,5 +1,7 @@
 # Change Log
 
+## [Version 1.17.0](https://github.com/suzukiplan/vgszero/releases/tag/1.17.0)
+
 ## [Version 1.16.0](https://github.com/suzukiplan/vgszero/releases/tag/1.16.0)
 
 BG, FG, スプライトのインタレース描画機能を追加しました。

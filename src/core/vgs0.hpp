@@ -492,12 +492,12 @@ class VGS0
                 x2 += w2 / 2;
                 y2 += h2 / 2;
                 auto deg = iatan2(x1 - x2, y1 - y2);
-                auto rad = degree * 3.141592653589793 / 1.80;
-                while (rad < 0.0) { rad += 628.0; }
-                while (628.0 <= rad) { rad -= 628.0; }
+                int rad = (int)(degree * 3.141592653589793 / 1.80);
+                while (rad < 0) { rad += 628; }
+                while (628 < rad) { rad -= 628; }
                 unsigned char angle = (unsigned char)((rad / 628.0) * 256.0);
-                signed short s16 = vgs0_sin_table(angle);
-                signed short c16 = vgs0_cos_table(angle);
+                signed short s16 = vgs0_sin_table[angle];
+                signed short c16 = vgs0_cos_table[angle];
                 this->cpu->reg.pair.B = (s16 & 0xFF00) >> 8;
                 this->cpu->reg.pair.C = s16 & 0x00FF;
                 this->cpu->reg.pair.D = (c16 & 0xFF00) >> 8;
