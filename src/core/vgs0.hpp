@@ -16,6 +16,8 @@
 extern "C" {
 extern const signed char vgs0_sin_table[256];
 extern const signed char vgs0_cos_table[256];
+extern const signed short vgs0_sin256_table[628];
+extern const signed short vgs0_cos256_table[628];
 extern const unsigned char vgs0_atan2_table[256][256];
 extern const unsigned char vgs0_rand8[256];
 extern const unsigned short vgs0_rand16[65536];
@@ -494,16 +496,14 @@ class VGS0
                 auto deg = iatan2(x1 - x2, y1 - y2);
                 int rad = (int)(deg * 3.141592653589793 / 1.80);
                 while (rad < 0) { rad += 628; }
-                while (628 < rad) { rad -= 628; }
-                unsigned char angle = (unsigned char)((rad / 628.0) * 256.0);
-                angle += 0x40;
-                signed short s16 = vgs0_cos_table[angle];
-                signed short c16 = vgs0_sin_table[angle];
+                while (628 <= rad) { rad -= 628; }
+                signed short s16 = vgs0_cos256_table[rad];
+                signed short c16 = vgs0_sin256_table[rad];
                 this->cpu->reg.pair.B = (s16 & 0xFF00) >> 8;
                 this->cpu->reg.pair.C = s16 & 0x00FF;
                 this->cpu->reg.pair.D = (c16 & 0xFF00) >> 8;
                 this->cpu->reg.pair.E = c16 & 0x00FF;
-                return angle;
+                return (unsigned char)((rad / 628.0) * 255.0);
             }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
