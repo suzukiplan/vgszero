@@ -497,8 +497,8 @@ class VGS0
                 int rad = (int)(deg * 3.141592653589793 / 1.80);
                 while (rad < 0) { rad += 628; }
                 while (628 <= rad) { rad -= 628; }
-                signed short s16 = vgs0_cos256_table[rad];
-                signed short c16 = vgs0_sin256_table[rad];
+                signed short s16 = vgs0_sin256_table[rad];
+                signed short c16 = vgs0_cos256_table[rad];
                 this->cpu->reg.pair.B = (s16 & 0xFF00) >> 8;
                 this->cpu->reg.pair.C = s16 & 0x00FF;
                 this->cpu->reg.pair.D = (c16 & 0xFF00) >> 8;
