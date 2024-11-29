@@ -493,17 +493,19 @@ class VGS0
                 y1 += h1 / 2;
                 x2 += w2 / 2;
                 y2 += h2 / 2;
-                auto deg = iatan2(x1 - x2, y1 - y2);
+                int deg = (int)iatan2(x1 - x2, y1 - y2);
+                deg %= 360;
+                while (deg < 0) { deg += 360; }
                 int rad = (int)(deg * 3.141592653589793 / 1.80);
                 while (rad < 0) { rad += 628; }
-                while (628 <= rad) { rad -= 628; }
+                rad = rad % 628;
                 signed short s16 = vgs0_sin256_table[rad];
                 signed short c16 = vgs0_cos256_table[rad];
                 this->cpu->reg.pair.B = (s16 & 0xFF00) >> 8;
                 this->cpu->reg.pair.C = s16 & 0x00FF;
                 this->cpu->reg.pair.D = (c16 & 0xFF00) >> 8;
                 this->cpu->reg.pair.E = c16 & 0x00FF;
-                return (unsigned char)((rad / 628.0) * 255.0);
+                return (unsigned char)((rad / 627.0) * 255.0);
             }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
