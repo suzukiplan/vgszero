@@ -15,11 +15,19 @@ struct bulette {
     an ds.b 1
 }
 
+struct rect {
+    x ds.b 1
+    y ds.b 1
+    width ds.b 1
+    height ds.b 1
+}
+
 struct vars $C000 {
     frames ds.b 1
     player_x ds.b 1
     player_y ds.b 1
     bidx ds.b 1
+    rects rect 2
     bulettes bulette bulette_num
 }
 
@@ -155,57 +163,38 @@ enum BANK {
     inc (ix + offset(bulette.flag))
 
     b = (256 - 8) / 2
-    d = b
-    d += 4
     c = 0
     (ix + offset(bulette.x)) = bc
+    vars.rects[0].x = b
     b = ((192 - 8) / 2) + 8
-    e = b
-    e += 4
     (ix + offset(bulette.y)) = bc
+    vars.rects[0].y = b
+    a = 8
+    vars.rects[0].width = a
+    vars.rects[0].height = a
 
     a = (vars.player_x)
-    a += 8
-    a -= d
-    d = a
+    vars.rects[1].x = a
     a = (vars.player_y)
-    a += 8
-    a -= e
-    e = a
-    atn2 a, de
+    vars.rects[1].y = a
+    a = 16
+    vars.rects[1].width = a
+    vars.rects[1].height = a
 
-    a += 0x40
-    d = a
-    cos a, d
-    (ix + offset(bulette.vx)) = a
-    bit 7, a
-    jr z, @xplus
-    a = 0xff
-    jr @xset
-@xplus
-    a = 0x00
-@xset
-    (ix + offset(bulette.vx) + 1) = a
-    hl = (ix + offset(bulette.vx))
-    c = 4
-    mul hl, c
+    hl = vars.rects
+    in a, (io.angle)
+    hl = bc
+    hl += bc
+    hl += bc
+    hl += bc
     (ix + offset(bulette.vx)) = hl
-
-    sin a, d
-    (ix + offset(bulette.vy)) = a
-    bit 7, a
-    jr z, @yplus
-    a = 0xff
-    jr @yset
-@yplus
-    a = 0x00
-@yset
-    (ix + offset(bulette.vy) + 1) = a
-    hl = (ix + offset(bulette.vy))
-    c = 4
-    mul hl, c
+    hl = de
+    hl += de
+    hl += de
+    hl += de
     (ix + offset(bulette.vy)) = hl
 
+    d = a
     h = d
     l = 100
     h /= l
@@ -228,7 +217,6 @@ enum BANK {
     a = h
     a += '0'
     vram.fg_name + 64 + 10 = a
-
 
     a = (vars.bidx)
     a++
