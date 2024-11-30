@@ -14,6 +14,7 @@ struct bulette {
     vx ds.w 1
     vy ds.w 1
     an ds.b 1
+    percent ds.b 1
 }
 
 struct rect {
@@ -219,6 +220,8 @@ enum BANK {
     ix = hl
 
     inc (ix + offset(bulette.flag))
+    xor a
+    (ix + offset(bulette.percent)) = a
 
     a = (oam[sprite.target].x)
     a += 4
@@ -245,6 +248,15 @@ enum BANK {
 
     hl = vars.rects
     in a, (io.angle)
+
+    ; 角度を -16 ~ 15 の範囲でズラず
+    b = a
+    in a, (io.rand8)
+    a &= 0x1F
+    a -= 0x10
+    a += b
+    out (io.angle), a
+
     hl = bc
     hl += bc
     hl += bc
@@ -308,19 +320,31 @@ enum BANK {
     ret
 
 @move
-    hl = (ix + offset(bulette.x))
-    bc = (ix + offset(bulette.vx))
+    a = (ix + offset(bulette.percent))
+    cp 250
+    jr nc, @max_speed
+    a += 3
+    (ix + offset(bulette.percent))= a
+@max_speed
+
+    hl = (ix + offset(bulette.vx))
+    out (io.percent), a
+    bc = (ix + offset(bulette.x))
     hl += bc
     (ix + offset(bulette.x)) = hl
-    a = h
+
+    hl = (ix + offset(bulette.vy))
+    out (io.percent), a
+    bc = (ix + offset(bulette.y))
+    hl += bc
+    (ix + offset(bulette.y)) = hl
+
+    a = (ix + offset(bulette.x) + 1)
     cp 248
     jr nc, @remove
     (iy + offset(oam.x)) = a
 
-    hl = (ix + offset(bulette.y))
-    bc = (ix + offset(bulette.vy))
-    hl += bc
-    a = h
+    a = (ix + offset(bulette.y) + 1)
     cp 200
     jr nc, @remove
     (ix + offset(bulette.y)) = hl
