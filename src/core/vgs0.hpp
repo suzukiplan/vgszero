@@ -446,10 +446,10 @@ class VGS0
                 y1 += h1 / 2;
                 x2 += w2 / 2;
                 y2 += h2 / 2;
-                int rad = (int)(this->atan2(y1 - y2, x1 - x2) * 100);
+                int rad = (int)(this->atan2(y2 - y1, x2 - x1) * 100);
                 while (rad < 0) { rad += 628; }
                 rad %= 628;
-                unsigned char r8 = (unsigned char)((rad / 627.0) * 255.0);
+                unsigned char r8 = ((rad / 627.0) * 255.0);
                 signed short s16 = vgs0_sin_table[r8];
                 signed short c16 = vgs0_cos_table[r8];
                 this->cpu->reg.pair.D = (s16 & 0xFF00) >> 8;
