@@ -3,6 +3,7 @@
 
 struct sprite {
     player ds.b 4
+    target ds.b 1
     bulette ds.b bulette_num
 }
 
@@ -45,6 +46,14 @@ enum BANK {
     memset(vars, 0, sizeof(vars))
     dma2chr(bank.font)
     player_init()
+
+    oam[sprite.target].x = (240 - 16) / 2 + 8
+    oam[sprite.target].y = ((192 - 16) / 2) + 8
+    oam[sprite.target].ptn = 0x0B
+    oam[sprite.target].attr = 0x80
+    oam[sprite.target].w = 1
+    oam[sprite.target].h = 1
+
     print_text_fg(2, 2, 0x80, "ANGLE:000")
 
 @loop
@@ -102,6 +111,8 @@ enum BANK {
 ;------------------------------------------------------------
 .player_move
     in a, (io.joypad)
+    bit pad.start, a
+    jp z, target_move
     bit pad.up, a
     call z, @up
     bit pad.down, a
@@ -146,6 +157,53 @@ enum BANK {
     ret
 
 ;------------------------------------------------------------
+; ターゲット移動
+;------------------------------------------------------------
+.target_move
+    bit pad.up, a
+    call z, @up
+    bit pad.down, a
+    call z, @down
+    bit pad.left, a
+    call z, @left
+    bit pad.right, a
+    call z, @right
+    call player_set_position
+    ret
+
+@up
+    push af
+    a = (oam[sprite.target].y)
+    a -= 2
+    oam[sprite.target].y = a
+    pop af
+    ret
+
+@down
+    push af
+    a = (oam[sprite.target].y)
+    a += 2
+    oam[sprite.target].y = a
+    pop af
+    ret
+
+@left
+    push af
+    a = (oam[sprite.target].x)
+    a -= 2
+    oam[sprite.target].x = a
+    pop af
+    ret
+
+@right
+    push af
+    a = (oam[sprite.target].x)
+    a += 2
+    oam[sprite.target].x = a
+    pop af
+    ret
+
+;------------------------------------------------------------
 ; 4フレームおきに敵弾を追加
 ;------------------------------------------------------------
 .bulette_add
@@ -162,22 +220,26 @@ enum BANK {
 
     inc (ix + offset(bulette.flag))
 
-    b = (256 - 8) / 2
+    a = (oam[sprite.target].x)
+    a += 4
+    b = a
     c = 0
     (ix + offset(bulette.x)) = bc
     vars.rects[0].x = b
-    b = ((192 - 8) / 2) + 8
+    a = (oam[sprite.target].y)
+    a += 4
+    b = a
     (ix + offset(bulette.y)) = bc
     vars.rects[0].y = b
-    a = 8
-    vars.rects[0].width = a
-    vars.rects[0].height = a
 
     a = (vars.player_x)
     vars.rects[1].x = a
     a = (vars.player_y)
     vars.rects[1].y = a
+
     a = 16
+    vars.rects[0].width = a
+    vars.rects[0].height = a
     vars.rects[1].width = a
     vars.rects[1].height = a
 
