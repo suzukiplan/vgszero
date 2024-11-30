@@ -668,6 +668,15 @@ class VGS0
                 this->noise->limitY(hl | 1);
                 break;
             }
+            case 0xD0: {
+                signed short s16 = vgs0_sin_table[value];
+                signed short c16 = vgs0_cos_table[value];
+                this->cpu->reg.pair.D = (s16 & 0xFF00) >> 8;
+                this->cpu->reg.pair.E = s16 & 0x00FF;
+                this->cpu->reg.pair.B = (c16 & 0xFF00) >> 8;
+                this->cpu->reg.pair.C = c16 & 0x00FF;
+                break;
+            }
             case 0xDA: {
                 if (this->saveCallback) {
                     unsigned short addr = this->cpu->reg.pair.B;
