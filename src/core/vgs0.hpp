@@ -677,6 +677,18 @@ class VGS0
                 this->cpu->reg.pair.C = c16 & 0x00FF;
                 break;
             }
+            case 0xD1: {
+                unsigned short hl = this->cpu->reg.pair.H;
+                hl <<= 8;
+                hl |= this->cpu->reg.pair.L;
+                int work = (short)hl;
+                work *= value;
+                work /= 100;
+                hl = (unsigned short)work;
+                this->cpu->reg.pair.H = (hl & 0xFF00) >> 8;
+                this->cpu->reg.pair.L = hl & 0x00FF;
+                break;
+            }
             case 0xDA: {
                 if (this->saveCallback) {
                     unsigned short addr = this->cpu->reg.pair.B;
