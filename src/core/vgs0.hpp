@@ -16,8 +16,6 @@
 extern "C" {
 extern const signed char vgs0_sin_table[256];
 extern const signed char vgs0_cos_table[256];
-extern const signed short vgs0_sin256_table[628];
-extern const signed short vgs0_cos256_table[628];
 extern const unsigned char vgs0_atan2_table[256][256];
 extern const unsigned char vgs0_rand8[256];
 extern const unsigned short vgs0_rand16[65536];
@@ -332,70 +330,25 @@ class VGS0
         }
     }
 
-    double iatan2(int a, int b)
-    {
-        double u;
-        double ret;
-        double v;
-        double d;
-        int c;
-        if (a == 0x80000000) {
-            a++;
-        } else if (a == 0) {
-            a--;
-        }
-        if (b == 0x80000000) {
-            b++;
-        } else if (b == 0) {
-            b--;
-        }
-        if (a < 0) {
-            if (b < 0) {
-                a = -a;
-                b = -b;
-                return 270 - (90 - iatan2(a, b));
-            } else {
-                return 360 - iatan2(-a, b);
-            }
-        } else if (b < 0) {
-            return 180 - iatan2(a, -b);
-        } else if (a > b) {
-            return 90 - iatan2(b, a);
-        }
-        u = (double)a / b;
-        if (a * 3 >= b * 2) {
-            v = (isqrt(1.0 + u * u) - 1.0) / u;
-            return (double)(2.0 * iatan2((int)(v * 2000 + 0.5), 2000));
-        }
-        ret = 0.0;
-        v = u;
-        d = 99.0;
-        c = 1;
-        while (d >= 0.1 || d <= -0.1) {
-            d = 57.295778965948 * v / c;
-            ret += d;
-            v *= u * u;
-            c = (c < 0 ? 2 : -2) - c;
-        }
-        return ret;
-    }
+    inline float abs(float v) { return v < 0 ? -v : v; }
+    inline float pi4() { return 0.785398163397448309616f; }
+    inline float pi4x3() { return 0.785398163397448309616f * 3.0f; }
 
-    double isqrt(double x)
+    float atan2(float y, float x)
     {
-        double s, last;
-        if (x <= 0.0) {
-            return 0.0;
-        }
-        if (x > 1) {
-            s = x;
+        // http://pubs.opengroup.org/onlinepubs/009695399/functions/atan2.html
+        // Volkan SALMA
+        float r, angle;
+        float abs_y = this->abs(y) + 1e-10f; // kludge to prevent 0/0 condition
+        if (x < 0.0f) {
+            r = (x + abs_y) / (abs_y - x);
+            angle = this->pi4x3();
         } else {
-            s = 1;
+            r = (x - abs_y) / (x + abs_y);
+            angle = this->pi4();
         }
-        do {
-            last = s;
-            s = (x / s + s) * 0.5;
-        } while (s < last);
-        return last;
+        angle += (0.1963f * r * r - 0.9817f) * r;
+        return y < 0.0f ? -angle : angle;
     }
 
   public:
@@ -493,19 +446,17 @@ class VGS0
                 y1 += h1 / 2;
                 x2 += w2 / 2;
                 y2 += h2 / 2;
-                int deg = (int)iatan2(x1 - x2, y1 - y2);
-                deg %= 360;
-                while (deg < 0) { deg += 360; }
-                int rad = (int)(deg * 3.141592653589793 / 1.80);
+                int rad = (int)(this->atan2(y1 - y2, x1 - x2) * 100);
                 while (rad < 0) { rad += 628; }
-                rad = rad % 628;
-                signed short s16 = vgs0_sin256_table[rad];
-                signed short c16 = vgs0_cos256_table[rad];
-                this->cpu->reg.pair.B = (s16 & 0xFF00) >> 8;
-                this->cpu->reg.pair.C = s16 & 0x00FF;
-                this->cpu->reg.pair.D = (c16 & 0xFF00) >> 8;
-                this->cpu->reg.pair.E = c16 & 0x00FF;
-                return (unsigned char)((rad / 627.0) * 255.0);
+                rad %= 628;
+                unsigned char r8 = (unsigned char)((rad / 627.0) * 255.0);
+                signed short s16 = vgs0_sin_table[r8];
+                signed short c16 = vgs0_cos_table[r8];
+                this->cpu->reg.pair.D = (s16 & 0xFF00) >> 8;
+                this->cpu->reg.pair.E = s16 & 0x00FF;
+                this->cpu->reg.pair.B = (c16 & 0xFF00) >> 8;
+                this->cpu->reg.pair.C = c16 & 0x00FF;
+                return r8;
             }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
