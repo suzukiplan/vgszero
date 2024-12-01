@@ -57,6 +57,8 @@ This repository provides the VGS-Zero body code, distribution images, SDK, and a
   - [Hardware atan2 table](#hardware-atan2-table)
   - [Hardware random number generator](#hardware-random)
   - [Hardware perlin noise](#hardware-perlin-noise)
+  - [Angle Calculation](#angle-calculation)
+  - [Percentage Calculation](#percentage-calculation)
 - [BGM](#bgmdat)
   - Playback of background music in [VGS MML](#compile-mml) or [NSF](#nsf) format
   - No need to implement sound drivers on the game program (Z80) side!
@@ -797,6 +799,8 @@ The memory area of the Character Pattern Table (0xA000 to 0xBFFF) can be made eq
 |   0xCD    |  -  |  o  | [Set Y-coordinate scale for perlin noise](#hardware-perlin-noise) |
 |   0xCE    |  o  |  -  | [Get perlin noise](#hardware-perlin-noise) |
 |   0xCF    |  o  |  -  | [Get perlin noise (with octave)](#hardware-perlin-noise) |
+|   0xD0    |  o  |  o  | [Angle Calculation](#angle-calculation) |
+|   0xD1    |  -  |  o  | [Percentage Calculation](#percentage-calculation) |
 |   0xDA    |  o  |  o  | [Save / Load](#save-data) |
 |   0xE0    |  -  |  o  | [Playback BGM](#play-bgm) |
 |   0xE1    |  -  |  o  | [Pause](#pause-bgm), [Resume](#resume-bgm) or [Fadeout](#fadeout-bgm) BGM|
@@ -1025,6 +1029,44 @@ LD DE, 123 # Y-coordinate
 LD A, 10   # Octave
 IN A, (0xCF)
 ```
+
+#### (Angle Calculation)
+
+The angle and 16-bit fixed-point movement speed can be calculated by specifying the address where the following 8 bytes structure is stored in HL and INing 0xD0.
+
+```c
+struct rect {
+    uint8_t x;      // X-coordinate
+    uint8_t y;      // Y-coordinate
+    uint8_t width;  // width
+    uint8_t height; // height
+} chr[2];           // For 2 characters of them（8bytes）
+```
+
+```z80
+LD HL, 0xC000
+IN A, (0xD0)
+```
+
+- `A` = angle (0-255)
+- `BC` = speed of movement in X direction (B = integer, C = minority)
+- `DE` = movement speed in Y direction (B = integer, C = minority)
+
+Also, by specifying an angle and OUTing 0xD0, you can obtain the `BC` and `DE` corresponding to that angle.
+
+First, the self-displacement can be easily implemented by calculating the self-direction at IN of 0xD0, adding or subtracting the obtained angle A, and then doing OUT.
+
+#### (Percentage Calculation)
+
+By setting 0xD0 to OUT, the numeric value stored in HL can be calculated in the range of 0% to 255%.
+
+```
+LD HL, 300
+LD A, 150
+OUT (0xD1), A   # HL = 450 (150% of 300)
+```
+
+> HL numbers are calculated as signed 16-bit integers (signed short).
 
 #### (Save Data)
 

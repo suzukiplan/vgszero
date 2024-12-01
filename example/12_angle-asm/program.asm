@@ -3,6 +3,7 @@
 
 struct sprite {
     player ds.b 4
+    target ds.b 1
     bulette ds.b bulette_num
 }
 
@@ -13,6 +14,14 @@ struct bulette {
     vx ds.w 1
     vy ds.w 1
     an ds.b 1
+    percent ds.b 1
+}
+
+struct rect {
+    x ds.b 1
+    y ds.b 1
+    width ds.b 1
+    height ds.b 1
 }
 
 struct vars $C000 {
@@ -20,6 +29,7 @@ struct vars $C000 {
     player_x ds.b 1
     player_y ds.b 1
     bidx ds.b 1
+    rects rect 2
     bulettes bulette bulette_num
 }
 
@@ -37,6 +47,14 @@ enum BANK {
     memset(vars, 0, sizeof(vars))
     dma2chr(bank.font)
     player_init()
+
+    oam[sprite.target].x = (240 - 16) / 2 + 8
+    oam[sprite.target].y = ((192 - 16) / 2) + 8
+    oam[sprite.target].ptn = 0x0B
+    oam[sprite.target].attr = 0x80
+    oam[sprite.target].w = 1
+    oam[sprite.target].h = 1
+
     print_text_fg(2, 2, 0x80, "ANGLE:000")
 
 @loop
@@ -94,6 +112,8 @@ enum BANK {
 ;------------------------------------------------------------
 .player_move
     in a, (io.joypad)
+    bit pad.start, a
+    jp z, target_move
     bit pad.up, a
     call z, @up
     bit pad.down, a
@@ -138,6 +158,53 @@ enum BANK {
     ret
 
 ;------------------------------------------------------------
+; ターゲット移動
+;------------------------------------------------------------
+.target_move
+    bit pad.up, a
+    call z, @up
+    bit pad.down, a
+    call z, @down
+    bit pad.left, a
+    call z, @left
+    bit pad.right, a
+    call z, @right
+    call player_set_position
+    ret
+
+@up
+    push af
+    a = (oam[sprite.target].y)
+    a -= 2
+    oam[sprite.target].y = a
+    pop af
+    ret
+
+@down
+    push af
+    a = (oam[sprite.target].y)
+    a += 2
+    oam[sprite.target].y = a
+    pop af
+    ret
+
+@left
+    push af
+    a = (oam[sprite.target].x)
+    a -= 2
+    oam[sprite.target].x = a
+    pop af
+    ret
+
+@right
+    push af
+    a = (oam[sprite.target].x)
+    a += 2
+    oam[sprite.target].x = a
+    pop af
+    ret
+
+;------------------------------------------------------------
 ; 4フレームおきに敵弾を追加
 ;------------------------------------------------------------
 .bulette_add
@@ -153,59 +220,55 @@ enum BANK {
     ix = hl
 
     inc (ix + offset(bulette.flag))
+    xor a
+    (ix + offset(bulette.percent)) = a
 
-    b = (256 - 8) / 2
-    d = b
-    d += 4
+    a = (oam[sprite.target].x)
+    a += 4
+    b = a
     c = 0
     (ix + offset(bulette.x)) = bc
-    b = ((192 - 8) / 2) + 8
-    e = b
-    e += 4
+    vars.rects[0].x = b
+    a = (oam[sprite.target].y)
+    a += 4
+    b = a
     (ix + offset(bulette.y)) = bc
+    vars.rects[0].y = b
 
     a = (vars.player_x)
-    a += 8
-    a -= d
-    d = a
+    vars.rects[1].x = a
     a = (vars.player_y)
-    a += 8
-    a -= e
-    e = a
-    atn2 a, de
+    vars.rects[1].y = a
 
-    a += 0x40
-    d = a
-    cos a, d
-    (ix + offset(bulette.vx)) = a
-    bit 7, a
-    jr z, @xplus
-    a = 0xff
-    jr @xset
-@xplus
-    a = 0x00
-@xset
-    (ix + offset(bulette.vx) + 1) = a
-    hl = (ix + offset(bulette.vx))
-    c = 4
-    mul hl, c
+    a = 16
+    vars.rects[0].width = a
+    vars.rects[0].height = a
+    vars.rects[1].width = a
+    vars.rects[1].height = a
+
+    hl = vars.rects
+    in a, (io.angle)
+
+    ; 角度を -16 ~ 15 の範囲でズラず
+    b = a
+    in a, (io.rand8)
+    a &= 0x1F
+    a -= 0x10
+    a += b
+    out (io.angle), a
+
+    hl = bc
+    hl += bc
+    hl += bc
+    hl += bc
     (ix + offset(bulette.vx)) = hl
-
-    sin a, d
-    (ix + offset(bulette.vy)) = a
-    bit 7, a
-    jr z, @yplus
-    a = 0xff
-    jr @yset
-@yplus
-    a = 0x00
-@yset
-    (ix + offset(bulette.vy) + 1) = a
-    hl = (ix + offset(bulette.vy))
-    c = 4
-    mul hl, c
+    hl = de
+    hl += de
+    hl += de
+    hl += de
     (ix + offset(bulette.vy)) = hl
 
+    d = a
     h = d
     l = 100
     h /= l
@@ -228,7 +291,6 @@ enum BANK {
     a = h
     a += '0'
     vram.fg_name + 64 + 10 = a
-
 
     a = (vars.bidx)
     a++
@@ -258,19 +320,31 @@ enum BANK {
     ret
 
 @move
-    hl = (ix + offset(bulette.x))
-    bc = (ix + offset(bulette.vx))
+    a = (ix + offset(bulette.percent))
+    cp 250
+    jr nc, @max_speed
+    a += 3
+    (ix + offset(bulette.percent))= a
+@max_speed
+
+    hl = (ix + offset(bulette.vx))
+    out (io.percent), a
+    bc = (ix + offset(bulette.x))
     hl += bc
     (ix + offset(bulette.x)) = hl
-    a = h
+
+    hl = (ix + offset(bulette.vy))
+    out (io.percent), a
+    bc = (ix + offset(bulette.y))
+    hl += bc
+    (ix + offset(bulette.y)) = hl
+
+    a = (ix + offset(bulette.x) + 1)
     cp 248
     jr nc, @remove
     (iy + offset(oam.x)) = a
 
-    hl = (ix + offset(bulette.y))
-    bc = (ix + offset(bulette.vy))
-    hl += bc
-    a = h
+    a = (ix + offset(bulette.y) + 1)
     cp 200
     jr nc, @remove
     (ix + offset(bulette.y)) = hl

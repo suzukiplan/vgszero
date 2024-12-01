@@ -330,6 +330,27 @@ class VGS0
         }
     }
 
+    inline float abs(float v) { return v < 0 ? -v : v; }
+    inline float pi4() { return 0.785398163397448309616f; }
+    inline float pi4x3() { return 0.785398163397448309616f * 3.0f; }
+
+    float atan2(float y, float x)
+    {
+        // http://pubs.opengroup.org/onlinepubs/009695399/functions/atan2.html
+        // Volkan SALMA
+        float r, angle;
+        float abs_y = this->abs(y) + 1e-10f; // kludge to prevent 0/0 condition
+        if (x < 0.0f) {
+            r = (x + abs_y) / (abs_y - x);
+            angle = this->pi4x3();
+        } else {
+            r = (x - abs_y) / (x + abs_y);
+            angle = this->pi4();
+        }
+        angle += (0.1963f * r * r - 0.9817f) * r;
+        return y < 0.0f ? -angle : angle;
+    }
+
   public:
     inline unsigned char readMemory(unsigned short addr)
     {
@@ -408,6 +429,34 @@ class VGS0
                 y <<= 8;
                 y |= this->cpu->reg.pair.E;
                 return this->noise->octave(this->cpu->reg.pair.A, x, y);
+            }
+            case 0xD0: {
+                unsigned short addr = this->cpu->reg.pair.H;
+                addr <<= 8;
+                addr |= this->cpu->reg.pair.L;
+                int x1 = this->readMemory(addr++);
+                int y1 = this->readMemory(addr++);
+                int w1 = this->readMemory(addr++);
+                int h1 = this->readMemory(addr++);
+                int x2 = this->readMemory(addr++);
+                int y2 = this->readMemory(addr++);
+                int w2 = this->readMemory(addr++);
+                int h2 = this->readMemory(addr);
+                x1 += w1 / 2;
+                y1 += h1 / 2;
+                x2 += w2 / 2;
+                y2 += h2 / 2;
+                int rad = (int)(this->atan2(y2 - y1, x2 - x1) * 100);
+                while (rad < 0) { rad += 628; }
+                rad %= 628;
+                unsigned char r8 = ((rad / 627.0) * 255.0);
+                signed short s16 = vgs0_sin_table[r8];
+                signed short c16 = vgs0_cos_table[r8];
+                this->cpu->reg.pair.D = (s16 & 0xFF00) >> 8;
+                this->cpu->reg.pair.E = s16 & 0x00FF;
+                this->cpu->reg.pair.B = (c16 & 0xFF00) >> 8;
+                this->cpu->reg.pair.C = c16 & 0x00FF;
+                return r8;
             }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
@@ -617,6 +666,27 @@ class VGS0
                 hl <<= 8;
                 hl |= this->cpu->reg.pair.L;
                 this->noise->limitY(hl | 1);
+                break;
+            }
+            case 0xD0: {
+                signed short s16 = vgs0_sin_table[value];
+                signed short c16 = vgs0_cos_table[value];
+                this->cpu->reg.pair.D = (s16 & 0xFF00) >> 8;
+                this->cpu->reg.pair.E = s16 & 0x00FF;
+                this->cpu->reg.pair.B = (c16 & 0xFF00) >> 8;
+                this->cpu->reg.pair.C = c16 & 0x00FF;
+                break;
+            }
+            case 0xD1: {
+                unsigned short hl = this->cpu->reg.pair.H;
+                hl <<= 8;
+                hl |= this->cpu->reg.pair.L;
+                int work = (short)hl;
+                work *= value;
+                work /= 100;
+                hl = (unsigned short)work;
+                this->cpu->reg.pair.H = (hl & 0xFF00) >> 8;
+                this->cpu->reg.pair.L = hl & 0x00FF;
                 break;
             }
             case 0xDA: {

@@ -1,5 +1,54 @@
 # Change Log
 
+## [Version 1.17.0](https://github.com/suzukiplan/vgszero/releases/tag/1.17.0)
+
+フルアセンブリ言語で弾幕 STG の実装でよく用いられる 自機狙い (IN 0xD0), 自機ずらし (OUT 0xD0), 加速度計算 (OUT 0xD1) を簡単に実装できるようにするため、角度計算 (Angle Calculation) と 百分率計算 (Percentage Calculation) の HAGe を追加しました。
+
+|   Port    |  I  |  O  | Description  |
+| :-------: | :-: | :-: | :----------- |
+|   0xD0    |  o  |  o  | 角度計算 |
+|   0xD1    |  -  |  o  | 百分率計算 |
+
+Examples の [12_angle-asm](./example/12_angle-asm/) の実装をこれらを用いた形に変更しています。
+
+__(Angle Calculation)__
+
+以下の 8 bytes の構造体が格納されたアドレスを HL に指定して 0xD0 を IN することで角度と16bit固定小数点の移動速度を計算することができます。
+
+```c
+struct rect {
+    uint8_t x;      // X座標
+    uint8_t y;      // Y座標
+    uint8_t width;  // 幅
+    uint8_t height; // 高さ
+} chr[2];           // それらを 2 キャラクタ分（8bytes）
+```
+
+```z80
+LD HL, 0xC000
+IN A, (0xD0)
+```
+
+- `A` = 角度 (0〜255)
+- `BC` = X 方向の移動速度（B = 整数, C = 少数）
+- `DE` = Y 方向の移動速度（B = 整数, C = 少数）
+
+また、 角度を指定して 0xD0 を OUT することで、その角度に対応する `BC` と `DE` を求めることができます。
+
+まずは、0xD0 の IN で自機狙いの計算をして、求まった角度 A を加算したり減算して OUT をすることで自機ずらしを簡単に実装することができます。
+
+__(Percentage Calculation)__
+
+0xD0 を OUT することで、HLに格納された数値を 0% から 255% 範囲で計算することができます。
+
+```
+LD HL, 300
+LD A, 150
+OUT (0xD1), A   # HL = 450 (300 の 150%)
+```
+
+> HL の数値は符号付き 16bit 整数（signed short）として計算されます。
+
 ## [Version 1.16.0](https://github.com/suzukiplan/vgszero/releases/tag/1.16.0)
 
 BG, FG, スプライトのインタレース描画機能を追加しました。
