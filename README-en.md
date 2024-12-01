@@ -1058,7 +1058,7 @@ First, the self-displacement can be easily implemented by calculating the self-d
 
 #### (Percentage Calculation)
 
-By setting 0xD0 to OUT, the numeric value stored in HL can be calculated in the range of 0% to 255%.
+By setting 0xD1 to OUT, the numeric value stored in HL can be calculated in the range of 0% to 255%.
 
 ```
 LD HL, 300
