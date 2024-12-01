@@ -336,10 +336,9 @@ class VGS0
 
     float atan2(float y, float x)
     {
-        // http://pubs.opengroup.org/onlinepubs/009695399/functions/atan2.html
-        // Volkan SALMA
+        // This code is copied and modified from https://gist.github.com/volkansalma/2972237
         float r, angle;
-        float abs_y = this->abs(y) + 1e-10f; // kludge to prevent 0/0 condition
+        float abs_y = this->abs(y) + 1e-10f;
         if (x < 0.0f) {
             r = (x + abs_y) / (abs_y - x);
             angle = this->pi4x3();
