@@ -457,6 +457,23 @@ class VGS0
                 this->cpu->reg.pair.C = c16 & 0x00FF;
                 return r8;
             }
+            case 0xD1: {
+                int bc = this->cpu->reg.pair.B;
+                bc <<= 8;
+                bc |= this->cpu->reg.pair.C;
+                int de = this->cpu->reg.pair.D;
+                de <<= 8;
+                de |= this->cpu->reg.pair.E;
+                if (0 == de) {
+                    return 0;
+                }
+                if (bc == de) {
+                    return 100;
+                }
+                bc *= 100;
+                bc /= de;
+                return bc < 256 ? (unsigned char)bc : 255;
+            }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
                 unsigned short addr = this->cpu->reg.pair.B;

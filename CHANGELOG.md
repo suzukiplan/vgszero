@@ -1,5 +1,18 @@
 # Change Log
 
+## [Version 1.18.0](https://github.com/suzukiplan/vgszero/releases/tag/1.18.0)
+
+0xD1 を IN することで BC が DE の何パーセントになのか 0% 〜 255% の範囲で求めることができるようになりました。
+
+```z80
+LD BC, 33
+LD DE, 100
+IN A, (0xD1)  ; A = 33%
+```
+
+- DE が 0 の場合、結果は常に 0% になり、ゼロ除算エラーにはなりません
+- 結果が 255% を超える場合は 255% に丸められます
+
 ## [Version 1.17.0](https://github.com/suzukiplan/vgszero/releases/tag/1.17.0)
 
 フルアセンブリ言語で弾幕 STG の実装でよく用いられる 自機狙い (IN 0xD0), 自機ずらし (OUT 0xD0), 加速度計算 (OUT 0xD1) を簡単に実装できるようにするため、角度計算 (Angle Calculation) と 百分率計算 (Percentage Calculation) の HAGe を追加しました。

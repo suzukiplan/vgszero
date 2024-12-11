@@ -800,7 +800,7 @@ The memory area of the Character Pattern Table (0xA000 to 0xBFFF) can be made eq
 |   0xCE    |  o  |  -  | [Get perlin noise](#hardware-perlin-noise) |
 |   0xCF    |  o  |  -  | [Get perlin noise (with octave)](#hardware-perlin-noise) |
 |   0xD0    |  o  |  o  | [Angle Calculation](#angle-calculation) |
-|   0xD1    |  -  |  o  | [Percentage Calculation](#percentage-calculation) |
+|   0xD1    |  o  |  o  | [Percentage Calculation](#percentage-calculation) |
 |   0xDA    |  o  |  o  | [Save / Load](#save-data) |
 |   0xE0    |  -  |  o  | [Playback BGM](#play-bgm) |
 |   0xE1    |  -  |  o  | [Pause](#pause-bgm), [Resume](#resume-bgm) or [Fadeout](#fadeout-bgm) BGM|
@@ -1067,6 +1067,17 @@ OUT (0xD1), A   # HL = 450 (150% of 300)
 ```
 
 > HL numbers are calculated as signed 16-bit integers (signed short).
+
+The percentage of the BC/DE can be obtained in the range of 0% to 255% by setting 0xD1 to IN.
+
+```z80
+LD BC, 33
+LD DE, 100
+IN A, (0xD1)  ; A = 33%
+```
+
+- If DE is 0, the result will always be 0% and will not result in a zero division error
+- If the result exceeds 255%, it is rounded to 255
 
 #### (Save Data)
 
