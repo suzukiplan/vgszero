@@ -778,7 +778,7 @@ Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)�
 |   0xCE    |  o  |  -  | [パーリンノイズを取得](#hardware-perlin-noise) |
 |   0xCF    |  o  |  -  | [パーリンノイズを取得（オクターブあり）](#hardware-perlin-noise) |
 |   0xD0    |  o  |  o  | [角度計算](#angle-calculation) |
-|   0xD1    |  -  |  o  | [百分率計算](#percentage-calculation) |
+|   0xD1    |  o  |  o  | [百分率計算](#percentage-calculation) |
 |   0xDA    |  o  |  o  | [データのセーブ・ロード](#save-data) |
 |   0xE0    |  -  |  o  | BGM を[再生](#play-bgm) |
 |   0xE1    |  -  |  o  | BGM を[中断](#pause-bgm)、[再開](#resume-bgm)、[フェードアウト](#fadeout-bgm) |
@@ -1045,6 +1045,17 @@ OUT (0xD1), A   # HL = 450 (300 の 150%)
 ```
 
 > HL の数値は符号付き 16bit 整数（signed short）として計算されます。
+
+また、0xD1 を IN することで BC が DE の何パーセントになのか 0% 〜 255% の範囲で求めることができます。
+
+```z80
+LD BC, 33
+LD DE, 100
+IN A, (0xD1)  ; A = 33%
+```
+
+- DE が 0 の場合、結果は常に 0% になり、ゼロ除算エラーにはなりません
+- 結果が 255% を超える場合は 255% に丸められます
 
 #### (Save Data)
 
