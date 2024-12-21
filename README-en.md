@@ -801,6 +801,8 @@ The memory area of the Character Pattern Table (0xA000 to 0xBFFF) can be made eq
 |   0xCF    |  o  |  -  | [Get perlin noise (with octave)](#hardware-perlin-noise) |
 |   0xD0    |  o  |  o  | [Angle Calculation](#angle-calculation) |
 |   0xD1    |  o  |  o  | [Percentage Calculation](#percentage-calculation) |
+|   0xD2    |  -  |  o  | [Hardware sin table (16bit)](#hardware-sin-table) |
+|   0xD3    |  -  |  o  | [Hardware cos table (16bit)](#hardware-cos-table) |
 |   0xDA    |  o  |  o  | [Save / Load](#save-data) |
 |   0xE0    |  -  |  o  | [Playback BGM](#play-bgm) |
 |   0xE1    |  -  |  o  | [Pause](#pause-bgm), [Resume](#resume-bgm) or [Fadeout](#fadeout-bgm) BGM|
@@ -961,11 +963,21 @@ LD A, 123      # Specify the table element number to be sought in A
 OUT (0xC6), A  # A = sin(A × π ÷ 128.0)
 ```
 
+```z80
+LD A, 123      # Specify the table element number to be sought in A
+OUT (0xD2), A  # HL = sin(A × π ÷ 128.0)
+```
+
 #### (Hardware COS table)
 
 ```z80
 LD A, 123      # Specify the table element number to be sought in A
 OUT (0xC7), A  # A = cos(A × π ÷ 128.0)
+```
+
+```z80
+LD A, 123      # Specify the table element number to be sought in A
+OUT (0xD3), A  # HL = cos(A × π ÷ 128.0)
 ```
 
 #### (Hardware ATAN2 table)

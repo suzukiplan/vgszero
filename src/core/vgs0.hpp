@@ -705,6 +705,18 @@ class VGS0
                 this->cpu->reg.pair.L = hl & 0x00FF;
                 break;
             }
+            case 0xD2: {
+                auto hl = (signed short)vgs0_sin_table[value];
+                this->cpu->reg.pair.H = (hl & 0xFF00) >> 8;
+                this->cpu->reg.pair.L = hl & 0x00FF;
+                break;
+            }
+            case 0xD3: {
+                auto hl = (signed short)vgs0_cos_table[value];
+                this->cpu->reg.pair.H = (hl & 0xFF00) >> 8;
+                this->cpu->reg.pair.L = hl & 0x00FF;
+                break;
+            }
             case 0xDA: {
                 if (this->saveCallback) {
                     unsigned short addr = this->cpu->reg.pair.B;

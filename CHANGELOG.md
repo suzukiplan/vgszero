@@ -2,6 +2,8 @@
 
 ## [Version 1.18.0](https://github.com/suzukiplan/vgszero/releases/tag/1.18.0)
 
+### (パーセンテージ計算)
+
 0xD1 を IN することで BC が DE の何パーセントになのか 0% 〜 255% の範囲で求めることができるようになりました。
 
 ```z80
@@ -12,6 +14,20 @@ IN A, (0xD1)  ; A = 33%
 
 - DE が 0 の場合、結果は常に 0% になり、ゼロ除算エラーにはなりません
 - 結果が 255% を超える場合は 255% に丸められます
+
+### (16bit sin/cos)
+
+0xD2, 0xD3 の OUT で HL に 16bit の sin/cos を求めることができるようになりました。
+
+```z80
+; 16bit sin
+LD A, 123      ; A に求めるテーブル要素番号を指定
+OUT (0xD2), A  ; HL = sin(A × π ÷ 128.0)
+
+; 16bit cos
+LD A, 123      ; A に求めるテーブル要素番号を指定
+OUT (0xD3), A  ; HL = cos(A × π ÷ 128.0)
+```
 
 ## [Version 1.17.0](https://github.com/suzukiplan/vgszero/releases/tag/1.17.0)
 
