@@ -694,13 +694,19 @@ class VGS0
                 break;
             }
             case 0xD1: {
-                unsigned short hl = this->cpu->reg.pair.H;
+                signed short hl = this->cpu->reg.pair.H;
                 hl <<= 8;
                 hl |= this->cpu->reg.pair.L;
-                int work = (short)hl;
+                int work = hl;
                 work *= value;
                 work /= 100;
-                hl = (unsigned short)work;
+                if (32767 < work) {
+                    hl = 32767;
+                } else if (work < -32768) {
+                    hl = -32768;
+                } else {
+                    hl = (short)work;
+                }
                 this->cpu->reg.pair.H = (hl & 0xFF00) >> 8;
                 this->cpu->reg.pair.L = hl & 0x00FF;
                 break;
