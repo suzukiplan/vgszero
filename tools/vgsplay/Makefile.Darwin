@@ -11,4 +11,4 @@ all: build
 build: vgsplay
 
 vgsplay: $(SOURCE)
-	clang -std=c++11 -D__APPLE__ -Os -o vgsplay $(SOURCE) -lstdc++ -framework Foundation -framework AudioToolbox
+	c++ -std=c++11 -D__APPLE__ -Os -o vgsplay $(SOURCE) -lstdc++ -framework Foundation -framework AudioToolbox
