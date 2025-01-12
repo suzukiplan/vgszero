@@ -393,6 +393,7 @@ int main(int argc, char* argv[])
                     case '?':
                         puts("M ADDR SIZE ... Memory Dump (ADDR: HEX, SIZE: DEC)");
                         puts("D ............. Toggle Disassemble");
+                        puts("E ............. Exit Process");
                         puts("H or ? ........ Help");
                         puts("Other ......... Continue");
                         break;
@@ -405,6 +406,10 @@ int main(int argc, char* argv[])
                             puts("Disable Disassemble");
                             vgs0->cpu->resetDebugMessage();
                         }
+                        break;
+                    case 'E':
+                        puts("Exit process");
+                        exit(0);
                         break;
                     default:
                         end = true;
