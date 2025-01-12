@@ -33,6 +33,10 @@ LD A, 123      ; A に求めるテーブル要素番号を指定
 OUT (0xD3), A  ; HL = cos(A × π ÷ 128.0)
 ```
 
+### (Add `E` command for vgs0)
+
+SDL2 版エミュレータのデバッグコマンドに `E` (プロセス終了) を追加しました。
+
 ### (Minor bugfix)
 
 - macOS で tools のビルドが失敗する不具合を修正
