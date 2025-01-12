@@ -33,6 +33,10 @@ LD A, 123      ; A に求めるテーブル要素番号を指定
 OUT (0xD3), A  ; HL = cos(A × π ÷ 128.0)
 ```
 
+### (Minor bugfix)
+
+- macOS で tools のビルドが失敗する不具合を修正
+
 ## [Version 1.17.0](https://github.com/suzukiplan/vgszero/releases/tag/1.17.0)
 
 フルアセンブリ言語で弾幕 STG の実装でよく用いられる 自機狙い (IN 0xD0), 自機ずらし (OUT 0xD0), 加速度計算 (OUT 0xD1) を簡単に実装できるようにするため、角度計算 (Angle Calculation) と 百分率計算 (Percentage Calculation) の HAGe を追加しました。
