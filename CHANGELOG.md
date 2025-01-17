@@ -40,6 +40,7 @@ SDL2 版エミュレータのデバッグコマンドに `E` (プロセス終了
 ### (Minor bugfix)
 
 - macOS で tools のビルドが失敗する不具合を修正
+- macOS で SDL2 版エミュレータのビルドが失敗する不具合を修正
 
 ## [Version 1.17.0](https://github.com/suzukiplan/vgszero/releases/tag/1.17.0)
 
