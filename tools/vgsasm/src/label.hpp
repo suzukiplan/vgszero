@@ -121,9 +121,7 @@ void label_parse_jump(LineData* line)
 void label_extract_anonymous(std::vector<LineData*>* lines)
 {
     int count = 0;
-    int lineNumber = 0;
     for (auto it = lines->begin(); it != lines->end(); it++) {
-        lineNumber++;
         auto line = *it;
         for (auto token = line->token.begin(); token != line->token.end(); token++) {
             if (token->first == TokenType::Other && token->second == "@") {
