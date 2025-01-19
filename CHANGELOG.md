@@ -37,6 +37,10 @@ OUT (0xD3), A  ; HL = cos(A × π ÷ 128.0)
 
 SDL2 版エミュレータのデバッグコマンドに `E` (プロセス終了) を追加しました。
 
+### (Add `NO_NSF` compile flag)
+
+コンパイル時に `-DNO_NSF` を定義することで NSF を使用できない状態にするオプションを追加しました。。
+
 ### (Minor bugfix)
 
 - macOS で tools のビルドが失敗する不具合を修正

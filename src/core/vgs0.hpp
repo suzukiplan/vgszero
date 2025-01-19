@@ -6,7 +6,9 @@
 
 #ifndef INCLUDE_VGS0_HPP
 #define INCLUDE_VGS0_HPP
+#ifndef NO_NSF
 #include "nsf/nsfplay.hpp"
+#endif
 #include "perlinnoise.hpp"
 #include "vdp.hpp"
 #include "vgs0def.h"
@@ -62,8 +64,10 @@ class VGS0
     VDP* vdp;
     VGSDecoder* vgsdec;
     PerlinNoise* noise;
+#ifndef NO_NSF
     xgm::NSF nsf;
     NSFPlayer nsfPlayer;
+#endif
     bool (*saveCallback)(VGS0* vgs0, const void* data, size_t size);
     bool (*loadCallback)(VGS0* vgs0, void* data, size_t size);
     void (*resetCallback)(VGS0* vgs0);
@@ -240,7 +244,9 @@ class VGS0
         }
         if (this->ctx.bgm.playing) {
             if (this->ctx.bgm.isNSF) {
+#ifndef NO_NSF
                 this->nsfPlayer.Render(buf, size / 2);
+#endif
             } else {
                 this->vgsdec->execute(buf, size);
                 this->ctx.bgm.playing = !this->vgsdec->isPlayEnd();
@@ -749,6 +755,7 @@ class VGS0
                     this->ctx.bgm.isNSF = false;
                     if (0 == memcmp(this->bgm[value].data, "VGSBGM-V", 8)) {
                         this->vgsdec->load(this->bgm[value].data, this->bgm[value].size);
+#ifndef NO_NSF
                     } else if (0 == memcmp(this->bgm[value].data, "NESM", 4)) {
                         if (this->nsf.Load((uint8_t*)this->bgm[value].data, this->bgm[value].size)) {
                             this->ctx.bgm.isNSF = true;
@@ -760,6 +767,7 @@ class VGS0
                             // unsupported .nsf format
                             this->ctx.bgm.playing = false;
                         }
+#endif
                     } else {
                         // unsupported format
                         this->ctx.bgm.playing = false;
