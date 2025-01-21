@@ -305,6 +305,7 @@ int main(int argc, char* argv[])
         char path[256];
         bank &= 0xFF;
         snprintf(path, sizeof(path), "save%03d.dat", bank);
+        log("Saving %s", path);
         FILE* fp = fopen(path, "wb");
         if (!fp) {
             log("File open error!");
@@ -323,6 +324,7 @@ int main(int argc, char* argv[])
         char path[256];
         bank &= 0xFF;
         snprintf(path, sizeof(path), "save%03d.dat", bank);
+        log("Loading %s", path);
         FILE* fp = fopen(path, "rb");
         if (!fp) {
             log("File open error!");
