@@ -27,6 +27,8 @@ enum IO {
     sin16                           ; 16-bits SIN (OUT only)
     cos16                           ; 16-bits COS (OUT only)
     save_load = 0xDA                ; Save (OUT) and Load (IN)
+    exram_save_load                 ; Save (OUT:val=bank) and Load (IN:A=bank)
+    exram_io                        ; A <-in-[HL]<-out- val (B: bank)
     bgm_play = 0xE0                 ; Play BGM (OUT)
     bgm_ctrl                        ; Pause(0), Resume(1), Fadeout(2) BGM (OUT)
     sfx_play = 0xF0                 ; Play SFX (OUT)
