@@ -70,6 +70,8 @@ class VGS0
 #endif
     bool (*saveCallback)(VGS0* vgs0, const void* data, size_t size);
     bool (*loadCallback)(VGS0* vgs0, void* data, size_t size);
+    bool (*saveExtraCallback)(VGS0* vgs0, int bank);
+    bool (*loadExtraCallback)(VGS0* vgs0, int bank);
     void (*resetCallback)(VGS0* vgs0);
 
     struct Context {
@@ -104,6 +106,8 @@ class VGS0
         this->saveCallback = nullptr;
         this->loadCallback = nullptr;
         this->resetCallback = nullptr;
+        this->loadExtraCallback = nullptr;
+        this->saveExtraCallback = nullptr;
         this->setBgmVolume(100);
         this->setSeVolume(100);
         this->reset();
@@ -492,6 +496,18 @@ class VGS0
                 size = 0x4000 < (int)addr + size ? 0x4000 - addr : size;
                 return this->loadCallback(this, &this->ctx.ram[addr], size) ? 0x00 : 0xFF;
             }
+            case 0xDB: {
+                memset(&this->vdp->ctx.ram1[this->cpu->reg.pair.A][0], 0, 0x2000);
+                if (!this->loadExtraCallback) return 0xFF;
+                return this->loadExtraCallback(this, this->cpu->reg.pair.A) ? 0x00 : 0xFF;
+            }
+            case 0xDC: {
+                unsigned short addr = this->cpu->reg.pair.H;
+                addr <<= 8;
+                addr |= this->cpu->reg.pair.L;
+                unsigned char bank = this->cpu->reg.pair.B;
+                return this->vdp->ctx.ram1[bank][addr];
+            }
             default: return 0xFF;
         }
     }
@@ -743,6 +759,22 @@ class VGS0
                 } else {
                     this->cpu->reg.pair.A = 0xFF;
                 }
+                break;
+            }
+            case 0xDB: {
+                if (this->saveExtraCallback) {
+                    this->cpu->reg.pair.A = this->saveExtraCallback(this, value) ? 0x00 : 0xFF;
+                } else {
+                    this->cpu->reg.pair.A = 0xFF;
+                }
+                break;
+            }
+            case 0xDC: {
+                unsigned short addr = this->cpu->reg.pair.H;
+                addr <<= 8;
+                addr |= this->cpu->reg.pair.L;
+                unsigned char bank = this->cpu->reg.pair.B;
+                this->vdp->ctx.ram1[bank][addr] = value;
                 break;
             }
             case 0xE0:

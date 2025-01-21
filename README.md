@@ -30,7 +30,9 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [最大 2MB (8kb × 256banks)](#cpu-memory-map) のプログラムとデータ (※音声データを除く)
   - [RAM サイズ 16KB](#cpu-memory-map) (PV16相当!)
   - [拡張 RAM サイズ 2MB](#extra-ram-bank)
+  - [拡張 RAM のバンク切り替え無しでの I/O に対応](#extra-ram-bank-io)
   - [セーブ機能](#save-data)に対応
+  - [拡張 RAM セーブ機能](#extra-save-data)に対応
 - VDP; VGS-Video (映像処理)
   - [VRAM](#vram-memory-map) サイズ 16KB (TMS9918A 相当!)
   - 解像度: 240x192 ピクセル (TMS9918A より少しだけ狭い!)
@@ -782,6 +784,8 @@ Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)�
 |   0xD2    |  -  |  o  | [ハードウェア sin テーブル (16bit)](#hardware-sin-table) |
 |   0xD3    |  -  |  o  | [ハードウェア cos テーブル (16bit)](#hardware-cos-table) |
 |   0xDA    |  o  |  o  | [データのセーブ・ロード](#save-data) |
+|   0xDB    |  o  |  o  | [拡張 RAM のセーブ・ロード](#extra-save-data) |
+|   0xDC    |  o  |  o  | [拡張 RAM の入出力](#extra-ram-bank-io) |
 |   0xE0    |  -  |  o  | BGM を[再生](#play-bgm) |
 |   0xE1    |  -  |  o  | BGM を[中断](#pause-bgm)、[再開](#resume-bgm)、[フェードアウト](#fadeout-bgm) |
 |   0xF0    |  -  |  o  | 効果音を再生 |
@@ -823,6 +827,25 @@ IN A, (0xB4)
 # Switch Extra RAM Bank to No.3
 LD A, 0x03
 OUT (0xB4), A
+```
+
+#### (Extra RAM Bank I/O)
+
+ポート番号 0xDC の入出力を行うことで、バンク切り替えをすることなく特定の拡張 RAM バンクの特定アドレスへの 1 byte の入出力を行うことができます。
+
+```z80
+; 入力
+LD HL, 0x1FFF     ; 読み込みアドレスを HL に設定(※上位3ビットはマスクされる)
+LD B, 123         ; 読み込むバンク番号を B に設定
+IN A, (0xDC)      ; exram[123] の 0x1FFF 番地を A に読み込む
+```
+
+```z80
+; 出力
+LD HL, 0x1FFF     ; 書き込みアドレスを HL に設定(※上位3ビットはマスクされる)
+LD B, 123         ; 書き込むバンク番号を B に設定
+LD A, 0xCC        ; 書き込む値を A に設定
+IN (0xDC), A      ; exram[123] の 0x1FFF 番地に A を書き込む
 ```
 
 #### (Duplicate Extra RAM Bank)
@@ -1091,7 +1114,7 @@ JNZ SAVE_FAILED # 失敗時は not 0
 ```z80
 LD BC, 0xC000   # ロード先のアドレスを指定 (RAM 領域のみ指定可能)
 LD HL, 0x2000   # ロードするデータサイズを指定 (最大 16 KB = 0x4000)
-IN A, (0xDA)    # ロード (※書き込んだ値は無視されるので何でもOK)
+IN A, (0xDA)    # ロード
 JZ LOAD_SUCCESS # ロード成功時は 0
 JNZ LOAD_FAILED # ロード失敗時は not 0 (※ロード先は 0x00 で埋められる)
 ```
@@ -1109,6 +1132,34 @@ RaspberryPi 固有の注意事項:
 - save.dat がロード時に指定したサイズ（HL）よりも小さくてもロードは成功し、この時、データが存在しない領域は 0x00 で埋められます
 - スタック領域へのロードを行うとプログラムが暴走する可能性があります
 - ユーザが異なるゲームのセーブデータを用いて動かす可能性を考慮するのが望ましいです
+
+#### (Extra Save Data)
+
+- ポート 0xDB の I/O で [拡張 RAM バンク](#extra-ram-bank) のセーブ（OUT）、ロード（IN）ができます
+- セーブデータのファイル名は SD カードルートディレクトリ（SDL2の場合はカレントディレクトリ）の `saveXXX.dat` 固定です
+  - `XXX` は拡張 RAM のバンク番号: `000` ~ `255`
+
+セーブの実装例:
+
+```z80
+LD A, 123       # セーブする拡張 RAM バンク番号を A に設定
+OUT (0xDB), A   # セーブを実行
+AND 0xFF        # セーブ結果はレジスタAに格納される
+JZ SAVE_SUCCESS # 成功時は 0
+JNZ SAVE_FAILED # 失敗時は not 0
+```
+
+ロードの実装例:
+
+```z80
+LD A, 123       # ロードする拡張 RAM バンク番号を A に設定
+IN A, (0xDB)    # ロード
+JZ LOAD_SUCCESS # ロード成功時は 0
+JNZ LOAD_FAILED # ロード失敗時は not 0 (※ロード先は 0x00 で埋められる)
+```
+
+- 1 つのセーブデータのサイズは 8192 bytes (バンクサイズ) 固定で領域の一部をセーブ・ロードすることはできません
+- [通常のセーブデータ](#save-data) と同様の注意事項があります
 
 #### (Play BGM)
 
