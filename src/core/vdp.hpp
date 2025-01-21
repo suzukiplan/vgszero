@@ -326,10 +326,13 @@ class VDP
             unsigned short x16 = sp16[1];
             if (y16 || x16) {
                 for (int cy = 0; cy < height; cy++) {
+                    unsigned short y = (unsigned short)(y16 + cy * 8);
+                    if (scanline < y || y + 8 <= scanline) {
+                        continue;
+                    }
                     for (int cx = 0; cx < width; cx++) {
-                        unsigned short y = (unsigned short)(y16 + cy * 8);
                         unsigned short x = (unsigned short)(x16 + cx * 8);
-                        if (x == 0 || 248 < x || scanline < y || y + 8 <= scanline) {
+                        if (x == 0 || 248 < x) {
                             continue;
                         }
                         const unsigned char* chrtbl = ptntbl;
@@ -354,10 +357,13 @@ class VDP
                 }
             } else {
                 for (int cy = 0; cy < height; cy++) {
+                    unsigned char y = (unsigned char)(oam[0] + cy * 8);
+                    if (scanline < y || y + 8 <= scanline) {
+                        continue;
+                    }
                     for (int cx = 0; cx < width; cx++) {
-                        unsigned char y = (unsigned char)(oam[0] + cy * 8);
                         unsigned char x = (unsigned char)(oam[1] + cx * 8);
-                        if (x == 0 || 248 < x || scanline < y || y + 8 <= scanline) {
+                        if (x == 0 || 248 < x) {
                             continue;
                         }
                         const unsigned char* chrtbl = ptntbl;
