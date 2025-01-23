@@ -6,7 +6,9 @@
 
 #ifndef INCLUDE_VGS0_HPP
 #define INCLUDE_VGS0_HPP
+#ifndef NO_NSF
 #include "nsf/nsfplay.hpp"
+#endif
 #include "perlinnoise.hpp"
 #include "vdp.hpp"
 #include "vgs0def.h"
@@ -62,10 +64,14 @@ class VGS0
     VDP* vdp;
     VGSDecoder* vgsdec;
     PerlinNoise* noise;
+#ifndef NO_NSF
     xgm::NSF nsf;
     NSFPlayer nsfPlayer;
+#endif
     bool (*saveCallback)(VGS0* vgs0, const void* data, size_t size);
     bool (*loadCallback)(VGS0* vgs0, void* data, size_t size);
+    bool (*saveExtraCallback)(VGS0* vgs0, int bank);
+    bool (*loadExtraCallback)(VGS0* vgs0, int bank);
     void (*resetCallback)(VGS0* vgs0);
 
     struct Context {
@@ -100,6 +106,8 @@ class VGS0
         this->saveCallback = nullptr;
         this->loadCallback = nullptr;
         this->resetCallback = nullptr;
+        this->loadExtraCallback = nullptr;
+        this->saveExtraCallback = nullptr;
         this->setBgmVolume(100);
         this->setSeVolume(100);
         this->reset();
@@ -240,7 +248,9 @@ class VGS0
         }
         if (this->ctx.bgm.playing) {
             if (this->ctx.bgm.isNSF) {
+#ifndef NO_NSF
                 this->nsfPlayer.Render(buf, size / 2);
+#endif
             } else {
                 this->vgsdec->execute(buf, size);
                 this->ctx.bgm.playing = !this->vgsdec->isPlayEnd();
@@ -457,6 +467,23 @@ class VGS0
                 this->cpu->reg.pair.C = c16 & 0x00FF;
                 return r8;
             }
+            case 0xD1: {
+                int bc = this->cpu->reg.pair.B;
+                bc <<= 8;
+                bc |= this->cpu->reg.pair.C;
+                int de = this->cpu->reg.pair.D;
+                de <<= 8;
+                de |= this->cpu->reg.pair.E;
+                if (0 == de) {
+                    return 0;
+                }
+                if (bc == de) {
+                    return 100;
+                }
+                bc *= 100;
+                bc /= de;
+                return bc < 256 ? (unsigned char)bc : 255;
+            }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
                 unsigned short addr = this->cpu->reg.pair.B;
@@ -468,6 +495,18 @@ class VGS0
                 size |= this->cpu->reg.pair.L;
                 size = 0x4000 < (int)addr + size ? 0x4000 - addr : size;
                 return this->loadCallback(this, &this->ctx.ram[addr], size) ? 0x00 : 0xFF;
+            }
+            case 0xDB: {
+                memset(&this->vdp->ctx.ram1[this->cpu->reg.pair.A][0], 0, 0x2000);
+                if (!this->loadExtraCallback) return 0xFF;
+                return this->loadExtraCallback(this, this->cpu->reg.pair.A) ? 0x00 : 0xFF;
+            }
+            case 0xDC: {
+                unsigned short addr = this->cpu->reg.pair.H;
+                addr <<= 8;
+                addr |= this->cpu->reg.pair.L;
+                unsigned char bank = this->cpu->reg.pair.B;
+                return this->vdp->ctx.ram1[bank][addr];
             }
             default: return 0xFF;
         }
@@ -677,13 +716,31 @@ class VGS0
                 break;
             }
             case 0xD1: {
-                unsigned short hl = this->cpu->reg.pair.H;
+                signed short hl = this->cpu->reg.pair.H;
                 hl <<= 8;
                 hl |= this->cpu->reg.pair.L;
-                int work = (short)hl;
+                int work = hl;
                 work *= value;
                 work /= 100;
-                hl = (unsigned short)work;
+                if (32767 < work) {
+                    hl = 32767;
+                } else if (work < -32768) {
+                    hl = -32768;
+                } else {
+                    hl = (short)work;
+                }
+                this->cpu->reg.pair.H = (hl & 0xFF00) >> 8;
+                this->cpu->reg.pair.L = hl & 0x00FF;
+                break;
+            }
+            case 0xD2: {
+                auto hl = (signed short)vgs0_sin_table[value];
+                this->cpu->reg.pair.H = (hl & 0xFF00) >> 8;
+                this->cpu->reg.pair.L = hl & 0x00FF;
+                break;
+            }
+            case 0xD3: {
+                auto hl = (signed short)vgs0_cos_table[value];
                 this->cpu->reg.pair.H = (hl & 0xFF00) >> 8;
                 this->cpu->reg.pair.L = hl & 0x00FF;
                 break;
@@ -704,6 +761,22 @@ class VGS0
                 }
                 break;
             }
+            case 0xDB: {
+                if (this->saveExtraCallback) {
+                    this->cpu->reg.pair.A = this->saveExtraCallback(this, value) ? 0x00 : 0xFF;
+                } else {
+                    this->cpu->reg.pair.A = 0xFF;
+                }
+                break;
+            }
+            case 0xDC: {
+                unsigned short addr = this->cpu->reg.pair.H;
+                addr <<= 8;
+                addr |= this->cpu->reg.pair.L;
+                unsigned char bank = this->cpu->reg.pair.B;
+                this->vdp->ctx.ram1[bank][addr] = value;
+                break;
+            }
             case 0xE0:
                 if (this->bgm[value].data) {
                     this->ctx.bgm.playing = true;
@@ -714,6 +787,7 @@ class VGS0
                     this->ctx.bgm.isNSF = false;
                     if (0 == memcmp(this->bgm[value].data, "VGSBGM-V", 8)) {
                         this->vgsdec->load(this->bgm[value].data, this->bgm[value].size);
+#ifndef NO_NSF
                     } else if (0 == memcmp(this->bgm[value].data, "NESM", 4)) {
                         if (this->nsf.Load((uint8_t*)this->bgm[value].data, this->bgm[value].size)) {
                             this->ctx.bgm.isNSF = true;
@@ -725,6 +799,7 @@ class VGS0
                             // unsupported .nsf format
                             this->ctx.bgm.playing = false;
                         }
+#endif
                     } else {
                         // unsupported format
                         this->ctx.bgm.playing = false;

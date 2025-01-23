@@ -363,7 +363,7 @@ LineData::LineData(const char* path, int lineNumber, std::string text)
                 }
                 case 0x02: {
                     char num[32];
-                    sprintf(num, "%d", (int)schrs[schrsIndex++]);
+                    snprintf(num, sizeof(num), "%d", (int)schrs[schrsIndex++]);
                     this->token.push_back(std::make_pair<TokenType, std::string>(TokenType::Numeric, num));
                     while (0x02 == *cp) { cp++; }
                     break;

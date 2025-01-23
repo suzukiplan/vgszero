@@ -301,6 +301,44 @@ int main(int argc, char* argv[])
         return true;
     };
 
+    vgs0.saveExtraCallback = [](VGS0* vgs0, int bank) -> bool {
+        char path[256];
+        bank &= 0xFF;
+        snprintf(path, sizeof(path), "save%03d.dat", bank);
+        log("Saving %s", path);
+        FILE* fp = fopen(path, "wb");
+        if (!fp) {
+            log("File open error!");
+            return false;
+        }
+        if (0x2000 != fwrite(&vgs0->vdp->ctx.ram1[bank][0], 1, 0x2000, fp)) {
+            log("File write error!");
+            fclose(fp);
+            return false;
+        }
+        fclose(fp);
+        return true;
+    };
+
+    vgs0.loadExtraCallback = [](VGS0* vgs0, int bank) -> bool {
+        char path[256];
+        bank &= 0xFF;
+        snprintf(path, sizeof(path), "save%03d.dat", bank);
+        log("Loading %s", path);
+        FILE* fp = fopen(path, "rb");
+        if (!fp) {
+            log("File open error!");
+            return false;
+        }
+        if (0x2000 != fread(&vgs0->vdp->ctx.ram1[bank][0], 1, 0x2000, fp)) {
+            log("File read error!");
+            fclose(fp);
+            return false;
+        }
+        fclose(fp);
+        return true;
+    };
+
     if (debugMode) {
         vgs0.cpu->addBreakOperand(0x00, [](void* arg, unsigned char* op, int len) {
             auto vgs0 = (VGS0*)arg;
@@ -393,6 +431,7 @@ int main(int argc, char* argv[])
                     case '?':
                         puts("M ADDR SIZE ... Memory Dump (ADDR: HEX, SIZE: DEC)");
                         puts("D ............. Toggle Disassemble");
+                        puts("E ............. Exit Process");
                         puts("H or ? ........ Help");
                         puts("Other ......... Continue");
                         break;
@@ -405,6 +444,10 @@ int main(int argc, char* argv[])
                             puts("Disable Disassemble");
                             vgs0->cpu->resetDebugMessage();
                         }
+                        break;
+                    case 'E':
+                        puts("Exit process");
+                        exit(0);
                         break;
                     default:
                         end = true;

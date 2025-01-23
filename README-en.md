@@ -28,9 +28,11 @@ This repository provides the VGS-Zero body code, distribution images, SDK, and a
   - Can also be programmed in C with SDCC (see [Programming Guide](#programming-guide))
   - The game executable file [game.pkg](#gamepkg) has a maximum size of 128 megabits.
   - [Up to 2MB (8KB x 256banks)](#cpu-memory-map) of programs and data _(*excluding voice data)_
-  - [RAM size 16KB](#cpu-memory-map) (PV16相当!)
+  - [RAM size 16KB](#cpu-memory-map) (PV16!)
   - [Extended RAM size 2MB](#extra-ram-bank)
-  - [Built-in RAM save function](#save-data)に対応
+  - [For I/O without bank switching of extended RAM](#extra-ram-bank-io)
+  - [Built-in RAM save function](#save-data)
+  - [Build-in Extended RAM save function](#extra-save-data)
 - VDP; VGS-Video (Video Display Processor)
   - [VRAM size 16KB](#vram-memory-map)
   - Screen resolution: 240x192 pixels
@@ -800,8 +802,12 @@ The memory area of the Character Pattern Table (0xA000 to 0xBFFF) can be made eq
 |   0xCE    |  o  |  -  | [Get perlin noise](#hardware-perlin-noise) |
 |   0xCF    |  o  |  -  | [Get perlin noise (with octave)](#hardware-perlin-noise) |
 |   0xD0    |  o  |  o  | [Angle Calculation](#angle-calculation) |
-|   0xD1    |  -  |  o  | [Percentage Calculation](#percentage-calculation) |
+|   0xD1    |  o  |  o  | [Percentage Calculation](#percentage-calculation) |
+|   0xD2    |  -  |  o  | [Hardware sin table (16bit)](#hardware-sin-table) |
+|   0xD3    |  -  |  o  | [Hardware cos table (16bit)](#hardware-cos-table) |
 |   0xDA    |  o  |  o  | [Save / Load](#save-data) |
+|   0xDB    |  o  |  o  | [Extended RAM Save / Load](#extra-save-data) |
+|   0xDC    |  o  |  o  | [Extended RAM I/O](#extra-ram-bank-io) |
 |   0xE0    |  -  |  o  | [Playback BGM](#play-bgm) |
 |   0xE1    |  -  |  o  | [Pause](#pause-bgm), [Resume](#resume-bgm) or [Fadeout](#fadeout-bgm) BGM|
 |   0xF0    |  -  |  o  | Play Sound Effect |
@@ -843,6 +849,17 @@ IN A, (0xB4)
 # Switch Extra RAM Bank to No.3
 LD A, 0x03
 OUT (0xB4), A
+```
+
+#### (Extra RAM Bank I/O)
+
+By inputting/outputting port number 0xDC, it is possible to input/output 1 byte to/from a specific address of a specific extended RAM bank without switching banks.
+
+```z80
+; Input
+LD HL, 0x1FFF     ; Set read address to HL (*Higher 3 bits are masked)
+LD B, 123         ; Set the bank number to be read to B
+IN A, (0xDC)      ; Read the number 0x1FFF of exram[123] into A
 ```
 
 #### (Duplicate Extra RAM Bank)
@@ -961,11 +978,21 @@ LD A, 123      # Specify the table element number to be sought in A
 OUT (0xC6), A  # A = sin(A × π ÷ 128.0)
 ```
 
+```z80
+LD A, 123      # Specify the table element number to be sought in A
+OUT (0xD2), A  # HL = sin(A × π ÷ 128.0)
+```
+
 #### (Hardware COS table)
 
 ```z80
 LD A, 123      # Specify the table element number to be sought in A
 OUT (0xC7), A  # A = cos(A × π ÷ 128.0)
+```
+
+```z80
+LD A, 123      # Specify the table element number to be sought in A
+OUT (0xD3), A  # HL = cos(A × π ÷ 128.0)
 ```
 
 #### (Hardware ATAN2 table)
@@ -1068,6 +1095,17 @@ OUT (0xD1), A   # HL = 450 (150% of 300)
 
 > HL numbers are calculated as signed 16-bit integers (signed short).
 
+The percentage of the BC/DE can be obtained in the range of 0% to 255% by setting 0xD1 to IN.
+
+```z80
+LD BC, 33
+LD DE, 100
+IN A, (0xD1)  ; A = 33%
+```
+
+- If DE is 0, the result will always be 0% and will not result in a zero division error
+- If the result exceeds 255%, it is rounded to 255
+
 #### (Save Data)
 
 - Save (OUT) and load (IN) can be done with I/O on port 0xDA.
@@ -1090,7 +1128,7 @@ Load implementation example:
 ```z80
 LD BC, 0xC000   # Specify load destination address (only RAM area can be specified)
 LD HL, 0x2000   # Specify data size to load (max 16 KB = 0x4000)
-IN A, (0xDA)    # Load (*Written values are ignored, so anything is OK)
+IN A, (0xDA)    # Load
 JZ LOAD_SUCCESS # 0 on success
 JNZ LOAD_FAILED # On failure, not 0 (*Load destination is filled with 0x00)
 ```
@@ -1108,6 +1146,34 @@ Common notes:
 - Even if save.dat is smaller than the size (HL) specified at load time, the load will succeed, and the area where no data exists will be filled with 0x00.
 - Loading into the stack area may cause the program to run out of control.
 - It is advisable to take into account the possibility that users may be running with saved data from different games
+
+#### (Extra Save Data)
+
+- The [extended RAM bank](#extra-ram-bank) can be saved (OUT) and loaded (IN) via I/O on port 0xDB.
+- The save data file name is fixed to `saveXXX.dat` in the SD card root directory (current directory for SDL2)
+  - `XXX` is the bank number of the extended RAM: `000` ~ `255`
+
+Example of save implementation:
+
+```z80
+LD A, 123       # Set the extended RAM bank number to be saved to A.
+OUT (0xDB), A   # Execute save.
+AND 0xFF        # The save result is stored in register A.
+JZ SAVE_SUCCESS # 0 on success
+JNZ SAVE_FAILED # On failure, not 0
+```
+
+Example of save implementation:
+
+```z80
+LD A, 123       # Set the extended RAM bank number to be loaded to A.
+IN A, (0xDB)    # Execute load.
+JZ LOAD_SUCCESS # 0 on success
+JNZ LOAD_FAILED # On failure, not 0 (*Load destination is filled with 0x00)
+```
+
+- The size of a single saved data is fixed at 8192 bytes (bank size) and it is not possible to save/load a part of the area
+- The same caveats apply as for [normal save-data](#save-data)
 
 #### (Play BGM)
 

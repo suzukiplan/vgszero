@@ -14,6 +14,7 @@ static UINT pkgSize_;
 #define CONFIG_FILE "/config.sys"
 #define PKG_FILE "/game.pkg"
 #define SAVE_FILE "/save.dat"
+#define EXTRA_SAVE_FILE "SD:/save%03d.dat"
 extern "C" const unsigned short splash[46080];
 extern "C" const unsigned short sderror[3072];
 VGS0* vgs0_;
@@ -25,6 +26,9 @@ uint16_t pcmData_[735];
 uint8_t saveDataCache_[0x4000];
 bool saveDataChanged_;
 UINT saveDataSize_;
+uint8_t extraSaveDataCache_[256][0x2000];
+bool extraSaveDataChanged_[256];
+bool extraSaveDataChangeDetect_;
 CLogger* logger_;
 SystemConfiguration* config_;
 
@@ -209,6 +213,42 @@ TShutdownMode CKernel::run(void)
         f_close(&saveDat);
     }
 
+    memset(extraSaveDataCache_, 0, sizeof(extraSaveDataCache_));
+    memset(extraSaveDataChanged_, 0, sizeof(extraSaveDataChanged_));
+    extraSaveDataChangeDetect_ = false;
+    DIR dir;
+    result = f_opendir(&dir, MOUNT_DRIVE);
+    if (FR_OK == result) {
+        FILINFO fno;
+        while (1) {
+            result = f_readdir(&dir, &fno);
+            logger.Write(TAG, LogNotice, "Check: %s", fno.fname);
+            if (FR_OK != result || 0 == fno.fname[0]) {
+                break; // no entry
+            } else if ('.' == fno.fname[0] || (fno.fattrib & AM_DIR)) {
+                continue; // skip directory
+            }
+            if (0 != strncmp(fno.fname, "save", 4)) {
+                continue; // not save file
+            }
+            if ('0' != fno.fname[4] && '1' != fno.fname[4] && '2' != fno.fname[4]) {
+                continue; // not extra save file
+            }
+            int bank = atoi(&fno.fname[4]) & 0xFF;
+            char path[256];
+            sprintf(path, EXTRA_SAVE_FILE, bank);
+            result = f_open(&saveDat, path, FA_READ | FA_OPEN_EXISTING);
+            if (FR_OK == result) {
+                UINT size = 0x2000;
+                if (FR_OK != f_read(&saveDat, &extraSaveDataCache_[bank][0], size, &size)) {
+                    ;
+                }
+                f_close(&saveDat);
+            }
+        }
+        f_closedir(&dir);
+    }
+
     f_unmount(MOUNT_DRIVE);
 
     void* rom = nullptr;
@@ -284,6 +324,20 @@ TShutdownMode CKernel::run(void)
         } else {
             return false;
         }
+    };
+    vgs0.saveExtraCallback = [](VGS0* vgs0, int bank) -> bool {
+        extraSaveDataChangeDetect_ = true;
+        extraSaveDataChanged_[bank & 0xFF] = true;
+        void* cache = &extraSaveDataCache_[bank & 0xFF][0];
+        void* data = &vgs0->vdp->ctx.ram1[bank & 0xFF][0];
+        memcpy(cache, data, 0x2000);
+        return true;
+    };
+    vgs0.loadExtraCallback = [](VGS0* vgs0, int bank) -> bool {
+        void* cache = &extraSaveDataCache_[bank & 0xFF][0];
+        void* data = &vgs0->vdp->ctx.ram1[bank & 0xFF][0];
+        memcpy(data, cache, 0x2000);
+        return true;
     };
     vgs0.resetCallback = [](VGS0* vgs0) {
         pendingCounter_ = 16;
@@ -402,6 +456,54 @@ TShutdownMode CKernel::run(void)
                 swap = 192 - swap;
                 buffer->SetVirtualOffset(0, swap);
                 led.Blink(blinkCount);
+            }
+            led.Off();
+        }
+
+        // extra save if needed
+        if (extraSaveDataChangeDetect_) {
+            extraSaveDataChangeDetect_ = false;
+            led.On();
+            result = f_mount(&fatFs, MOUNT_DRIVE, 1);
+            if (FR_OK != result) {
+                logger.Write(TAG, LogError, "Mount failed! (%d)", (int)result);
+            } else {
+                int blinkCount = 0;
+                for (int i = 0; i < 256; i++) {
+                    if (extraSaveDataChanged_[i]) {
+                        extraSaveDataChanged_[i] = false;
+                        char path[256];
+                        sprintf(path, EXTRA_SAVE_FILE, i);
+                        result = f_open(&saveDat, path, FA_WRITE | FA_CREATE_ALWAYS);
+                        if (FR_OK != result) {
+                            logger.Write(TAG, LogError, "File open failed! (%d)", (int)result);
+                            blinkCount = 3;
+                        } else {
+                            UINT wrote;
+                            result = f_write(&saveDat, &extraSaveDataCache_[i][0], 0x2000, &wrote);
+                            if (FR_OK != result || wrote != 0x2000) {
+                                logger.Write(TAG, LogError, "File write failed! (%d)", (int)result);
+                                blinkCount = 3;
+                            }
+                            f_close(&saveDat);
+                        }
+                    }
+                }
+                if (0 < blinkCount) {
+                    auto bptr = hdmiBuffer_;
+                    bptr += hdmiPitch_ * 84;
+                    uint16_t* eptr = (uint16_t*)sderror;
+                    buffer->WaitForVerticalSync();
+                    for (int y = 0; y < 24; y++) {
+                        memcpy(bptr + 56, eptr, 128 * 2);
+                        bptr += hdmiPitch_;
+                        eptr += 128;
+                    }
+                    swap = 192 - swap;
+                    buffer->SetVirtualOffset(0, swap);
+                    led.Blink(blinkCount);
+                }
+                f_unmount(MOUNT_DRIVE);
             }
             led.Off();
         }

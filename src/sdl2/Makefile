@@ -37,14 +37,21 @@ OBJECTS += nes_dmc.o
 OBJECTS += nes_vrc6.o
 OBJECTS += rom_tndtable.o
 
-all: vgs0
+all:
+	make build-`uname`
+
+build-Linux:
+	make vgs0 LNFLAG="-L/usr/local/lib -lSDL2"
+
+build-Darwin:
+	make vgs0 CPPFLAGS="${CPPFLAGS} `sdl2-config --cflags`" LNFLAG="`sdl2-config --libs`"
 
 clean:
 	rm -f $(OBJECTS)
 	rm -f vgs0 
 
 vgs0: $(OBJECTS)
-	$(CPP) -o vgs0 $(OBJECTS) -L/usr/local/lib -lSDL2
+	$(CPP) -o vgs0 $(OBJECTS) ${LNFLAG}
 
 vgs0sdl2.o: vgs0sdl2.cpp $(HEADER_FILES) ./Makefile
 	$(CPP) -c $<
