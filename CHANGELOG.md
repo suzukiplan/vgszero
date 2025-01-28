@@ -1,5 +1,26 @@
 # Change Log
 
+## [Version 1.19.0](https://github.com/suzukiplan/vgszero/releases/tag/1.19.0)
+
+### (User Definition I/O)
+
+ポート番号 0x00 〜 0x0F は、ネイティブプログラムとの入出力に使用できるユーザ定義 I/O として利用できます。
+
+例えば、Steam で UGC (リプレイデータなど) のダウンロード非同期リクエスト（out）をして結果のポーリング（in）をしたり、アチーブメントのアンロックをリクエストするなど、ネイティブコードで処理を実装しなければならない処理での利用を想定しています。
+
+本機能を利用するには、`VGS0` クラス（エミュレータ）のインスタンスのメンバ変数 `userInCallback` または `userOutCallback` を設定する必要があります。
+
+```c++
+VGS0 vgs0;
+vgs0.userInCallback = [](VGS0* vgs0, uint8_t port) -> uint8_t {
+  return my_input_proc(port);
+};
+
+vgs0.userOutCallback = [](VGS0* vgs0, uint8_t port, uint8_t value) {
+  my_output_proc(proc, value);
+};
+```
+
 ## [Version 1.18.0](https://github.com/suzukiplan/vgszero/releases/tag/1.18.0)
 
 ### (拡張 RAM バンク I/O)

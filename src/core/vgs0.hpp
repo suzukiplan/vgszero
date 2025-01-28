@@ -73,6 +73,8 @@ class VGS0
     bool (*saveExtraCallback)(VGS0* vgs0, int bank);
     bool (*loadExtraCallback)(VGS0* vgs0, int bank);
     void (*resetCallback)(VGS0* vgs0);
+    void (*userOutCallback)(VGS0* vgs0, uint8_t port, uint8_t value);
+    uint8_t (*userInCallback)(VGS0* vgs0, uint8_t port);
 
     struct Context {
         int64_t bobo;
@@ -108,6 +110,8 @@ class VGS0
         this->resetCallback = nullptr;
         this->loadExtraCallback = nullptr;
         this->saveExtraCallback = nullptr;
+        this->userInCallback = nullptr;
+        this->userOutCallback = nullptr;
         this->setBgmVolume(100);
         this->setSeVolume(100);
         this->reset();
@@ -386,6 +390,13 @@ class VGS0
 
     inline unsigned char inPort(unsigned char port)
     {
+        if (port < 0x10) {
+            if (this->userInCallback) {
+                return this->userInCallback(this, port);
+            } else {
+                return 0xFF;
+            }
+        }
         switch (port) {
             case 0xA0: return this->ctx.pad;
             case 0xB0: return this->ctx.romBank[0];
@@ -514,6 +525,13 @@ class VGS0
 
     inline void outPort(unsigned char port, unsigned char value)
     {
+        if (port < 0x10) {
+            if (this->userOutCallback) {
+                this->userOutCallback(this, port, value);
+            } else {
+                return;
+            }
+        }
         switch (port) {
             case 0xB0: this->ctx.romBank[0] = value; break;
             case 0xB1: this->ctx.romBank[1] = value; break;

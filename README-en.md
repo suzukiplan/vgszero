@@ -33,6 +33,7 @@ This repository provides the VGS-Zero body code, distribution images, SDK, and a
   - [For I/O without bank switching of extended RAM](#extra-ram-bank-io)
   - [Built-in RAM save function](#save-data)
   - [Build-in Extended RAM save function](#extra-save-data)
+  - [16 user-defined I/Os can be defined](#user-definition-io)
 - VDP; VGS-Video (Video Display Processor)
   - [VRAM size 16KB](#vram-memory-map)
   - Screen resolution: 240x192 pixels
@@ -778,6 +779,7 @@ The memory area of the Character Pattern Table (0xA000 to 0xBFFF) can be made eq
 
 |   Port    |  I  |  O  | Description  |
 | :-------: | :-: | :-: | :----------- |
+| 0x00 ~ 0x0F | o |  o  | [User Defined I/O](#user-definition-io)|
 |   0xA0    |  o  |  -  | [Joypad](#joypad-1) |
 |   0xB0    |  o  |  o  | [ROM Bank](#bank-switch) 0 (default: 0x00) |
 |   0xB1    |  o  |  o  | [ROM Bank](#bank-switch) 1 (default: 0x01) |
@@ -813,6 +815,25 @@ The memory area of the Character Pattern Table (0xA000 to 0xBFFF) can be made eq
 |   0xF0    |  -  |  o  | Play Sound Effect |
 |   0xF1    |  -  |  o  | Interrupted Sound Effect |
 |   0xF2    |  -  |  o  | Check if sound effects are playing. |
+
+#### (User Definition I/O)
+
+Port numbers 0x00 to 0x0F are available as user-defined I/O that can be used for input/output with native programs.
+
+For example, it is intended for use in processes that must be implemented in native code, such as making an asynchronous request (out) to download UGC (e.g., replay data) and polling (in) for results on Steam, or requesting an achievement unlock.
+
+To use this function, you must set the member variable `userInCallback` or `userOutCallback` of the instance of the `VGS0` class (emulator).
+
+```c++
+VGS0 vgs0;
+vgs0.userInCallback = [](VGS0* vgs0, uint8_t port) -> uint8_t {
+  return my_input_proc(port);
+};
+
+vgs0.userOutCallback = [](VGS0* vgs0, uint8_t port, uint8_t value) {
+  my_output_proc(proc, value);
+};
+```
 
 #### (JoyPad)
 
