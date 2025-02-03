@@ -23,7 +23,7 @@ vgs0.userInCallback = [](VGS0* vgs0, uint8_t port) -> uint8_t {
 };
 
 vgs0.userOutCallback = [](VGS0* vgs0, uint8_t port, uint8_t value) {
-  my_output_proc(proc, value);
+  my_output_proc(port, value);
 };
 ```
 

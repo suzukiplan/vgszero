@@ -75,7 +75,6 @@ class VGS0
     void (*resetCallback)(VGS0* vgs0);
     void (*userOutCallback)(VGS0* vgs0, uint8_t port, uint8_t value);
     uint8_t (*userInCallback)(VGS0* vgs0, uint8_t port);
-    void (*debugCallback)(VGS0* vgs0, char c);
 
     struct Context {
         int64_t bobo;
@@ -113,7 +112,6 @@ class VGS0
         this->saveExtraCallback = nullptr;
         this->userInCallback = nullptr;
         this->userOutCallback = nullptr;
-        this->debugCallback = nullptr;
         this->setBgmVolume(100);
         this->setSeVolume(100);
         this->reset();
@@ -535,12 +533,6 @@ class VGS0
             }
         }
         switch (port) {
-            case 0x80: {
-                if (this->debugCallback) {
-                    this->debugCallback(this, (char)value);
-                }
-                break;
-            }
             case 0xB0: this->ctx.romBank[0] = value; break;
             case 0xB1: this->ctx.romBank[1] = value; break;
             case 0xB2: this->ctx.romBank[2] = value; break;
