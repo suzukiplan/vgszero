@@ -726,6 +726,6 @@ void vgs0_exit(void) __z88dk_fastcall;
 /**
  * @brief Output string to the user defined port 0x00
  */
-void vgs0_debug(uint16_t msg)  __z88dk_fastcall;
+void vgs0_debug(uint16_t msg) __z88dk_fastcall;
 
 #endif

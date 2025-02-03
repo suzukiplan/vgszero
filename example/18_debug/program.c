@@ -2,6 +2,5 @@
 
 void main(void)
 {
-    const char* msg = "Hello, World!";
-    vgs0_debug(msg);
+    vgs0_debug((uint16_t)"Hello, World!");
 }

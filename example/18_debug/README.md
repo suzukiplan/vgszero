@@ -1,7 +1,7 @@
-# Hello, World
+# Debug Message (User Definition I/O)
 
-- 画面に `Hello, World!` を表示します
-- ジョイパッドでハードウェアスクロール機能を用いて8方向に動かすことができます
+- ユーザ定義 I/O を用いてポート 0x00 に文字列を書き込む例です
+- SDL2 版 VGS-Zero エミュレータはポート 0x00 に書き込んだ `\0` 終端の文字列をログへ出力します
 
 ![preview](preview.png)
 
@@ -20,7 +20,7 @@
 
 ```zsh
 git clone https://github.com/suzukiplan/vgszero
-cd vgszero/example/01_hello
+cd vgszero/example/18_debug
 make
 ```
 

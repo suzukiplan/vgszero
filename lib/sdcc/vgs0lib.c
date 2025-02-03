@@ -767,12 +767,13 @@ __endasm;
 
 void vgs0_debug(uint16_t msg)  __z88dk_fastcall
 {
-    while (1) {
 __asm
+Loop:
     ld a, (hl)
     out (0x00), a
-    and a
+    and a, a
     ret z
+    inc hl
+    jr Loop
 __endasm;
-    }
 }
