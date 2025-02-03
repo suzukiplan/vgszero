@@ -1343,6 +1343,7 @@ _We hope to address this in the future._
 | `15_nsf` | [Z80](./example/15_nsf-asm/), [C](./example/15_nsf/) | Example usage of [NSF](#nsf) |
 | `16_ptn-plus1` | [Z80](./example/16_ptn-plus1-asm/), [C](./example/16_ptn-plus1/) | Example usage of `ptn` in [Attribute](#attribute) |
 | `17_clip` | [Z80](./example/17_clip-asm/), [C](./example/17_clip/) | Example usage of [OAM16](#oam16) |
+| `18_debug` | [C](./example/18_debug/) | Example usage of [User Defined I/O](#user-definition-io) |
 
 ## License
 

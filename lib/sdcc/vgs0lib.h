@@ -723,4 +723,9 @@ uint8_t vgs0_load(uint16_t addr, uint16_t size) __smallc;
  */
 void vgs0_exit(void) __z88dk_fastcall;
 
+/**
+ * @brief Output string to the user defined port 0x00
+ */
+void vgs0_debug(uint16_t msg) __z88dk_fastcall;
+
 #endif

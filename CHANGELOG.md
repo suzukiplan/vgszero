@@ -1,5 +1,11 @@
 # Change Log
 
+## [Version 1.19.1](https://github.com/suzukiplan/vgszero/releases/tag/1.19.1)
+
+- SDL2 版エミュレータで port 0x00 に書き込んだ値をログ出力する機能を追加
+- SDCC 版ライブラリへ `vgs0_debug` を追加（ポート 0x00 へ文字列を書き込む）
+- ユーザ定義I/Oの C 言語での利用例を追加: `example/18_debug`
+
 ## [Version 1.19.0](https://github.com/suzukiplan/vgszero/releases/tag/1.19.0)
 
 ### (User Definition I/O)

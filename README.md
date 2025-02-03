@@ -1328,6 +1328,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | `15_nsf` | [Z80](./example/15_nsf-asm/), [C](./example/15_nsf/) | [NSF](#nsf) の利用例 |
 | `16_ptn-plus1` | [Z80](./example/16_ptn-plus1-asm/), [C](./example/16_ptn-plus1/) | [Attribute](#attribute) の `ptn` の使用例 |
 | `17_clip` | [Z80](./example/17_clip-asm/), [C](./example/17_clip/) | [OAM16](#oam16) の使用例 |
+| `18_debug` | [C](./example/18_debug/) | [ユーザ定義I/O](#user-definition-io) の使用例 |
 
 ## License
 
