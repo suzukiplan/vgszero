@@ -764,3 +764,15 @@ __asm
     halt
 __endasm;
 }
+
+void vgs0_debug(uint16_t msg)  __z88dk_fastcall
+{
+    while (1) {
+__asm
+    ld a, (hl)
+    out (0x00), a
+    and a
+    ret z
+__endasm;
+    }
+}

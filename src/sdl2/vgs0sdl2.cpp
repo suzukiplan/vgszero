@@ -339,6 +339,23 @@ int main(int argc, char* argv[])
         return true;
     };
 
+    vgs0.userOutCallback = [](VGS0* vgs0, uint8_t port, uint8_t value) {
+        static char debugBuffer[0x1000];
+        static int debugIndex;
+        switch (port) {
+            case 0x00: {
+                if (debugIndex < 0x1000) {
+                    debugBuffer[debugIndex++] = (char)value;
+                }
+                if (!value) {
+                    debugIndex = 0;
+                    log("[Z80] %s", debugBuffer);
+                }
+                break;
+            }
+        }
+    };
+
     if (debugMode) {
         vgs0.cpu->addBreakOperand(0x00, [](void* arg, unsigned char* op, int len) {
             auto vgs0 = (VGS0*)arg;
