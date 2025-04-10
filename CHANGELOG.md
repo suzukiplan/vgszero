@@ -1,5 +1,10 @@
 # Change Log
 
+
+## [Version 1.20.0](https://github.com/suzukiplan/vgszero/releases/tag/1.19.1)
+
+- ユーザ定義I/Oの範囲を 16 (0x00~0x0F) から 128 (0x00~0x7F) に拡張
+
 ## [Version 1.19.1](https://github.com/suzukiplan/vgszero/releases/tag/1.19.1)
 
 - SDL2 版エミュレータで port 0x00 に書き込んだ値をログ出力する機能を追加

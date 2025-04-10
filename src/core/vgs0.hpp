@@ -390,7 +390,7 @@ class VGS0
 
     inline unsigned char inPort(unsigned char port)
     {
-        if (port < 0x10) {
+        if (port < 0x80) {
             if (this->userInCallback) {
                 return this->userInCallback(this, port);
             } else {
@@ -525,7 +525,7 @@ class VGS0
 
     inline void outPort(unsigned char port, unsigned char value)
     {
-        if (port < 0x10) {
+        if (port < 0x80) {
             if (this->userOutCallback) {
                 this->userOutCallback(this, port, value);
             } else {

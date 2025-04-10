@@ -33,7 +33,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [拡張 RAM のバンク切り替え無しでの I/O に対応](#extra-ram-bank-io)
   - [セーブ機能](#save-data)に対応
   - [拡張 RAM セーブ機能](#extra-save-data)に対応
-  - [16 個のユーザ定義 I/O を定義可能](#user-definition-io)
+  - [128 個のユーザ定義 I/O を定義可能](#user-definition-io)
 - VDP; VGS-Video (映像処理)
   - [VRAM](#vram-memory-map) サイズ 16KB (TMS9918A 相当!)
   - 解像度: 240x192 ピクセル (TMS9918A より少しだけ狭い!)
@@ -757,7 +757,7 @@ Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)�
 
 |   Port    |  I  |  O  | Description  |
 | :-------: | :-: | :-: | :----------- |
-| 0x00 ~ 0x0F | o |  o  | [ユーザ定義I/O](#user-definition-io)|
+| 0x00 ~ 0x7F | o |  o  | [ユーザ定義I/O](#user-definition-io)|
 |   0xA0    |  o  |  -  | [ジョイパッド](#joypad-1) |
 |   0xB0    |  o  |  o  | [ROM Bank](#bank-switch) 0 (default: 0x00) |
 |   0xB1    |  o  |  o  | [ROM Bank](#bank-switch) 1 (default: 0x01) |
@@ -796,7 +796,7 @@ Character Pattern Table のメモリ領域（0xA000〜0xBFFF）は、[BG](#bg)�
 
 #### (User Definition I/O)
 
-ポート番号 0x00 〜 0x0F は、ネイティブプログラムとの入出力に使用できるユーザ定義 I/O として利用できます。
+ポート番号 0x00 〜 0x7F は、ネイティブプログラムとの入出力に使用できるユーザ定義 I/O として利用できます。
 
 例えば、Steam で UGC (リプレイデータなど) のダウンロード非同期リクエスト（out）をして結果のポーリング（in）をしたり、アチーブメントのアンロックをリクエストするなど、ネイティブコードで処理を実装しなければならない処理での利用を想定しています。
 
