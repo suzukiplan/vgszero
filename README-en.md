@@ -1347,7 +1347,7 @@ _We hope to address this in the future._
 
 ## License
 
-- VGS-Zero is GPLv3 OSS: [LICENSE-VGS0.txt](./LICENSE_VGS0.txt)
+- VGS-Zero is GPLv3 OSS: [LICENSE-VGS0.txt](./LICENSE-VGS0.txt)
 - The VGS-Zero distribution image includes a RaspberryPi bootloader: [LICENCE.broadcom](./LICENCE.broadcom)
 - VGS-Zero itself includes Circle (GPLv3): [LICENSE-CIRCLE.txt](./LICENSE-CIRCLE.txt)
 - VGS-Zero itself includes SUZUKI PLAN - Z80 Emulator (MIT): [LICENSE-Z80.txt](./LICENSE-Z80.txt)
