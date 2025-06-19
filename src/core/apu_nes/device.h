@@ -1,3 +1,9 @@
+// NSF Player implementation without STL
+// Original auther: Mamiya (mamiya@proc.org.tohoku.ac.jp)
+// Modified by: Yoji Suzuki
+// License under GPLv3
+// NOTE: This source code is based on the following source code:
+// https://github.com/bbbradsmith/nsfplay/blob/master/xgm/devices/device.h
 #ifndef _DEVICE_H_
 #define _DEVICE_H_
 #include <stdio.h>
@@ -15,7 +21,7 @@ class IDevice
     virtual bool Write(uint32_t adr, uint32_t val, uint32_t id = 0) = 0;
     virtual bool Read(uint32_t adr, uint32_t& val, uint32_t id = 0) = 0;
     virtual void SetOption(int id, int val) {};
-    virtual ~IDevice(){};
+    virtual ~IDevice() {};
 };
 
 class IRenderable
@@ -24,7 +30,7 @@ class IRenderable
     virtual uint32_t Render(int32_t b[2]) = 0;
     virtual void Skip() {}
     virtual void Tick(uint32_t clocks) {}
-    virtual ~IRenderable(){};
+    virtual ~IRenderable() {};
 };
 
 class ISoundChip : public IDevice, virtual public IRenderable
@@ -35,7 +41,7 @@ class ISoundChip : public IDevice, virtual public IRenderable
     virtual void SetRate(long rate) = 0;
     virtual void SetMask(int mask) = 0;
     virtual void SetStereoMix(int trk, int16_t mixl, int16_t mixr) = 0;
-    virtual ~ISoundChip(){};
+    virtual ~ISoundChip() {};
 };
 
 class Bus : public IDevice

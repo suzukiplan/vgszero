@@ -1,3 +1,9 @@
+// NSF Player implementation without STL
+// Original auther: Mamiya (mamiya@proc.org.tohoku.ac.jp)
+// Modified by: Yoji Suzuki
+// License under GPLv3
+// NOTE: This source code is based on the following source code:
+// https://github.com/bbbradsmith/nsfplay/blob/master/xgm/devices/Sound/nes_vrc6.cpp
 #include "nes_vrc6.h"
 
 namespace xgm
