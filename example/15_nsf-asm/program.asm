@@ -11,7 +11,8 @@ enum BANK {
 }
 
 enum BGM {
-    song1
+    song_nes
+    song_dcsg
 }
 
 enum SFX {
@@ -37,10 +38,11 @@ enum SFX {
     VARS.cur = 7
 
     ; メニューを表示
-    print_text_fg(8, 7, $80, "> PLAY")
-    print_text_fg(8, 9, $80, "  PAUSE")
-    print_text_fg(8, 11, $80, "  RESUME")
-    print_text_fg(8, 13, $80, "  FADEOUT")
+    print_text_fg(8, 7, $80, "> PLAY (NES APU)")
+    print_text_fg(8, 9, $80, "  PLAY (DCSG)")
+    print_text_fg(8, 11, $80, "  PAUSE")
+    print_text_fg(8, 13, $80, "  RESUME")
+    print_text_fg(8, 15, $80, "  FADEOUT")
 
 ; メインループ
 .main_loop
@@ -97,34 +99,48 @@ enum SFX {
 ;------------------------------------------------------------
 .select_menu
     push af
+    push hl
+    push ix
     sfx_play(sfx.enter)
     a = (vars.cur)
-    cp 7
-    jr z, @play
-    cp 9
-    jr z, @pause
-    cp 11
-    jr z, @resume
-    jr @fadeout
-
-@play
-    bgm_play(bgm.song1)
+    a -= 7
+    hl = @menu
+    hl += a
+    ix = (hl)
+    hl = @return
+    push hl
+    jp (ix)
+@return
+    pop ix
+    pop hl
     pop af
+    ret
+
+@menu
+    dw @play_nes
+    dw @play_dcsg
+    dw @pause
+    dw @resume
+    dw @fadeout
+
+@play_nes
+    bgm_play(bgm.song_nes)
+    ret
+
+@play_dcsg
+    bgm_play(bgm.song_dcsg)
     ret
 
 @pause
     bgm_pause()
-    pop af
     ret
 
 @resume
     bgm_resume()
-    pop af
     ret
 
 @fadeout
     bgm_fadeout()
-    pop af
     ret
 
 ;------------------------------------------------------------
@@ -139,7 +155,7 @@ enum SFX {
     a -= 2
     jr @move
 @over
-    a = 13
+    a = 15
 @move
     VARS.cur = a
     call draw_cur
@@ -153,12 +169,12 @@ enum SFX {
     push_all_without_i()
     call clear_cur
     a = (VARS.cur)
-    cp 13
+    cp 15
     jr z, @over
     a += 2
     jr @move
 @over
-    a = 7
+    a = 0
 @move
     VARS.cur = a
     call draw_cur
