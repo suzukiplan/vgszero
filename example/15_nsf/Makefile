@@ -49,8 +49,8 @@ program.bin: program.c ../../lib/sdcc/vgs0.lib ../../lib/sdcc/vgs0lib.h
 font.chr: font.bmp
 	${BMP2CHR} font.bmp font.chr
 
-bgm.dat: bgm.nsf
-	${MAKEBGM} bgm.dat bgm.nsf
+bgm.dat: bgm.vgm
+	${MAKEBGM} bgm.dat bgm.vgm
 
 se.dat: se_move.wav se_enter.wav
 	${MAKESE} se.dat se_move.wav se_enter.wav
