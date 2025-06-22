@@ -1,4 +1,6 @@
 // VGM Manager
+// Copyright (c) 2025, Yoji Suzuki
+// License under GPLv3
 #include "nesvgm.hpp"
 #include "emu76489.hpp"
 
