@@ -34,6 +34,7 @@ OBJS += sderror.o
 OBJS += vgstone.o
 OBJS += vgs0math.o
 OBJS += rom_tndtable.o
+OBJS += emu76489.o
 LIBS = $(CIRCLEHOME)/lib/libcircle.a
 LIBS += $(CIRCLEHOME)/lib/fs/libfs.a
 LIBS += $(CIRCLEHOME)/lib/input/libinput.a
