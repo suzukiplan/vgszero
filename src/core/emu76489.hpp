@@ -3,7 +3,6 @@ emu76489.hpp -- SN76489 emulator for Sigle Header C++
 
 Original: https://github.com/digital-sound-antiques/emu76489
 Copyright (c) 2014 Mitsutaka Okazaki
-Modified by Yoji Suzuki
 
 The MIT License (MIT)
 
@@ -24,6 +23,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+------------------------------
+Modified by Yoji Suzuki
+License under GPLv3
+
 */
 #pragma once
 #include <stdio.h>
