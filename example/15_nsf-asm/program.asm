@@ -13,6 +13,7 @@ enum BANK {
 enum BGM {
     song_nes
     song_dcsg
+    song_psg
 }
 
 enum SFX {
@@ -40,9 +41,10 @@ enum SFX {
     ; メニューを表示
     print_text_fg(8, 7, $80, "> PLAY (NES APU)")
     print_text_fg(8, 9, $80, "  PLAY (DCSG)")
-    print_text_fg(8, 11, $80, "  PAUSE")
-    print_text_fg(8, 13, $80, "  RESUME")
-    print_text_fg(8, 15, $80, "  FADEOUT")
+    print_text_fg(8, 11, $80, "  PLAY (PSG)")
+    print_text_fg(8, 13, $80, "  PAUSE")
+    print_text_fg(8, 15, $80, "  RESUME")
+    print_text_fg(8, 17, $80, "  FADEOUT")
 
 ; メインループ
 .main_loop
@@ -119,6 +121,7 @@ enum SFX {
 @menu
     dw @play_nes
     dw @play_dcsg
+    dw @play_psg
     dw @pause
     dw @resume
     dw @fadeout
@@ -129,6 +132,10 @@ enum SFX {
 
 @play_dcsg
     bgm_play(bgm.song_dcsg)
+    ret
+
+@play_psg
+    bgm_play(bgm.song_psg)
     ret
 
 @pause
@@ -155,7 +162,7 @@ enum SFX {
     a -= 2
     jr @move
 @over
-    a = 15
+    a = 17
 @move
     VARS.cur = a
     call draw_cur
@@ -169,7 +176,7 @@ enum SFX {
     push_all_without_i()
     call clear_cur
     a = (VARS.cur)
-    cp 15
+    cp 17
     jr z, @over
     a += 2
     jr @move

@@ -3,6 +3,7 @@
 // License under GPLv3
 #include "nesvgm.hpp"
 #include "emu76489.hpp"
+#include "emu2149.hpp"
 
 class VgmManager
 {
@@ -10,12 +11,14 @@ class VgmManager
     enum EmulatorType {
         ET_NES = 0,
         ET_DCSG,
+        ET_PSG,
         ET_Length
     };
 
     struct Emulator {
         xgm::NesVgmDriver* nes;
         EMU76489* dcsg;
+        EMU2149* psg;
     } emu;
 
     struct VgmContext {
@@ -34,12 +37,14 @@ class VgmManager
     {
         emu.nes = new xgm::NesVgmDriver();
         emu.dcsg = new EMU76489(3579545, 44100);
+        emu.psg = new EMU2149(3579545, 44100);
     }
 
     ~VgmManager()
     {
         delete emu.nes;
         delete emu.dcsg;
+        delete emu.psg;
     }
 
     bool load(const uint8_t* data, size_t size)
@@ -62,18 +67,26 @@ class VgmManager
 
         memcpy(&vgm.clocks[ET_NES], &data[0x84], 4);
         memcpy(&vgm.clocks[ET_DCSG], &data[0x0C], 4);
+        memcpy(&vgm.clocks[ET_PSG], &data[0x74], 4);
 
         if (vgm.clocks[ET_NES]) {
             emu.nes->Load(data, size);
             emu.nes->SetPlayFreq(44100);
             emu.nes->SetChannels(1);
             emu.nes->Reset();
-        } else {
-            memcpy(&vgm.cursor, &data[0x34], 4);
-            vgm.cursor += 0x40 - 0x0C;
-            memcpy(&vgm.loopOffset, &data[0x1C], 4);
-            vgm.loopOffset += vgm.loopOffset ? 0x1C : 0;
+            return true;
         }
+
+        if (vgm.clocks[ET_PSG]) {
+            emu.psg->setVolumeMode(2);
+            emu.psg->setClockDivider(1);
+            emu.psg->setQuality(1);
+        }
+
+        memcpy(&vgm.cursor, &data[0x34], 4);
+        vgm.cursor += 0x40 - 0x0C;
+        memcpy(&vgm.loopOffset, &data[0x1C], 4);
+        vgm.loopOffset += vgm.loopOffset ? 0x1C : 0;
         return true;
     }
 
@@ -82,6 +95,7 @@ class VgmManager
         memset(&vgm, 0, sizeof(vgm));
         emu.nes->Reset();
         emu.dcsg->reset();
+        emu.psg->reset();
     }
 
     void render(int16_t* buf, int samples)
@@ -105,6 +119,9 @@ class VgmManager
             if (vgm.clocks[ET_DCSG]) {
                 buf[cursor] += emu.dcsg->calc() << 1;
             }
+            if (vgm.clocks[ET_PSG]) {
+                buf[cursor] += emu.psg->calc() << 1;
+            }
             cursor++;
         }
     }
@@ -118,12 +135,22 @@ class VgmManager
         while (vgm.wait < 1) {
             uint8_t cmd = vgm.data[vgm.cursor++];
             switch (cmd) {
-                case 0x4F:
+                case 0x4F: // SN76489 GG I/O
                     emu.dcsg->writeGGIO(vgm.data[vgm.cursor++]);
                     break;
-                case 0x50:
+                case 0x50: // SN76489 register
                     emu.dcsg->writeIO(vgm.data[vgm.cursor++]);
                     break;
+                case 0x31: // AY-3-8910 stereo mask
+                    emu.psg->setMask(vgm.data[vgm.cursor++]);
+                    break;
+                case 0xA0: {
+                    // AY-3-8910 reigster
+                    uint8_t addr = vgm.data[vgm.cursor++];
+                    uint8_t value = vgm.data[vgm.cursor++];
+                    emu.psg->writeReg(addr, value);
+                    break;
+                }
                 case 0x61: {
                     // Wait nn samples
                     unsigned short nn;

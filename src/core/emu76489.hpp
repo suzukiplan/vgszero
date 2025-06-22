@@ -27,7 +27,6 @@ SOFTWARE.
 ------------------------------
 Modified by Yoji Suzuki
 License under GPLv3
-
 */
 #pragma once
 #include <stdio.h>
