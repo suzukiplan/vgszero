@@ -4,7 +4,6 @@ all:
 	cp -p ../core/vgstone.c src
 	cp -p ../core/vgs0math.c src
 	cp -p ../core/rom_tndtable.c src
-	cp -p ../core/emu76489.c src
 	cd src/circle && ./makeall --nosample
 	cd src/circle/addon/fatfs && make
 	cd src/circle/addon/SDCard && make

@@ -26,7 +26,6 @@ OBJECTS = vgs0sdl2.o
 OBJECTS += vgstone.o
 OBJECTS += vgs0math.o
 OBJECTS += rom_tndtable.o
-OBJECTS += emu76489.o
 
 all:
 	make build-`uname`
@@ -54,7 +53,4 @@ vgs0math.o: ../core/vgs0math.c $(HEADER_FILES) ./Makefile
 	$(CC) -c $<
 
 rom_tndtable.o: ../core/rom_tndtable.c
-	${CC} -c $<
-
-emu76489.o: ../core/emu76489.c ../core/emu76489.h
 	${CC} -c $<

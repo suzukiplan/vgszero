@@ -5,7 +5,7 @@
 #pragma once
 #include <stdint.h>
 #include <string.h>
-#include "emu76489.h"
+#include "emu76489.hpp"
 
 #define SN76489_CLOCK 3579545
 
@@ -13,7 +13,7 @@ class SN76489VgmDriver
 {
   private:
     const uint8_t* vgm;
-    SNG* emu;
+    EMU76489* emu;
     size_t vgmSize;
     int vgmCursor;
     int vgmLoopOffset;
@@ -24,12 +24,12 @@ class SN76489VgmDriver
     SN76489VgmDriver()
     {
         this->vgm = nullptr;
-        this->emu = SNG_new(SN76489_CLOCK, 44100);
+        this->emu = new EMU76489(SN76489_CLOCK, 44100);
     }
 
     ~SN76489VgmDriver()
     {
-        SNG_delete(this->emu);
+        delete this->emu;
     }
 
     bool load(const uint8_t* vgm, size_t size)
@@ -82,7 +82,7 @@ class SN76489VgmDriver
                 this->vgmexec();
             }
             this->vgmWait--;
-            buf[cursor] = SNG_calc(this->emu) << 1;
+            buf[cursor] = emu->calc() << 1;
             cursor++;
         }
     }
@@ -90,7 +90,7 @@ class SN76489VgmDriver
   private:
     void reset()
     {
-        SNG_reset(this->emu);
+        emu->reset();
     }
 
     inline void vgmexec()
@@ -102,14 +102,12 @@ class SN76489VgmDriver
         while (this->vgmWait < 1) {
             uint8_t cmd = this->vgm[this->vgmCursor++];
             switch (cmd) {
-                case 0x4F: {
-                    SNG_writeGGIO(this->emu, this->vgm[this->vgmCursor++]);
+                case 0x4F:
+                    emu->writeGGIO(this->vgm[this->vgmCursor++]);
                     break;
-                }
-                case 0x50: {
-                    SNG_writeIO(this->emu, this->vgm[this->vgmCursor++]);
+                case 0x50:
+                    emu->writeIO(this->vgm[this->vgmCursor++]);
                     break;
-                }
                 case 0x61: {
                     // Wait nn samples
                     unsigned short nn;
