@@ -23,6 +23,7 @@ OBJECTS = vgs0test.o
 OBJECTS += vgstone.o
 OBJECTS += vgs0math.o
 OBJECTS += rom_tndtable.o
+OBJECTS += emu76489.o
 
 all: vgs0test
 
@@ -46,4 +47,7 @@ vgs0math.o: ../core/vgs0math.c $(HEADER_FILES) ./Makefile
 	$(CC) -c $<
 
 rom_tndtable.o: ../core/rom_tndtable.c
+	${CC} -c $<
+
+emu76489.o: ../core/emu76489.c
 	${CC} -c $<
