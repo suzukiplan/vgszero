@@ -11,7 +11,7 @@
 #include "vgs0def.h"
 #include "vgsdecv.hpp"
 #include "nesvgm.hpp"
-#include "sn76489.hpp"
+#include "sn76489vgm.hpp"
 #include "z80.hpp"
 
 extern "C" {
@@ -64,7 +64,7 @@ class VGS0
     VGSDecoder* vgsdec;
     PerlinNoise* noise;
     xgm::NesVgmDriver* nes;
-    SN76489* dcsg;
+    SN76489VgmDriver* dcsg;
     bool (*saveCallback)(VGS0* vgs0, const void* data, size_t size);
     bool (*loadCallback)(VGS0* vgs0, void* data, size_t size);
     bool (*saveExtraCallback)(VGS0* vgs0, int bank);
@@ -108,7 +108,7 @@ class VGS0
             colorMode, this, [](void* arg) { ((VGS0*)arg)->cpu->requestBreak(); }, [](void* arg) { ((VGS0*)arg)->cpu->generateIRQ(0x07); });
         this->vgsdec = new VGSDecoder();
         this->nes = new xgm::NesVgmDriver();
-        this->dcsg = new SN76489();
+        this->dcsg = new SN76489VgmDriver();
         this->noise = new PerlinNoise(vgs0_rand16, 0);
         this->saveCallback = nullptr;
         this->loadCallback = nullptr;
