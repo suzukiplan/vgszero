@@ -10,8 +10,7 @@
 #include "vdp.hpp"
 #include "vgs0def.h"
 #include "vgsdecv.hpp"
-#include "nesvgm.hpp"
-#include "sn76489vgm.hpp"
+#include "vgm.hpp"
 #include "z80.hpp"
 
 extern "C" {
@@ -63,8 +62,7 @@ class VGS0
     VDP* vdp;
     VGSDecoder* vgsdec;
     PerlinNoise* noise;
-    xgm::NesVgmDriver* nes;
-    SN76489VgmDriver* dcsg;
+    VgmManager* vgm;
     bool (*saveCallback)(VGS0* vgs0, const void* data, size_t size);
     bool (*loadCallback)(VGS0* vgs0, void* data, size_t size);
     bool (*saveExtraCallback)(VGS0* vgs0, int bank);
@@ -72,11 +70,6 @@ class VGS0
     void (*resetCallback)(VGS0* vgs0);
     void (*userOutCallback)(VGS0* vgs0, uint8_t port, uint8_t value);
     uint8_t (*userInCallback)(VGS0* vgs0, uint8_t port);
-
-    enum class VGMType {
-        NES,
-        DCSG,
-    };
 
     struct Context {
         int64_t bobo;
@@ -87,7 +80,6 @@ class VGS0
         unsigned short ri16;
         struct BgmContext {
             bool isVGM;
-            VGMType vgmType;
             bool playing;
             bool fadeout;
             int vgmFadeCounter;
@@ -107,8 +99,7 @@ class VGS0
         this->vdp = new VDP(
             colorMode, this, [](void* arg) { ((VGS0*)arg)->cpu->requestBreak(); }, [](void* arg) { ((VGS0*)arg)->cpu->generateIRQ(0x07); });
         this->vgsdec = new VGSDecoder();
-        this->nes = new xgm::NesVgmDriver();
-        this->dcsg = new SN76489VgmDriver();
+        this->vgm = new VgmManager();
         this->noise = new PerlinNoise(vgs0_rand16, 0);
         this->saveCallback = nullptr;
         this->loadCallback = nullptr;
@@ -126,8 +117,7 @@ class VGS0
     {
         delete this->noise;
         delete this->vgsdec;
-        delete this->nes;
-        delete this->dcsg;
+        delete this->vgm;
         delete this->vdp;
         delete this->cpu;
     }
@@ -170,7 +160,7 @@ class VGS0
         memset(&this->cpu->reg, 0, sizeof(this->cpu->reg));
         this->cpu->reg.SP = 0xFFFF;
         this->ctx.bgm.playing = false;
-        this->nes->Reset();
+        this->vgm->reset();
         for (int i = 0; i < 256; i++) {
             this->ctx.se[i].playing = false;
         }
@@ -260,10 +250,7 @@ class VGS0
         }
         if (this->ctx.bgm.playing) {
             if (this->ctx.bgm.isVGM) {
-                switch (this->ctx.bgm.vgmType) {
-                    case VGMType::NES: nes->Render(buf, size / 2); break;
-                    case VGMType::DCSG: dcsg->render(buf, size / 2); break;
-                }
+                this->vgm->render(buf, size / 2);
             } else {
                 this->vgsdec->execute(buf, size);
                 this->ctx.bgm.playing = !this->vgsdec->isPlayEnd();
@@ -814,15 +801,8 @@ class VGS0
                     this->ctx.bgm.isVGM = false;
                     if (0 == memcmp(this->bgm[value].data, "VGSBGM-V", 8)) {
                         this->vgsdec->load(this->bgm[value].data, this->bgm[value].size);
-                    } else if (nes->Load(this->bgm[value].data, this->bgm[value].size)) {
+                    } else if (this->vgm->load(this->bgm[value].data, this->bgm[value].size)) {
                         this->ctx.bgm.isVGM = true;
-                        this->ctx.bgm.vgmType = VGMType::NES;
-                        this->nes->SetPlayFreq(44100);
-                        this->nes->SetChannels(1);
-                        this->nes->Reset();
-                    } else if (dcsg->load(this->bgm[value].data, this->bgm[value].size)) {
-                        this->ctx.bgm.isVGM = true;
-                        this->ctx.bgm.vgmType = VGMType::DCSG;
                     } else {
                         // unsupported format
                         this->ctx.bgm.playing = false;
