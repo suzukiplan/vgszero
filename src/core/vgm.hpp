@@ -134,7 +134,7 @@ class VgmManager
                 buf[cursor] += emu.psg->calc() << 1;
             }
             if (vgm.clocks[ET_SCC]) {
-                buf[cursor] += emu.scc->calc() << 2;
+                buf[cursor] += emu.scc->calc() << 1;
             }
             cursor++;
         }
