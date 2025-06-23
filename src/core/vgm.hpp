@@ -141,8 +141,9 @@ class VgmManager
                 case 0x50: // SN76489 register
                     emu.dcsg->writeIO(vgm.data[vgm.cursor++]);
                     break;
-                case 0x31: // AY-3-8910 stereo mask
-                    emu.psg->setMask(vgm.data[vgm.cursor++]);
+                case 0x31: // AY-3-8910 stereo mask (ignore)
+                    vgm.cursor++;
+                    // emu.psg->setMask(vgm.data[vgm.cursor++]);
                     break;
                 case 0xA0: {
                     // AY-3-8910 reigster
