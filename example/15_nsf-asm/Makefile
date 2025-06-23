@@ -36,8 +36,8 @@ font.chr: font.bmp
 program.bin: program.asm
 	${ASM} program.asm
 
-bgm.dat: bgm_nes.vgm bgm_dcsg.vgm bgm_psg.vgm bgm_scc.vgm
-	${MAKEBGM} bgm.dat bgm_nes.vgm bgm_dcsg.vgm bgm_psg.vgm bgm_scc.vgm
+bgm.dat: bgm_nes.vgm bgm_dcsg.vgm bgm_scc.vgm
+	${MAKEBGM} bgm.dat bgm_nes.vgm bgm_dcsg.vgm bgm_scc.vgm
 
 se.dat: se_move.wav se_enter.wav
 	${MAKESE} se.dat se_move.wav se_enter.wav
