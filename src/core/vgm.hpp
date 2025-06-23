@@ -4,6 +4,7 @@
 #include "nesvgm.hpp"
 #include "emu76489.hpp"
 #include "emu2149.hpp"
+#include "emu2212.hpp"
 
 class VgmManager
 {
@@ -12,6 +13,7 @@ class VgmManager
         ET_NES = 0,
         ET_DCSG,
         ET_PSG,
+        ET_SCC,
         ET_Length
     };
 
@@ -19,6 +21,7 @@ class VgmManager
         xgm::NesVgmDriver* nes;
         EMU76489* dcsg;
         EMU2149* psg;
+        EMU2212* scc;
     } emu;
 
     struct VgmContext {
@@ -38,6 +41,7 @@ class VgmManager
         emu.nes = new xgm::NesVgmDriver();
         emu.dcsg = new EMU76489(3579545, 44100);
         emu.psg = new EMU2149(3579545, 44100);
+        emu.scc = new EMU2212(3579545, 44100);
     }
 
     ~VgmManager()
@@ -45,6 +49,7 @@ class VgmManager
         delete emu.nes;
         delete emu.dcsg;
         delete emu.psg;
+        delete emu.scc;
     }
 
     bool load(const uint8_t* data, size_t size)
@@ -68,6 +73,7 @@ class VgmManager
         memcpy(&vgm.clocks[ET_NES], &data[0x84], 4);
         memcpy(&vgm.clocks[ET_DCSG], &data[0x0C], 4);
         memcpy(&vgm.clocks[ET_PSG], &data[0x74], 4);
+        memcpy(&vgm.clocks[ET_SCC], &data[0x9C], 4);
 
         if (vgm.clocks[ET_NES]) {
             emu.nes->Load(data, size);
@@ -81,6 +87,11 @@ class VgmManager
             emu.psg->setVolumeMode(2);
             emu.psg->setClockDivider(1);
             emu.psg->setQuality(1);
+        }
+
+        if (vgm.clocks[ET_SCC]) {
+            emu.scc->set_type(EMU2212::Type::Standard);
+            emu.scc->set_quality(1);
         }
 
         memcpy(&vgm.cursor, &data[0x34], 4);
@@ -122,6 +133,9 @@ class VgmManager
             if (vgm.clocks[ET_PSG]) {
                 buf[cursor] += emu.psg->calc() << 1;
             }
+            if (vgm.clocks[ET_SCC]) {
+                buf[cursor] += emu.scc->calc() << 2;
+            }
             cursor++;
         }
     }
@@ -150,6 +164,21 @@ class VgmManager
                     uint8_t addr = vgm.data[vgm.cursor++];
                     uint8_t value = vgm.data[vgm.cursor++];
                     emu.psg->writeReg(addr, value);
+                    break;
+                }
+                case 0xD2: {
+                    // SCC1
+                    uint8_t port = vgm.data[vgm.cursor++] & 0x7F;
+                    uint8_t offset = vgm.data[vgm.cursor++];
+                    uint8_t data = vgm.data[vgm.cursor++];
+                    switch (port) {
+                        case 0x00: emu.scc->write_waveform1(offset, data); break;
+                        case 0x01: emu.scc->write_frequency(offset, data); break;
+                        case 0x02: emu.scc->write_volume(offset, data); break;
+                        case 0x03: emu.scc->write_keyoff(data); break;
+                        case 0x04: emu.scc->write_waveform2(offset, data); break;
+                        case 0x05: emu.scc->write_test(data); break;
+                    }
                     break;
                 }
                 case 0x61: {

@@ -1348,6 +1348,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 - VGS-Zero 本体には NEZplug (Free Software) の実装を改変したプログラムが含まれます: [LICENSE-NEZplug.txt](./LICENSE-NEZplug.txt)
 - VGS-Zero 本体には NSFPlay (GPLv3) の実装を改変したプログラムが含まれます: [LICENSE-NSFPlay-alter.txt](./LICENSE-NSFPlay-alter.txt)
 - VGS-Zero 本体には EMU2149 (MIT) をC++シングルヘッダ形式に改変したプログラムが含まれます: [LICENSE-EMU2149.txt](LICENSE-EMU2149.txt)
+- VGS-Zero 本体には EMU2212 (MIT) をC++シングルヘッダ形式に改変したプログラムが含まれます: [LICENSE-EMU2212.txt](LICENSE-EMU2212.txt)
 - VGS-Zero 本体には EMU76489 (MIT) をC++シングルヘッダ形式に改変したプログラムが含まれます: [LICENSE-EMU76489.txt](LICENSE-EMU76489.txt)
 - VGS-Zero Library for Z80 は MIT ライセンスの OSS です: [LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
 

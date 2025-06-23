@@ -1365,6 +1365,7 @@ _We hope to address this in the future._
 - VGS-Zero itself includes NEZplug (Free Software): [LICENSE-NEZplug.txt](./LICENSE-NEZplug.txt)
 - VGS-Zero itself includes Modified NSFPlay (GPLv3): [LICENSE-NSFPlay-alter.txt](./LICENSE-NSFPlay-alter.txt)
 - VGS-Zero includes EMU2149 (MIT) modified into C++ single header format: [LICENSE-EMU2149.txt](LICENSE-EMU2149.txt)
+- VGS-Zero includes EMU2212 (MIT) modified into C++ single header format: [LICENSE-EMU2212.txt](LICENSE-EMU2212.txt)
 - VGS-Zero includes EMU76489 (MIT) modified into C++ single header format: [LICENSE-EMU76489.txt](LICENSE-EMU76489.txt)
 - VGS-Zero Library for Z80 is MIT licensed OSS: [LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
 

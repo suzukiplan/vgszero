@@ -14,6 +14,7 @@ enum BGM {
     song_nes
     song_dcsg
     song_psg
+    song_scc
 }
 
 enum SFX {
@@ -42,9 +43,10 @@ enum SFX {
     print_text_fg(8, 7, $80, "> PLAY (NES APU)")
     print_text_fg(8, 9, $80, "  PLAY (DCSG)")
     print_text_fg(8, 11, $80, "  PLAY (PSG)")
-    print_text_fg(8, 13, $80, "  PAUSE")
-    print_text_fg(8, 15, $80, "  RESUME")
-    print_text_fg(8, 17, $80, "  FADEOUT")
+    print_text_fg(8, 13, $80, "  PLAY (SCC)")
+    print_text_fg(8, 15, $80, "  PAUSE")
+    print_text_fg(8, 17, $80, "  RESUME")
+    print_text_fg(8, 19, $80, "  FADEOUT")
 
 ; メインループ
 .main_loop
@@ -122,6 +124,7 @@ enum SFX {
     dw @play_nes
     dw @play_dcsg
     dw @play_psg
+    dw @play_scc
     dw @pause
     dw @resume
     dw @fadeout
@@ -136,6 +139,10 @@ enum SFX {
 
 @play_psg
     bgm_play(bgm.song_psg)
+    ret
+
+@play_scc
+    bgm_play(bgm.song_scc)
     ret
 
 @pause
@@ -162,7 +169,7 @@ enum SFX {
     a -= 2
     jr @move
 @over
-    a = 17
+    a = 19
 @move
     VARS.cur = a
     call draw_cur
@@ -176,7 +183,7 @@ enum SFX {
     push_all_without_i()
     call clear_cur
     a = (VARS.cur)
-    cp 17
+    cp 19
     jr z, @over
     a += 2
     jr @move
