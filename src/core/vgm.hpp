@@ -107,6 +107,7 @@ class VgmManager
         emu.nes->Reset();
         emu.dcsg->reset();
         emu.psg->reset();
+        emu.scc->reset();
     }
 
     void render(int16_t* buf, int samples)
