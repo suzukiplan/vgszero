@@ -63,7 +63,7 @@ Video Game System - Zero (VGS-Zero) は RaspberryPi Zero 2W のベアメタル�
   - [角度計算](#angle-calculation)
   - [百分率計算](#percentage-calculation)
 - [BGM](#bgmdat)
-  - [VGS の MML](#compile-mml) または [NSF 形式](#nsf) の BGM を再生可能
+  - [VGS の MML](#compile-mml) または [VGM 形式](#vgm) の BGM を再生可能
   - ゲームプログラム (Z80) 側でのサウンドドライバ実装が不要!
   - ゲームプログラム (Z80) 側の RAM (16KB) を専有不要!
   - 本体 ROM ([`game.rom`](#gamerom)) とは別アセット（[`bgm.dat`](#bgmdat)）
@@ -300,7 +300,7 @@ bgm.dat は 1 曲以上の楽曲データが含まれたデータセットで、
 楽曲データは次の 2 種類のデータ形式をサポートしています
 
 - [vgsmml コマンド](./tools/vgsmml) でコンパイルされた VGS; Video Game Sound 形式の BGM データ
-- [NSF 形式](#nsf) の BGM データ
+- [VGM 形式](#vgm) の BGM データ
 
 プログラム（Z80）で [再生を指示 (0xE0)](#play-bgm) した BGM データの種別は VGS-Zero 本体が自動的に識別します。
 
@@ -314,14 +314,22 @@ usage: vgsmml /path/to/file.mml /path/to/file.bgm
 - [東方BGM on VGS の MML](https://github.com/suzukiplan/tohovgs-cli/tree/master/mml) が全楽曲公開されているので、実用的な使い方はそちらが参考になるかもしれません
 - MML ファイルは、ツールチェインの [vgsplay コマンド](./tools/vgsplay) を用いれば PC 上でプレビューできます
 
-#### (NSF)
+#### (VGM)
 
-- NSF; NES Sound Format の BGM データは [FamiStudio](https://famistudio.org/) などの NSF 形式をサポートした DAW; Digital Audio Workstation を用いて作成することができます
-- 詳しくは [example/15_nsf](example/15_nsf) を確認してください 
-- 拡張音源については VRC6 のみサポートしています（VRC7, FME7, FDS, N106, MMC5 は非サポート）
-- 参考記事: https://note.com/suzukiplan/n/n94ea503ff2c8
-- NSF はデフォルトトラック（※NSF ヘッダの 8 バイト目で指定）のみを再生対象にしています
-  - マルチトラック形式の NSF のデータを使用したい場合、デフォルトトラックを書き換えた複数の同じ NSF ファイルを bgm.dat へ組み込んでください
+VGS-Zero では VGM 形式の次のチップチューン音源の曲を BGM として再生することができます。
+
+サポートするチップチューン音源:
+
+|音源名|概要|備考|
+|:---:|:--|:--|
+| NES APU | ファミコン音源 | 拡張音源は未サポート<br>DMC は CPU 依存機能を使用不可 |
+| SN76489 (DCSG) | SG-1000, セガマークIII, ゲームギア等の音源 | ステレオ未サポート |
+| AY-3-8910 (PSG) | MSX等の標準音源 | - |
+| SCC | MSXのコナミ拡張音源 | SCC1 のみサポート (SCC2 は未サポート) |
+
+VGM は version 1.61 以降の形式で出力しなければなりません。
+
+使用例: [example/15_nsf-asm](example/15_nsf-asm)
 
 #### (Make bgm.dat)
 
@@ -364,7 +372,8 @@ VGS-Zero のゲーム開発に必要なツールの情報を記します。
 | [aseprite](https://aseprite.org/) | 画像エディタ | 256 色 Bitmap 形式に対応した画像エディタ |
 | [Tiled Map Editor](https://www.mapeditor.org) | マップエディタ | 利用例: [example/08_map-scroll](./example/08_map-scroll/) |
 | [Jfxr](https://github.com/ttencate/jfxr) | 効果音エディタ | ブラウザ上でゲームの効果音を制作 |
-| [FamiStudio](https://famistudio.org/) | BGM エディタ | [NSF 形式](#nsf) の BGM を制作できる DAW |
+| [FamiStudio](https://famistudio.org/) | BGM エディタ | [VGM (NES APU)](#vgm) の BGM を制作できる DAW |
+| [Furnace](https://tildearrow.org/furnace/) | BGM エディタ | [VGM (各種音源)](#vgm) の BGM を制作できるトラッカー |
 
 上記のツールがあれば、ゲームに必要なプログラムとアセット（グラフィックス、効果音、音楽）の全てを開発することができ、全てのツールは無料で使うことができます。（一部有料のものもありますが自分でソースコードをダウンロードしてビルドすれば無料で使うことができます）
 
@@ -410,7 +419,7 @@ Z80 アセンブリ言語でプログラミングする場合、VSCode (Visual S
 
 ### Create Sound Data
 
-- VGS 形式の Music Macro Language (MML) または NSF 形式（[FamiStudio](https://famistudio.org/)等）で [音楽データ](#bgmdat) を作成できます
+- VGS 形式の Music Macro Language (MML) または [VGM](#vgm) で [音楽データ](#bgmdat) を作成できます
 - 44100Hz 16bits 1ch (モノラル) の wav ファイルで [効果音データ](#sedat) を作成できます
 
 ### Joypad Recommended Usage
@@ -1325,20 +1334,21 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | `12_angle` | [Z80](./example/12_angle-asm), [C](./example/12_angle) | [atan2](#hardware-atan2-table) を用いた自機狙いの実装例 |
 | `13_perlin` | [Z80](./example/13_perlin-asm), [C](./example/13_perlin) | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
 | `14_1024ptn` | [Z80](./example/14_1024ptn-asm), [C](./example/14_1024ptn) | [1024 パターンモード](#1024-patterns-mode) の利用例 |
-| `15_nsf` | [Z80](./example/15_nsf-asm/), [C](./example/15_nsf/) | [NSF](#nsf) の利用例 |
+| `15_nsf` | [Z80](./example/15_nsf-asm/), [C](./example/15_nsf/) | [VGM](#vgm) の利用例 |
 | `16_ptn-plus1` | [Z80](./example/16_ptn-plus1-asm/), [C](./example/16_ptn-plus1/) | [Attribute](#attribute) の `ptn` の使用例 |
 | `17_clip` | [Z80](./example/17_clip-asm/), [C](./example/17_clip/) | [OAM16](#oam16) の使用例 |
 | `18_debug` | [C](./example/18_debug/) | [ユーザ定義I/O](#user-definition-io) の使用例 |
 
 ## License
 
-- VGS-Zero 本体は GPLv3 の OSS です: [LICENSE-VGS0.txt](./LICENSE-VGS0.txt)
+- VGS-Zero は GPLv3 の OSS です: [LICENSE-VGS0.txt](./LICENSE-VGS0.txt)
 - VGS-Zero 本体配布イメージには RaspberryPi ブートローダーが含まれます: [LICENCE.broadcom](./LICENCE.broadcom)
 - VGS-Zero 本体には Circle（GPLv3）が含まれます: [LICENSE-CIRCLE.txt](./LICENSE-CIRCLE.txt)
 - VGS-Zero 本体には SUZUKI PLAN - Z80 Emulator (MIT) が含まれます: [LICENSE-Z80.txt](./LICENSE-Z80.txt)
-- VGS-Zero 本体には NEZplug (Free Software) が含まれます: [LICENSE-NEZplug.txt](./LICENSE-NEZplug.txt)
-- VGS-Zero 本体には NSFPlay (GPLv3) を改変したプログラムが含まれます: [LICENSE-NSFPlay-alter.txt](./LICENSE-NSFPlay-alter.txt)
-- VGS-Zero 本体には KM6502 (Free Software) が含まれます: [LICENSE-km6502.txt](./LICENSE-km6502.txt)
+- VGS-Zero 本体には NEZplug (Free Software) の実装を改変したプログラムが含まれます: [LICENSE-NEZplug.txt](./LICENSE-NEZplug.txt)
+- VGS-Zero 本体には NSFPlay (GPLv3) の実装を改変したプログラムが含まれます: [LICENSE-NSFPlay-alter.txt](./LICENSE-NSFPlay-alter.txt)
+- VGS-Zero 本体には EMU2149 (MIT) をC++シングルヘッダ形式に改変したプログラムが含まれます: [LICENSE-EMU2149.txt](LICENSE-EMU2149.txt)
+- VGS-Zero 本体には EMU76489 (MIT) をC++シングルヘッダ形式に改変したプログラムが含まれます: [LICENSE-EMU76489.txt](LICENSE-EMU76489.txt)
 - VGS-Zero Library for Z80 は MIT ライセンスの OSS です: [LICENSE-VGS0LIB.txt](./LICENSE_VGS0LIB.txt)
 
 > あなたが開発した[game.pkg](#gamepkg)の著作権はあなたに帰属し、商業利用を含む自由な利用が可能です。
