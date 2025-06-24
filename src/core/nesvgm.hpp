@@ -1289,13 +1289,14 @@ class NES_DMC : public ISoundChip
         noise = 1;
         noise_tap = (1 << 1);
 
+        uint16_t r = 0;
         if (option[OPT_RANDOMIZE_NOISE]) {
-            noise |= ::rand();
-            counter[1] = -(rand() & 511);
+            noise |= vgs0_rand16[r++];
+            counter[1] = -(vgs0_rand16[r++] & 511);
         }
         if (option[OPT_RANDOMIZE_TRI]) {
-            tphase = ::rand() & 31;
-            counter[0] = -(rand() & 2047);
+            tphase = vgs0_rand16[r++] & 31;
+            counter[0] = -(vgs0_rand16[r++] & 2047);
         }
 
         SetRate(rate);
