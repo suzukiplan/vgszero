@@ -40,7 +40,6 @@ class EMU2149
         uint8_t reg[0x20];
         int32_t out;
         uint32_t clk, rate, base_incr;
-        uint8_t quality;
         uint8_t clk_div;
         uint16_t count[3];
         uint8_t volume[3];
@@ -101,7 +100,6 @@ class EMU2149
         psg->clk = clock;
         psg->clk_div = 0;
         psg->rate = rate ? rate : 44100;
-        psg->quality = 0;
         internal_refresh();
         setMask(0x00);
     }
@@ -132,14 +130,6 @@ class EMU2149
         uint32_t r = rate ? rate : 44100;
         if (psg->rate != r) {
             psg->rate = r;
-            internal_refresh();
-        }
-    }
-
-    void setQuality(uint8_t q)
-    {
-        if (psg->quality != q) {
-            psg->quality = q;
             internal_refresh();
         }
     }
@@ -295,19 +285,14 @@ class EMU2149
     }
     int16_t calc()
     {
-        if (!psg->quality) {
+        /* Simple rate converter (See README for detail). */
+        while (psg->realstep > psg->psgtime) {
+            psg->psgtime += psg->psgstep;
             update_output();
-            psg->out = mix_output();
-        } else {
-            /* Simple rate converter (See README for detail). */
-            while (psg->realstep > psg->psgtime) {
-                psg->psgtime += psg->psgstep;
-                update_output();
-                psg->out += mix_output();
-                psg->out >>= 1;
-            }
-            psg->psgtime -= psg->realstep;
+            psg->out += mix_output();
+            psg->out >>= 1;
         }
+        psg->psgtime -= psg->realstep;
         return psg->out;
     }
 
@@ -320,16 +305,11 @@ class EMU2149
             f_master /= 2;
         }
 
-        if (psg->quality) {
-            psg->base_incr = 1 << GETA_BITS;
-            psg->realstep = f_master;
-            psg->psgstep = psg->rate * 8;
-            psg->psgtime = 0;
-            psg->freq_limit = (uint32_t)(f_master / 16 / (psg->rate / 2));
-        } else {
-            psg->base_incr = (uint32_t)((double)f_master * (1 << GETA_BITS) / 8 / psg->rate);
-            psg->freq_limit = 0;
-        }
+        psg->base_incr = 1 << GETA_BITS;
+        psg->realstep = f_master;
+        psg->psgstep = psg->rate * 8;
+        psg->psgtime = 0;
+        psg->freq_limit = (uint32_t)(f_master / 16 / (psg->rate / 2));
     }
     inline void update_output()
     {

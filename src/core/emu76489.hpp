@@ -42,7 +42,7 @@ class EMU76489
 
     typedef struct {
         int32_t out;
-        uint32_t clk, rate, base_incr, quality;
+        uint32_t clk, rate, base_incr;
         uint32_t count[3];
         uint32_t volume[3];
         uint32_t freq[3];
@@ -70,18 +70,11 @@ class EMU76489
         sng = new Context();
         sng->clk = clk;
         sng->rate = rate ? rate : 44100;
-        set_quality(0);
     }
 
     ~EMU76489()
     {
         delete sng;
-    }
-
-    void set_quality(uint32_t quality)
-    {
-        sng->quality = quality;
-        internal_refresh();
     }
 
     void set_rate(uint32_t rate)
@@ -163,11 +156,6 @@ class EMU76489
 
     int16_t calc()
     {
-        if (!sng->quality) {
-            update_output();
-            return mix_output();
-        }
-
         /* Simple rate converter */
         while (sng->realstep > sng->sngtime) {
             sng->sngtime += sng->sngstep;
@@ -180,12 +168,6 @@ class EMU76489
 
     void calc_stereo(int32_t out[2])
     {
-        if (!sng->quality) {
-            update_output();
-            mix_output_stereo(out);
-            return;
-        }
-
         while (sng->realstep > sng->sngtime) {
             sng->sngtime += sng->sngstep;
             update_output();
@@ -208,14 +190,10 @@ class EMU76489
 
     void internal_refresh()
     {
-        if (sng->quality) {
-            sng->base_incr = 1 << GETA_BITS;
-            sng->realstep = (uint32_t)((1 << 31) / sng->rate);
-            sng->sngstep = (uint32_t)((1 << 31) / (sng->clk / 16));
-            sng->sngtime = 0;
-        } else {
-            sng->base_incr = (uint32_t)((double)sng->clk * (1 << GETA_BITS) / (16 * sng->rate));
-        }
+        sng->base_incr = 1 << GETA_BITS;
+        sng->realstep = (uint32_t)((1 << 31) / sng->rate);
+        sng->sngstep = (uint32_t)((1 << 31) / (sng->clk / 16));
+        sng->sngtime = 0;
     }
 
     inline void update_output()

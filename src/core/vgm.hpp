@@ -86,12 +86,10 @@ class VgmManager
         if (vgm.clocks[ET_PSG]) {
             emu.psg->setVolumeMode(2);
             emu.psg->setClockDivider(1);
-            emu.psg->setQuality(1);
         }
 
         if (vgm.clocks[ET_SCC]) {
             emu.scc->set_type(EMU2212::Type::Standard);
-            emu.scc->set_quality(1);
         }
 
         memcpy(&vgm.cursor, &data[0x34], 4);

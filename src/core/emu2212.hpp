@@ -44,7 +44,7 @@ class EMU2212
     const int GETA_BITS = 22;
 
     typedef struct {
-        uint32_t clk, rate, base_incr, quality;
+        uint32_t clk, rate, base_incr;
         int16_t out;
         Type type;
         uint32_t mode;
@@ -86,7 +86,7 @@ class EMU2212
         scc = new Context();
         scc->clk = c;
         scc->rate = r ? r : 44100;
-        set_quality(1);
+        internal_refresh();
         scc->type = Type::Enhanced;
     }
 
@@ -140,12 +140,6 @@ class EMU2212
         internal_refresh();
     }
 
-    void set_quality(uint32_t q)
-    {
-        scc->quality = q;
-        internal_refresh();
-    }
-
     void set_type(Type type)
     {
         scc->type = type;
@@ -153,11 +147,6 @@ class EMU2212
 
     int16_t calc()
     {
-        if (!scc->quality) {
-            update_output();
-            return mix_output();
-        }
-
         while (scc->realstep > scc->scctime) {
             scc->scctime += scc->sccstep;
             update_output();
@@ -305,14 +294,10 @@ class EMU2212
   private:
     void internal_refresh()
     {
-        if (scc->quality) {
-            scc->base_incr = 2 << GETA_BITS;
-            scc->realstep = (uint32_t)((1 << 31) / scc->rate);
-            scc->sccstep = (uint32_t)((1 << 31) / (scc->clk / 2));
-            scc->scctime = 0;
-        } else {
-            scc->base_incr = (uint32_t)((double)scc->clk * (1 << GETA_BITS) / scc->rate);
-        }
+        scc->base_incr = 2 << GETA_BITS;
+        scc->realstep = (uint32_t)((1 << 31) / scc->rate);
+        scc->sccstep = (uint32_t)((1 << 31) / (scc->clk / 2));
+        scc->scctime = 0;
     }
 
     inline void update_output()
