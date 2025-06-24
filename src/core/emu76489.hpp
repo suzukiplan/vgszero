@@ -70,6 +70,7 @@ class EMU76489
         sng = new Context();
         sng->clk = clk;
         sng->rate = rate ? rate : 44100;
+        internal_refresh();
     }
 
     ~EMU76489()
