@@ -333,7 +333,7 @@ Supported chiptune:
 
 VGM must be output in version 1.61 or later format.
 
-Example: [example/15_nsf-asm](example/15_nsf-asm)
+Example: [example/15_vgm-asm](example/15_vgm-asm)
 
 #### (Make bgm.dat)
 
@@ -1351,7 +1351,7 @@ _We hope to address this in the future._
 | `12_angle` | [Z80](./example/12_angle-asm), [C](./example/12_angle) | Example of implementing complete self-targeting using [atan2](#hardware-atan2-table) |
 | `13_perlin` | [Z80](./example/13_perlin-asm), [C](./example/13_perlin) | Example usage of [Perlin Noise](#hardware-perlin-noise) |
 | `14_1024ptn` | [Z80](./example/14_1024ptn-asm), [C](./example/14_1024ptn) | [1024-patterns-mode](#1024-patterns-mode) usage example |
-| `15_nsf` | [Z80](./example/15_nsf-asm/), [C](./example/15_nsf/) | Example usage of [VGM](#vgm) |
+| `15_vgm` | [Z80](./example/15_vgm-asm/) | Example usage of [VGM](#vgm) |
 | `16_ptn-plus1` | [Z80](./example/16_ptn-plus1-asm/), [C](./example/16_ptn-plus1/) | Example usage of `ptn` in [Attribute](#attribute) |
 | `17_clip` | [Z80](./example/17_clip-asm/), [C](./example/17_clip/) | Example usage of [OAM16](#oam16) |
 | `18_debug` | [C](./example/18_debug/) | Example usage of [User Defined I/O](#user-definition-io) |

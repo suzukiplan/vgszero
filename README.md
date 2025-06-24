@@ -329,7 +329,7 @@ VGS-Zero では VGM 形式の次のチップチューン音源の曲を BGM と�
 
 VGM は version 1.61 以降の形式で出力しなければなりません。
 
-使用例: [example/15_nsf-asm](example/15_nsf-asm)
+使用例: [example/15_vgm-asm](example/15_vgm-asm)
 
 #### (Make bgm.dat)
 
@@ -337,7 +337,7 @@ VGM は version 1.61 以降の形式で出力しなければなりません。
 makebgm bgm.dat song1.bgm [song2.bgm [song3.bgm...]]
 ```
 
-BGM ファイルまたは NSF ファイルを最大 256 個指定することができます。
+BGM ファイルまたは VGM ファイルを最大 256 個指定することができます。
 
 ### se.dat
 
@@ -1334,7 +1334,7 @@ https://github.com/suzukiplan/vgszero/tree/master/tools/joypad
 | `12_angle` | [Z80](./example/12_angle-asm), [C](./example/12_angle) | [atan2](#hardware-atan2-table) を用いた自機狙いの実装例 |
 | `13_perlin` | [Z80](./example/13_perlin-asm), [C](./example/13_perlin) | [ハードウェア・パーリンノイズ](#hardware-perlin-noise) の利用例 |
 | `14_1024ptn` | [Z80](./example/14_1024ptn-asm), [C](./example/14_1024ptn) | [1024 パターンモード](#1024-patterns-mode) の利用例 |
-| `15_nsf` | [Z80](./example/15_nsf-asm/), [C](./example/15_nsf/) | [VGM](#vgm) の利用例 |
+| `15_vgm` | [Z80](./example/15_vgm-asm/) | [VGM](#vgm) の利用例 |
 | `16_ptn-plus1` | [Z80](./example/16_ptn-plus1-asm/), [C](./example/16_ptn-plus1/) | [Attribute](#attribute) の `ptn` の使用例 |
 | `17_clip` | [Z80](./example/17_clip-asm/), [C](./example/17_clip/) | [OAM16](#oam16) の使用例 |
 | `18_debug` | [C](./example/18_debug/) | [ユーザ定義I/O](#user-definition-io) の使用例 |
