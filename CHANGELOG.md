@@ -1,7 +1,23 @@
 # Change Log
 
+## [Version 1.21.0](https://github.com/suzukiplan/vgszero/releases/tag/1.21.0)
 
-## [Version 1.20.0](https://github.com/suzukiplan/vgszero/releases/tag/1.19.1)
+NSF 再生機能を廃止して VGM 再生機能を追加しました。
+
+サポートするチップチューン音源:
+
+|音源名|概要|備考|
+|:---:|:--|:--|
+| NES APU | ファミコン音源 | 拡張音源は未サポート<br>DMC は CPU 依存機能を使用不可 |
+| SN76489 (DCSG) | SG-1000, セガマークIII, ゲームギア等の音源 | ステレオ未サポート |
+| AY-3-8910 (PSG) | MSX等の標準音源 | - |
+| SCC | MSXのコナミ拡張音源 | SCC1 のみサポート (SCC2 は未サポート) |
+
+VGM は version 1.61 以降の形式で出力しなければなりません。
+
+使用例: example/15_vgm-asm
+
+## [Version 1.20.0](https://github.com/suzukiplan/vgszero/releases/tag/1.20.0)
 
 - ユーザ定義I/Oの範囲を 16 (0x00~0x0F) から 128 (0x00~0x7F) に拡張
 
