@@ -12,7 +12,7 @@ all:
 	cd 12_angle-asm && make clean build
 	cd 13_perlin-asm && make clean build
 	cd 14_1024ptn-asm && make clean build
-	cd 15_nsf-asm && make clean build
+	cd 15_vgm-asm && make clean build
 	cd 16_ptn-plus1-asm && make clean build
 	cd 17_clip-asm && make clean build
 
@@ -31,7 +31,6 @@ cpp-build:
 	cd 12_angle && make build
 	cd 13_perlin && make build
 	cd 14_1024ptn && make build
-	cd 15_nsf && make build
 	cd 16_ptn-plus1 && make build
 	cd 17_clip && make build
 
@@ -50,6 +49,5 @@ cpp-clean:
 	cd 12_angle && make clean
 	cd 13_perlin && make clean
 	cd 14_1024ptn && make clean
-	cd 15_nsf && make clean
 	cd 16_ptn-plus1 && make clean
 	cd 17_clip && make clean

@@ -33,3 +33,4 @@ nes_vrc6.cpp
 nes_vrc7.cpp
 emu2149.c
 emu2212.c
+emu76489.c

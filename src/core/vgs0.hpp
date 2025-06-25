@@ -6,13 +6,11 @@
 
 #ifndef INCLUDE_VGS0_HPP
 #define INCLUDE_VGS0_HPP
-#ifndef NO_NSF
-#include "nsf/nsfplay.hpp"
-#endif
 #include "perlinnoise.hpp"
 #include "vdp.hpp"
 #include "vgs0def.h"
 #include "vgsdecv.hpp"
+#include "vgm.hpp"
 #include "z80.hpp"
 
 extern "C" {
@@ -64,10 +62,7 @@ class VGS0
     VDP* vdp;
     VGSDecoder* vgsdec;
     PerlinNoise* noise;
-#ifndef NO_NSF
-    xgm::NSF nsf;
-    NSFPlayer nsfPlayer;
-#endif
+    VgmManager* vgm;
     bool (*saveCallback)(VGS0* vgs0, const void* data, size_t size);
     bool (*loadCallback)(VGS0* vgs0, void* data, size_t size);
     bool (*saveExtraCallback)(VGS0* vgs0, int bank);
@@ -84,10 +79,10 @@ class VGS0
         unsigned char ri8;
         unsigned short ri16;
         struct BgmContext {
-            bool isNSF;
+            bool isVGM;
             bool playing;
             bool fadeout;
-            int nsfFadeCounter;
+            int vgmFadeCounter;
             int playingIndex;
             unsigned int seekPosition;
         } bgm;
@@ -104,6 +99,7 @@ class VGS0
         this->vdp = new VDP(
             colorMode, this, [](void* arg) { ((VGS0*)arg)->cpu->requestBreak(); }, [](void* arg) { ((VGS0*)arg)->cpu->generateIRQ(0x07); });
         this->vgsdec = new VGSDecoder();
+        this->vgm = new VgmManager();
         this->noise = new PerlinNoise(vgs0_rand16, 0);
         this->saveCallback = nullptr;
         this->loadCallback = nullptr;
@@ -121,6 +117,7 @@ class VGS0
     {
         delete this->noise;
         delete this->vgsdec;
+        delete this->vgm;
         delete this->vdp;
         delete this->cpu;
     }
@@ -163,6 +160,7 @@ class VGS0
         memset(&this->cpu->reg, 0, sizeof(this->cpu->reg));
         this->cpu->reg.SP = 0xFFFF;
         this->ctx.bgm.playing = false;
+        this->vgm->reset();
         for (int i = 0; i < 256; i++) {
             this->ctx.se[i].playing = false;
         }
@@ -251,10 +249,8 @@ class VGS0
             return nullptr; // invalid size
         }
         if (this->ctx.bgm.playing) {
-            if (this->ctx.bgm.isNSF) {
-#ifndef NO_NSF
-                this->nsfPlayer.Render(buf, size / 2);
-#endif
+            if (this->ctx.bgm.isVGM) {
+                this->vgm->render(buf, size / 2);
             } else {
                 this->vgsdec->execute(buf, size);
                 this->ctx.bgm.playing = !this->vgsdec->isPlayEnd();
@@ -272,12 +268,12 @@ class VGS0
                     buf[i] = (short)w;
                 }
             }
-            if (this->ctx.bgm.isNSF && this->ctx.bgm.fadeout) {
-                this->ctx.bgm.nsfFadeCounter--;
-                if (0 < this->ctx.bgm.nsfFadeCounter) {
+            if (this->ctx.bgm.isVGM && this->ctx.bgm.fadeout) {
+                this->ctx.bgm.vgmFadeCounter--;
+                if (0 < this->ctx.bgm.vgmFadeCounter) {
                     for (int i = 0; i < (int)size / 2; i++) {
                         int w = buf[i];
-                        w *= this->ctx.bgm.nsfFadeCounter;
+                        w *= this->ctx.bgm.vgmFadeCounter;
                         w /= 100;
                         buf[i] = (short)w;
                     }
@@ -799,25 +795,14 @@ class VGS0
                 if (this->bgm[value].data) {
                     this->ctx.bgm.playing = true;
                     this->ctx.bgm.fadeout = false;
-                    this->ctx.bgm.nsfFadeCounter = 0;
+                    this->ctx.bgm.vgmFadeCounter = 0;
                     this->ctx.bgm.seekPosition = 0;
                     this->ctx.bgm.playingIndex = value;
-                    this->ctx.bgm.isNSF = false;
+                    this->ctx.bgm.isVGM = false;
                     if (0 == memcmp(this->bgm[value].data, "VGSBGM-V", 8)) {
                         this->vgsdec->load(this->bgm[value].data, this->bgm[value].size);
-#ifndef NO_NSF
-                    } else if (0 == memcmp(this->bgm[value].data, "NESM", 4)) {
-                        if (this->nsf.Load((uint8_t*)this->bgm[value].data, this->bgm[value].size)) {
-                            this->ctx.bgm.isNSF = true;
-                            this->nsfPlayer.Load(&this->nsf);
-                            this->nsfPlayer.SetPlayFreq(44100);
-                            this->nsfPlayer.SetChannels(1);
-                            this->nsfPlayer.Reset();
-                        } else {
-                            // unsupported .nsf format
-                            this->ctx.bgm.playing = false;
-                        }
-#endif
+                    } else if (this->vgm->load(this->bgm[value].data, this->bgm[value].size)) {
+                        this->ctx.bgm.isVGM = true;
                     } else {
                         // unsupported format
                         this->ctx.bgm.playing = false;
@@ -833,9 +818,9 @@ class VGS0
                         this->ctx.bgm.playing = true;
                         break;
                     case 2: // fadeout
-                        if (this->ctx.bgm.isNSF) {
+                        if (this->ctx.bgm.isVGM) {
                             this->ctx.bgm.fadeout = true;
-                            this->ctx.bgm.nsfFadeCounter = 100;
+                            this->ctx.bgm.vgmFadeCounter = 100;
                         } else {
                             this->ctx.bgm.fadeout = true;
                             this->vgsdec->fadeout();
