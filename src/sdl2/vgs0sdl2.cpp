@@ -538,6 +538,7 @@ int main(int argc, char* argv[])
     memset(msxKeyCodeMap, 0, sizeof(msxKeyCodeMap));
     bool stabled = false;
     unsigned char key1 = 0;
+    vgs0.vdp->setScanlineMode(false);
     while (!halt) {
         loopCount++;
         auto start = std::chrono::system_clock::now();
@@ -587,6 +588,7 @@ int main(int argc, char* argv[])
                     case SDLK_r: {
                         log("Reset");
                         vgs0.reset();
+                        vgs0.vdp->setScanlineMode(false);
                         break;
                     }
                 }
