@@ -87,6 +87,7 @@ struct VRAM $8000 {
     spDPM       ds.b    1           ; R10: Sprite Direct Pattern Maaping
     mode1024    ds.b    1           ; R11: 1024 pattern mode
     interlace   ds.b    1           ; R12: Interlace 
+    renderMode  ds.b    1           ; R13: Rendering Mode
 }
 
 #macro wait_vblank()
