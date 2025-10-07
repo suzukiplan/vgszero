@@ -529,7 +529,6 @@ If there is no need to expand character patterns into RAM (VRAM), the Extra RAM 
 | 0x9F0A          | 0x1F0A          | Register #10: [Direct Pattern Maaping](#direct-pattern-mapping) for [Sprite](#sprite) |
 | 0x9F0B          | 0x1F0B          | Register #11: [1024 pattern mode setting for BG/FG](#1024-patterns-mode) |
 | 0x9F0C          | 0x1F0C          | Register #12: [Interlace mode setting for BG/FG](#interlace-mode) |
-| 0x9F0D          | 0x1F0D          | Register #13: [Rendering Mode](#rendering-mode) |
 | 0xA000 ~ $BFFF  | 0x2000 ~ 0x3FFF | [Character Pattern Table](#character-pattern-table) (32 x 256) |
 
 Unlike general VDP, access to VRAM can be easily performed by load/store to CPU address (e.g., LD instruction).
@@ -759,16 +758,6 @@ The BG/FG drawing can be interlaced (skipping the drawing of odd-numbered rows o
 - `FV` : skip drawing odd pixels of FG (vertical interlace)
 - `BH` : skip drawing odd scan lines of BG (horizontal interlace)
 - `BV` : skip drawing odd pixels of BG (vertical interlace)
-
-#### (Rendering Mode)
-
-| Bit-7 | Bit-6 | Bit-5 | Bit-4 | Bit-3 | Bit-2 | Bit-1 | Bit-0 |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `BF`  |   -   |   -   |   -   |   -   |   -   |   -   |   -   |
-
-- `BF` (Buffer Flip Mode)
-  - `0`: Drawing one scanline at a time (Scanline Mode)
-  - `1`: Draw all scan lines in one batch during the VBLANK detection timing (Buffer Flip Mode)
 
 #### (Character Pattern Table)
 
