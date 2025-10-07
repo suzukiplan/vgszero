@@ -6,7 +6,15 @@
 #include "emu2149.hpp"
 #include "emu2212.hpp"
 
+#ifdef ENABLE_OPN2
+#include "ymfm_opn2.hpp"
+#endif
+
+#ifdef ENABLE_OPN2
+class VgmManager : public ymfm::ymfm_interface
+#else
 class VgmManager
+#endif
 {
   private:
     enum EmulatorType {
@@ -14,6 +22,9 @@ class VgmManager
         ET_DCSG,
         ET_PSG,
         ET_SCC,
+#ifdef ENABLE_OPN2
+        ET_OPN2,
+#endif
         ET_Length
     };
 
@@ -23,6 +34,10 @@ class VgmManager
         EMU2149* psg;
         EMU2212* scc;
     } emu;
+
+#ifdef ENABLE_OPN2
+    ymfm::ym2612 ym2612;
+#endif
 
     struct VgmContext {
         uint32_t clocks[ET_Length];
@@ -35,8 +50,21 @@ class VgmManager
         bool end;
     } vgm;
 
+#ifdef ENABLE_OPN2
+    struct YM2612Context {
+        uint64_t output_start;
+        uint64_t pos;
+        uint64_t step;
+    } ym;
+    std::vector<std::pair<uint32_t, uint8_t>> ym2612_queue;
+#endif
+
   public:
+#ifdef ENABLE_OPN2
+    VgmManager() : ym2612(*this)
+#else
     VgmManager()
+#endif
     {
         emu.nes = new xgm::NesVgmDriver();
         emu.dcsg = new EMU76489(3579545, 44100);
@@ -92,6 +120,16 @@ class VgmManager
             emu.scc->set_type(EMU2212::Type::Standard);
         }
 
+#ifdef ENABLE_OPN2
+        memcpy(&vgm.clocks[ET_OPN2], &data[0x2C], 4);
+        if (vgm.clocks[ET_OPN2]) {
+            memset(&ym, 0, sizeof(ym));
+            ym2612.reset();
+            ym.step = 0x100000000ull / ym2612.sample_rate(vgm.clocks[ET_OPN2]);
+            ym2612_queue.clear();
+        }
+#endif
+
         memcpy(&vgm.cursor, &data[0x34], 4);
         vgm.cursor += 0x40 - 0x0C;
         memcpy(&vgm.loopOffset, &data[0x1C], 4);
@@ -106,6 +144,9 @@ class VgmManager
         emu.dcsg->reset();
         emu.psg->reset();
         emu.scc->reset();
+#ifdef ENABLE_OPN2
+        ym2612.reset();
+#endif
     }
 
     void render(int16_t* buf, int samples)
@@ -135,6 +176,30 @@ class VgmManager
             if (vgm.clocks[ET_SCC]) {
                 buf[cursor] += emu.scc->calc() << 1;
             }
+#ifdef ENABLE_OPN2
+            if (vgm.clocks[ET_OPN2]) {
+                uint32_t addr1 = 0xffff, addr2 = 0xffff;
+                uint8_t data1 = 0, data2 = 0;
+                if (!ym2612_queue.empty()) {
+                    auto front = ym2612_queue.front();
+                    addr1 = 0 + 2 * ((front.first >> 8) & 3);
+                    data1 = front.first & 0xff;
+                    addr2 = addr1 + 1;
+                    data2 = front.second;
+                    ym2612_queue.erase(ym2612_queue.begin());
+                }
+                if (addr1 != 0xffff) {
+                    ym2612.write(addr1, data1);
+                    ym2612.write(addr2, data2);
+                }
+                ymfm::ym2612::output_data out;
+                for (; ym.pos <= ym.output_start; ym.pos += ym.step) {
+                    ym2612.generate(&out);
+                }
+                ym.output_start += 0x100000000ull / 44100;
+                buf[cursor] += out.data[0];
+            }
+#endif
             cursor++;
         }
     }
@@ -180,6 +245,26 @@ class VgmManager
                     }
                     break;
                 }
+
+#ifdef ENABLE_OPN2
+                case 0x52:
+                case 0xA2: {
+                    // YM2612 port 0, write value dd to register aa
+                    uint32_t reg = vgm.data[vgm.cursor++];
+                    uint8_t data = vgm.data[vgm.cursor++];
+                    ym2612_queue.push_back(std::make_pair(reg, data));
+                    break;
+                }
+                case 0x53:
+                case 0xA3: {
+                    // YM2612 port 1, write value dd to register aa
+                    uint32_t reg = vgm.data[vgm.cursor++];
+                    uint8_t data = vgm.data[vgm.cursor++];
+                    ym2612_queue.push_back(std::make_pair(reg | 0x100, data));
+                    break;
+                }
+#endif
+
                 case 0x61: {
                     // Wait nn samples
                     unsigned short nn;
@@ -208,6 +293,28 @@ class VgmManager
                 case 0xFE:
                 case 0xFF:
                     // Skip: Furnace outputs thies unsupport commands (use for labels?)
+                    break;
+
+                case 0x90: // Setup Stream Control: 0x90 ss tt pp cc (ignore)
+                case 0x91: // Set Stream Data: 0x91 ss dd ll bb (ignore)
+                case 0x95: // Start Stream (fast call): 0x95 ss bb bb ff
+                    // printf("[DAC]0x%02X: %02X %02X %02X %02X\n", cmd, vgm.data[0], vgm.data[1], vgm.data[2], vgm.data[3]);
+                    vgm.cursor += 4;
+                    break;
+
+                case 0x92: // Set Stream Frequency: 0x92 ss ff ff ff ff (ignore)
+                    // printf("[DAC]0x%02X: %02X %02X %02X %02X %02X\n", cmd, vgm.data[0], vgm.data[1], vgm.data[2], vgm.data[3], vgm.data[4]);
+                    vgm.cursor += 5;
+                    break;
+
+                case 0x93: // Start Stream: 0x93 ss aa aa aa aa mm ll ll ll ll (ignored)
+                    // printf("[DAC]0x%02X: %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n", cmd, vgm.data[0], vgm.data[1], vgm.data[2], vgm.data[3], vgm.data[4], vgm.data[5], vgm.data[6], vgm.data[7], vgm.data[8], vgm.data[9]);
+                    vgm.cursor += 10;
+                    break;
+
+                case 0x94: // Stop Stream: 0x94 ss
+                    // printf("[DAC]0x%02X: %02X\n", cmd, vgm.data[0]);
+                    vgm.cursor++;
                     break;
 
                 default:
