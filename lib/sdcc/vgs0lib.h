@@ -221,12 +221,6 @@
  */
 #define VGS0_ADDR_INTERLACE ((uint8_t*)0x9F0C)
 
-/** @def
- * Rendering Mode
- * https://github.com/suzukiplan/vgszero/blob/master/README.md#rendering-mode
- */
-#define VGS0_ADDR_RENDERING ((uint8_t*)0x9F0D)
-
 //! stdint compatible (8bit unsigned)
 typedef unsigned char uint8_t;
 

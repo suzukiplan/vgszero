@@ -1,5 +1,9 @@
 # Change Log
 
+## [Version 1.23.1](https://github.com/suzukiplan/vgszero/releases/tag/1.23.1)
+
+誤って没にした 1.22.0 の修正内容が混入してしまったので revert
+
 ## [Version 1.23.0](https://github.com/suzukiplan/vgszero/releases/tag/1.23.0)
 
 YM2612 (OPN2) の VGM の再生を **PC限定** でサポートしました。

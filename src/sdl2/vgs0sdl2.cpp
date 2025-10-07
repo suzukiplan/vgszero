@@ -538,7 +538,6 @@ int main(int argc, char* argv[])
     memset(msxKeyCodeMap, 0, sizeof(msxKeyCodeMap));
     bool stabled = false;
     unsigned char key1 = 0;
-
     while (!halt) {
         loopCount++;
         auto start = std::chrono::system_clock::now();
