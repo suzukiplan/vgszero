@@ -1,5 +1,15 @@
 # Change Log
 
+## [Version 1.23.0](https://github.com/suzukiplan/vgszero/releases/tag/1.23.0)
+
+YM2612 (OPN2) の VGM の再生を **PC限定** でサポートしました。
+
+YM2612 (OPN2) の VGM を再生するには core モジュールをビルドする際に `-DENABLE_OPN2` を定義する必要があります。
+
+SDL2版エミュレータは `-DENABLE_OPN2` を付与してビルドしています。
+
+ただし、RaspberryPi Zero 2W では `-DENABLE_OPN2` を付与すると現状ではビルドに失敗します。（STLを利用しているため）
+
 ## [Version 1.21.0](https://github.com/suzukiplan/vgszero/releases/tag/1.21.0)
 
 NSF 再生機能を廃止して VGM 再生機能を追加しました。

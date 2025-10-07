@@ -46,6 +46,7 @@ class VDP
     inline bool isInterlaceBH() { return this->ctx.ram0[0x1F0C] & 0x02; }
     inline bool isInterlaceFV() { return this->ctx.ram0[0x1F0C] & 0x04; }
     inline bool isInterlaceFH() { return this->ctx.ram0[0x1F0C] & 0x08; }
+    inline bool isScanlineMode() { return (this->ctx.ram0[0x1F0D] & 0x80) == 0; }
     inline unsigned char getRegisterIRQ() { return this->ctx.ram0[0x1F06]; }
     inline unsigned char* getOamAddr() { return &this->ctx.ram0[0x1000]; }
     inline bool isAttrVisible(unsigned char attr) { return attr & 0x80; }
@@ -87,6 +88,15 @@ class VDP
         unsigned char ram0[0x2000];
         unsigned char ram1[256][0x2000];
     } ctx;
+
+    void setScanlineMode(bool isScanline)
+    {
+        if (isScanline) {
+            this->ctx.ram0[0x1F0D] &= 0x7F;
+        } else {
+            this->ctx.ram0[0x1F0D] |= 0x80;
+        }
+    }
 
     VDP(ColorMode colorMode_, void* arg, void (*detectEndOfFrame)(void* arg), void (*detectIRQ)(void* arg))
     {
@@ -149,11 +159,16 @@ class VDP
         this->ctx.countH++;
         this->ctx.countH %= 342;
         if (0 == this->ctx.countH) {
-            this->renderScanline(this->ctx.countV);
+            if (this->isScanlineMode()) {
+                this->renderScanline(this->ctx.countV);
+            }
             this->ctx.countV++;
             this->ctx.countV %= 262;
             this->ctx.status |= (200 == this->ctx.countV ? 0x80 : 0x00);
             if (0 == this->ctx.countV) {
+                if (!this->isScanlineMode()) {
+                    this->renderScreen();
+                }
                 this->detectEndOfFrame(this->arg);
             } else if (this->ctx.countV == this->getRegisterIRQ()) {
                 this->detectIRQ(this->arg);
@@ -164,7 +179,7 @@ class VDP
     void refreshDisplay()
     {
         this->resetPaletteCache();
-        for (int i = 8; i < 200; i++) this->renderScanline(i);
+        this->renderScreen();
     }
 
     bool externalRendering()
@@ -387,6 +402,17 @@ class VDP
                     }
                 }
             }
+        }
+    }
+
+    void renderScreen()
+    {
+        // NOTE: Render the entire screen at once.
+        // Rendering in the order of BGs, Sprites, and FGs all at once
+        // could potentially improve performance significantly,
+        // but the existing renderScanline function is used as-is for code brevity.
+        for (int i = 8; i < 200; i++) {
+            this->renderScanline(i);
         }
     }
 };
