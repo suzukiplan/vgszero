@@ -215,6 +215,12 @@
  */
 #define VGS0_ADDR_PTN1024 ((uint8_t*)0x9F0B)
 
+/** @def
+ * Interlace Mode
+ * https://github.com/suzukiplan/vgszero/blob/master/README.md#interlace-mode
+ */
+#define VGS0_ADDR_INTERLACE ((uint8_t*)0x9F0C)
+
 //! stdint compatible (8bit unsigned)
 typedef unsigned char uint8_t;
 
