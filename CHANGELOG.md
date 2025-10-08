@@ -1,5 +1,9 @@
 # Change Log
 
+## [Version 1.24.0](https://github.com/suzukiplan/vgszero/releases/tag/1.24.0)
+
+OPN2 の再生を RaspberryPi Zero 2W でもサポート
+
 ## [Version 1.23.1](https://github.com/suzukiplan/vgszero/releases/tag/1.23.1)
 
 誤って没にした 1.22.0 の修正内容が混入してしまったので revert
