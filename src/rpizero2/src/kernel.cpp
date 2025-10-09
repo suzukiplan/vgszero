@@ -296,10 +296,18 @@ TShutdownMode CKernel::run(void)
         se = ptr;
     }
 
+    logger.Write(TAG, LogDebug, "Creating an instance: VGS0");
     VGS0 vgs0(VDP::ColorMode::RGB565);
+    logger.Write(TAG, LogDebug, "Loading game.pkg");
     vgs0.loadRom(rom, romSize);
-    if (0 < bgmSize) vgs0.loadBgm(bgm, bgmSize);
-    if (0 < seSize) vgs0.loadSoundEffect(se, seSize);
+    if (0 < bgmSize) {
+        logger.Write(TAG, LogDebug, "Extractin bgm");
+        vgs0.loadBgm(bgm, bgmSize);
+    }
+    if (0 < seSize) {
+        logger.Write(TAG, LogDebug, "Extractin sfx");
+        vgs0.loadSoundEffect(se, seSize);
+    }
     vgs0.setExternalRenderingCallback([](void* arg) {
         CMultiCoreSupport::SendIPI(3, IPI_USER + 2); // request execute rendering core (vdp)
     });
@@ -345,6 +353,7 @@ TShutdownMode CKernel::run(void)
     vgs0_ = &vgs0;
 
     // fill empty buffer to the sound queue
+    logger.Write(TAG, LogDebug, "Setup the audio playback");
     memset(pcmData_, 0, sizeof(pcmData_));
     for (int i = 0; i < 8; i++) {
         sound.Playback(pcmData_, 735, 1, 16);
@@ -354,6 +363,7 @@ TShutdownMode CKernel::run(void)
 
     int swap = 0;
     auto buffer = screen.GetFrameBuffer();
+    logger.Write(TAG, LogDebug, "Start main loop");
     while (1) {
         // update status of the peripheral devices
         updateUsbStatus();
