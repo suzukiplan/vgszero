@@ -19,11 +19,17 @@ class VgmManager : public ymfm::ymfm_interface
         ET_Length
     };
 
-    struct Emulator {
-        xgm::NesVgmDriver* nes;
-        EMU76489* dcsg;
-        EMU2149* psg;
-        EMU2212* scc;
+    class Emulator
+    {
+      public:
+        Emulator() : nes(),
+                     dcsg(3579545, 44100),
+                     psg(3579545, 44100),
+                     scc(3579545, 44100) {}
+        xgm::NesVgmDriver nes;
+        EMU76489 dcsg;
+        EMU2149 psg;
+        EMU2212 scc;
     } emu;
 
     ymfm::ym2612 ym2612;
@@ -56,20 +62,11 @@ class VgmManager : public ymfm::ymfm_interface
   public:
     VgmManager() : ym2612(*this)
     {
-        emu.nes = new xgm::NesVgmDriver();
-        emu.dcsg = new EMU76489(3579545, 44100);
-        emu.psg = new EMU2149(3579545, 44100);
-        emu.scc = new EMU2212(3579545, 44100);
         ym2612_queue_reset();
     }
 
-    ~VgmManager()
-    {
-        delete emu.nes;
-        delete emu.dcsg;
-        delete emu.psg;
-        delete emu.scc;
-    }
+    VgmManager(const VgmManager&) = delete;
+    VgmManager& operator=(const VgmManager&) = delete;
 
     bool load(const uint8_t* data, size_t size)
     {
@@ -95,20 +92,20 @@ class VgmManager : public ymfm::ymfm_interface
         memcpy(&vgm.clocks[ET_SCC], &data[0x9C], 4);
 
         if (vgm.clocks[ET_NES]) {
-            emu.nes->Load(data, size);
-            emu.nes->SetPlayFreq(44100);
-            emu.nes->SetChannels(1);
-            emu.nes->Reset();
+            emu.nes.Load(data, size);
+            emu.nes.SetPlayFreq(44100);
+            emu.nes.SetChannels(1);
+            emu.nes.Reset();
             return true;
         }
 
         if (vgm.clocks[ET_PSG]) {
-            emu.psg->setVolumeMode(2);
-            emu.psg->setClockDivider(1);
+            emu.psg.setVolumeMode(2);
+            emu.psg.setClockDivider(1);
         }
 
         if (vgm.clocks[ET_SCC]) {
-            emu.scc->set_type(EMU2212::Type::Standard);
+            emu.scc.set_type(EMU2212::Type::Standard);
         }
 
         memcpy(&vgm.clocks[ET_OPN2], &data[0x2C], 4);
@@ -129,10 +126,10 @@ class VgmManager : public ymfm::ymfm_interface
     void reset()
     {
         memset(&vgm, 0, sizeof(vgm));
-        emu.nes->Reset();
-        emu.dcsg->reset();
-        emu.psg->reset();
-        emu.scc->reset();
+        emu.nes.Reset();
+        emu.dcsg.reset();
+        emu.psg.reset();
+        emu.scc.reset();
         ym2612.reset();
         ym2612_queue_reset();
     }
@@ -145,7 +142,7 @@ class VgmManager : public ymfm::ymfm_interface
         }
         if (vgm.clocks[ET_NES]) {
             // Execute NES only
-            emu.nes->Render(buf, samples);
+            emu.nes.Render(buf, samples);
             return;
         }
         int cursor = 0;
@@ -156,13 +153,13 @@ class VgmManager : public ymfm::ymfm_interface
             vgm.wait--;
             buf[cursor] = 0;
             if (vgm.clocks[ET_DCSG]) {
-                buf[cursor] += emu.dcsg->calc() << 1;
+                buf[cursor] += emu.dcsg.calc() << 1;
             }
             if (vgm.clocks[ET_PSG]) {
-                buf[cursor] += emu.psg->calc() << 1;
+                buf[cursor] += emu.psg.calc() << 1;
             }
             if (vgm.clocks[ET_SCC]) {
-                buf[cursor] += emu.scc->calc() << 1;
+                buf[cursor] += emu.scc.calc() << 1;
             }
             if (vgm.clocks[ET_OPN2]) {
                 uint32_t addr1 = 0xffff, addr2 = 0xffff;
@@ -200,20 +197,20 @@ class VgmManager : public ymfm::ymfm_interface
             uint8_t cmd = vgm.data[vgm.cursor++];
             switch (cmd) {
                 case 0x4F: // SN76489 GG I/O
-                    emu.dcsg->writeGGIO(vgm.data[vgm.cursor++]);
+                    emu.dcsg.writeGGIO(vgm.data[vgm.cursor++]);
                     break;
                 case 0x50: // SN76489 register
-                    emu.dcsg->writeIO(vgm.data[vgm.cursor++]);
+                    emu.dcsg.writeIO(vgm.data[vgm.cursor++]);
                     break;
                 case 0x31: // AY-3-8910 stereo mask (ignore)
                     vgm.cursor++;
-                    // emu.psg->setMask(vgm.data[vgm.cursor++]);
+                    // emu.psg.setMask(vgm.data[vgm.cursor++]);
                     break;
                 case 0xA0: {
                     // AY-3-8910 reigster
                     uint8_t addr = vgm.data[vgm.cursor++];
                     uint8_t value = vgm.data[vgm.cursor++];
-                    emu.psg->writeReg(addr, value);
+                    emu.psg.writeReg(addr, value);
                     break;
                 }
                 case 0xD2: {
@@ -222,12 +219,12 @@ class VgmManager : public ymfm::ymfm_interface
                     uint8_t offset = vgm.data[vgm.cursor++];
                     uint8_t data = vgm.data[vgm.cursor++];
                     switch (port) {
-                        case 0x00: emu.scc->write_waveform1(offset, data); break;
-                        case 0x01: emu.scc->write_frequency(offset, data); break;
-                        case 0x02: emu.scc->write_volume(offset, data); break;
-                        case 0x03: emu.scc->write_keyoff(data); break;
-                        case 0x04: emu.scc->write_waveform2(offset, data); break;
-                        case 0x05: emu.scc->write_test(data); break;
+                        case 0x00: emu.scc.write_waveform1(offset, data); break;
+                        case 0x01: emu.scc.write_frequency(offset, data); break;
+                        case 0x02: emu.scc.write_volume(offset, data); break;
+                        case 0x03: emu.scc.write_keyoff(data); break;
+                        case 0x04: emu.scc.write_waveform2(offset, data); break;
+                        case 0x05: emu.scc.write_test(data); break;
                     }
                     break;
                 }

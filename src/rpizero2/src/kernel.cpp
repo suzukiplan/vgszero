@@ -336,13 +336,13 @@ TShutdownMode CKernel::run(void)
         extraSaveDataChangeDetect_ = true;
         extraSaveDataChanged_[bank & 0xFF] = true;
         void* cache = &extraSaveDataCache_[bank & 0xFF][0];
-        void* data = &vgs0->vdp->ctx.ram1[bank & 0xFF][0];
+        void* data = &vgs0->vdp.ctx.ram1[bank & 0xFF][0];
         memcpy(cache, data, 0x2000);
         return true;
     };
     vgs0.loadExtraCallback = [](VGS0* vgs0, int bank) -> bool {
         void* cache = &extraSaveDataCache_[bank & 0xFF][0];
-        void* data = &vgs0->vdp->ctx.ram1[bank & 0xFF][0];
+        void* data = &vgs0->vdp.ctx.ram1[bank & 0xFF][0];
         memcpy(data, cache, 0x2000);
         return true;
     };
