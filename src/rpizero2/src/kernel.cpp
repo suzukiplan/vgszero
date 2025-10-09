@@ -297,21 +297,21 @@ TShutdownMode CKernel::run(void)
     }
 
     logger.Write(TAG, LogDebug, "Creating an instance: VGS0");
-    VGS0 vgs0(VDP::ColorMode::RGB565);
+    VGS0* vgs0 = new VGS0(VDP::ColorMode::RGB565);
     logger.Write(TAG, LogDebug, "Loading game.pkg");
-    vgs0.loadRom(rom, romSize);
+    vgs0->loadRom(rom, romSize);
     if (0 < bgmSize) {
         logger.Write(TAG, LogDebug, "Extractin bgm");
-        vgs0.loadBgm(bgm, bgmSize);
+        vgs0->loadBgm(bgm, bgmSize);
     }
     if (0 < seSize) {
         logger.Write(TAG, LogDebug, "Extractin sfx");
-        vgs0.loadSoundEffect(se, seSize);
+        vgs0->loadSoundEffect(se, seSize);
     }
-    vgs0.setExternalRenderingCallback([](void* arg) {
+    vgs0->setExternalRenderingCallback([](void* arg) {
         CMultiCoreSupport::SendIPI(3, IPI_USER + 2); // request execute rendering core (vdp)
     });
-    vgs0.saveCallback = [](VGS0* vgs0, const void* data, size_t size) -> bool {
+    vgs0->saveCallback = [](VGS0* vgs0, const void* data, size_t size) -> bool {
         // この処理はサブCPUで実行されるのでキャッシュと変更フラグのみ更新して実際のセーブはメイン処理に委ねる
         if (sizeof(saveDataCache_) < size) return false;
         if (saveDataSize_ != size || 0 != memcmp(saveDataCache_, data, size)) {
@@ -321,7 +321,7 @@ TShutdownMode CKernel::run(void)
         }
         return true;
     };
-    vgs0.loadCallback = [](VGS0* vgs0, void* data, size_t size) -> bool {
+    vgs0->loadCallback = [](VGS0* vgs0, void* data, size_t size) -> bool {
         // 実際にSDカードからは読み込まずキャッシュから読む
         // NOTE: ゲーム稼働中にSDカードのsave.datを置き換えてゲーム内でロードしても無効
         if (sizeof(saveDataCache_) < size) return false;
@@ -332,7 +332,7 @@ TShutdownMode CKernel::run(void)
             return false;
         }
     };
-    vgs0.saveExtraCallback = [](VGS0* vgs0, int bank) -> bool {
+    vgs0->saveExtraCallback = [](VGS0* vgs0, int bank) -> bool {
         extraSaveDataChangeDetect_ = true;
         extraSaveDataChanged_[bank & 0xFF] = true;
         void* cache = &extraSaveDataCache_[bank & 0xFF][0];
@@ -340,17 +340,17 @@ TShutdownMode CKernel::run(void)
         memcpy(cache, data, 0x2000);
         return true;
     };
-    vgs0.loadExtraCallback = [](VGS0* vgs0, int bank) -> bool {
+    vgs0->loadExtraCallback = [](VGS0* vgs0, int bank) -> bool {
         void* cache = &extraSaveDataCache_[bank & 0xFF][0];
         void* data = &vgs0->vdp->ctx.ram1[bank & 0xFF][0];
         memcpy(data, cache, 0x2000);
         return true;
     };
-    vgs0.resetCallback = [](VGS0* vgs0) {
+    vgs0->resetCallback = [](VGS0* vgs0) {
         pendingCounter_ = 16;
     };
     pendingCounter_ = 0;
-    vgs0_ = &vgs0;
+    vgs0_ = vgs0;
 
     // fill empty buffer to the sound queue
     logger.Write(TAG, LogDebug, "Setup the audio playback");
