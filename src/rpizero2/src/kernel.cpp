@@ -31,6 +31,7 @@ bool extraSaveDataChanged_[256];
 bool extraSaveDataChangeDetect_;
 CLogger* logger_;
 SystemConfiguration* config_;
+VGS0 vgs0(VDP::ColorMode::RGB565);
 
 CKernel::CKernel(void) : screen(480, 384),
                          timer(&interrupt),
@@ -296,8 +297,6 @@ TShutdownMode CKernel::run(void)
         se = ptr;
     }
 
-    logger.Write(TAG, LogDebug, "Creating an instance: VGS0");
-    VGS0 vgs0(VDP::ColorMode::RGB565);
     logger.Write(TAG, LogDebug, "Loading game.pkg");
     vgs0.loadRom(rom, romSize);
     if (0 < bgmSize) {
