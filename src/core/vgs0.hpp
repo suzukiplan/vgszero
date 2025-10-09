@@ -57,12 +57,48 @@ class VGS0
     int bgmVolume;
     int seVolume;
 
+  private:
+    static unsigned char readMemoryProxy(void* arg, unsigned short addr)
+    {
+        return static_cast<VGS0*>(arg)->readMemory(addr);
+    }
+
+    static void writeMemoryProxy(void* arg, unsigned short addr, unsigned char value)
+    {
+        static_cast<VGS0*>(arg)->writeMemory(addr, value);
+    }
+
+    static unsigned char inPortProxy(void* arg, unsigned short port)
+    {
+        return static_cast<VGS0*>(arg)->inPort(port);
+    }
+
+    static void outPortProxy(void* arg, unsigned short port, unsigned char value)
+    {
+        static_cast<VGS0*>(arg)->outPort(port, value);
+    }
+
+    static void consumeClockProxy(void* arg, int clocks)
+    {
+        static_cast<VGS0*>(arg)->consumeClock(clocks);
+    }
+
+    static void requestBreakProxy(void* arg)
+    {
+        static_cast<VGS0*>(arg)->cpu.requestBreak();
+    }
+
+    static void generateIRQProxy(void* arg)
+    {
+        static_cast<VGS0*>(arg)->cpu.generateIRQ(0x07);
+    }
+
   public:
-    Z80* cpu;
-    VDP* vdp;
-    VGSDecoder* vgsdec;
-    PerlinNoise* noise;
-    VgmManager* vgm;
+    Z80 cpu;
+    VDP vdp;
+    VGSDecoder vgsdec;
+    PerlinNoise noise;
+    VgmManager vgm;
     bool (*saveCallback)(VGS0* vgs0, const void* data, size_t size);
     bool (*loadCallback)(VGS0* vgs0, void* data, size_t size);
     bool (*saveExtraCallback)(VGS0* vgs0, int bank);
@@ -93,14 +129,13 @@ class VGS0
     } ctx;
 
     VGS0(VDP::ColorMode colorMode = VDP::ColorMode::RGB555)
+        : cpu(readMemoryProxy, writeMemoryProxy, inPortProxy, outPortProxy, this),
+          vdp(colorMode, this, requestBreakProxy, generateIRQProxy),
+          vgsdec(),
+          noise(vgs0_rand16, 0),
+          vgm()
     {
-        this->cpu = new Z80([](void* arg, unsigned short addr) { return ((VGS0*)arg)->readMemory(addr); }, [](void* arg, unsigned short addr, unsigned char value) { ((VGS0*)arg)->writeMemory(addr, value); }, [](void* arg, unsigned short port) { return ((VGS0*)arg)->inPort(port); }, [](void* arg, unsigned short port, unsigned char value) { ((VGS0*)arg)->outPort(port, value); }, this);
-        this->cpu->setConsumeClockCallback([](void* arg, int clocks) { ((VGS0*)arg)->consumeClock(clocks); });
-        this->vdp = new VDP(
-            colorMode, this, [](void* arg) { ((VGS0*)arg)->cpu->requestBreak(); }, [](void* arg) { ((VGS0*)arg)->cpu->generateIRQ(0x07); });
-        this->vgsdec = new VGSDecoder();
-        this->vgm = new VgmManager();
-        this->noise = new PerlinNoise(vgs0_rand16, 0);
+        this->cpu.setConsumeClockCallback(consumeClockProxy);
         this->saveCallback = nullptr;
         this->loadCallback = nullptr;
         this->resetCallback = nullptr;
@@ -113,15 +148,6 @@ class VGS0
         this->reset();
     }
 
-    ~VGS0()
-    {
-        delete this->noise;
-        delete this->vgsdec;
-        delete this->vgm;
-        delete this->vdp;
-        delete this->cpu;
-    }
-
     void* getRAM(size_t* size)
     {
         *size = sizeof(this->ctx.ram);
@@ -131,23 +157,23 @@ class VGS0
     void* getVRAM0(size_t* size)
     {
         *size = 0x2000;
-        return this->vdp->ctx.ram0;
+        return this->vdp.ctx.ram0;
     }
 
     void* getVRAM1(size_t* size)
     {
         *size = 0x2000;
-        return &this->vdp->ctx.ram1[this->vdp->ctx.bank][0];
+        return &this->vdp.ctx.ram1[this->vdp.ctx.bank][0];
     }
 
     void setExternalRenderingCallback(void (*externalRedneringCallback)(void* arg))
     {
-        this->vdp->externalRedneringCallback = externalRedneringCallback;
+        this->vdp.externalRedneringCallback = externalRedneringCallback;
     }
 
     bool executeExternalRendering()
     {
-        return this->vdp->externalRendering();
+        return this->vdp.externalRendering();
     }
 
     void reset()
@@ -156,11 +182,11 @@ class VGS0
         for (int i = 0; i < 4; i++) {
             this->ctx.romBank[i] = i;
         }
-        this->vdp->reset();
-        memset(&this->cpu->reg, 0, sizeof(this->cpu->reg));
-        this->cpu->reg.SP = 0xFFFF;
+        this->vdp.reset();
+        memset(&this->cpu.reg, 0, sizeof(this->cpu.reg));
+        this->cpu.reg.SP = 0xFFFF;
         this->ctx.bgm.playing = false;
-        this->vgm->reset();
+        this->vgm.reset();
         for (int i = 0; i < 256; i++) {
             this->ctx.se[i].playing = false;
         }
@@ -174,7 +200,7 @@ class VGS0
         this->rom.data = (const unsigned char*)data;
         this->rom.size = size & 0x001FFFFF; // max 2MB
         this->rom.size -= size % 0x2000;    // ignore additional not 8KB data
-        this->vdp->setROM(this->rom.data, this->rom.size);
+        this->vdp.setROM(this->rom.data, this->rom.size);
     }
 
     void loadBgm(const void* buffer, size_t size)
@@ -235,11 +261,11 @@ class VGS0
             this->reset();
         } else {
             this->ctx.pad = 0xFF ^ pad;
-            this->cpu->execute(0x7FFFFFFF);
+            this->cpu.execute(0x7FFFFFFF);
         }
     }
 
-    unsigned short* getDisplay() { return this->vdp->display; }
+    unsigned short* getDisplay() { return this->vdp.display; }
     size_t getDisplaySize() { return 240 * 192 * 2; }
 
     short* tickSound(size_t size)
@@ -250,14 +276,14 @@ class VGS0
         }
         if (this->ctx.bgm.playing) {
             if (this->ctx.bgm.isVGM) {
-                this->vgm->render(buf, size / 2);
+                this->vgm.render(buf, size / 2);
             } else {
-                this->vgsdec->execute(buf, size);
-                this->ctx.bgm.playing = !this->vgsdec->isPlayEnd();
+                this->vgsdec.execute(buf, size);
+                this->ctx.bgm.playing = !this->vgsdec.isPlayEnd();
                 if (!this->ctx.bgm.playing) {
                     this->ctx.bgm.fadeout = false;
                 } else {
-                    this->ctx.bgm.seekPosition = (unsigned int)this->vgsdec->getDurationTime();
+                    this->ctx.bgm.seekPosition = (unsigned int)this->vgsdec.getDurationTime();
                 }
             }
             if (this->bgmVolume < 100) {
@@ -333,10 +359,10 @@ class VGS0
   private:
     inline void consumeClock(int clocks)
     {
-        this->vdp->ctx.bobo += clocks * VGS0_VDP_CLOCK_PER_SEC;
-        while (0 < this->vdp->ctx.bobo) {
-            this->vdp->tick();
-            this->vdp->ctx.bobo -= VGS0_CPU_CLOCK_PER_SEC;
+        this->vdp.ctx.bobo += clocks * VGS0_VDP_CLOCK_PER_SEC;
+        while (0 < this->vdp.ctx.bobo) {
+            this->vdp.tick();
+            this->vdp.ctx.bobo -= VGS0_CPU_CLOCK_PER_SEC;
         }
     }
 
@@ -367,7 +393,7 @@ class VGS0
             int ptr = this->ctx.romBank[addr / 0x2000] * 0x2000 + (addr & 0x1FFF);
             return ((int)this->rom.size <= ptr) ? 0xFF : this->rom.data[ptr];
         } else if (addr < 0xC000) {
-            return this->vdp->read(addr);
+            return this->vdp.read(addr);
         } else {
             return this->ctx.ram[addr & 0x3FFF];
         }
@@ -378,7 +404,7 @@ class VGS0
         if (addr < 0x8000) {
             this->ctx.romBank[addr / 0x2000] = value;
         } else if (addr < 0xC000) {
-            this->vdp->write(addr, value);
+            this->vdp.write(addr, value);
         } else {
             this->ctx.ram[addr & 0x3FFF] = value;
         }
@@ -399,11 +425,11 @@ class VGS0
             case 0xB1: return this->ctx.romBank[1];
             case 0xB2: return this->ctx.romBank[2];
             case 0xB3: return this->ctx.romBank[3];
-            case 0xB4: return this->vdp->ctx.bank;
+            case 0xB4: return this->vdp.ctx.bank;
             case 0xC4: {
-                unsigned short addr = this->cpu->reg.pair.H;
+                unsigned short addr = this->cpu.reg.pair.H;
                 addr <<= 8;
-                addr |= this->cpu->reg.pair.L;
+                addr |= this->cpu.reg.pair.L;
                 int x1 = this->readMemory(addr++);
                 int y1 = this->readMemory(addr++);
                 int w1 = this->readMemory(addr++);
@@ -415,41 +441,41 @@ class VGS0
                 return y1 < y2 + h2 && y2 < y1 + h1 && x1 < x2 + w2 && x2 < x1 + w1 ? 0x01 : 0x00;
             }
             case 0xC8: {
-                return vgs0_atan2_table[this->cpu->reg.pair.H][this->cpu->reg.pair.L];
+                return vgs0_atan2_table[this->cpu.reg.pair.H][this->cpu.reg.pair.L];
             }
             case 0xC9:
                 this->ctx.ri8++;
                 this->ctx.ri8 &= 0xFF;
-                this->cpu->reg.pair.L = vgs0_rand8[this->ctx.ri8];
-                return this->cpu->reg.pair.L;
+                this->cpu.reg.pair.L = vgs0_rand8[this->ctx.ri8];
+                return this->cpu.reg.pair.L;
             case 0xCA:
                 this->ctx.ri16++;
                 this->ctx.ri16 &= 0xFFFF;
-                this->cpu->reg.pair.L = vgs0_rand16[this->ctx.ri16] & 0xFF;
-                this->cpu->reg.pair.H = (vgs0_rand16[this->ctx.ri16] & 0xFF00) >> 8;
-                return this->cpu->reg.pair.L;
+                this->cpu.reg.pair.L = vgs0_rand16[this->ctx.ri16] & 0xFF;
+                this->cpu.reg.pair.H = (vgs0_rand16[this->ctx.ri16] & 0xFF00) >> 8;
+                return this->cpu.reg.pair.L;
             case 0xCE: {
-                unsigned short x = this->cpu->reg.pair.H;
+                unsigned short x = this->cpu.reg.pair.H;
                 x <<= 8;
-                x |= this->cpu->reg.pair.L;
-                unsigned short y = this->cpu->reg.pair.D;
+                x |= this->cpu.reg.pair.L;
+                unsigned short y = this->cpu.reg.pair.D;
                 y <<= 8;
-                y |= this->cpu->reg.pair.E;
-                return this->noise->noise(x, y);
+                y |= this->cpu.reg.pair.E;
+                return this->noise.noise(x, y);
             }
             case 0xCF: {
-                unsigned short x = this->cpu->reg.pair.H;
+                unsigned short x = this->cpu.reg.pair.H;
                 x <<= 8;
-                x |= this->cpu->reg.pair.L;
-                unsigned short y = this->cpu->reg.pair.D;
+                x |= this->cpu.reg.pair.L;
+                unsigned short y = this->cpu.reg.pair.D;
                 y <<= 8;
-                y |= this->cpu->reg.pair.E;
-                return this->noise->octave(this->cpu->reg.pair.A, x, y);
+                y |= this->cpu.reg.pair.E;
+                return this->noise.octave(this->cpu.reg.pair.A, x, y);
             }
             case 0xD0: {
-                unsigned short addr = this->cpu->reg.pair.H;
+                unsigned short addr = this->cpu.reg.pair.H;
                 addr <<= 8;
-                addr |= this->cpu->reg.pair.L;
+                addr |= this->cpu.reg.pair.L;
                 int x1 = this->readMemory(addr++);
                 int y1 = this->readMemory(addr++);
                 int w1 = this->readMemory(addr++);
@@ -468,19 +494,19 @@ class VGS0
                 unsigned char r8 = ((rad / 627.0) * 255.0);
                 signed short s16 = vgs0_sin_table[r8];
                 signed short c16 = vgs0_cos_table[r8];
-                this->cpu->reg.pair.D = (s16 & 0xFF00) >> 8;
-                this->cpu->reg.pair.E = s16 & 0x00FF;
-                this->cpu->reg.pair.B = (c16 & 0xFF00) >> 8;
-                this->cpu->reg.pair.C = c16 & 0x00FF;
+                this->cpu.reg.pair.D = (s16 & 0xFF00) >> 8;
+                this->cpu.reg.pair.E = s16 & 0x00FF;
+                this->cpu.reg.pair.B = (c16 & 0xFF00) >> 8;
+                this->cpu.reg.pair.C = c16 & 0x00FF;
                 return r8;
             }
             case 0xD1: {
-                int bc = this->cpu->reg.pair.B;
+                int bc = this->cpu.reg.pair.B;
                 bc <<= 8;
-                bc |= this->cpu->reg.pair.C;
-                int de = this->cpu->reg.pair.D;
+                bc |= this->cpu.reg.pair.C;
+                int de = this->cpu.reg.pair.D;
                 de <<= 8;
-                de |= this->cpu->reg.pair.E;
+                de |= this->cpu.reg.pair.E;
                 if (0 == de) {
                     return 0;
                 }
@@ -493,27 +519,27 @@ class VGS0
             }
             case 0xDA: {
                 if (!this->loadCallback) return 0xFF;
-                unsigned short addr = this->cpu->reg.pair.B;
+                unsigned short addr = this->cpu.reg.pair.B;
                 addr <<= 8;
-                addr |= this->cpu->reg.pair.C;
+                addr |= this->cpu.reg.pair.C;
                 addr &= 0x3FFF;
-                unsigned short size = this->cpu->reg.pair.H;
+                unsigned short size = this->cpu.reg.pair.H;
                 size <<= 8;
-                size |= this->cpu->reg.pair.L;
+                size |= this->cpu.reg.pair.L;
                 size = 0x4000 < (int)addr + size ? 0x4000 - addr : size;
                 return this->loadCallback(this, &this->ctx.ram[addr], size) ? 0x00 : 0xFF;
             }
             case 0xDB: {
-                memset(&this->vdp->ctx.ram1[this->cpu->reg.pair.A][0], 0, 0x2000);
+                memset(&this->vdp.ctx.ram1[this->cpu.reg.pair.A][0], 0, 0x2000);
                 if (!this->loadExtraCallback) return 0xFF;
-                return this->loadExtraCallback(this, this->cpu->reg.pair.A) ? 0x00 : 0xFF;
+                return this->loadExtraCallback(this, this->cpu.reg.pair.A) ? 0x00 : 0xFF;
             }
             case 0xDC: {
-                unsigned short addr = this->cpu->reg.pair.H;
+                unsigned short addr = this->cpu.reg.pair.H;
                 addr <<= 8;
-                addr |= this->cpu->reg.pair.L;
-                unsigned char bank = this->cpu->reg.pair.B;
-                return this->vdp->ctx.ram1[bank][addr];
+                addr |= this->cpu.reg.pair.L;
+                unsigned char bank = this->cpu.reg.pair.B;
+                return this->vdp.ctx.ram1[bank][addr];
             }
             default: return 0xFF;
         }
@@ -533,43 +559,43 @@ class VGS0
             case 0xB1: this->ctx.romBank[1] = value; break;
             case 0xB2: this->ctx.romBank[2] = value; break;
             case 0xB3: this->ctx.romBank[3] = value; break;
-            case 0xB4: this->vdp->ctx.bank = value; break;
+            case 0xB4: this->vdp.ctx.bank = value; break;
             case 0xB5: {
-                if (this->cpu->reg.pair.A != this->vdp->ctx.bank) {
-                    memcpy(&this->vdp->ctx.ram1[this->cpu->reg.pair.A][0],
-                           &this->vdp->ctx.ram1[this->vdp->ctx.bank][0],
+                if (this->cpu.reg.pair.A != this->vdp.ctx.bank) {
+                    memcpy(&this->vdp.ctx.ram1[this->cpu.reg.pair.A][0],
+                           &this->vdp.ctx.ram1[this->vdp.ctx.bank][0],
                            0x2000);
                 }
                 break;
             }
             case 0xC0: {
-                int addr = this->cpu->reg.pair.A;
+                int addr = this->cpu.reg.pair.A;
                 addr *= 0x2000;
                 if (addr + 0x2000 <= (int)this->rom.size) {
-                    // printf("DMA: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu->reg.pair.A);
-                    memcpy(&this->vdp->ctx.ram1[this->vdp->ctx.bank][0], &this->rom.data[addr], 0x2000);
+                    // printf("DMA: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu.reg.pair.A);
+                    memcpy(&this->vdp.ctx.ram1[this->vdp.ctx.bank][0], &this->rom.data[addr], 0x2000);
                 } else {
-                    // printf("DMA-error: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu->reg.pair.A);
-                    memset(&this->vdp->ctx.ram1[this->vdp->ctx.bank][0], 0xFF, 0x2000);
+                    // printf("DMA-error: rom[%06X] bank(%d) -> cptn\n", addr, this->cpu.reg.pair.A);
+                    memset(&this->vdp.ctx.ram1[this->vdp.ctx.bank][0], 0xFF, 0x2000);
                 }
                 break;
             }
             case 0xC1: {
-                int addr = this->cpu->reg.pair.A;
-                unsigned short offset = this->cpu->reg.pair.B;
+                int addr = this->cpu.reg.pair.A;
+                unsigned short offset = this->cpu.reg.pair.B;
                 offset <<= 8;
-                offset |= this->cpu->reg.pair.C;
+                offset |= this->cpu.reg.pair.C;
                 offset &= 0x1FFF;
-                unsigned short size = this->cpu->reg.pair.D;
+                unsigned short size = this->cpu.reg.pair.D;
                 size <<= 8;
-                size |= this->cpu->reg.pair.E;
+                size |= this->cpu.reg.pair.E;
                 size = 0x2000 - offset < size ? 0x2000 - offset : size;
-                unsigned short dist = this->cpu->reg.pair.H;
+                unsigned short dist = this->cpu.reg.pair.H;
                 dist <<= 8;
-                dist |= this->cpu->reg.pair.L;
+                dist |= this->cpu.reg.pair.L;
                 addr *= 0x2000;
                 addr += offset;
-                // printf("DMA: BANK=0x%02X, OFFSET=0x%04X, SIZE=%d, DIST=0x%04X\n", this->cpu->reg.pair.A, offset, size, dist);
+                // printf("DMA: BANK=0x%02X, OFFSET=0x%04X, SIZE=%d, DIST=0x%04X\n", this->cpu.reg.pair.A, offset, size, dist);
                 for (int i = 0; i < size; i++) {
                     if (addr < (int)this->rom.size) {
                         this->writeMemory(dist++, this->rom.data[addr++]);
@@ -580,28 +606,28 @@ class VGS0
                 break;
             }
             case 0xC2: {
-                unsigned short addrTo = this->cpu->reg.pair.B;
+                unsigned short addrTo = this->cpu.reg.pair.B;
                 addrTo <<= 8;
-                addrTo |= this->cpu->reg.pair.C;
-                unsigned short count = this->cpu->reg.pair.H;
+                addrTo |= this->cpu.reg.pair.C;
+                unsigned short count = this->cpu.reg.pair.H;
                 count <<= 8;
-                count |= this->cpu->reg.pair.L;
-                // printf("DMA: memset(%04X,%02X,%d)\n",addrTo,cpu->reg.pair.A,count);
+                count |= this->cpu.reg.pair.L;
+                // printf("DMA: memset(%04X,%02X,%d)\n",addrTo,cpu.reg.pair.A,count);
                 for (int i = 0; i < count; i++, addrTo++) {
-                    this->writeMemory(addrTo, this->cpu->reg.pair.A);
+                    this->writeMemory(addrTo, this->cpu.reg.pair.A);
                 }
                 break;
             }
             case 0xC3: {
-                unsigned short addrTo = this->cpu->reg.pair.B;
+                unsigned short addrTo = this->cpu.reg.pair.B;
                 addrTo <<= 8;
-                addrTo |= this->cpu->reg.pair.C;
-                unsigned short addrFrom = this->cpu->reg.pair.D;
+                addrTo |= this->cpu.reg.pair.C;
+                unsigned short addrFrom = this->cpu.reg.pair.D;
                 addrFrom <<= 8;
-                addrFrom |= this->cpu->reg.pair.E;
-                unsigned short count = this->cpu->reg.pair.H;
+                addrFrom |= this->cpu.reg.pair.E;
+                unsigned short count = this->cpu.reg.pair.H;
                 count <<= 8;
-                count |= this->cpu->reg.pair.L;
+                count |= this->cpu.reg.pair.L;
                 // printf("DMA: memcpy(%04X,%04X,%d)\n",addrTo,addrFrom,count);
                 for (int i = 0; i < count; i++, addrTo++, addrFrom++) {
                     this->writeMemory(addrTo, this->readMemory(addrFrom));
@@ -612,36 +638,36 @@ class VGS0
                 unsigned short result = 0;
                 switch (value) {
                     case 0x00:
-                        result = this->cpu->reg.pair.H;
-                        result *= this->cpu->reg.pair.L;
+                        result = this->cpu.reg.pair.H;
+                        result *= this->cpu.reg.pair.L;
                         break;
                     case 0x01:
-                        if (this->cpu->reg.pair.L) {
-                            result = this->cpu->reg.pair.H;
-                            result /= this->cpu->reg.pair.L;
+                        if (this->cpu.reg.pair.L) {
+                            result = this->cpu.reg.pair.H;
+                            result /= this->cpu.reg.pair.L;
                         } else {
                             result = 0xFFFF;
                         }
                         break;
                     case 0x02:
-                        if (this->cpu->reg.pair.L) {
-                            result = this->cpu->reg.pair.H;
-                            result %= this->cpu->reg.pair.L;
+                        if (this->cpu.reg.pair.L) {
+                            result = this->cpu.reg.pair.H;
+                            result %= this->cpu.reg.pair.L;
                         } else {
                             result = 0xFFFF;
                         }
                         break;
                     case 0x40: {
-                        signed char sh = (signed char)this->cpu->reg.pair.H;
-                        signed char sl = (signed char)this->cpu->reg.pair.L;
+                        signed char sh = (signed char)this->cpu.reg.pair.H;
+                        signed char sl = (signed char)this->cpu.reg.pair.L;
                         signed short tmp = sh * sl;
                         result = (short)tmp;
                         break;
                     }
                     case 0x41:
-                        if (this->cpu->reg.pair.L) {
-                            signed char sh = (signed char)this->cpu->reg.pair.H;
-                            signed char sl = (signed char)this->cpu->reg.pair.L;
+                        if (this->cpu.reg.pair.L) {
+                            signed char sh = (signed char)this->cpu.reg.pair.H;
+                            signed char sl = (signed char)this->cpu.reg.pair.L;
                             signed short tmp = sh / sl;
                             result = (short)tmp;
                         } else {
@@ -651,88 +677,88 @@ class VGS0
                     case 0x80:
                     case 0x81:
                     case 0x82: {
-                        unsigned short hl = this->cpu->reg.pair.H;
+                        unsigned short hl = this->cpu.reg.pair.H;
                         hl <<= 8;
-                        hl |= this->cpu->reg.pair.L;
+                        hl |= this->cpu.reg.pair.L;
                         if (0x80 == value) {
                             unsigned int tmp = hl;
-                            tmp *= this->cpu->reg.pair.C;
+                            tmp *= this->cpu.reg.pair.C;
                             result = tmp & 0xFFFF;
-                        } else if (0 == this->cpu->reg.pair.C) {
+                        } else if (0 == this->cpu.reg.pair.C) {
                             result = 0xFFFF;
                         } else if (0x81 == value) {
                             result = hl;
-                            result /= this->cpu->reg.pair.C;
+                            result /= this->cpu.reg.pair.C;
                         } else {
                             result = hl;
-                            result %= this->cpu->reg.pair.C;
+                            result %= this->cpu.reg.pair.C;
                         }
                         break;
                     }
                     case 0xC0:
                     case 0xC1: {
-                        unsigned short hl = this->cpu->reg.pair.H;
+                        unsigned short hl = this->cpu.reg.pair.H;
                         hl <<= 8;
-                        hl |= this->cpu->reg.pair.L;
+                        hl |= this->cpu.reg.pair.L;
                         int tmp = (signed short)hl;
                         if (0x80 == value) {
-                            tmp *= (signed char)this->cpu->reg.pair.C;
+                            tmp *= (signed char)this->cpu.reg.pair.C;
                             result = (unsigned short)tmp;
-                        } else if (0 == this->cpu->reg.pair.C) {
+                        } else if (0 == this->cpu.reg.pair.C) {
                             result = 0xFFFF;
                         } else {
-                            tmp /= (signed char)this->cpu->reg.pair.C;
+                            tmp /= (signed char)this->cpu.reg.pair.C;
                             result = (unsigned short)tmp;
                         }
                         break;
                     }
                 }
-                this->cpu->reg.pair.H = (result & 0xFF00) >> 8;
-                this->cpu->reg.pair.L = result & 0xFF;
+                this->cpu.reg.pair.H = (result & 0xFF00) >> 8;
+                this->cpu.reg.pair.L = result & 0xFF;
                 break;
             }
-            case 0xC6: this->cpu->reg.pair.A = (unsigned char)vgs0_sin_table[value]; break;
-            case 0xC7: this->cpu->reg.pair.A = (unsigned char)vgs0_cos_table[value]; break;
+            case 0xC6: this->cpu.reg.pair.A = (unsigned char)vgs0_sin_table[value]; break;
+            case 0xC7: this->cpu.reg.pair.A = (unsigned char)vgs0_cos_table[value]; break;
             case 0xC9: this->ctx.ri8 = value; break;
             case 0xCA:
-                this->ctx.ri16 = this->cpu->reg.pair.H;
+                this->ctx.ri16 = this->cpu.reg.pair.H;
                 this->ctx.ri16 <<= 8;
-                this->ctx.ri16 |= this->cpu->reg.pair.L;
+                this->ctx.ri16 |= this->cpu.reg.pair.L;
                 break;
             case 0xCB: {
-                unsigned short hl = this->cpu->reg.pair.H;
+                unsigned short hl = this->cpu.reg.pair.H;
                 hl <<= 8;
-                hl |= this->cpu->reg.pair.L;
-                this->noise->seed(vgs0_rand16, hl);
+                hl |= this->cpu.reg.pair.L;
+                this->noise.seed(vgs0_rand16, hl);
                 break;
             }
             case 0xCC: {
-                unsigned short hl = this->cpu->reg.pair.H;
+                unsigned short hl = this->cpu.reg.pair.H;
                 hl <<= 8;
-                hl |= this->cpu->reg.pair.L;
-                this->noise->limitX(hl | 1);
+                hl |= this->cpu.reg.pair.L;
+                this->noise.limitX(hl | 1);
                 break;
             }
             case 0xCD: {
-                unsigned short hl = this->cpu->reg.pair.H;
+                unsigned short hl = this->cpu.reg.pair.H;
                 hl <<= 8;
-                hl |= this->cpu->reg.pair.L;
-                this->noise->limitY(hl | 1);
+                hl |= this->cpu.reg.pair.L;
+                this->noise.limitY(hl | 1);
                 break;
             }
             case 0xD0: {
                 signed short s16 = vgs0_sin_table[value];
                 signed short c16 = vgs0_cos_table[value];
-                this->cpu->reg.pair.D = (s16 & 0xFF00) >> 8;
-                this->cpu->reg.pair.E = s16 & 0x00FF;
-                this->cpu->reg.pair.B = (c16 & 0xFF00) >> 8;
-                this->cpu->reg.pair.C = c16 & 0x00FF;
+                this->cpu.reg.pair.D = (s16 & 0xFF00) >> 8;
+                this->cpu.reg.pair.E = s16 & 0x00FF;
+                this->cpu.reg.pair.B = (c16 & 0xFF00) >> 8;
+                this->cpu.reg.pair.C = c16 & 0x00FF;
                 break;
             }
             case 0xD1: {
-                signed short hl = this->cpu->reg.pair.H;
+                signed short hl = this->cpu.reg.pair.H;
                 hl <<= 8;
-                hl |= this->cpu->reg.pair.L;
+                hl |= this->cpu.reg.pair.L;
                 int work = hl;
                 work *= value;
                 work /= 100;
@@ -743,52 +769,52 @@ class VGS0
                 } else {
                     hl = (short)work;
                 }
-                this->cpu->reg.pair.H = (hl & 0xFF00) >> 8;
-                this->cpu->reg.pair.L = hl & 0x00FF;
+                this->cpu.reg.pair.H = (hl & 0xFF00) >> 8;
+                this->cpu.reg.pair.L = hl & 0x00FF;
                 break;
             }
             case 0xD2: {
                 auto hl = (signed short)vgs0_sin_table[value];
-                this->cpu->reg.pair.H = (hl & 0xFF00) >> 8;
-                this->cpu->reg.pair.L = hl & 0x00FF;
+                this->cpu.reg.pair.H = (hl & 0xFF00) >> 8;
+                this->cpu.reg.pair.L = hl & 0x00FF;
                 break;
             }
             case 0xD3: {
                 auto hl = (signed short)vgs0_cos_table[value];
-                this->cpu->reg.pair.H = (hl & 0xFF00) >> 8;
-                this->cpu->reg.pair.L = hl & 0x00FF;
+                this->cpu.reg.pair.H = (hl & 0xFF00) >> 8;
+                this->cpu.reg.pair.L = hl & 0x00FF;
                 break;
             }
             case 0xDA: {
                 if (this->saveCallback) {
-                    unsigned short addr = this->cpu->reg.pair.B;
+                    unsigned short addr = this->cpu.reg.pair.B;
                     addr <<= 8;
-                    addr |= this->cpu->reg.pair.C;
+                    addr |= this->cpu.reg.pair.C;
                     addr &= 0x3FFF;
-                    unsigned short size = this->cpu->reg.pair.H;
+                    unsigned short size = this->cpu.reg.pair.H;
                     size <<= 8;
-                    size |= this->cpu->reg.pair.L;
+                    size |= this->cpu.reg.pair.L;
                     size = 0x4000 < (int)addr + size ? 0x4000 - addr : size;
-                    this->cpu->reg.pair.A = this->saveCallback(this, &this->ctx.ram[addr], size) ? 0x00 : 0xFF;
+                    this->cpu.reg.pair.A = this->saveCallback(this, &this->ctx.ram[addr], size) ? 0x00 : 0xFF;
                 } else {
-                    this->cpu->reg.pair.A = 0xFF;
+                    this->cpu.reg.pair.A = 0xFF;
                 }
                 break;
             }
             case 0xDB: {
                 if (this->saveExtraCallback) {
-                    this->cpu->reg.pair.A = this->saveExtraCallback(this, value) ? 0x00 : 0xFF;
+                    this->cpu.reg.pair.A = this->saveExtraCallback(this, value) ? 0x00 : 0xFF;
                 } else {
-                    this->cpu->reg.pair.A = 0xFF;
+                    this->cpu.reg.pair.A = 0xFF;
                 }
                 break;
             }
             case 0xDC: {
-                unsigned short addr = this->cpu->reg.pair.H;
+                unsigned short addr = this->cpu.reg.pair.H;
                 addr <<= 8;
-                addr |= this->cpu->reg.pair.L;
-                unsigned char bank = this->cpu->reg.pair.B;
-                this->vdp->ctx.ram1[bank][addr] = value;
+                addr |= this->cpu.reg.pair.L;
+                unsigned char bank = this->cpu.reg.pair.B;
+                this->vdp.ctx.ram1[bank][addr] = value;
                 break;
             }
             case 0xE0:
@@ -800,8 +826,8 @@ class VGS0
                     this->ctx.bgm.playingIndex = value;
                     this->ctx.bgm.isVGM = false;
                     if (0 == memcmp(this->bgm[value].data, "VGSBGM-V", 8)) {
-                        this->vgsdec->load(this->bgm[value].data, this->bgm[value].size);
-                    } else if (this->vgm->load(this->bgm[value].data, this->bgm[value].size)) {
+                        this->vgsdec.load(this->bgm[value].data, this->bgm[value].size);
+                    } else if (this->vgm.load(this->bgm[value].data, this->bgm[value].size)) {
                         this->ctx.bgm.isVGM = true;
                     } else {
                         // unsupported format
@@ -823,7 +849,7 @@ class VGS0
                             this->ctx.bgm.vgmFadeCounter = 100;
                         } else {
                             this->ctx.bgm.fadeout = true;
-                            this->vgsdec->fadeout();
+                            this->vgsdec.fadeout();
                         }
                         break;
                 }
@@ -839,7 +865,7 @@ class VGS0
                 this->ctx.se[value].playingIndex = 0;
                 break;
             case 0xF2:
-                this->cpu->reg.pair.A = this->ctx.se[value].playing ? 1 : 0;
+                this->cpu.reg.pair.A = this->ctx.se[value].playing ? 1 : 0;
                 break;
         }
     }

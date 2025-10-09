@@ -330,6 +330,7 @@ Supported chiptune:
 | SN76489 (DCSG) | SG-1000, SEGA Master System, GameGear, and etc | Stereo is not supported |
 | AY-3-8910 (PSG) | MSX and etc | - |
 | SCC | KONAMI MSX | Support SCC1 only |
+| YM2612 (OPN2) | FM sound chip | DAS was not supported (FM 6ch only) |
 
 VGM must be output in version 1.61 or later format.
 

@@ -5,16 +5,9 @@
 #include "emu76489.hpp"
 #include "emu2149.hpp"
 #include "emu2212.hpp"
-
-#ifdef ENABLE_OPN2
 #include "ymfm_opn2.hpp"
-#endif
 
-#ifdef ENABLE_OPN2
 class VgmManager : public ymfm::ymfm_interface
-#else
-class VgmManager
-#endif
 {
   private:
     enum EmulatorType {
@@ -22,22 +15,24 @@ class VgmManager
         ET_DCSG,
         ET_PSG,
         ET_SCC,
-#ifdef ENABLE_OPN2
         ET_OPN2,
-#endif
         ET_Length
     };
 
-    struct Emulator {
-        xgm::NesVgmDriver* nes;
-        EMU76489* dcsg;
-        EMU2149* psg;
-        EMU2212* scc;
+    class Emulator
+    {
+      public:
+        Emulator() : nes(),
+                     dcsg(3579545, 44100),
+                     psg(3579545, 44100),
+                     scc(3579545, 44100) {}
+        xgm::NesVgmDriver nes;
+        EMU76489 dcsg;
+        EMU2149 psg;
+        EMU2212 scc;
     } emu;
 
-#ifdef ENABLE_OPN2
     ymfm::ym2612 ym2612;
-#endif
 
     struct VgmContext {
         uint32_t clocks[ET_Length];
@@ -50,35 +45,28 @@ class VgmManager
         bool end;
     } vgm;
 
-#ifdef ENABLE_OPN2
     struct YM2612Context {
         uint64_t output_start;
         uint64_t pos;
         uint64_t step;
     } ym;
-    std::vector<std::pair<uint32_t, uint8_t>> ym2612_queue;
-#endif
+    struct YM2612QueueEntry {
+        uint32_t reg;
+        uint8_t data;
+    };
+    enum { YM2612_QUEUE_CAPACITY = 1024 };
+    YM2612QueueEntry ym2612_queue[YM2612_QUEUE_CAPACITY];
+    int ym2612_queue_head;
+    int ym2612_queue_tail;
 
   public:
-#ifdef ENABLE_OPN2
     VgmManager() : ym2612(*this)
-#else
-    VgmManager()
-#endif
     {
-        emu.nes = new xgm::NesVgmDriver();
-        emu.dcsg = new EMU76489(3579545, 44100);
-        emu.psg = new EMU2149(3579545, 44100);
-        emu.scc = new EMU2212(3579545, 44100);
+        ym2612_queue_reset();
     }
 
-    ~VgmManager()
-    {
-        delete emu.nes;
-        delete emu.dcsg;
-        delete emu.psg;
-        delete emu.scc;
-    }
+    VgmManager(const VgmManager&) = delete;
+    VgmManager& operator=(const VgmManager&) = delete;
 
     bool load(const uint8_t* data, size_t size)
     {
@@ -104,31 +92,29 @@ class VgmManager
         memcpy(&vgm.clocks[ET_SCC], &data[0x9C], 4);
 
         if (vgm.clocks[ET_NES]) {
-            emu.nes->Load(data, size);
-            emu.nes->SetPlayFreq(44100);
-            emu.nes->SetChannels(1);
-            emu.nes->Reset();
+            emu.nes.Load(data, size);
+            emu.nes.SetPlayFreq(44100);
+            emu.nes.SetChannels(1);
+            emu.nes.Reset();
             return true;
         }
 
         if (vgm.clocks[ET_PSG]) {
-            emu.psg->setVolumeMode(2);
-            emu.psg->setClockDivider(1);
+            emu.psg.setVolumeMode(2);
+            emu.psg.setClockDivider(1);
         }
 
         if (vgm.clocks[ET_SCC]) {
-            emu.scc->set_type(EMU2212::Type::Standard);
+            emu.scc.set_type(EMU2212::Type::Standard);
         }
 
-#ifdef ENABLE_OPN2
         memcpy(&vgm.clocks[ET_OPN2], &data[0x2C], 4);
         if (vgm.clocks[ET_OPN2]) {
             memset(&ym, 0, sizeof(ym));
             ym2612.reset();
             ym.step = 0x100000000ull / ym2612.sample_rate(vgm.clocks[ET_OPN2]);
-            ym2612_queue.clear();
+            ym2612_queue_reset();
         }
-#endif
 
         memcpy(&vgm.cursor, &data[0x34], 4);
         vgm.cursor += 0x40 - 0x0C;
@@ -140,13 +126,12 @@ class VgmManager
     void reset()
     {
         memset(&vgm, 0, sizeof(vgm));
-        emu.nes->Reset();
-        emu.dcsg->reset();
-        emu.psg->reset();
-        emu.scc->reset();
-#ifdef ENABLE_OPN2
+        emu.nes.Reset();
+        emu.dcsg.reset();
+        emu.psg.reset();
+        emu.scc.reset();
         ym2612.reset();
-#endif
+        ym2612_queue_reset();
     }
 
     void render(int16_t* buf, int samples)
@@ -157,7 +142,7 @@ class VgmManager
         }
         if (vgm.clocks[ET_NES]) {
             // Execute NES only
-            emu.nes->Render(buf, samples);
+            emu.nes.Render(buf, samples);
             return;
         }
         int cursor = 0;
@@ -168,25 +153,24 @@ class VgmManager
             vgm.wait--;
             buf[cursor] = 0;
             if (vgm.clocks[ET_DCSG]) {
-                buf[cursor] += emu.dcsg->calc() << 1;
+                buf[cursor] += emu.dcsg.calc() << 1;
             }
             if (vgm.clocks[ET_PSG]) {
-                buf[cursor] += emu.psg->calc() << 1;
+                buf[cursor] += emu.psg.calc() << 1;
             }
             if (vgm.clocks[ET_SCC]) {
-                buf[cursor] += emu.scc->calc() << 1;
+                buf[cursor] += emu.scc.calc() << 1;
             }
-#ifdef ENABLE_OPN2
             if (vgm.clocks[ET_OPN2]) {
                 uint32_t addr1 = 0xffff, addr2 = 0xffff;
                 uint8_t data1 = 0, data2 = 0;
-                if (!ym2612_queue.empty()) {
-                    auto front = ym2612_queue.front();
-                    addr1 = 0 + 2 * ((front.first >> 8) & 3);
-                    data1 = front.first & 0xff;
+                uint32_t reg;
+                uint8_t value;
+                if (ym2612_queue_pop(&reg, &value)) {
+                    addr1 = 0 + 2 * ((reg >> 8) & 3);
+                    data1 = reg & 0xff;
                     addr2 = addr1 + 1;
-                    data2 = front.second;
-                    ym2612_queue.erase(ym2612_queue.begin());
+                    data2 = value;
                 }
                 if (addr1 != 0xffff) {
                     ym2612.write(addr1, data1);
@@ -199,7 +183,6 @@ class VgmManager
                 ym.output_start += 0x100000000ull / 44100;
                 buf[cursor] += out.data[0];
             }
-#endif
             cursor++;
         }
     }
@@ -214,20 +197,20 @@ class VgmManager
             uint8_t cmd = vgm.data[vgm.cursor++];
             switch (cmd) {
                 case 0x4F: // SN76489 GG I/O
-                    emu.dcsg->writeGGIO(vgm.data[vgm.cursor++]);
+                    emu.dcsg.writeGGIO(vgm.data[vgm.cursor++]);
                     break;
                 case 0x50: // SN76489 register
-                    emu.dcsg->writeIO(vgm.data[vgm.cursor++]);
+                    emu.dcsg.writeIO(vgm.data[vgm.cursor++]);
                     break;
                 case 0x31: // AY-3-8910 stereo mask (ignore)
                     vgm.cursor++;
-                    // emu.psg->setMask(vgm.data[vgm.cursor++]);
+                    // emu.psg.setMask(vgm.data[vgm.cursor++]);
                     break;
                 case 0xA0: {
                     // AY-3-8910 reigster
                     uint8_t addr = vgm.data[vgm.cursor++];
                     uint8_t value = vgm.data[vgm.cursor++];
-                    emu.psg->writeReg(addr, value);
+                    emu.psg.writeReg(addr, value);
                     break;
                 }
                 case 0xD2: {
@@ -236,23 +219,22 @@ class VgmManager
                     uint8_t offset = vgm.data[vgm.cursor++];
                     uint8_t data = vgm.data[vgm.cursor++];
                     switch (port) {
-                        case 0x00: emu.scc->write_waveform1(offset, data); break;
-                        case 0x01: emu.scc->write_frequency(offset, data); break;
-                        case 0x02: emu.scc->write_volume(offset, data); break;
-                        case 0x03: emu.scc->write_keyoff(data); break;
-                        case 0x04: emu.scc->write_waveform2(offset, data); break;
-                        case 0x05: emu.scc->write_test(data); break;
+                        case 0x00: emu.scc.write_waveform1(offset, data); break;
+                        case 0x01: emu.scc.write_frequency(offset, data); break;
+                        case 0x02: emu.scc.write_volume(offset, data); break;
+                        case 0x03: emu.scc.write_keyoff(data); break;
+                        case 0x04: emu.scc.write_waveform2(offset, data); break;
+                        case 0x05: emu.scc.write_test(data); break;
                     }
                     break;
                 }
 
-#ifdef ENABLE_OPN2
                 case 0x52:
                 case 0xA2: {
                     // YM2612 port 0, write value dd to register aa
                     uint32_t reg = vgm.data[vgm.cursor++];
                     uint8_t data = vgm.data[vgm.cursor++];
-                    ym2612_queue.push_back(std::make_pair(reg, data));
+                    ym2612_queue_push(reg, data);
                     break;
                 }
                 case 0x53:
@@ -260,10 +242,9 @@ class VgmManager
                     // YM2612 port 1, write value dd to register aa
                     uint32_t reg = vgm.data[vgm.cursor++];
                     uint8_t data = vgm.data[vgm.cursor++];
-                    ym2612_queue.push_back(std::make_pair(reg | 0x100, data));
+                    ym2612_queue_push(reg | 0x100, data);
                     break;
                 }
-#endif
 
                 case 0x61: {
                     // Wait nn samples
@@ -324,5 +305,34 @@ class VgmManager
                     return;
             }
         }
+    }
+
+    void ym2612_queue_reset()
+    {
+        ym2612_queue_head = 0;
+        ym2612_queue_tail = 0;
+    }
+
+    bool ym2612_queue_pop(uint32_t* reg, uint8_t* data)
+    {
+        if (ym2612_queue_head == ym2612_queue_tail) {
+            return false;
+        }
+        *reg = ym2612_queue[ym2612_queue_head].reg;
+        *data = ym2612_queue[ym2612_queue_head].data;
+        ym2612_queue_head = (ym2612_queue_head + 1) % YM2612_QUEUE_CAPACITY;
+        return true;
+    }
+
+    void ym2612_queue_push(uint32_t reg, uint8_t data)
+    {
+        int next_tail = (ym2612_queue_tail + 1) % YM2612_QUEUE_CAPACITY;
+        if (next_tail == ym2612_queue_head) {
+            // Drop the oldest entry to prevent overflow
+            ym2612_queue_head = (ym2612_queue_head + 1) % YM2612_QUEUE_CAPACITY;
+        }
+        ym2612_queue[ym2612_queue_tail].reg = reg;
+        ym2612_queue[ym2612_queue_tail].data = data;
+        ym2612_queue_tail = next_tail;
     }
 };

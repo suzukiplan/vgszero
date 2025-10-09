@@ -31,6 +31,7 @@ bool extraSaveDataChanged_[256];
 bool extraSaveDataChangeDetect_;
 CLogger* logger_;
 SystemConfiguration* config_;
+VGS0 vgs0(VDP::ColorMode::RGB565);
 
 CKernel::CKernel(void) : screen(480, 384),
                          timer(&interrupt),
@@ -78,7 +79,7 @@ boolean CKernel::initialize(void)
             auto col = *splashPtr;
             splashPtr++;
             bptr[x * 2] = col;
-            bptr[x * 2 + 1] = col & 0b1110011100011100; 
+            bptr[x * 2 + 1] = col & 0b1110011100011100;
             bptr[hdmiPitch_ + x * 2] = col & 0b1001110011110011;
             bptr[hdmiPitch_ + x * 2 + 1] = col & 0b1000010000010000;
         }
@@ -296,11 +297,16 @@ TShutdownMode CKernel::run(void)
         se = ptr;
     }
 
-    sound.SetControl(VCHIQ_SOUND_VOLUME_MAX);
-    VGS0 vgs0(VDP::ColorMode::RGB565);
+    logger.Write(TAG, LogDebug, "Loading game.pkg");
     vgs0.loadRom(rom, romSize);
-    if (0 < bgmSize) vgs0.loadBgm(bgm, bgmSize);
-    if (0 < seSize) vgs0.loadSoundEffect(se, seSize);
+    if (0 < bgmSize) {
+        logger.Write(TAG, LogDebug, "Extractin bgm");
+        vgs0.loadBgm(bgm, bgmSize);
+    }
+    if (0 < seSize) {
+        logger.Write(TAG, LogDebug, "Extractin sfx");
+        vgs0.loadSoundEffect(se, seSize);
+    }
     vgs0.setExternalRenderingCallback([](void* arg) {
         CMultiCoreSupport::SendIPI(3, IPI_USER + 2); // request execute rendering core (vdp)
     });
@@ -329,13 +335,13 @@ TShutdownMode CKernel::run(void)
         extraSaveDataChangeDetect_ = true;
         extraSaveDataChanged_[bank & 0xFF] = true;
         void* cache = &extraSaveDataCache_[bank & 0xFF][0];
-        void* data = &vgs0->vdp->ctx.ram1[bank & 0xFF][0];
+        void* data = &vgs0->vdp.ctx.ram1[bank & 0xFF][0];
         memcpy(cache, data, 0x2000);
         return true;
     };
     vgs0.loadExtraCallback = [](VGS0* vgs0, int bank) -> bool {
         void* cache = &extraSaveDataCache_[bank & 0xFF][0];
-        void* data = &vgs0->vdp->ctx.ram1[bank & 0xFF][0];
+        void* data = &vgs0->vdp.ctx.ram1[bank & 0xFF][0];
         memcpy(data, cache, 0x2000);
         return true;
     };
@@ -346,14 +352,17 @@ TShutdownMode CKernel::run(void)
     vgs0_ = &vgs0;
 
     // fill empty buffer to the sound queue
+    logger.Write(TAG, LogDebug, "Setup the audio playback");
     memset(pcmData_, 0, sizeof(pcmData_));
     for (int i = 0; i < 8; i++) {
         sound.Playback(pcmData_, 735, 1, 16);
         scheduler.Yield(); // ensure the VCHIQ tasks can run
     }
+    sound.SetControl(VCHIQ_SOUND_VOLUME_MAX);
 
     int swap = 0;
     auto buffer = screen.GetFrameBuffer();
+    logger.Write(TAG, LogDebug, "Start main loop");
     while (1) {
         // update status of the peripheral devices
         updateUsbStatus();
@@ -390,7 +399,7 @@ TShutdownMode CKernel::run(void)
             for (int y = 0; y < 192; y++) {
                 for (int x = 0; x < 240; x++) {
                     hdmi[x * 2] = col;
-                    hdmi[x * 2 + 1] = col & 0b1110011100011100; 
+                    hdmi[x * 2 + 1] = col & 0b1110011100011100;
                     hdmi[hdmiPitch_ + x * 2] = col & 0b1001110011110011;
                     hdmi[hdmiPitch_ + x * 2 + 1] = col & 0b1000010000010000;
                 }
