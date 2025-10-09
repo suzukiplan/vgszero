@@ -78,7 +78,7 @@ boolean CKernel::initialize(void)
             auto col = *splashPtr;
             splashPtr++;
             bptr[x * 2] = col;
-            bptr[x * 2 + 1] = col & 0b1110011100011100; 
+            bptr[x * 2 + 1] = col & 0b1110011100011100;
             bptr[hdmiPitch_ + x * 2] = col & 0b1001110011110011;
             bptr[hdmiPitch_ + x * 2 + 1] = col & 0b1000010000010000;
         }
@@ -296,7 +296,6 @@ TShutdownMode CKernel::run(void)
         se = ptr;
     }
 
-    sound.SetControl(VCHIQ_SOUND_VOLUME_MAX);
     VGS0 vgs0(VDP::ColorMode::RGB565);
     vgs0.loadRom(rom, romSize);
     if (0 < bgmSize) vgs0.loadBgm(bgm, bgmSize);
@@ -351,6 +350,7 @@ TShutdownMode CKernel::run(void)
         sound.Playback(pcmData_, 735, 1, 16);
         scheduler.Yield(); // ensure the VCHIQ tasks can run
     }
+    sound.SetControl(VCHIQ_SOUND_VOLUME_MAX);
 
     int swap = 0;
     auto buffer = screen.GetFrameBuffer();
@@ -390,7 +390,7 @@ TShutdownMode CKernel::run(void)
             for (int y = 0; y < 192; y++) {
                 for (int x = 0; x < 240; x++) {
                     hdmi[x * 2] = col;
-                    hdmi[x * 2 + 1] = col & 0b1110011100011100; 
+                    hdmi[x * 2 + 1] = col & 0b1110011100011100;
                     hdmi[hdmiPitch_ + x * 2] = col & 0b1001110011110011;
                     hdmi[hdmiPitch_ + x * 2 + 1] = col & 0b1000010000010000;
                 }
