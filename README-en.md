@@ -330,11 +330,20 @@ Supported chiptune:
 | SN76489 (DCSG) | SG-1000, SEGA Master System, GameGear, and etc | Stereo is not supported |
 | AY-3-8910 (PSG) | MSX and etc | - |
 | SCC | KONAMI MSX | Support SCC1 only |
-| YM2612 (OPN2) | FM sound chip | DAS was not supported (FM 6ch only) |
+| YM2612 (OPN2) | FM sound chip | DAC is not supported (FM 6ch only) |
 
 VGM must be output in version 1.61 or later format.
 
 Example: [example/15_vgm-asm](example/15_vgm-asm)
+
+YM2612 analog audio emulation is disabled by default. Applications can enable it through the public `VGS0` API.
+
+```c++
+VGS0 vgs0;
+vgs0.setYm2612AnalogEnabled(true); // Enables the equivalent of the real preset
+```
+
+The VGS-X-compatible `clean`, `subtle`, `real`, `re1e`, and `warm` presets are also available through the `useYm2612Analog*Preset()` methods. The SDL2 emulator accepts `--ym-analog=off|clean|subtle|real|re1e|warm` (default: `off`).
 
 #### (Make bgm.dat)
 
