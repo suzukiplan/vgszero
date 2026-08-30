@@ -24,16 +24,24 @@ OBJECTS += vgstone.o
 OBJECTS += vgs0math.o
 OBJECTS += rom_tndtable.o
 
-all: vgs0test
+all: vgs0test vgm_analog_test
 
 clean:
 	rm -f $(OBJECTS)
 	rm -f vgs0test
+	rm -f vgm_analog_test.o
+	rm -f vgm_analog_test
 
 vgs0test: $(OBJECTS)
 	$(CPP) -o vgs0test $(OBJECTS)
 
+vgm_analog_test: vgm_analog_test.o vgs0math.o rom_tndtable.o
+	$(CPP) -o vgm_analog_test vgm_analog_test.o vgs0math.o rom_tndtable.o
+
 vgs0test.o: vgs0test.cpp $(HEADER_FILES) ./Makefile
+	$(CPP) -c $<
+
+vgm_analog_test.o: vgm_analog_test.cpp $(HEADER_FILES) ./Makefile
 	$(CPP) -c $<
 
 lz4.o: ../core/lz4.c $(HEADER_FILES) ./Makefile
