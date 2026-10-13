@@ -58,9 +58,18 @@ usage: vgs0 /path/to/game.pkg ....... Specify game package to be used
                 | Vulkan ............ GPU: Vulkan
                 | Metal ............. GPU: Metal
                 }]
+            [--ym-analog={ off ...... Disable YM2612 analog emulation <default>
+                         | clean
+                         | subtle
+                         | real
+                         | re1e
+                         | warm
+                         }]
             [-f] .................... Full Screen Mode
             [-d] .................... Enable Debug Mode (NOP break)
 ```
+
+YM2612 のアナログ音声エミュレーションはデフォルトでは無効です。有効化する場合は、例えば `--ym-analog=real` を指定してください。
 
 ## Debug Mode
 

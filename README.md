@@ -332,6 +332,15 @@ VGM は version 1.61 以降の形式で出力しなければなりません。
 
 使用例: [example/15_vgm-asm](example/15_vgm-asm)
 
+YM2612 のアナログ音声エミュレーションはデフォルトでは無効です。アプリケーション側で有効化する場合は、`VGS0` の公開 API を使用します。
+
+```c++
+VGS0 vgs0;
+vgs0.setYm2612AnalogEnabled(true); // real プリセット相当を有効化
+```
+
+VGS-X と同じ `clean`、`subtle`、`real`、`re1e`、`warm` プリセットも、`useYm2612Analog*Preset()` で選択できます。SDL2 版では `--ym-analog=off|clean|subtle|real|re1e|warm` を指定できます（デフォルト: `off`）。
+
 #### (Make bgm.dat)
 
 ```

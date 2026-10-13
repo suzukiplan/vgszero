@@ -48,6 +48,15 @@ static pthread_mutex_t soundMutex = PTHREAD_MUTEX_INITIALIZER;
 static bool halt = false;
 static bool disasm = false;
 
+enum class YmAnalogOption {
+    Off,
+    Clean,
+    Subtle,
+    Real,
+    Re1e,
+    Warm,
+};
+
 static void log(const char* format, ...)
 {
     char buf[256];
@@ -171,10 +180,30 @@ int main(int argc, char* argv[])
     bool debugMode = false;
     int fullScreen = 0;
     int gpuType = SDL_WINDOW_OPENGL;
+    YmAnalogOption ymAnalogOption = YmAnalogOption::Off;
 
     for (int i = 1; !cliError && i < argc; i++) {
         if ('-' != argv[i][0]) {
             pkgPath = argv[i];
+            continue;
+        }
+        if (0 == strncmp(argv[i], "--ym-analog=", 12)) {
+            const char* value = argv[i] + 12;
+            if (0 == strcmp(value, "off")) {
+                ymAnalogOption = YmAnalogOption::Off;
+            } else if (0 == strcmp(value, "clean")) {
+                ymAnalogOption = YmAnalogOption::Clean;
+            } else if (0 == strcmp(value, "subtle")) {
+                ymAnalogOption = YmAnalogOption::Subtle;
+            } else if (0 == strcmp(value, "real")) {
+                ymAnalogOption = YmAnalogOption::Real;
+            } else if (0 == strcmp(value, "re1e")) {
+                ymAnalogOption = YmAnalogOption::Re1e;
+            } else if (0 == strcmp(value, "warm")) {
+                ymAnalogOption = YmAnalogOption::Warm;
+            } else {
+                cliError = true;
+            }
             continue;
         }
         switch (tolower(argv[i][1])) {
@@ -215,6 +244,13 @@ int main(int argc, char* argv[])
         puts("                | Vulkan ............ GPU: Vulkan");
         puts("                | Metal ............. GPU: Metal");
         puts("                }]");
+        puts("            [--ym-analog={ off ...... Disable YM2612 analog emulation <default>");
+        puts("                         | clean");
+        puts("                         | subtle");
+        puts("                         | real");
+        puts("                         | re1e");
+        puts("                         | warm");
+        puts("                         }]");
         puts("            [-f] .................... Full Screen Mode");
         puts("            [-d] .................... Enable Debug Mode (NOP break)");
         return 1;
@@ -259,6 +295,14 @@ int main(int argc, char* argv[])
 
     log("Initializing VGS0");
     VGS0 vgs0;
+    switch (ymAnalogOption) {
+        case YmAnalogOption::Off: vgs0.setYm2612AnalogEnabled(false); break;
+        case YmAnalogOption::Clean: vgs0.useYm2612AnalogCleanPreset(); break;
+        case YmAnalogOption::Subtle: vgs0.useYm2612AnalogSubtlePreset(); break;
+        case YmAnalogOption::Real: vgs0.useYm2612AnalogRealPreset(); break;
+        case YmAnalogOption::Re1e: vgs0.useYm2612AnalogRe1ePreset(); break;
+        case YmAnalogOption::Warm: vgs0.useYm2612AnalogWarmPreset(); break;
+    }
     if (0 < bgmSize) vgs0.loadBgm(bgm, bgmSize);
     if (0 < seSize) vgs0.loadSoundEffect(se, seSize);
     vgs0.loadRom(rom, romSize);

@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 1.25.0
+
+- OPN2 エミュレータの出力モデルを VGS-X 相当へ更新
+- VGS-X 相当の YM2612 アナログ音声エミュレーションとプリセットを追加（デフォルトは無効）
+- SDL2 版へ `--ym-analog=off|clean|subtle|real|re1e|warm` オプションを追加
+
 ## [Version 1.24.0](https://github.com/suzukiplan/vgszero/releases/tag/1.24.0)
 
 - OPN2 の再生を RaspberryPi Zero 2W でもサポート
@@ -383,4 +389,3 @@ Attribute の bit-4 を指定することで DPM のパターン番号を +1 す
 ## [Version 1.0.0 (2024.01.01)](https://github.com/suzukiplan/vgszero/releases/tag/1.0.0)
 
 初期リリース
-

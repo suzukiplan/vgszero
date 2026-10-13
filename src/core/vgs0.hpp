@@ -356,6 +356,41 @@ class VGS0
         }
     }
 
+    bool isYm2612AnalogEnabled() const
+    {
+        return this->vgm.isYm2612AnalogEnabled();
+    }
+
+    void setYm2612AnalogEnabled(bool enabled)
+    {
+        this->vgm.setYm2612AnalogEnabled(enabled);
+    }
+
+    void useYm2612AnalogCleanPreset()
+    {
+        this->vgm.useYm2612AnalogCleanPreset();
+    }
+
+    void useYm2612AnalogSubtlePreset()
+    {
+        this->vgm.useYm2612AnalogSubtlePreset();
+    }
+
+    void useYm2612AnalogRealPreset()
+    {
+        this->vgm.useYm2612AnalogRealPreset();
+    }
+
+    void useYm2612AnalogRe1ePreset()
+    {
+        this->vgm.useYm2612AnalogRe1ePreset();
+    }
+
+    void useYm2612AnalogWarmPreset()
+    {
+        this->vgm.useYm2612AnalogWarmPreset();
+    }
+
   private:
     inline void consumeClock(int clocks)
     {

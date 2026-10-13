@@ -8,6 +8,7 @@ format:
 	make execute-format FILENAME=./src/core/vdp.hpp
 	make execute-format FILENAME=./src/core/vgs0def.h
 	make execute-format FILENAME=./src/core/vgsdecv.hpp
+	make execute-format FILENAME=./src/core/vgm.hpp
 	make execute-format FILENAME=./src/core/vgstone.c
 	make execute-format FILENAME=./src/core/z80.hpp
 	make execute-format FILENAME=./src/core/vgs0math.c
@@ -19,6 +20,7 @@ format:
 	make execute-format FILENAME=./src/rpizero/src/std.c
 	make execute-format FILENAME=./src/sdl2/vgs0sdl2.cpp
 	make execute-format FILENAME=./src/test/vgs0test.cpp
+	make execute-format FILENAME=./src/test/vgm_analog_test.cpp
 	make execute-format FILENAME=./tools/bmp2chr/bmp2chr.c
 	make execute-format FILENAME=./tools/makepkg/makepkg.cpp
 	make execute-format FILENAME=./tools/makebgm/makebgm.cpp
@@ -123,4 +125,3 @@ ci:
 
 sdcc-4.1.0-amd64-unknown-linux2.5.tar.bz2:
 	wget https://sourceforge.net/projects/sdcc/files/sdcc-linux-amd64/4.1.0/sdcc-4.1.0-amd64-unknown-linux2.5.tar.bz2
-
